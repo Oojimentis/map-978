@@ -1,0 +1,23 @@
+{
+"type": "FeatureCollection",
+ "features": [
+{ "type": "Feature", 
+"id": 1, 
+"properties": { "MSG": "Newark Liberty International", "Location": "KEWR"}, 
+"geometry": { "type": "Point", "coordinates": [ -74.166641,40.691986 ] } 
+}
+,
+{ "type": "Feature", 
+"id": 2, 
+"properties": { "MSG": "Sikorsky Memorial Airport", "Location": "KBDR" }, 
+"geometry": { "type": "Point", "coordinates": [-73.128433,41.163025] } 
+}
+,
+{ "type": "Feature", 
+"id": 3, 
+"properties": { "MSG": "Republic Airport - East Farmingdale", "Location": "KFRG" }, 
+"geometry": { "type": "Point", "coordinates": [-73.414078, 40.728394] } 
+}
+
+]
+}
