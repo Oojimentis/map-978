@@ -1,5 +1,5 @@
 
-{ "type": "Feature", "properties": { "Named": "Roslindale", "density": 5.580000 }, 
+{ "type": "Feature", "properties": { "Named": "AIRMET Region"}, 
 "geometry": { "type": "Polygon", 
 "coordinates":  [[
 [-79.707428,39.396015] ,

@@ -4,7 +4,7 @@
 { "type": "Feature", 
 "id": 1, 
 "properties": { "MSG": "Newark Liberty International", "Location": "KEWR"}, 
-"geometry": { "type": "Point", "coordinates": [ -74.166641,40.691986 ] } 
+"geometry": { "type": "Point", "coordinates": [ -77.166641,40.691986 ] } 
 }
 ,
 { "type": "Feature", 
