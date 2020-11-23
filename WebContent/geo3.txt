@@ -4,13 +4,13 @@
 { "type": "Feature", 
 "id": 1, 
 "properties": { "MSG": "Newark Liberty International", "Location": "moo"}, 
-"geometry": { "type": "Point", "coordinates": [ -87.866028 , 52.896938 ] } 
+"geometry": { "type": "Point", "coordinates": [ -87.866028 , 59.896938 ] } 
 }
 ,
 { "type": "Feature", 
 "id": 2, 
 "properties": { "MSG": "Sikorsky Memorial Airport", "Location": "KBDR" }, 
-"geometry": { "type": "Point", "coordinates": [-73.607712 ,53.126812] } 
+"geometry": { "type": "Point", "coordinates": [-73.607712 ,51.126812] } 
 }
 ,
 { "type": "Feature", 
