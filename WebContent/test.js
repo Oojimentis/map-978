@@ -18,18 +18,18 @@ L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
 	});  
 
     realtime = L.realtime({
-        url: 'http://localhost:8080/geo3.txt',
+        url: 'http://localhost:8080/notam.geojson',
         crossOrigin: true,
         type: 'json'
-    }, {interval: 10 * 1000,
+    }, {interval: 3 * 1000,
 
 
     	getFeatureId: function(featureData) {
-    	  return featureData.properties.Location;
+    	  return featureData.properties.Location,featureData.properties.Stuff;
    },
      pointToLayer: function (feature, latlng) {
       marker = L.marker(latlng);
-      marker.bindPopup('location: ' + feature.properties.Location + feature.properties.Stuff);
+      marker.bindPopup(feature.properties.Location + '<br>'+ feature.properties.Stuff);
       marker.addTo(map);
       return marker;
     }

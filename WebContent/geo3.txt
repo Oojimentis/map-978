@@ -2,25 +2,24 @@
 "type": "FeatureCollection",
  "features": [
 { "type": "Feature", 
-"id": 1, 
-"properties": { "MSG": "Newark Liberty International", "Location": "KEWR"
-,"Stuff": "180210Z !IJD 11/012 IJD OBST POWER LINE LGT (ASN 2019-ANE-6763-OE) 414443N0721352W (2.3NM W IJD) 516FT (93FT AGL) U/S 2011180210-2012030210"}, 
+
+"properties": { "MSG": "Newark Liberty International", "Location": "mo2" 
+,"Stuff": "    this is 10"}, 
 "geometry": { "type": "Point", "coordinates": [ -74.166641,  40.691986] } 
 }
 ,
 { "type": "Feature", 
-"id": 2, 
+
 "properties": { "MSG": "Sikorsky Memorial Airport", "Location": "KBDR"
-, "Stuff": "testing testing"}, 
+, "Stuff": "testing one"}, 
 "geometry": { "type": "Point", "coordinates": [-73.128433 ,41.163025] } 
 }
 ,
 { "type": "Feature", 
-"id": 3, 
+
 "properties": { "MSG": "Republic Airport - East Farmingdale", "Location": "KFRG" 
-, "Stuff": "testing testing"}, 
+, "Stuff": "testing two"}, 
 "geometry": { "type": "Point", "coordinates": [-73.414078  ,   40.728394 ] } 
 }
-
 ]
 }
