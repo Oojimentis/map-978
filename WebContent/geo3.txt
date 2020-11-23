@@ -3,20 +3,23 @@
  "features": [
 { "type": "Feature", 
 "id": 1, 
-"properties": { "MSG": "Newark Liberty International", "Location": "moo"}, 
-"geometry": { "type": "Point", "coordinates": [ -87.866028 , 59.896938 ] } 
+"properties": { "MSG": "Newark Liberty International", "Location": "KEWR"
+,"Stuff": "180210Z !IJD 11/012 IJD OBST POWER LINE LGT (ASN 2019-ANE-6763-OE) 414443N0721352W (2.3NM W IJD) 516FT (93FT AGL) U/S 2011180210-2012030210"}, 
+"geometry": { "type": "Point", "coordinates": [ -74.166641,  40.691986] } 
 }
 ,
 { "type": "Feature", 
 "id": 2, 
-"properties": { "MSG": "Sikorsky Memorial Airport", "Location": "KBDR" }, 
-"geometry": { "type": "Point", "coordinates": [-73.607712 ,51.126812] } 
+"properties": { "MSG": "Sikorsky Memorial Airport", "Location": "KBDR"
+, "Stuff": "testing testing"}, 
+"geometry": { "type": "Point", "coordinates": [-73.128433 ,41.163025] } 
 }
 ,
 { "type": "Feature", 
 "id": 3, 
-"properties": { "MSG": "Republic Airport - East Farmingdale", "Location": "Moose" }, 
-"geometry": { "type": "Point", "coordinates": [-71.805298 ,  51.445995] } 
+"properties": { "MSG": "Republic Airport - East Farmingdale", "Location": "KFRG" 
+, "Stuff": "testing testing"}, 
+"geometry": { "type": "Point", "coordinates": [-73.414078  ,   40.728394 ] } 
 }
 
 ]

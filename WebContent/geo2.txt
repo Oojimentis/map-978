@@ -1,7 +1,7 @@
 {
    	"type": "FeatureCollection",
    	"features": [{
-	"type": "Feature",
+	"type": "Feature", "id": 5,
 	"geometry": { 
 		"type": "LineString", 
    	 	"coordinates": [
@@ -29,7 +29,7 @@
  "properties": {"MSG": "Alt 3400", "Location": "3456" }
    	},
 {
-	"type": "Feature",
+	"type": "Feature", "id": 6,
 	"geometry": { 
  	 "type": "LineString", 
    	 "coordinates": [

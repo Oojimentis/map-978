@@ -12,7 +12,7 @@ L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
 		function onEachFeature(feature,layer){
 			layer.bindPopup(feature.properties.Named);
 		}
-		var geojson = L.geoJson(hoodData, {
+		var geojson = L.geoJson(hoodData, { 
 			onEachFeature: onEachFeature
 		}).addTo(map);
 	});  
@@ -21,20 +21,27 @@ L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
         url: 'http://localhost:8080/geo3.txt',
         crossOrigin: true,
         type: 'json'
-    }, {interval: 10 * 1000
-    }).addTo(map);
-//    	getFeatureId: function(realtime) {
-//    	  return realtime.properties.Location;
-//    },
-//          onEachFeature(realtime, l){
-//    	 l.bindPopup(function() {
-//             return f.properties.Location ;
-    	
-    	
+    }, {interval: 10 * 1000,
 
-realtime.on('update', function() {
-    map.fitBounds(realtime.getBounds(), {maxZoom: 3});
-});	
+
+    	getFeatureId: function(featureData) {
+    	  return featureData.properties.Location;
+   },
+     pointToLayer: function (feature, latlng) {
+      marker = L.marker(latlng);
+      marker.bindPopup('location: ' + feature.properties.Location + feature.properties.Stuff);
+      marker.addTo(map);
+      return marker;
+    }
+    
+}).addTo(map);
+    
+
+//realtime.on('update', function() {
+//    map.fitBounds(realtime.getBounds(), {maxZoom: 3});
+//  map.fitBounds(realtime.getBounds());
+
+//});	
 	
 	
 	
