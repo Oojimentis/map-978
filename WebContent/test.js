@@ -1,5 +1,5 @@
 
-var map = L.map('map').setView([ 40.355, -75.15], 4);
+var map = L.map('map').setView([ 40.855, -73.15], 9);
 
 L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
  maxZoom: 19,
@@ -23,17 +23,19 @@ L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
         type: 'json'
     }, {interval: 3 * 1000,
     	getFeatureId: function(featureData) {
-    		return featureData.properties.Stn,featureData.properties.WindSp;
+//    		return featureData.properties.Stn,featureData.properties.WindSp;
+    		return featureData.properties.Stn;
     	},
     	pointToLayer: function (feature, latlng) {
     		marker = L.marker(latlng);
-    		marker.bindPopup('<b><u>'+feature.properties.Stn +'</b></u>' 	
-    			 + '<br>Wind Speed: ' + feature.properties.WindSp
-    			 + '<br>Altimeter: ' + feature.properties.Alt
-    			 + '<br>Visibility: '+ feature.properties.Vsby
-    			 + '<br>Dew Point: '+ feature.properties.DewP
-    			 + '<br>Temp(c): '+ feature.properties.Temp
-    			 + '<br>Wind Direction: '+ feature.properties.WindDir
+    		marker.bindPopup('<b><u>'+feature.properties.Stn +'</b></u>' 
+    				+ '<br>Obs Date :' + '<b>' + feature.properties.ObDate  + '</b>'	
+    				+ '<br>Temp(f)  :' + '<b>' + feature.properties.Temp    + '</b>'    				
+    				+ '<br>Wind Sp  :' + '<b>' + feature.properties.WindSp  + '</b>'
+    				+ '<br>Wind Dir  :' + '<b>' + feature.properties.WindDir + '</b>'    				
+    				+ '<br>Altimeter  :' + '<b>' + feature.properties.Alt     + '</b>'
+    				+ '<br>Visibility  : ' + '<b>' + feature.properties.Vsby    + '</b>'
+    				+ '<br>Dew Pt(f)  :' + '<b>' + feature.properties.DewP    + '</b>'
     	 );
     		marker.addTo(map);
     		return marker;
