@@ -82,18 +82,26 @@ L.realtime({url: 'http://localhost:8000/gairmet.geojson',
 		style: function(feature){
 // var fillColor = '#' +Math.floor(Math.random()*16777215).toString(16);
 			var fillColor;
+			var wgt=1 ;
+	 	var col;
 			var  alt = feature.properties.Alt;
 			if  ( alt > 50000 ) fillColor = "#0000FF";
 			else if ( alt > 30001 ) fillColor = "#FFFF00";
       		else if ( alt > 20001 ) fillColor = "#FF00FF";
-      		else if ( alt > 16000 ) fillColor = "#32CD32";
-      		else if ( alt > 10000 ) fillColor = "#800000";
+      		else if ( alt > 15999 ) fillColor = "#32CD32";
+      		else if ( alt > 10001 ) fillColor = "#800000";
       		else if ( alt > 7000 )  fillColor = "#008000";
       		else if ( alt > 5000 )  fillColor = "#FF8C00";
       		else if ( alt > 2000 )  fillColor = "#008080";
       		else if ( alt > 999 )   fillColor = "#000080";
       		else fillColor = "#000000";  // no data
-			return { color: "#999", weight: 1, fillColor: fillColor, fillOpacity: .2 };
+    	
+
+			if (feature.geometry.type == "LineString")  col = "#EE7C7C" , wgt = 2;     
+			else col = "#999";
+     		
+      		
+			return { color: col, weight: wgt, fillColor: fillColor, fillOpacity: .2 };
 		},
 		getFeatureId: function(featureData){
 			return featureData.properties.RepNum;
@@ -102,7 +110,8 @@ L.realtime({url: 'http://localhost:8000/gairmet.geojson',
 		onEachFeature: function(feature,layer){
 			layer.bindPopup('G-AIRMET: Rep ID:' + feature.properties.RepNum
 					+ '<br>Altitude: ' + feature.properties.Alt	
-					+ '<br>' + feature.properties.Ob	
+					+ '<br>' + feature.properties.Ob
+	
 			)}}
 ).addTo(map);
 
