@@ -18,7 +18,7 @@ L.control.scale().addTo(map);
 	});  
 */
 
-// ** AIRMET
+// ** AIRMET  test
 L.realtime({url: 'http://localhost:8000/airmet.geojson',
 	crossOrigin: true, type: 'json'},  {interval: 3 * 1000,
 		style: function(feature){
