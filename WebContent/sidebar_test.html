@@ -1,0 +1,403 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+  <title>DUMP978 - UAT WX Data - Sidebar</title>
+  <link rel="stylesheet" href="./leaflet/leaflet.css"/>
+  <script src="./leaflet/leaflet.js"></script>
+  <script src="./leaflet/jquery.js"></script> 
+  <script src="./leaflet/leaflet-realtime.js"></script>
+	
+<style>
+#wrapper {
+  margin: 0 auto;
+  width: 100%;
+}
+
+#panel{
+ float: left;
+  width: 100%;
+  height:50px;
+background-color: #175B81;
+color:white;
+}
+
+#map {
+  float: left;
+  width: 80%;
+  height:600px;
+}
+
+.sidebar {
+  float: left;
+  width: 20%;
+  height:600px;
+   background-color: white;
+   color: #175B81;
+}
+
+#footer {
+float: left;
+background-color: #175B81;
+color: white;
+  width: 100%;
+  height:25px
+}
+
+.text-labels     {
+	font-weight: bold;
+    color:#006400;
+	font-family: "Arial Black"
+	font-size: 20px ;
+    line-height:25px;
+    text-align:center;
+   }
+   
+table, th, td 
+	{
+		margin:0px 5px;
+		/*border:solid 1px #333; */
+		padding:2px 4px;
+		font:10px Verdana;
+	}
+th {
+		font-size:14px;
+		font-weight:bold
+	}
+td {
+		font-size:14px;
+		font-weight:normal
+	}
+tr {
+		background: white;
+	}
+	
+tbody  tr:hover {
+		background: yellow;
+	}
+table {
+		border-collapse: collapse;
+	}  
+.table a
+{
+    display:block;
+    text-decoration:none;
+}
+#f1{
+	font-weight:bold
+}
+.p2 {
+    font-size: 24px;
+	font-weight:bold;
+    position: relative;
+    top: 11px;
+	left: 20px;
+	}
+	
+#ckboxes {	/* pushes checkbox a little from sidebar left edge */
+	padding-left: 10px;
+}
+
+
+img {  /* Images are all different sizes, this makes them the same */
+  width:100px;
+  height:100px;
+  object-fit:scale-down;
+}
+
+	.box{
+		width:15px;
+		height:15px;
+		border-radius:25px; /* makes a circle from a box */
+    	 display: inline-block;
+		}
+	 
+	.red{
+		background:red;
+	} 
+	.green{
+		background:green;
+	}
+	.blue{
+		background:blue;
+	} 
+	.orange{
+		background:orange;
+	}
+	#ball{	/* pushes the circle right 80 px. */
+		padding-left: 80px;
+	}
+</style>
+</head>
+<body>
+
+<div id="wrapper">
+	<div id="panel"><span class="p2">DUMP978 Sidebar, Checkbox, and filter</span> </div>
+  <div id="map">  </div>
+  
+  <div class="sidebar">
+<p style="text-align:center; font-size: 24px; color:#175B81; font-weight:bold; "><span id="sport">Baseball</span></p>	 
+			<table  style="width:90%; ">
+			<tr>
+			<td id='pict' ALIGN='center'; >	</td>
+			<td id='pict2' ALIGN='center'; ></td>
+			</tr>
+			</table></br> 
+			
+			<table  style="width:90%">
+			  <tr>
+              <th align="left">League</th>
+              <td id='f1'></td>
+              </tr> <tr>
+              <th align="left">Team</th>
+              <td id='f2'></td></tr>
+              <tr>
+			 <th align="left">Address</th>
+              <td id='f3'></td>
+              </tr> <tr>
+			  <th align="left">Stadium</th>
+              <td id='f4'></td>
+              </tr> <tr>
+              <th align="left">Capacity</th>
+              <td id='f5'></td></tr>
+              <tr>
+			  <th align="left">Website</th>
+              <td id='f6'><a href="#"></a></td>
+               </table>
+			   
+			   </br><hr>
+				<div id="ckboxes">
+					<label class="container"> <!-- need a name property for check/uncheck funtion to work -->
+						<input type="checkbox"  id="bball" name="bball" checked><b>Baseball</b><br>
+						<div id="ball">
+							<div class="box red" ></div> American League<br>
+							<div class="box blue" ></div> National League
+						</div>
+					</label>
+					<label class="container">
+						<input type="checkbox"  id="foot" name="foot" ><b>Football </b><br>
+						<div id="ball">
+							<div class="box orange" ></div> AFC<br>
+							<div class="box green" ></div> NFC
+						</div>
+					</label>
+				</div>
+  </div>
+  <div id="footer">  </div>
+  
+</div>
+<script>
+var url = 'sports.json';  // Here is the url path to my GeoJSON file, 
+
+	var map = L.map('map').setView([39.0, -98.26], 4); 
+
+	var osm=new L.tileLayer('http://{s}.tile.osm.org/{z}/{x}/{y}.png',{ 
+				attribution: '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'});
+	
+	// https: also suppported.
+	var Esri_WorldImagery = L.tileLayer('http://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
+		attribution: 'Tiles &copy; Esri &mdash; Source: Esri, i-cubed, USDA, USGS, AEX, GeoEye, Getmapping, Aerogrid, IGN, IGP, UPR-EGP, and the GIS User Community'
+	});
+	
+	// https: also suppported.
+	var Esri_WorldGrayCanvas = L.tileLayer('http://server.arcgisonline.com/ArcGIS/rest/services/Canvas/World_Light_Gray_Base/MapServer/tile/{z}/{y}/{x}', {
+		attribution: 'Tiles &copy; Esri &mdash; Esri, DeLorme, NAVTEQ',
+		maxZoom: 16
+	}).addTo(map);;
+	
+	var OpenStreetMap_BlackAndWhite = L.tileLayer('http://{s}.tiles.wmflabs.org/bw-mapnik/{z}/{x}/{y}.png', {
+	maxZoom: 18,
+	attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
+	});
+
+
+	// Set function for color ramp, used for both layers
+	function getColor(league){
+		return league == 'NL' ? 'blue' :
+			   league == 'AL' ? 'red' :
+			   league == 'AFC' ? 'orange' :
+			   league == 'NFC' ? 'green' :
+								'white';
+	       }	
+	
+	// Set style function that sets fill color property
+	function style(feature) {
+		return {
+			fillColor: setColor(feature.properties.League),
+			fillOpacity: 0.5,
+			weight: 2,
+			opacity: 1,
+			color: '#ffffff',
+			dashArray: '3'
+		};
+	}
+
+	var baseball;	
+		
+// Get GeoJSON data and create features.
+  $.getJSON(url, function(data) {
+  
+        baseball = L.geoJson(data, {
+			
+            pointToLayer: function(feature, latlng) {
+		
+				return L.circleMarker(latlng, {
+				radius:6,
+				opacity: .5,
+				//color: "#000",
+				color:getColor(feature.properties.League),
+				fillColor:  getColor(feature.properties.League),
+				fillOpacity: 0.8
+
+				}).bindTooltip(feature.properties.Name);
+            },
+				onEachFeature: function (feature, layer) {
+				
+						layer.on('click', function (e) {
+ 
+							// get coordinates from GeoJSON
+							var coords = e.target.feature.geometry.coordinates
+							//pass coords to function to create marker.(Yellow circle)
+							onMapClick(coords);
+							
+							//place attributes in panel table.
+								$('#sport').html('Baseball');
+								$('#pict').html('<img src="' +e.target.feature.properties.Logo +'">');
+								$('#pict2').html('<img src="' +e.target.feature.properties.LeagueLogo +'">');
+								$('#f1').html(e.target.feature.properties.League);
+								$('#f2').html(e.target.feature.properties.Team);
+								$('#f3').html(e.target.feature.properties.Address);
+								$('#f4').html(e.target.feature.properties.Stadium);
+								$('#f5').html(e.target.feature.properties.Capacity);
+
+								var wsite = e.target.feature.properties.Website;
+								if (wsite !== null){ 
+									$('#f6').html('<a href="'+ wsite +'" target="_blank">website</a>');
+								} else{
+									$('#f6').html('No site recorded');
+								}
+						});
+
+				},
+				filter: function(feature, layer) {   
+					return (feature.properties.Sport == "BaseBall" );
+				}
+				}).addTo(map);  //Note turned on to start map with Data, Checkbox has checked property.
+        });
+
+//2nd Layer in map
+var footballTeam;	
+		
+// Get GeoJSON data and create features.
+  $.getJSON(url, function(data) {
+  
+        footballTeam = L.geoJson(data, {
+			
+            pointToLayer: function(feature, latlng) {
+		
+				return L.circleMarker(latlng, {
+				radius:6,
+				opacity: .5,
+				//color: "#000",
+				color:getColor(feature.properties.League),
+				fillColor:  getColor(feature.properties.League),
+				fillOpacity: 0.8
+
+				}).bindTooltip(feature.properties.Name);
+            },
+				onEachFeature: function (feature, layer) {
+				
+						layer.on('click', function (e) {
+ 
+							// get coordinates from GeoJSON
+							var coords = e.target.feature.geometry.coordinates
+							//pass coords to function to create marker.(Yellow circle)
+							onMapClick(coords);
+							
+							//place attributes in panel table.
+								$('#sport').html('Football');
+								$('#pict').html('<img src="' +e.target.feature.properties.Logo +'">');
+								$('#pict2').html('<img src="' +e.target.feature.properties.LeagueLogo +'">');
+								$('#f1').html(e.target.feature.properties.League);
+								$('#f2').html(e.target.feature.properties.Team);
+								$('#f3').html(e.target.feature.properties.Address);
+								$('#f4').html(e.target.feature.properties.Stadium);
+								$('#f5').html(e.target.feature.properties.Capacity);
+
+								var wsite = e.target.feature.properties.Website;
+								if (wsite !== null){ 
+									$('#f6').html('<a href="'+ wsite +'" target="_blank">website</a>');
+								} else{
+									$('#f6').html('No site recorded');
+								}
+						});
+
+				},
+				filter: function(feature, layer) {   
+					return (feature.properties.Sport == "Football" );
+				}
+				});
+        });
+
+// Handles the check boxes being turned on/off
+document.querySelector("input[name=bball]").addEventListener('change', function() {
+                if(this.checked) map.addLayer(baseball)
+                  else map.removeLayer(baseball)
+				  	if (clickmark != undefined) {  //i.e. if it exists...
+					//function all to remove the yellow select circle, could call function to clear table from here.
+						map.removeLayer(clickmark);
+					};
+                })
+				
+document.querySelector("input[name=foot]").addEventListener('change', function() {
+                if(this.checked) map.addLayer(footballTeam)
+                  else map.removeLayer(footballTeam)
+				  	if (clickmark != undefined) {
+						map.removeLayer(clickmark);
+					};
+                })
+
+	
+
+// click marker
+  var clickmark;
+
+  // When you click on a circle, it calls the onMapClick function and passes the layers coordinates.
+  // I grab the coords which are X,Y, and I need to flip them to latLng for a marker,  
+  function onMapClick(coords) {
+		//console.log(coords);
+		var thecoords = coords.toString().split(',');
+		var lat = thecoords[1];
+		var lng = thecoords[0];
+		//if prior marker exists, remove it.
+		if (clickmark != undefined) {
+		  map.removeLayer(clickmark);
+		};
+  
+		 clickmark = L.circleMarker([lat,lng],{
+			radius: 8,
+			color: "yellow",
+			fillColor:  "yellow",
+			fillOpacity: 0.8}
+		 ).addTo(map);
+	}
+// end of code for click marker.
+
+
+
+//Add layer control
+var baseMaps = {
+    "Open Moose Street Map": osm,
+    "Imagery":Esri_WorldImagery,
+    "silly moose":Esri_WorldImagery,
+	"Gray":Esri_WorldGrayCanvas,
+	"OSM B&W":OpenStreetMap_BlackAndWhite
+};
+
+var overlayMaps = {};
+L.control.layers(baseMaps, overlayMaps).addTo(map);
+
+ </script>
+
+</body>
+</html>
