@@ -169,8 +169,22 @@ img {  /* Images are all different sizes, this makes them the same */
 					<label class="container"> <!-- need a name property for check/uncheck funtion to work -->
 						<input type="checkbox"  id="bball" name="bball" checked><b>Baseball</b><br>
 						<div id="ball">
-							<div class="box red" ></div> American League<br>
-							<div class="box blue" ></div> National League
+						<label for="agalt">Altitude:</label>
+						<select name="galt" id="bgalt">
+						<option value="22000">22000</option>
+						<option value="16000">16000</option>
+						<option value="12000">12000</option>
+						<option value="10000">10000</option>
+						<option value="16000">16000</option>
+						<option value="9000">9000</option>
+						<option value="8000">8000</option>
+						<option value="7000">7000</option>
+						<option value="5000">5000</option>
+						<option value="4000">4000</option>
+						<option value="0">0</option>
+						</select>
+
+
 						</div>
 					</label>
 					<label class="container">
@@ -271,7 +285,7 @@ var url = 'gairmet.geojson';  // Here is the url path to my GeoJSON file,
 								$('#f1').html(e.target.feature.properties.Ob);
 								$('#f2').html(e.target.feature.properties.RepNum);
 								$('#f3').html(e.target.feature.properties.Alt);
-//								$('#f4').html(e.target.feature.properties.coords);
+								$('#f4').html(galt);
 								$('#f5').html(e.target.feature.properties.Capacity);
 
 								var wsite = e.target.feature.properties.Website;
@@ -286,7 +300,9 @@ var url = 'gairmet.geojson';  // Here is the url path to my GeoJSON file,
 						layer.bindTooltip(feature.properties.Ob) ;
 				}   ,    //,
 				filter: function(feature, layer) {   
-					return (feature.properties.Alt == "4000" );
+
+					return (feature.properties.Alt == document.querySelector('#bgalt').value); 				
+//					return (feature.properties.Alt == '12000' );
 				}
 				}).addTo(map);  //Note turned on to start map with Data, Checkbox has checked property.
         });
@@ -354,6 +370,8 @@ document.querySelector("input[name=bball]").addEventListener('change', function(
 						map.removeLayer(clickmark);
 					};
                 })
+                
+              
 				
 document.querySelector("input[name=foot]").addEventListener('change', function() {
                 if(this.checked) map.addLayer(footballTeam)
