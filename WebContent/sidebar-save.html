@@ -5,7 +5,7 @@
   <link rel="stylesheet" href="./leaflet/leaflet.css"/>
   <script src="./leaflet/leaflet.js"></script>
   <script src="./leaflet/jquery.js"></script> 
-<!-- <script src="./leaflet/leaflet-realtime.js"></script>  -->
+  <script src="./leaflet/leaflet-realtime.js"></script>
 	
 <style>
 #wrapper {
@@ -186,7 +186,7 @@ img {  /* Images are all different sizes, this makes them the same */
   
 </div>
 <script>
-var url = 'gairmet.geojson';  // Here is the url path to my GeoJSON file, 
+var url = 'sports.json';  // Here is the url path to my GeoJSON file, 
 
 	var map = L.map('map').setView([39.0, -98.26], 4); 
 
@@ -211,22 +211,18 @@ var url = 'gairmet.geojson';  // Here is the url path to my GeoJSON file,
 
 
 	// Set function for color ramp, used for both layers
-	function getColor(Alt){
-		return 	Alt == '11000' ? 'blue' :
-				Alt == '4000' ? 'red' :
-				Alt == '12000' ? 'red' :
-				Alt == '6000' ? 'red' :
-				Alt == '4000' ? 'red' :
-				Alt == '0' ? 'red' :
-				Alt == '16000' ? 'orange' :
-				Alt == '8000' ? 'green' :
+	function getColor(league){
+		return league == 'NL' ? 'blue' :
+			   league == 'AL' ? 'red' :
+			   league == 'AFC' ? 'orange' :
+			   league == 'NFC' ? 'green' :
 								'white';
 	       }	
 	
 	// Set style function that sets fill color property
 	function style(feature) {
 		return {
-			fillColor: setColor(feature.properties.Alt),
+			fillColor: setColor(feature.properties.League),
 			fillOpacity: 0.5,
 			weight: 2,
 			opacity: 1,
@@ -241,37 +237,36 @@ var url = 'gairmet.geojson';  // Here is the url path to my GeoJSON file,
   $.getJSON(url, function(data) {
   
         baseball = L.geoJson(data, {
-        	getFeatureId: function(featureData){
- //  			return featureData.properties.RepNum,{		
-//            pointToLayer: function(feature, latlng) {
+			
+            pointToLayer: function(feature, latlng) {
 		
 				return L.circleMarker(latlng, {
-//				radius:6,
-//				opacity: .5,
-//				//color: "#000",
-//				color:getColor(feature.properties.Alt),
-//				fillColor:  getColor(feature.properties.Alt),
-//				fillOpacity: 0.8
+				radius:6,
+				opacity: .5,
+				//color: "#000",
+				color:getColor(feature.properties.League),
+				fillColor:  getColor(feature.properties.League),
+				fillOpacity: 0.8
 
-				})
+				}).bindTooltip(feature.properties.Name);
             },
-				onEachFeature: function (feature, layer){
-
+				onEachFeature: function (feature, layer) {
+				
 						layer.on('click', function (e) {
  
 							// get coordinates from GeoJSON
-//							var coords = e.target.feature.geometry.coordinates
+							var coords = e.target.feature.geometry.coordinates
 							//pass coords to function to create marker.(Yellow circle)
-//							onMapClick(coords);
+							onMapClick(coords);
 							
 							//place attributes in panel table.
 								$('#sport').html('Baseball');
-//								$('#pict').html('<img src="' +e.target.feature.properties.Logo +'">');
-//								$('#pict2').html('<img src="' +e.target.feature.properties.LeagueLogo +'">');
-								$('#f1').html(e.target.feature.properties.Ob);
-								$('#f2').html(e.target.feature.properties.RepNum);
-								$('#f3').html(e.target.feature.properties.Alt);
-//								$('#f4').html(e.target.feature.properties.coords);
+								$('#pict').html('<img src="' +e.target.feature.properties.Logo +'">');
+								$('#pict2').html('<img src="' +e.target.feature.properties.LeagueLogo +'">');
+								$('#f1').html(e.target.feature.properties.League);
+								$('#f2').html(e.target.feature.properties.Team);
+								$('#f3').html(e.target.feature.properties.Address);
+								$('#f4').html(e.target.feature.properties.Stadium);
 								$('#f5').html(e.target.feature.properties.Capacity);
 
 								var wsite = e.target.feature.properties.Website;
@@ -281,21 +276,19 @@ var url = 'gairmet.geojson';  // Here is the url path to my GeoJSON file,
 									$('#f6').html('No site recorded');
 								}
 						});
-						
-	//					layer.bindPopup('G-AIRMET: Rep ID:' + feature.properties.RepNum) ;
-						layer.bindTooltip(feature.properties.Ob) ;
-				}   ,    //,
+
+				},
 				filter: function(feature, layer) {   
-					return (feature.properties.Alt == "4000" );
+					return (feature.properties.Sport == "BaseBall" );
 				}
 				}).addTo(map);  //Note turned on to start map with Data, Checkbox has checked property.
         });
 
 //2nd Layer in map
 var footballTeam;	
-var url2 = 'airmet.geojson'; 		
+		
 // Get GeoJSON data and create features.
-  $.getJSON(url2, function(data) {
+  $.getJSON(url, function(data) {
   
         footballTeam = L.geoJson(data, {
 			

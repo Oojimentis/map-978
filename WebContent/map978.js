@@ -130,7 +130,7 @@ L.realtime({url: 'http://localhost:8000/gairmet.geojson',
 
 		pointToLayer: function (feature, latlng) {
 			marker = L.marker(latlng,{icon: wxIcon});
-    		marker.bindPopup('<b><u>'+feature.properties.Stn +'</b></u>' 
+    		marker.bindTooltip('<b><u>'+feature.properties.Stn +'</b></u>' 
     				+ '<br>Obs Date :' + '<b>' + feature.properties.ObDate  + '</b>'	
     				+ '<br>Temp(f)  :' + '<b>' + feature.properties.Temp    + '</b>'    				
     				+ '<br>Wind Sp  :' + '<b>' + feature.properties.WindSp  + '</b>'
