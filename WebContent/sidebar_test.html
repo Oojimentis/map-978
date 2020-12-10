@@ -97,7 +97,6 @@ table {
 	padding-left: 10px;
 }
 
-
 img {  /* Images are all different sizes, this makes them the same */
   width:100px;
   height:100px;
@@ -136,12 +135,6 @@ img {  /* Images are all different sizes, this makes them the same */
   
   <div class="sidebar">
 <p style="text-align:center; font-size: 24px; color:#175B81; font-weight:bold; "><span id="sport">Baseball</span></p>	 
-			<table  style="width:90%; ">
-			<tr>
-			<td id='pict' ALIGN='center'; >	</td>
-			<td id='pict2' ALIGN='center'; ></td>
-			</tr>
-			</table></br> 
 			
 			<table  style="width:90%">
 			  <tr>
@@ -167,31 +160,45 @@ img {  /* Images are all different sizes, this makes them the same */
 			   </br><hr>
 				<div id="ckboxes">
 					<label class="container"> <!-- need a name property for check/uncheck funtion to work -->
-						<input type="checkbox"  id="bball" name="bball" checked><b>Baseball</b><br>
+						<input type="checkbox"  id="bball" name="bball" checked><b>G-AIRMET</b><br>
 						<div id="ball">
 						<label for="agalt">Altitude:</label>
-						<select name="galt" id="bgalt">
-						<option value="22000">22000</option>
-						<option value="16000">16000</option>
+						<select name="galt" id="bgalt" onchange="reloadFunc(this);">
+						<option value="50000">50000</option>
+						<option value="40000">40000</option>
+						<option value="20000">20000</option>
+						<option value="15000">15000</option>
 						<option value="12000">12000</option>
 						<option value="10000">10000</option>
-						<option value="16000">16000</option>
 						<option value="9000">9000</option>
 						<option value="8000">8000</option>
-						<option value="7000">7000</option>
+						<option value="6000">6000</option>
 						<option value="5000">5000</option>
-						<option value="4000">4000</option>
+						<option value="2000">2000</option>
+						<option value="1000">1000</option>
 						<option value="0">0</option>
 						</select>
-
-
 						</div>
 					</label>
 					<label class="container">
 						<input type="checkbox"  id="foot" name="foot" ><b>Football </b><br>
 						<div id="ball">
-							<div class="box orange" ></div> AFC<br>
-							<div class="box green" ></div> NFC
+						<label for="aaalt">Altitude:</label>
+						<select name="aalt" id="agalt" onchange="reloadFunc(this);">
+						<option value="50000">50000</option>
+						<option value="40000">40000</option>
+						<option value="20000">20000</option>
+						<option value="15000">15000</option>
+						<option value="12000">12000</option>
+						<option value="10000">10000</option>
+						<option value="9000">9000</option>
+						<option value="8000">8000</option>
+						<option value="6000">6000</option>
+						<option value="5000">5000</option>
+						<option value="2000">2000</option>
+						<option value="1000">1000</option>
+						<option value="0">0</option>
+						</select>						
 						</div>
 					</label>
 				</div>
@@ -200,7 +207,12 @@ img {  /* Images are all different sizes, this makes them the same */
   
 </div>
 <script>
-var url = 'gairmet.geojson';  // Here is the url path to my GeoJSON file, 
+
+function reloadFunc(obj){
+		  location.reload();
+	}
+
+var url = 'gairmet.geojson';  
 
 	var map = L.map('map').setView([39.0, -98.26], 4); 
 
@@ -222,7 +234,6 @@ var url = 'gairmet.geojson';  // Here is the url path to my GeoJSON file,
 	maxZoom: 18,
 	attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
 	});
-
 
 	// Set function for color ramp, used for both layers
 	function getColor(Alt){
@@ -250,13 +261,13 @@ var url = 'gairmet.geojson';  // Here is the url path to my GeoJSON file,
 	}
 
 	var baseball;	
-		
+
 // Get GeoJSON data and create features.
   $.getJSON(url, function(data) {
   
         baseball = L.geoJson(data, {
         	getFeatureId: function(featureData){
- //  			return featureData.properties.RepNum,{		
+//  			return featureData.properties.RepNum,{		
 //            pointToLayer: function(feature, latlng) {
 		
 				return L.circleMarker(latlng, {
@@ -270,7 +281,6 @@ var url = 'gairmet.geojson';  // Here is the url path to my GeoJSON file,
 				})
             },
 				onEachFeature: function (feature, layer){
-
 						layer.on('click', function (e) {
  
 							// get coordinates from GeoJSON
@@ -280,83 +290,62 @@ var url = 'gairmet.geojson';  // Here is the url path to my GeoJSON file,
 							
 							//place attributes in panel table.
 								$('#sport').html('Baseball');
-//								$('#pict').html('<img src="' +e.target.feature.properties.Logo +'">');
-//								$('#pict2').html('<img src="' +e.target.feature.properties.LeagueLogo +'">');
 								$('#f1').html(e.target.feature.properties.Ob);
 								$('#f2').html(e.target.feature.properties.RepNum);
 								$('#f3').html(e.target.feature.properties.Alt);
-								$('#f4').html(galt);
-								$('#f5').html(e.target.feature.properties.Capacity);
+//								$('#f4').html('galt');
+//								$('#f5').html('poo');
 
-								var wsite = e.target.feature.properties.Website;
-								if (wsite !== null){ 
-									$('#f6').html('<a href="'+ wsite +'" target="_blank">website</a>');
-								} else{
-									$('#f6').html('No site recorded');
-								}
 						});
-						
-	//					layer.bindPopup('G-AIRMET: Rep ID:' + feature.properties.RepNum) ;
 						layer.bindTooltip(feature.properties.Ob) ;
-				}   ,    //,
+				}   ,   
 				filter: function(feature, layer) {   
-
-					return (feature.properties.Alt == document.querySelector('#bgalt').value); 				
-//					return (feature.properties.Alt == '12000' );
+					var n = document.getElementById("bgalt").value;
+					var nn = parseInt(n, 10);
+					return (feature.properties.Alt > nn );
 				}
 				}).addTo(map);  //Note turned on to start map with Data, Checkbox has checked property.
         });
 
 //2nd Layer in map
 var footballTeam;	
-var url2 = 'airmet.geojson'; 		
-// Get GeoJSON data and create features.
-  $.getJSON(url2, function(data) {
-  
-        footballTeam = L.geoJson(data, {
-			
-            pointToLayer: function(feature, latlng) {
-		
-				return L.circleMarker(latlng, {
-				radius:6,
-				opacity: .5,
-				//color: "#000",
-				color:getColor(feature.properties.League),
-				fillColor:  getColor(feature.properties.League),
-				fillOpacity: 0.8
+var url2 = 'airmet.geojson'; 	
 
-				}).bindTooltip(feature.properties.Name);
+// Get GeoJSON data and create features.
+  $.getJSON(url2, function(data2) {
+  
+        footballTeam = L.geoJson(data2, {
+        	getFeatureId: function(featureData){
+        		
+				return L.circleMarker(latlng, {
+//				radius:6,
+//				opacity: .5,
+//				//color: "#000",
+//				color:getColor(feature.properties.Alt),
+//				fillColor:  getColor(feature.properties.Alt),
+//				fillOpacity: 0.8
+
+				})
             },
 				onEachFeature: function (feature, layer) {
 				
 						layer.on('click', function (e) {
- 
-							// get coordinates from GeoJSON
-							var coords = e.target.feature.geometry.coordinates
-							//pass coords to function to create marker.(Yellow circle)
-							onMapClick(coords);
 							
 							//place attributes in panel table.
 								$('#sport').html('Football');
-								$('#pict').html('<img src="' +e.target.feature.properties.Logo +'">');
-								$('#pict2').html('<img src="' +e.target.feature.properties.LeagueLogo +'">');
-								$('#f1').html(e.target.feature.properties.League);
-								$('#f2').html(e.target.feature.properties.Team);
-								$('#f3').html(e.target.feature.properties.Address);
-								$('#f4').html(e.target.feature.properties.Stadium);
-								$('#f5').html(e.target.feature.properties.Capacity);
+								$('#f1').html(e.target.feature.properties.RepNum);
+								$('#f2').html(e.target.feature.properties.Alt);
+								$('#f3').html('poo');
+								$('#f4').html('poo');
+								$('#f5').html('poo');
 
-								var wsite = e.target.feature.properties.Website;
-								if (wsite !== null){ 
-									$('#f6').html('<a href="'+ wsite +'" target="_blank">website</a>');
-								} else{
-									$('#f6').html('No site recorded');
-								}
 						});
 
 				},
 				filter: function(feature, layer) {   
-					return (feature.properties.Sport == "Football" );
+					var n = document.getElementById("agalt").value;
+					var nn = parseInt(n, 10);
+					return (feature.properties.Alt >= nn );
 				}
 				});
         });
@@ -371,8 +360,6 @@ document.querySelector("input[name=bball]").addEventListener('change', function(
 					};
                 })
                 
-              
-				
 document.querySelector("input[name=foot]").addEventListener('change', function() {
                 if(this.checked) map.addLayer(footballTeam)
                   else map.removeLayer(footballTeam)
