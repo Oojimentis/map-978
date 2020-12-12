@@ -297,12 +297,13 @@ var url = 'gairmet.geojson';
 //								$('#f5').html('poo');
 
 						});
-						layer.bindTooltip(feature.properties.Ob) ;
+						layer.bindTooltip('G-AIRMET:' + feature.properties.RepNum
+								+ '<br>' + feature.properties.Ob) ;
 				}   ,   
 				filter: function(feature, layer) {   
 					var n = document.getElementById("bgalt").value;
 					var nn = parseInt(n, 10);
-					return (feature.properties.Alt > nn );
+					return (feature.properties.Alt >= nn );
 				}
 				}).addTo(map);  //Note turned on to start map with Data, Checkbox has checked property.
         });
@@ -340,7 +341,8 @@ var url2 = 'airmet.geojson';
 								$('#f5').html('poo');
 
 						});
-
+						layer.bindTooltip('AIRMET: Rep ID:' + feature.properties.RepNum
+								+ '<br>Altitude: ' + feature.properties.Alt	) ;
 				},
 				filter: function(feature, layer) {   
 					var n = document.getElementById("agalt").value;

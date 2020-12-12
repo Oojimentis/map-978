@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>DUMP978 - UAT WX Data - Sidebar</title>
+  <link rel="stylesheet" href="./leaflet/leaflet.css"/>
+  <script src="./leaflet/leaflet.js"></script>
+  <script src="./leaflet/jquery.js"></script> 
+ <script src="./leaflet/leaflet-realtime.js"></script>  
+	
+<style>
+#wrapper {
+  margin: 0 auto;
+  width: 100%;
+}
+
+#panel{
+ float: left;
+  width: 100%;
+  height:50px;
+background-color: #175B81;
+color:white;
+}
+
+#map {
+  float: left;
+  width: 80%;
+  height:600px;
+}
+
+.sidebar {
+  float: left;
+  width: 20%;
+  height:600px;
+   background-color: white;
+   color: #175B81;
+}
+
+#footer {
+float: left;
+background-color: #175B81;
+color: white;
+  width: 100%;
+  height:25px
+}
+
+.text-labels     {
+	font-weight: bold;
+    color:#006400;
+	font-family: "Arial Black"
+	font-size: 20px ;
+    line-height:25px;
+    text-align:center;
+   }
+   
+table, th, td 
+	{
+		margin:0px 5px;
+		/*border:solid 1px #333; */
+		padding:2px 4px;
+		font:10px Verdana;
+	}
+th {
+		font-size:14px;
+		font-weight:bold
+	}
+td {
+		font-size:14px;
+		font-weight:normal
+	}
+tr {
+		background: white;
+	}
+	
+tbody  tr:hover {
+		background: yellow;
+	}
+table {
+		border-collapse: collapse;
+	}  
+.table a
+{
+    display:block;
+    text-decoration:none;
+}
+#f1{
+	font-weight:bold
+}
+.p2 {
+    font-size: 24px;
+	font-weight:bold;
+    position: relative;
+    top: 11px;
+	left: 20px;
+	}
+	
+#ckboxes {	/* pushes checkbox a little from sidebar left edge */
+	padding-left: 10px;
+}
+
+img {  /* Images are all different sizes, this makes them the same */
+  width:100px;
+  height:100px;
+  object-fit:scale-down;
+}
+
+	.box{
+		width:15px;
+		height:15px;
+		border-radius:25px; /* makes a circle from a box */
+    	 display: inline-block;
+		}
+	 
+	.red{
+		background:red;
+	} 
+	.green{
+		background:green;
+	}
+	.blue{
+		background:blue;
+	} 
+	.orange{
+		background:orange;
+	}
+	#ball{	/* pushes the circle right 80 px. */
+		padding-left: 80px;
+	}
+</style>
+</head>
+<body>
+
+<div id="wrapper">
+	<div id="panel"><span class="p2">DUMP978 Sidebar, Checkbox, and filter</span> </div>
+  <div id="map">  </div>
+  
+  <div class="sidebar">
+<p style="text-align:center; font-size: 24px; color:#175B81; font-weight:bold; "><span id="sport">Baseball</span></p>	 
+			
+			<table  style="width:90%">
+			  <tr>
+              <th align="left">League</th>
+              <td id='f1'></td>
+              </tr> <tr>
+              <th align="left">Team</th>
+              <td id='f2'></td></tr>
+              <tr>
+			 <th align="left">Address</th>
+              <td id='f3'></td>
+              </tr> <tr>
+			  <th align="left">Stadium</th>
+              <td id='f4'></td>
+              </tr> <tr>
+              <th align="left">Capacity</th>
+              <td id='f5'></td></tr>
+              <tr>
+			  <th align="left">Website</th>
+              <td id='f6'><a href="#"></a></td>
+               </table>
+			   
+			   </br><hr>
+				<div id="ckboxes">
+					<label class="container"> <!-- need a name property for check/uncheck funtion to work -->
+						<input type="checkbox"  id="bball" name="bball" checked><b>G-AIRMET</b><br>
+						<div id="ball">
+						<label for="agalt">Altitude:</label>
+						<select name="galt" id="bgalt" onchange="reloadFunc(this);">
+						<option value="50000">50000</option>
+						<option value="40000">40000</option>
+						<option value="20000">20000</option>
+						<option value="15000">15000</option>
+						<option value="12000">12000</option>
+						<option value="10000">10000</option>
+						<option value="9000">9000</option>
+						<option value="8000">8000</option>
+						<option value="6000">6000</option>
+						<option value="5000">5000</option>
+						<option value="2000">2000</option>
+						<option value="1000">1000</option>
+						<option value="0">0</option>
+						</select>
+						</div>
+					</label>
+					<label class="container">
+						<input type="checkbox"  id="foot" name="foot" checked><b>Football </b><br>
+						<div id="foot">
+						<label for="aaalt">Altitude:</label>
+						<select name="aalt" id="agalt" onchange="reloadFunc(this);">
+						<option value="50000">50000</option>
+						<option value="40000">40000</option>
+						<option value="20000">20000</option>
+						<option value="15000">15000</option>
+						<option value="12000">12000</option>
+						<option value="10000">10000</option>
+						<option value="9000">9000</option>
+						<option value="8000">8000</option>
+						<option value="6000">6000</option>
+						<option value="5000">5000</option>
+						<option value="2000">2000</option>
+						<option value="1000">1000</option>
+						<option value="0">0</option>
+						</select>						
+						</div>
+					</label>
+				</div>
+  </div>
+  <div id="footer">  </div>
+  
+</div>
+
+<script src="sidebar.js">
+
+ </script>
+
+</body>
+</html>
