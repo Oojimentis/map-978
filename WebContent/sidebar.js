@@ -2,7 +2,7 @@ function reloadFunc(obj){
 		  location.reload();
 	}
 
-var map = L.map('map').setView([39.0, -98.26], 4); 
+var map = L.map('map').setView([39.0, -88.26], 5); 
 
 var osm=new L.tileLayer('http://{s}.tile.osm.org/{z}/{x}/{y}.png',{ 
 		attribution: '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'}).addTo(map);;
@@ -23,15 +23,27 @@ var OpenStreetMap_BlackAndWhite = L.tileLayer('http://{s}.tiles.wmflabs.org/bw-m
 
 // Set function for color ramp, used for both layers
 function getColor(colf){
-	return 	colf >= 50000 ? '#800026':
-			colf >= 30000 ? '#BD0026':
-			colf >= 20000 ? '#E31A1C':
-			colf >= 16000 ? '#FC4E2A':
-			colf >= 10000 ? '#FD8D3C':
-			colf >= 7000  ? '#FEB24C':
-			colf >= 5000  ? '#FED976':
-			colf >= 2000  ? '#008080':
-								'blue';
+	return 	colf >=	60000 ? '#ff9999':
+			colf >=	50000 ? '#ffb399':
+			colf >=	43000 ? '#ffcc99':
+			colf >=	42000 ? '#ffe699':
+			colf >=	40000 ? '#e6ff99':
+			colf >=	32000 ? '#ccff99':
+			colf >=	24000 ? '#b3ff99':
+			colf >=	22000 ? '#99ff99':
+			colf >=	20000 ? '#99ffb3':
+			colf >=	18000 ? '#99ffcc':
+			colf >=	16000 ? '#99ffe6':
+			colf >=	12000 ? '#99ffff':
+			colf >=	10000 ? '#99e6ff':
+			colf >=	9000 ? '#99ccff':
+			colf >=	8000 ? '#99b3ff':
+			colf >=	7000 ? '#9999ff':
+			colf >=	6000 ? '#b399ff':
+			colf >=	4000 ? '#cc99ff':
+			colf >=	1000 ? '#e699ff':
+			colf >=	0 	? 	'#ff99ff':
+							'blue';
 }	
 
 // G-AIRMET
@@ -42,7 +54,7 @@ var url = 'gairmet.geojson';
      gairmet = L.geoJson(data, {
 		style: function(feature){
 			kolor  = getColor(feature.properties.Alt);
-			return { color: '#0080FF', weight: 2, fillColor: 'yellow',opacity: 0.3,fillOpacity: 0.7};
+			return { color: '#00cccc', weight: 2, fillColor: kolor,opacity: 0.1,fillOpacity: 0.02};
 		},
  			onEachFeature: function (feature, layer){
 				layer.bindTooltip('Altitude:' + feature.properties.Alt + ' RepID:' + feature.properties.RepNum
@@ -64,7 +76,7 @@ var url2 = 'airmet.geojson';
 	airmet = L.geoJson(data2, {
 		style: function(feature){
 			kolor  = getColor(feature.properties.Alt);
-			return { color: '#0080FF', weight: 2, fillColor: 'green',opacity: 0.3,fillOpacity: 0.7};
+			return { color: '#00ffff', weight: 2, fillColor: kolor ,opacity: 0.1,fillOpacity: 0.02};
 		},
 			onEachFeature: function (feature, layer) {
 				layer.bindTooltip('AIRMET: Rep ID:' + feature.properties.RepNum
@@ -78,6 +90,27 @@ var url2 = 'airmet.geojson';
 		}).addTo(map);
 });
 
+// SIGMET
+var sigmet;	
+var url3 = 'sigmet.geojson';
+ 	
+ $.getJSON(url3, function(data3) {
+	sigmet = L.geoJson(data3, {
+		style: function(feature){
+			kolor  = getColor(feature.properties.Alt);
+			return { color: '#66ff99', weight: 2, fillColor: kolor,opacity: 0.1,fillOpacity: 0.02};
+		},
+			onEachFeature: function (feature, layer) {
+				layer.bindTooltip('SIGMET: Rep ID:' + feature.properties.RepNum
+						+ '<br>Altitude: ' + feature.properties.Alt	) ;
+				},
+				filter: function(feature,layer) {   
+					var n = document.getElementById("sgalt").value;
+					var nn = parseInt(n, 10);
+					return (feature.properties.Alt >= nn );
+				}
+		}).addTo(map);
+});
 
 // ** METAR 
 var wxIcon = L.icon({iconUrl: 'therm.ico', iconSize: [35,25]});
@@ -92,7 +125,7 @@ realtime = L.realtime({
 		pointToLayer: function (feature, latlng) {
 			marker = L.marker(latlng,{icon: wxIcon});
     		marker.bindTooltip(feature.properties.Stn 
-    				+ '<br>' + feature.properties.Temp    				
+    				+ '<br>' + feature.properties.Temp   +'&#x2109' 				
     		);
  			marker.on('click', function (e) {
 					$('#f1').html(e.target.feature.properties.Stn);
@@ -108,16 +141,24 @@ realtime = L.realtime({
 	}).addTo(map);
 
 // Handles the check boxes being turned on/off
-document.querySelector("input[name=bball]").addEventListener('change', function() {
+document.querySelector("input[name=gmet]").addEventListener('change', function() {
                 if(this.checked) map.addLayer(gairmet)
                   else map.removeLayer(gairmet)
                 })
                 
-document.querySelector("input[name=foot]").addEventListener('change', function() {
+document.querySelector("input[name=amet]").addEventListener('change', function() {
                 if(this.checked) map.addLayer(airmet)
                   else map.removeLayer(airmet)
                 })
 
+document.querySelector("input[name=meta]").addEventListener('change', function() {
+                if(this.checked) map.addLayer(realtime)
+                  else map.removeLayer(realtime)
+                })
+document.querySelector("input[name=smet]").addEventListener('change', function() {
+                if(this.checked) map.addLayer(sigmet)
+                  else map.removeLayer(sigmet)
+                })
 
 //Add layer control
 var baseMaps = {

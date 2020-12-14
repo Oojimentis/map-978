@@ -24,14 +24,14 @@
 #map {
   	float: left;
   	width: 80%;
-  	height:600px;
+  	height:700px;
 }
 
 .sidebar {
 	float: left;
  	width: 20%;
-  	height:600px;
-	background-color: white;
+  	height:700px;
+	background-color: #d3eaf8;
    	color: #175B81;
 }
 
@@ -55,9 +55,6 @@
   -ms-user-select: none;
   user-select: none;
 }
-
-
-
 
 .text-labels     {
 	font-weight: bold;
@@ -151,47 +148,96 @@ table {
 	<hr>
 	<div id="ckboxes">
 		<label class="container"> <!-- need a name property for check/uncheck funtion to work -->
-		<input type="checkbox"  id="bball" name="bball" checked><b>G-AIRMET</b><br>
-		<div id="ball">
+		<input type="checkbox"  id="meta" name="meta" checked><b>METAR</b><br>
+
+		<label class="container"> <!-- need a name property for check/uncheck funtion to work -->
+		<input type="checkbox"  id="gmet" name="gmet" checked><b>G-AIRMET</b><br>
+		<div id="gm">
 			<label for="agalt">Altitude:</label>
 			<select name="galt" id="bgalt" onchange="reloadFunc(this);">
-			<option value="50000">50000</option>
-			<option value="40000">40000</option>
-			<option value="20000">20000</option>
-			<option value="15000">15000</option>
-			<option value="12000">12000</option>
-			<option value="10000">10000</option>
-			<option value="9000">9000</option>
-			<option value="8000">8000</option>
-			<option value="6000">6000</option>
-			<option value="5000">5000</option>
-			<option value="2000">2000</option>
-			<option value="1000">1000</option>
-			<option value="0">0</option>
+				<option value="60000">60000</option>
+				<option value="50000">50000</option>
+				<option value="43000">43000</option>
+				<option value="42000">42000</option>
+				<option value="40000">40000</option>
+				<option value="32000">32000</option>
+				<option value="24000">24000</option>
+				<option value="22000">22000</option>
+				<option value="20000">20000</option>
+				<option value="18000">18000</option>
+				<option value="16000">16000</option>
+				<option value="12000">12000</option>
+				<option value="10000">10000</option>
+				<option value="9000">9000</option>
+				<option value="8000">8000</option>
+				<option value="7000">7000</option>
+				<option value="6000">6000</option>
+				<option value="4000">4000</option>
+				<option value="1000">1000</option>
+				<option value="0">0</option>
 			</select>
 		</div>
 		</label>
 		<label class="container">
-		<input type="checkbox"  id="foot" name="foot" checked><b>AIRMET </b><br>
-		<div id="foot">
+		<input type="checkbox"  id="amet" name="amet" checked><b>AIRMET </b><br>
+		<div id="am">
 			<label for="aaalt">Altitude:</label>
 			<select name="aalt" id="agalt" onchange="reloadFunc(this);">
-			<option value="50000">50000</option>
-			<option value="40000">40000</option>
-			<option value="20000">20000</option>
-			<option value="15000">15000</option>
-			<option value="12000">12000</option>
-			<option value="10000">10000</option>
-			<option value="9000">9000</option>
-			<option value="8000">8000</option>
-			<option value="6000">6000</option>
-			<option value="5000">5000</option>
-			<option value="2000">2000</option>
-			<option value="1000">1000</option>
-			<option value="0">0</option>
+				<option value="60000">60000</option>
+				<option value="50000">50000</option>
+				<option value="43000">43000</option>
+				<option value="42000">42000</option>
+				<option value="40000">40000</option>
+				<option value="32000">32000</option>
+				<option value="24000">24000</option>
+				<option value="22000">22000</option>
+				<option value="20000">20000</option>
+				<option value="18000">18000</option>
+				<option value="16000">16000</option>
+				<option value="12000">12000</option>
+				<option value="10000">10000</option>
+				<option value="9000">9000</option>
+				<option value="8000">8000</option>
+				<option value="7000">7000</option>
+				<option value="6000">6000</option>
+				<option value="4000">4000</option>
+				<option value="1000">1000</option>
+				<option value="0">0</option>
 			</select>						
 		</div>
 		</label>
+		<label class="container">
+		<input type="checkbox"  id="smet" name="smet" checked><b>SIGMET </b><br>
+		<div id="sm">
+			<label for="saalt">Altitude:</label>
+			<select name="salt" id="sgalt" onchange="reloadFunc(this);">
+				<option value="60000">60000</option>
+				<option value="50000">50000</option>
+				<option value="43000">43000</option>
+				<option value="42000">42000</option>
+				<option value="40000">40000</option>
+				<option value="32000">32000</option>
+				<option value="24000">24000</option>
+				<option value="22000">22000</option>
+				<option value="20000">20000</option>
+				<option value="18000">18000</option>
+				<option value="16000">16000</option>
+				<option value="12000">12000</option>
+				<option value="10000">10000</option>
+				<option value="9000">9000</option>
+				<option value="8000">8000</option>
+				<option value="7000">7000</option>
+				<option value="6000">6000</option>
+				<option value="4000">4000</option>
+				<option value="1000">1000</option>
+				<option value="0">0</option>
+			</select>						
+		</div>
+		</label>
+
+		
+		
+		
 	</div>
   	</div>
   <div id="footer">  </div>
