@@ -109,9 +109,6 @@ table {
 #ckboxes {	/* pushes checkbox a little from sidebar left edge */
 	padding-left: 1px;
 }
-
-
-
 </style>
 </head>
 <body>
@@ -154,7 +151,7 @@ table {
 		<input type="checkbox"  id="gmet" name="gmet" checked><b>G-AIRMET</b><br>
 		<div id="gm">
 			<label for="agalt">Altitude:</label>
-			<select name="galt" id="bgalt" onchange="reloadFunc(this);">
+			<select name="galt" id="bgalt" >
 				<option value="60000">60000</option>
 				<option value="50000">50000</option>
 				<option value="43000">43000</option>
@@ -182,7 +179,7 @@ table {
 		<input type="checkbox"  id="amet" name="amet" checked><b>AIRMET </b><br>
 		<div id="am">
 			<label for="aaalt">Altitude:</label>
-			<select name="aalt" id="agalt" onchange="reloadFunc(this);">
+			<select name="aalt" id="agalt">
 				<option value="60000">60000</option>
 				<option value="50000">50000</option>
 				<option value="43000">43000</option>
@@ -210,7 +207,7 @@ table {
 		<input type="checkbox"  id="smet" name="smet" checked><b>SIGMET </b><br>
 		<div id="sm">
 			<label for="saalt">Altitude:</label>
-			<select name="salt" id="sgalt" onchange="reloadFunc(this);">
+			<select name="salt" id="sgalt">
 				<option value="60000">60000</option>
 				<option value="50000">50000</option>
 				<option value="43000">43000</option>
@@ -234,14 +231,9 @@ table {
 			</select>						
 		</div>
 		</label>
-
-		
-		
-		
 	</div>
   	</div>
   <div id="footer">  </div>
-  
 </div>
 
 <script src="sidebar.js"></script>

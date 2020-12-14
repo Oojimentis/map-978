@@ -21,7 +21,6 @@ var OpenStreetMap_BlackAndWhite = L.tileLayer('http://{s}.tiles.wmflabs.org/bw-m
 		attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
 });
 
-// Set function for color ramp, used for both layers
 function getColor(colf){
 	return 	colf >=	60000 ? '#ff9999':
 			colf >=	50000 ? '#ffb399':
@@ -36,25 +35,27 @@ function getColor(colf){
 			colf >=	16000 ? '#99ffe6':
 			colf >=	12000 ? '#99ffff':
 			colf >=	10000 ? '#99e6ff':
-			colf >=	9000 ? '#99ccff':
-			colf >=	8000 ? '#99b3ff':
-			colf >=	7000 ? '#9999ff':
-			colf >=	6000 ? '#b399ff':
-			colf >=	4000 ? '#cc99ff':
-			colf >=	1000 ? '#e699ff':
-			colf >=	0 	? 	'#ff99ff':
+			colf >=	9000  ? '#99ccff':
+			colf >=	8000  ? '#99b3ff':
+			colf >=	7000  ? '#9999ff':
+			colf >=	6000  ? '#b399ff':
+			colf >=	4000  ? '#cc99ff':
+			colf >=	1000  ? '#e699ff':
+			colf >=	0 	  ?	'#ff99ff':
 							'blue';
 }	
 
 // G-AIRMET
-var gairmet;	
-var url = 'gairmet.geojson'; 
-
- $.getJSON(url, function(data) {
-     gairmet = L.geoJson(data, {
+var gairmet = L.realtime({
+     	url: 'http://localhost:8000/gairmet.geojson',
+		crossOrigin: true, type: 'json'
+	}, {interval: 3 * 1000,
 		style: function(feature){
 			kolor  = getColor(feature.properties.Alt);
-			return { color: '#00cccc', weight: 2, fillColor: kolor,opacity: 0.1,fillOpacity: 0.02};
+			return { color: '#00cccc', weight: 2, fillColor: kolor,opacity: 1.0,fillOpacity: 0.2};
+		},
+			getFeatureId: function(featureData){
+				return featureData.properties.RepNum;
 		},
  			onEachFeature: function (feature, layer){
 				layer.bindTooltip('Altitude:' + feature.properties.Alt + ' RepID:' + feature.properties.RepNum
@@ -66,17 +67,19 @@ var url = 'gairmet.geojson';
 					return (feature.properties.Alt >= nn );
 				}
 		}).addTo(map);  //Note turned on to start map with Data, Checkbox has checked property.
-});
+;
 
 // AIRMET
-var airmet;	
-var url2 = 'airmet.geojson';
- 	
- $.getJSON(url2, function(data2) {
-	airmet = L.geoJson(data2, {
+var	airmet = L.realtime({
+     	url: 'http://localhost:8000/airmet.geojson',
+		crossOrigin: true, type: 'json'
+	}, {interval: 3 * 1020,
 		style: function(feature){
 			kolor  = getColor(feature.properties.Alt);
-			return { color: '#00ffff', weight: 2, fillColor: kolor ,opacity: 0.1,fillOpacity: 0.02};
+				return { color: '#00cccc', weight: 2, fillColor: kolor,opacity: 1.0,fillOpacity: 0.2};
+		},
+			getFeatureId: function(featureData){
+				return featureData.properties.RepNum;
 		},
 			onEachFeature: function (feature, layer) {
 				layer.bindTooltip('AIRMET: Rep ID:' + feature.properties.RepNum
@@ -87,30 +90,32 @@ var url2 = 'airmet.geojson';
 					var nn = parseInt(n, 10);
 					return (feature.properties.Alt >= nn );
 				}
-		}).addTo(map);
-});
+		})  ;   //.addTo(map);
+;
 
 // SIGMET
-var sigmet;	
-var url3 = 'sigmet.geojson';
- 	
- $.getJSON(url3, function(data3) {
-	sigmet = L.geoJson(data3, {
+var	sigmet = L.realtime({
+     	url: 'http://localhost:8000/sigmet.geojson',
+		crossOrigin: true, type: 'json'
+	}, {interval: 3 * 1030,
 		style: function(feature){
 			kolor  = getColor(feature.properties.Alt);
-			return { color: '#66ff99', weight: 2, fillColor: kolor,opacity: 0.1,fillOpacity: 0.02};
+				return { color: '#00cccc', weight: 2, fillColor: kolor,opacity: 1.0,fillOpacity: 0.2};
+		},
+			getFeatureId: function(featureData){
+				return featureData.properties.RepNum;
 		},
 			onEachFeature: function (feature, layer) {
 				layer.bindTooltip('SIGMET: Rep ID:' + feature.properties.RepNum
-						+ '<br>Altitude: ' + feature.properties.Alt	) ;
+						+ '<br>Altitude: ' + feature.properties.Alt	);
 				},
 				filter: function(feature,layer) {   
 					var n = document.getElementById("sgalt").value;
 					var nn = parseInt(n, 10);
 					return (feature.properties.Alt >= nn );
 				}
-		}).addTo(map);
-});
+		}) ;  //.addTo(map);
+;
 
 // ** METAR 
 var wxIcon = L.icon({iconUrl: 'therm.ico', iconSize: [35,25]});
@@ -125,8 +130,7 @@ realtime = L.realtime({
 		pointToLayer: function (feature, latlng) {
 			marker = L.marker(latlng,{icon: wxIcon});
     		marker.bindTooltip(feature.properties.Stn 
-    				+ '<br>' + feature.properties.Temp   +'&#x2109' 				
-    		);
+    				+ '<br>' + feature.properties.Temp   +'&#x2109');
  			marker.on('click', function (e) {
 					$('#f1').html(e.target.feature.properties.Stn);
 					$('#f2').html(e.target.feature.properties.Loc);
