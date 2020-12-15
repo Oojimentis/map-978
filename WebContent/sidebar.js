@@ -1,5 +1,5 @@
 function reloadFunc(obj){
-		  location.reload();
+			  location.reload();
 	}
 
 var map = L.map('map').setView([39.0, -88.26], 5); 
@@ -22,25 +22,25 @@ var OpenStreetMap_BlackAndWhite = L.tileLayer('http://{s}.tiles.wmflabs.org/bw-m
 });
 
 function getColor(colf){
-	return 	colf >=	60000 ? '#ff9999':
-			colf >=	50000 ? '#ffb399':
-			colf >=	43000 ? '#ffcc99':
-			colf >=	42000 ? '#ffe699':
-			colf >=	40000 ? '#e6ff99':
-			colf >=	32000 ? '#ccff99':
-			colf >=	24000 ? '#b3ff99':
-			colf >=	22000 ? '#99ff99':
-			colf >=	20000 ? '#99ffb3':
-			colf >=	18000 ? '#99ffcc':
+	return 	colf >=	60000 ? '#d75b5b':
+			colf >=	50000 ? '#d7995b':
+			colf >=	43000 ? '#d7b85b':
+			colf >=	42000 ? '#d7d75b':
+			colf >=	40000 ? '#99d75b':
+			colf >=	32000 ? '#5bd77a':
+			colf >=	24000 ? '#5bd7b8':
+			colf >=	22000 ? '#5bd7d7':
+			colf >=	20000 ? '#5bb8d7':
+			colf >=	18000 ? '#d75bd7':
 			colf >=	16000 ? '#99ffe6':
 			colf >=	12000 ? '#99ffff':
 			colf >=	10000 ? '#99e6ff':
 			colf >=	9000  ? '#99ccff':
-			colf >=	8000  ? '#99b3ff':
+			colf >=	8000  ? '#d75bb8':
 			colf >=	7000  ? '#9999ff':
 			colf >=	6000  ? '#b399ff':
 			colf >=	4000  ? '#cc99ff':
-			colf >=	1000  ? '#e699ff':
+			colf >=	1000  ? '#f0f075':
 			colf >=	0 	  ?	'#ff99ff':
 							'blue';
 }	
@@ -49,7 +49,7 @@ function getColor(colf){
 var gairmet = L.realtime({
      	url: 'http://localhost:8000/gairmet.geojson',
 		crossOrigin: true, type: 'json'
-	}, {interval: 3 * 1000,
+	}, {interval: 5 * 1000,
 		style: function(feature){
 			kolor  = getColor(feature.properties.Alt);
 			return { color: '#00cccc', weight: 2, fillColor: kolor,opacity: 1.0,fillOpacity: 0.2};
@@ -67,13 +67,12 @@ var gairmet = L.realtime({
 					return (feature.properties.Alt >= nn );
 				}
 		}).addTo(map);  //Note turned on to start map with Data, Checkbox has checked property.
-;
 
 // AIRMET
 var	airmet = L.realtime({
      	url: 'http://localhost:8000/airmet.geojson',
 		crossOrigin: true, type: 'json'
-	}, {interval: 3 * 1020,
+	}, {interval: 7 * 1020,
 		style: function(feature){
 			kolor  = getColor(feature.properties.Alt);
 				return { color: '#00cccc', weight: 2, fillColor: kolor,opacity: 1.0,fillOpacity: 0.2};
@@ -90,14 +89,13 @@ var	airmet = L.realtime({
 					var nn = parseInt(n, 10);
 					return (feature.properties.Alt >= nn );
 				}
-		})  ;   //.addTo(map);
-;
+		});   
 
 // SIGMET
 var	sigmet = L.realtime({
      	url: 'http://localhost:8000/sigmet.geojson',
 		crossOrigin: true, type: 'json'
-	}, {interval: 3 * 1030,
+	}, {interval: 3 * 1000,
 		style: function(feature){
 			kolor  = getColor(feature.properties.Alt);
 				return { color: '#00cccc', weight: 2, fillColor: kolor,opacity: 1.0,fillOpacity: 0.2};
@@ -107,15 +105,14 @@ var	sigmet = L.realtime({
 		},
 			onEachFeature: function (feature, layer) {
 				layer.bindTooltip('SIGMET: Rep ID:' + feature.properties.RepNum
-						+ '<br>Altitude: ' + feature.properties.Alt	);
-				},
+						+ '<br>Altitude: ' + feature.properties.Alt);
+	},
 				filter: function(feature,layer) {   
 					var n = document.getElementById("sgalt").value;
 					var nn = parseInt(n, 10);
 					return (feature.properties.Alt >= nn );
 				}
-		}) ;  //.addTo(map);
-;
+		});  
 
 // ** METAR 
 var wxIcon = L.icon({iconUrl: 'therm.ico', iconSize: [35,25]});
@@ -123,7 +120,7 @@ var wxIcon = L.icon({iconUrl: 'therm.ico', iconSize: [35,25]});
 realtime = L.realtime({
 	url: 'http://localhost:8000/metar.geojson',
 		crossOrigin: true, type: 'json'
-	}, {interval: 3 * 1000,
+	}, {interval: 123 * 1000,
   		getFeatureId: function(featureData) {
 			return featureData.properties.Stn;
 		},
