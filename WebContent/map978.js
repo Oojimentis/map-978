@@ -1,3 +1,12 @@
+window.onload = onPageLoad();
+function onPageLoad() {
+  document.getElementById("gmet").checked = true;
+    document.getElementById("meta").checked = true;
+      document.getElementById("amet").checked = true;
+        document.getElementById("smet").checked = true;
+}
+
+
 function reloadFunc(obj){
 			  location.reload();
 	}
@@ -46,7 +55,7 @@ function getColor(colf){
 var gairmet = L.realtime({
      	url: 'http://localhost:8000/gairmet.geojson',
 		crossOrigin: true, type: 'json'
-	}, {interval: 2 * 1000,
+	}, {interval: 12 * 1000,
 		style: function(feature){
 			kolor  = getColor(feature.properties.Alt);
 			return { color: '#5D8C8C', weight: 2, fillColor: kolor,opacity: 1.0,fillOpacity: 0.2};
@@ -69,7 +78,9 @@ var gairmet = L.realtime({
 				filter: function(feature, layer) {   
 					var n = document.getElementById("bgalt").value;
 					var nn = parseInt(n, 10);
-					return (feature.properties.Alt >= nn );
+					if (nn== -1) return (feature.properties.Alt)
+					else
+					return (feature.properties.Alt >= (nn-1000) && feature.properties.Alt <= (nn +1000) );
 				}
 		}).addTo(map);  //Note turned on to start map with Data, Checkbox has checked property.
 
@@ -77,7 +88,7 @@ var gairmet = L.realtime({
 var	airmet = L.realtime({
      	url: 'http://localhost:8000/airmet.geojson',
 		crossOrigin: true, type: 'json'
-	}, {interval: 2 * 1020,
+	}, {interval: 12 * 1020,
 		style: function(feature){
 			kolor  = getColor(feature.properties.Alt);
 				return { color: '#00cccc', weight: 2, fillColor: kolor,opacity: 1.0,fillOpacity: 0.2};
@@ -101,7 +112,9 @@ var	airmet = L.realtime({
 				filter: function(feature,layer) {   
 					var n = document.getElementById("agalt").value;
 					var nn = parseInt(n, 10);
-					return (feature.properties.Alt >= nn );
+					if (nn== -1) return (feature.properties.Alt)
+					else
+					return (feature.properties.Alt >= (nn-1000) && feature.properties.Alt <= (nn +1000) );
 				}
 		}).addTo(map);;   
 
@@ -109,7 +122,7 @@ var	airmet = L.realtime({
 var	sigmet = L.realtime({
      	url: 'http://localhost:8000/sigmet.geojson',
 		crossOrigin: true, type: 'json'
-	}, {interval: 2 * 1030,
+	}, {interval: 12 * 1030,
 		style: function(feature){
 			kolor  = getColor(feature.properties.Alt);
 				return { color: '#00cccc', weight: 2, fillColor: kolor,opacity: 1.0,fillOpacity: 0.2};
@@ -133,7 +146,9 @@ var	sigmet = L.realtime({
 				filter: function(feature,layer) {   
 					var n = document.getElementById("sgalt").value;
 					var nn = parseInt(n, 10);
-					return (feature.properties.Alt >= nn );
+					if (nn== -1) return (feature.properties.Alt)
+					else
+					return (feature.properties.Alt >= (nn-1000) && feature.properties.Alt <= (nn +1000) );
 				}
 		}).addTo(map);;  
 
@@ -143,7 +158,7 @@ var wxIcon = L.icon({iconUrl: 'therm.ico', iconSize: [35,25]});
 metar = L.realtime({
 	url: 'http://localhost:8000/metar.geojson',
 		crossOrigin: true, type: 'json'
-	}, {interval: 3 * 1000,
+	}, {interval: 5 * 1000,
   		getFeatureId: function(featureData) {
 			return featureData.properties.Stn;
 		},
@@ -166,24 +181,33 @@ metar = L.realtime({
 
 // Handles the check boxes being turned on/off
 document.querySelector("input[name=gmet]").addEventListener('change', function() {
-                if(this.checked) map.addLayer(gairmet)
-                  else map.removeLayer(gairmet)
+                if(this.checked) {map.addLayer(gairmet),gairmet.start()}
+                  else {map.removeLayer(gairmet),gairmet.stop()}
                 })
    
 document.querySelector("input[name=amet]").addEventListener('change', function() {
-                if(this.checked) map.addLayer(airmet)
-                  else map.removeLayer(airmet)
+                if(this.checked)  {map.addLayer(airmet),airmet.start()}
+                  else {map.removeLayer(airmet),airmet.stop()}
                 })
 
 document.querySelector("input[name=meta]").addEventListener('change', function() {
-                if(this.checked) map.addLayer(metar)
-                  else map.removeLayer(metar)
+                if(this.checked)  {map.addLayer(metar),metar.start()}
+                  else {map.removeLayer(metar),metar.stop()}
                 })
 
 document.querySelector("input[name=smet]").addEventListener('change', function() {
-                if(this.checked) map.addLayer(sigmet)
-                  else map.removeLayer(sigmet)
+                if(this.checked)  {map.addLayer(sigmet),sigmet.start()}
+                  else {map.removeLayer(sigmet),sigmet.stop()}
                 })
+
+document.getElementById("bgalt").onchange = function()
+		{gairmet.update()}
+		                
+document.getElementById("agalt").onchange = function()
+		{airmet.update()}
+
+document.getElementById("sgalt").onchange = function()
+		{sigmet.update()}  
 
 //Add layer control
 var baseMaps = {
