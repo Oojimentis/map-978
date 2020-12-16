@@ -8,10 +8,12 @@
 	<script src="./leaflet/leaflet-realtime.js"></script>  
 	
 <style>
+
 #wrapper {
 	margin: 0 auto;
   	width: 100%;
 }
+
 #panel{
  	float: left;
 	width: 100%;
@@ -19,11 +21,13 @@
 	background-color: #175B81;
 	color:white;
 }
+
 #map {
   	float: left;
   	width: 80%;
   	height:700px;
 }
+
 .sidebar {
 	float: left;
  	width: 20%;
@@ -31,6 +35,7 @@
 	background-color: #d3eaf8;
    	color: #175B81;
 }
+
 #footer {
 	float: left;
 	background-color: #175B81;
@@ -38,6 +43,7 @@
   	width: 100%;
   	height:25px
 }
+
 .container {
   	display: block;
   	position: relative;
@@ -50,6 +56,7 @@
   	-ms-user-select: none;
   	user-select: none;
 }
+
 .text-labels {
 	font-weight: bold;
     color:#006400;
@@ -92,9 +99,11 @@ table {
     display:block;
     text-decoration:none;
 }
+
 #f1{
 	font-weight:bold
 }
+
 .p2 {
     font-size: 20px;
 	font-weight:bold;
@@ -102,20 +111,43 @@ table {
     top: 11px;
 	left: 20px;
 	}
+
+select { 
+	appearance: none; 
+    outline: 0; 
+    background: white; 
+    background-image: none; 
+    border:1px solid black; 
+    font:14px arial;
+  	} 
+
+.select { 
+    width: 10%; 
+    height: 33em; 
+    line-height: 3; 
+    background: #d3eaf8; 
+    overflow: hidden; 
+    border-radius: .25em; 
+    }	
+
 label {
 	font:12px arial;
 }
+
 #first {
     width: 50%;
     float: left;
 }
+
 #second {
     width: 50%;
     float: left;
 }
+
 #ckboxes {	/* pushes checkbox a little from sidebar left edge */
 	padding-left: 1px;
 }
+
 </style>
 </head>
 <body>
@@ -126,7 +158,14 @@ label {
   
 	<div class="sidebar">
 	<p style="text-align:center; font-size: 12px; color:#175B81; 
-		font-weight:bold; "><span id="metar">METAR</span></p>	 
+		font-weight:bold; "><span id="metar">Details</span></p>	 
+
+<div id="ckboxes">
+	<div class="checkbox">
+		<label>
+			<input type="checkbox"  id="meta" name="meta" checked><b>METAR</b><br>
+        </label>
+ 	</div>
 			
 <table  style="width:90%">
 	<tr>
@@ -150,13 +189,6 @@ label {
  </table>
 			   
 <hr>
-   
-<div id="ckboxes">
-	<div class="checkbox">
-		<label>
-			<input type="checkbox"  id="meta" name="meta" checked><b>METAR</b><br>
-        </label>
- 	</div>
    
  <div class ='container'>
 	<div id="first">
@@ -251,8 +283,11 @@ label {
 
 </div>	
 	
+<br>
 <hr>
-
+<hr>
+<hr>
+<hr>
 <table  style="width:90%">
 	<tr>
        	<th align="left">Type</th>
@@ -267,11 +302,12 @@ label {
 		<th align="left">Warning</th>
        	<td id='f14'><a href="#"></a></td>
 </table>
-		
+
+</div>
 </div>
 <div id="footer">  </div>
 </div>
-</div>
+
 <script src="map978.js"></script>
 
 </body>

@@ -55,7 +55,7 @@ var gairmet = L.realtime({
 				return featureData.properties.RepNum;
 		},
  			onEachFeature: function (feature, layer){
-				layer.bindTooltip('G-AIRMET: Alt '+ feature.properties.RepNum);
+				layer.bindTooltip('G-AIRMET: Alt '+ feature.properties.Alt);
 	           	layer.on('click',function(e){
 					layer.setStyle({color: 'yellow',opacity: 0.8, fillColor: 'yellow', fillOpacity: 0.5});
 					$('#f11').html('G-AIRMET');
@@ -143,7 +143,7 @@ var wxIcon = L.icon({iconUrl: 'therm.ico', iconSize: [35,25]});
 metar = L.realtime({
 	url: 'http://localhost:8000/metar.geojson',
 		crossOrigin: true, type: 'json'
-	}, {interval: 123 * 1000,
+	}, {interval: 3 * 1000,
   		getFeatureId: function(featureData) {
 			return featureData.properties.Stn;
 		},
