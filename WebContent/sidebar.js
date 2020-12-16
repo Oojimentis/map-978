@@ -2,20 +2,17 @@ function reloadFunc(obj){
 			  location.reload();
 	}
 
-var map = L.map('map').setView([39.0, -88.26], 5); 
+var map = L.map('map').setView([36.0, -75.26], 5); 
 
 var osm=new L.tileLayer('http://{s}.tile.osm.org/{z}/{x}/{y}.png',{ 
 		attribution: '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'}).addTo(map);;
-		
 var Esri_WorldImagery = L.tileLayer('http://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
 		attribution: 'Tiles &copy; Esri &mdash; Source: Esri, i-cubed, USDA, USGS, AEX, GeoEye, Getmapping, Aerogrid, IGN, IGP, UPR-EGP, and the GIS User Community'
 });
-
 var Esri_WorldGrayCanvas = L.tileLayer('http://server.arcgisonline.com/ArcGIS/rest/services/Canvas/World_Light_Gray_Base/MapServer/tile/{z}/{y}/{x}', {
 		attribution: 'Tiles &copy; Esri &mdash; Esri, DeLorme, NAVTEQ',
 		maxZoom: 16
 });
-
 var OpenStreetMap_BlackAndWhite = L.tileLayer('http://{s}.tiles.wmflabs.org/bw-mapnik/{z}/{x}/{y}.png', {
 		maxZoom: 18,
 		attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
@@ -49,18 +46,26 @@ function getColor(colf){
 var gairmet = L.realtime({
      	url: 'http://localhost:8000/gairmet.geojson',
 		crossOrigin: true, type: 'json'
-	}, {interval: 5 * 1000,
+	}, {interval: 2 * 1000,
 		style: function(feature){
 			kolor  = getColor(feature.properties.Alt);
-			return { color: '#00cccc', weight: 2, fillColor: kolor,opacity: 1.0,fillOpacity: 0.2};
+			return { color: '#5D8C8C', weight: 2, fillColor: kolor,opacity: 1.0,fillOpacity: 0.2};
 		},
 			getFeatureId: function(featureData){
 				return featureData.properties.RepNum;
 		},
  			onEachFeature: function (feature, layer){
-				layer.bindTooltip('Altitude:' + feature.properties.Alt + ' RepID:' + feature.properties.RepNum
-						+ '<br>' + feature.properties.Ob);
-				},   
+				layer.bindTooltip('G-AIRMET: Alt '+ feature.properties.RepNum);
+	           	layer.on('click',function(e){
+					layer.setStyle({color: 'yellow',opacity: 0.8, fillColor: 'yellow', fillOpacity: 0.5});
+					$('#f11').html('G-AIRMET');
+					$('#f12').html(e.target.feature.properties.Alt);
+					$('#f13').html(e.target.feature.properties.RepNum);
+					$('#f14').html(e.target.feature.properties.Ob);
+					gairmet.stop();});
+	           layer.on('mouseout',function(e){
+					gairmet.start();})		
+			},
 				filter: function(feature, layer) {   
 					var n = document.getElementById("bgalt").value;
 					var nn = parseInt(n, 10);
@@ -72,7 +77,7 @@ var gairmet = L.realtime({
 var	airmet = L.realtime({
      	url: 'http://localhost:8000/airmet.geojson',
 		crossOrigin: true, type: 'json'
-	}, {interval: 7 * 1020,
+	}, {interval: 2 * 1020,
 		style: function(feature){
 			kolor  = getColor(feature.properties.Alt);
 				return { color: '#00cccc', weight: 2, fillColor: kolor,opacity: 1.0,fillOpacity: 0.2};
@@ -80,22 +85,31 @@ var	airmet = L.realtime({
 			getFeatureId: function(featureData){
 				return featureData.properties.RepNum;
 		},
-			onEachFeature: function (feature, layer) {
-				layer.bindTooltip('AIRMET: Rep ID:' + feature.properties.RepNum
-						+ '<br>Altitude: ' + feature.properties.Alt	) ;
-				},
+			onEachFeature: function (feature, layer) 
+			{
+				layer.bindTooltip('AIRMET: Alt ' + feature.properties.Alt);
+	           	layer.on('click',function(e){
+					layer.setStyle({fillColor: 'yellow', fillOpacity: 0.5});
+					$('#f11').html('AIRMET');
+					$('#f12').html(e.target.feature.properties.Alt);
+					$('#f13').html(e.target.feature.properties.RepNum);
+					$('#f14').html('n/a');
+					airmet.stop();});
+	           layer.on('mouseout',function(e){
+					airmet.start();})		
+			},
 				filter: function(feature,layer) {   
 					var n = document.getElementById("agalt").value;
 					var nn = parseInt(n, 10);
 					return (feature.properties.Alt >= nn );
 				}
-		});   
+		}).addTo(map);;   
 
 // SIGMET
 var	sigmet = L.realtime({
      	url: 'http://localhost:8000/sigmet.geojson',
 		crossOrigin: true, type: 'json'
-	}, {interval: 3 * 1000,
+	}, {interval: 2 * 1030,
 		style: function(feature){
 			kolor  = getColor(feature.properties.Alt);
 				return { color: '#00cccc', weight: 2, fillColor: kolor,opacity: 1.0,fillOpacity: 0.2};
@@ -103,21 +117,30 @@ var	sigmet = L.realtime({
 			getFeatureId: function(featureData){
 				return featureData.properties.RepNum;
 		},
-			onEachFeature: function (feature, layer) {
-				layer.bindTooltip('SIGMET: Rep ID:' + feature.properties.RepNum
-						+ '<br>Altitude: ' + feature.properties.Alt);
-	},
+			onEachFeature: function (feature, layer) 
+			{
+				layer.bindTooltip('SIGMET: Alt ' + feature.properties.Alt);
+	           	layer.on('click',function(e){
+					layer.setStyle({fillColor: 'yellow', fillOpacity: 0.5});
+					$('#f11').html('SIGMET');
+					$('#f12').html(e.target.feature.properties.Alt);
+					$('#f13').html(e.target.feature.properties.RepNum);
+					$('#f14').html('n/a');
+					sigmet.stop();});
+	           layer.on('mouseout',function(e){
+					sigmet.start();})		
+			},
 				filter: function(feature,layer) {   
 					var n = document.getElementById("sgalt").value;
 					var nn = parseInt(n, 10);
 					return (feature.properties.Alt >= nn );
 				}
-		});  
+		}).addTo(map);;  
 
 // ** METAR 
 var wxIcon = L.icon({iconUrl: 'therm.ico', iconSize: [35,25]});
 
-realtime = L.realtime({
+metar = L.realtime({
 	url: 'http://localhost:8000/metar.geojson',
 		crossOrigin: true, type: 'json'
 	}, {interval: 123 * 1000,
@@ -146,16 +169,17 @@ document.querySelector("input[name=gmet]").addEventListener('change', function()
                 if(this.checked) map.addLayer(gairmet)
                   else map.removeLayer(gairmet)
                 })
-                
+   
 document.querySelector("input[name=amet]").addEventListener('change', function() {
                 if(this.checked) map.addLayer(airmet)
                   else map.removeLayer(airmet)
                 })
 
 document.querySelector("input[name=meta]").addEventListener('change', function() {
-                if(this.checked) map.addLayer(realtime)
-                  else map.removeLayer(realtime)
+                if(this.checked) map.addLayer(metar)
+                  else map.removeLayer(metar)
                 })
+
 document.querySelector("input[name=smet]").addEventListener('change', function() {
                 if(this.checked) map.addLayer(sigmet)
                   else map.removeLayer(sigmet)

@@ -9,10 +9,9 @@
 	
 <style>
 #wrapper {
-  margin: 0 auto;
-  width: 100%;
+	margin: 0 auto;
+  	width: 100%;
 }
-
 #panel{
  	float: left;
 	width: 100%;
@@ -20,13 +19,11 @@
 	background-color: #175B81;
 	color:white;
 }
-
 #map {
   	float: left;
   	width: 80%;
   	height:700px;
 }
-
 .sidebar {
 	float: left;
  	width: 20%;
@@ -34,7 +31,6 @@
 	background-color: #d3eaf8;
    	color: #175B81;
 }
-
 #footer {
 	float: left;
 	background-color: #175B81;
@@ -42,21 +38,19 @@
   	width: 100%;
   	height:25px
 }
-
 .container {
-  display: block;
-  position: relative;
-  padding-left: 1px;
-  margin-bottom: 12px;
-  cursor: pointer;
-  font-size: 10px;
-  -webkit-user-select: none;
-  -moz-user-select: none;
-  -ms-user-select: none;
-  user-select: none;
+  	display: block;
+  	position: relative;
+  	padding-left: 1px;
+  	margin-bottom: 12px;
+  	cursor: pointer;
+  	font-size: 10px;
+  	-webkit-user-select: none;
+  	-moz-user-select: none;
+  	-ms-user-select: none;
+  	user-select: none;
 }
-
-.text-labels     {
+.text-labels {
 	font-weight: bold;
     color:#006400;
 	font-family: "Arial Black";
@@ -73,17 +67,20 @@ table, th, td
 		font:10px arial;
 	}
 th {
-		font-size:10px;
-		font-weight:bold
+		font-size:11px;
+		font-weight:bold;
+		
 	}
 td {
-		font-size:10px;
+		font-size:11px;
 		font-weight:normal
 	}
 tr:nth-child(even)  {
-		background: #dddddd;
+		background: #E6BECF;
 	}
-	
+tr:nth-child(odd)  {
+		background: #BEE6D5;
+	}
 tbody  tr:hover {
 		background: yellow;
 	}
@@ -105,7 +102,17 @@ table {
     top: 11px;
 	left: 20px;
 	}
-	
+label {
+	font:12px arial;
+}
+#first {
+    width: 50%;
+    float: left;
+}
+#second {
+    width: 50%;
+    float: left;
+}
 #ckboxes {	/* pushes checkbox a little from sidebar left edge */
 	padding-left: 1px;
 }
@@ -118,122 +125,151 @@ table {
   	<div id="map"></div>
   
 	<div class="sidebar">
-<p style="text-align:center; font-size: 12px; color:#175B81; 
-		font-weight:bold; "><span id="sport">METAR</span></p>	 
+	<p style="text-align:center; font-size: 12px; color:#175B81; 
+		font-weight:bold; "><span id="metar">METAR</span></p>	 
 			
-	<table  style="width:90%">
-		<tr>
-        	<th align="left">Station</th>
-        	<td id='f1'></td>
-        </tr> <tr>
-        	<th align="left">Location</th>
-        	<td id='f2'></td></tr>
-        <tr>
-   			<th align="left">Time</th>
-        	<td id='f3'></td>
-        </tr> <tr>
-	  		<th align="left">Temp</th>
-        	<td id='f4'></td>
-        </tr> <tr>
-        	<th align="left">Wind Speed</th>
-        	<td id='f5'></td></tr>
-        <tr>
-	  		<th align="left">Visibility</th>
-        	<td id='f6'><a href="#"></a></td>
- 	</table>
+<table  style="width:90%">
+	<tr>
+       	<th align="left">Station</th>
+       	<td id='f1'></td>
+	</tr> <tr>
+       	<th align="left">Location</th>
+       	<td id='f2'></td></tr>
+    <tr>
+   		<th align="left">Time</th>
+       	<td id='f3'></td>
+    </tr> <tr>
+		<th align="left">Temp</th>
+       	<td id='f4'></td>
+    </tr> <tr>
+       	<th align="left">Wind Speed</th>
+       	<td id='f5'></td></tr>
+     <tr>
+		<th align="left">Visibility</th>
+       	<td id='f6'><a href="#"></a></td>
+ </table>
 			   
-	<hr>
-	<div id="ckboxes">
-		<label class="container"> <!-- need a name property for check/uncheck funtion to work -->
-		<input type="checkbox"  id="meta" name="meta" checked><b>METAR</b><br>
-
-		<label class="container"> <!-- need a name property for check/uncheck funtion to work -->
-		<input type="checkbox"  id="gmet" name="gmet" checked><b>G-AIRMET</b><br>
-		<div id="gm">
-			<label for="agalt">Altitude:</label>
-			<select name="galt" id="bgalt" >
-				<option value="60000">60000</option>
-				<option value="50000">50000</option>
-				<option value="43000">43000</option>
-				<option value="42000">42000</option>
-				<option value="40000">40000</option>
-				<option value="32000">32000</option>
-				<option value="24000">24000</option>
-				<option value="22000">22000</option>
-				<option value="20000">20000</option>
-				<option value="18000">18000</option>
-				<option value="16000">16000</option>
-				<option value="12000">12000</option>
-				<option value="10000">10000</option>
-				<option value="9000">9000</option>
-				<option value="8000">8000</option>
-				<option value="7000">7000</option>
-				<option value="6000">6000</option>
-				<option value="4000">4000</option>
-				<option value="1000">1000</option>
-				<option value="0">0</option>
-			</select>
-		</div>
-		</label>
-		<label class="container">
-		<input type="checkbox"  id="amet" name="amet" checked><b>AIRMET </b><br>
-		<div id="am">
-			<label for="aaalt">Altitude:</label>
-			<select name="aalt" id="agalt">
-				<option value="60000">60000</option>
-				<option value="50000">50000</option>
-				<option value="43000">43000</option>
-				<option value="42000">42000</option>
-				<option value="40000">40000</option>
-				<option value="32000">32000</option>
-				<option value="24000">24000</option>
-				<option value="22000">22000</option>
-				<option value="20000">20000</option>
-				<option value="18000">18000</option>
-				<option value="16000">16000</option>
-				<option value="12000">12000</option>
-				<option value="10000">10000</option>
-				<option value="9000">9000</option>
-				<option value="8000">8000</option>
-				<option value="7000">7000</option>
-				<option value="6000">6000</option>
-				<option value="4000">4000</option>
-				<option value="1000">1000</option>
-				<option value="0">0</option>
-			</select>						
-		</div>
-		</label>
-		<label class="container">
-		<input type="checkbox"  id="smet" name="smet" checked><b>SIGMET </b><br>
-		<div id="sm">
-			<label for="saalt">Altitude:</label>
-			<select name="salt" id="sgalt">
-				<option value="60000">60000</option>
-				<option value="50000">50000</option>
-				<option value="43000">43000</option>
-				<option value="42000">42000</option>
-				<option value="40000">40000</option>
-				<option value="32000">32000</option>
-				<option value="24000">24000</option>
-				<option value="22000">22000</option>
-				<option value="20000">20000</option>
-				<option value="18000">18000</option>
-				<option value="16000">16000</option>
-				<option value="12000">12000</option>
-				<option value="10000">10000</option>
-				<option value="9000">9000</option>
-				<option value="8000">8000</option>
-				<option value="7000">7000</option>
-				<option value="6000">6000</option>
-				<option value="4000">4000</option>
-				<option value="1000">1000</option>
-				<option value="0">0</option>
-			</select>						
-		</div>
-		</label>
+<hr>
+   
+<div id="ckboxes">
+	<div class="checkbox">
+		<label>
+			<input type="checkbox"  id="meta" name="meta" checked><b>METAR</b><br>
+        </label>
+ 	</div>
+   
+ <div class ='container'>
+	<div id="first">
+    	<label>
+			<input type="checkbox"  id="gmet" name="gmet" checked><b>G-AIRMET</b><br>
+	    </label> 
 	</div>
-  	</div>
-  <div id="footer">  </div>
+	<div id = "second">
+		<select name="galt" id="bgalt" >
+			<option value="60000">60000</option>
+			<option value="50000">50000</option>
+			<option value="43000">43000</option>
+			<option value="42000">42000</option>
+			<option value="40000">40000</option>
+			<option value="32000">32000</option>
+			<option value="24000">24000</option>
+			<option value="22000">22000</option>
+			<option value="20000">20000</option>
+			<option value="18000">18000</option>
+			<option value="16000">16000</option>
+			<option value="12000">12000</option>
+			<option value="10000">10000</option>
+			<option value="9000">9000</option>
+			<option value="8000">8000</option>
+			<option value="7000">7000</option>
+			<option value="6000">6000</option>
+			<option value="4000">4000</option>
+			<option value="1000">1000</option>
+			<option value="0">0</option>
+		</select>
+	</div>
+
+	<div id="first">
+    	<label>
+			<input type="checkbox"  id="amet" name="amet" checked><b>AIRMET </b><br>
+   		</label> 
+	</div>
+	<div id="second">
+		<select name="aalt" id="agalt">
+			<option value="60000">60000</option>
+			<option value="50000">50000</option>
+			<option value="43000">43000</option>
+			<option value="42000">42000</option>
+			<option value="40000">40000</option>
+			<option value="32000">32000</option>
+			<option value="24000">24000</option>
+			<option value="22000">22000</option>
+			<option value="20000">20000</option>
+			<option value="18000">18000</option>
+			<option value="16000">16000</option>
+			<option value="12000">12000</option>
+			<option value="10000">10000</option>
+			<option value="9000">9000</option>
+			<option value="8000">8000</option>
+			<option value="7000">7000</option>
+			<option value="6000">6000</option>
+			<option value="4000">4000</option>
+			<option value="1000">1000</option>
+			<option value="0">0</option>
+		</select>						
+	</div>
+		
+	<div id="first">
+   		<label>
+			<input type="checkbox"  id="smet" name="smet" checked><b>SIGMET </b><br>
+   		</label> 
+	</div>	
+	<div id="second">
+		<select name="salt" id="sgalt">
+			<option value="60000">60000</option>
+			<option value="50000">50000</option>
+			<option value="43000">43000</option>
+			<option value="42000">42000</option>
+			<option value="40000">40000</option>
+			<option value="32000">32000</option>
+			<option value="24000">24000</option>
+			<option value="22000">22000</option>
+			<option value="20000">20000</option>
+			<option value="18000">18000</option>
+			<option value="16000">16000</option>
+			<option value="12000">12000</option>
+			<option value="10000">10000</option>
+			<option value="9000">9000</option>
+			<option value="8000">8000</option>
+			<option value="7000">7000</option>
+			<option value="6000">6000</option>
+			<option value="4000">4000</option>
+			<option value="1000">1000</option>
+			<option value="0">0</option>
+		</select>						
+	</div>
+
+</div>	
+	
+<hr>
+
+<table  style="width:90%">
+	<tr>
+       	<th align="left">Type</th>
+       	<td id='f11'></td>
+	</tr> <tr>
+       	<th align="left">Altitude</th>
+       	<td id='f12'></td></tr>
+   	<tr>
+   		<th align="left">Report#</th>
+       	<td id='f13'></td>
+    </tr> <tr>
+		<th align="left">Warning</th>
+       	<td id='f14'><a href="#"></a></td>
+</table>
+		
+</div>
+<div id="footer">  </div>
 </div>
 
 <script src="sidebar.js"></script>
