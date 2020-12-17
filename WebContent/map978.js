@@ -5,9 +5,10 @@ function onPageLoad() {
       document.getElementById("amet").checked = true;
         document.getElementById("smet").checked = true;
 
-document.getElementById("sliderRange").step = "1000";
+document.getElementById("gmsliderRange").step = "1000";
+document.getElementById("amsliderRange").step = "1000";
+document.getElementById("smsliderRange").step = "1000";
 }
-
 
 function reloadFunc(obj){
 			  location.reload();
@@ -79,7 +80,7 @@ var gairmet = L.realtime({
 			},
 				filter: function(feature, layer) {   
 //					var n = document.getElementById("bgalt").value;
-					var rangeslider = document.getElementById("sliderRange");
+					var rangeslider = document.getElementById("gmsliderRange");
 					var output = document.getElementById("demo");
 					if (rangeslider.value== -1000) output.innerHTML = "All"
 					 else output.innerHTML = rangeslider.value;
@@ -118,11 +119,15 @@ var	airmet = L.realtime({
 					airmet.start();})		
 			},
 				filter: function(feature,layer) {   
-					var n = document.getElementById("agalt").value;
-					var nn = parseInt(n, 10);
-					if (nn== -1) return (feature.properties.Alt)
+//					var n = document.getElementById("agalt").value;
+					var rangeslider = document.getElementById("amsliderRange");
+					var output = document.getElementById("demo1");
+					if (rangeslider.value== -1000) output.innerHTML = "All"
+					 else output.innerHTML = rangeslider.value;
+					var nn = parseInt(rangeslider.value, 10);
+					if (nn== -1000) return (feature.properties.Alt)
 					else
-					return (feature.properties.Alt >= (nn-1000) && feature.properties.Alt <= (nn +1000) );
+					return (feature.properties.Alt >= (nn-500) && feature.properties.Alt <= (nn +500) );
 				}
 		}).addTo(map);;   
 
@@ -152,13 +157,18 @@ var	sigmet = L.realtime({
 					sigmet.start();})		
 			},
 				filter: function(feature,layer) {   
-					var n = document.getElementById("sgalt").value;
-					var nn = parseInt(n, 10);
-					if (nn== -1) return (feature.properties.Alt)
+//					var n = document.getElementById("sgalt").value;
+					var rangeslider = document.getElementById("smsliderRange");
+					var output = document.getElementById("demo2");
+					if (rangeslider.value== -1000) output.innerHTML = "All"
+					 else output.innerHTML = rangeslider.value;
+					var nn = parseInt(rangeslider.value, 10);
+					if (nn== -1000) return (feature.properties.Alt)
 					else
-					return (feature.properties.Alt >= (nn-1000) && feature.properties.Alt <= (nn +1000) );
+					return (feature.properties.Alt >= (nn-500) && feature.properties.Alt <= (nn +500) );
+
 				}
-		}).addTo(map);;  
+		}).addTo(map);  
 
 // ** METAR 
 var wxIcon = L.icon({iconUrl: 'therm.ico', iconSize: [35,25]});
@@ -211,15 +221,18 @@ document.querySelector("input[name=smet]").addEventListener('change', function()
 //document.getElementById("bgalt").onchange = function()
 //		{gairmet.update()}
 		                
-document.getElementById("agalt").onchange = function()
-		{airmet.update()}
+//document.getElementById("agalt").onchange = function()
+//		{airmet.update()}
 
-document.getElementById("sgalt").onchange = function()
-		{sigmet.update()}  
+//document.getElementById("sgalt").onchange = function()
+//		{sigmet.update()}  
 		
-document.getElementById("sliderRange").onchange = function()
+document.getElementById("gmsliderRange").onchange = function()
 	{gairmet.update()}
-
+document.getElementById("amsliderRange").onchange = function()
+	{airmet.update()}
+document.getElementById("smsliderRange").onchange = function()
+	{sigmet.update()}
 
 
 //							alert(this.value); }document.getElementById("myRange").onchange = function()
