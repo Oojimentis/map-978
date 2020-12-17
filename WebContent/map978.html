@@ -148,6 +148,19 @@ label {
 	padding-left: 1px;
 }
 
+.slidecontainer {
+  width: 100%; /* Width of the outside container */
+}
+
+/* The slider itself */
+.slider {
+  appearance: none;
+  width: 90%; /* Full-width */
+  height: 10px; /* Specified height */
+  background: #d3d3d3; /* Grey background */
+  opacity: 0.7; /* Set transparency (for mouse-over effects on hover) */
+ }
+
 </style>
 </head>
 <body>
@@ -196,34 +209,11 @@ label {
 			<input type="checkbox"  id="gmet" name="gmet" checked><b>G-AIRMET</b><br>
 	    </label> 
 	</div>
-	<div id = "second">
-		<select name="galt" id="bgalt" >
-			<option value="-1">All</option>
-			<option value="60000">60000</option>
-			<option value="50000">50000</option>
-			<option value="43000">43000</option>
-			<option value="42000">42000</option>
-			<option value="40000">40000</option>
-			<option value="37000">37000</option>
-			<option value="32000">32000</option>
-			<option value="24000">24000</option>
-			<option value="22000">22000</option>
-			<option value="20000">20000</option>
-			<option value="18000">18000</option>
-			<option value="16000">16000</option>
-			<option value="12000">12000</option>
-			<option value="10000">10000</option>
-			<option value="9000">9000</option>
-			<option value="8000">8000</option>
-			<option value="7000">7000</option>
-			<option value="6000">6000</option>
-			<option value="4000">4000</option>
-			<option value="2000">2000</option>
-			<option value="1000">1000</option>
-			<option value="0">0</option>
-		</select>
-	</div>
-
+<div class="slidecontainer">
+	<input type="range" min="-1000" max="65000" value="-1" 
+  		class="slider" id="sliderRange">
+    <p>Value: <span id="demo"></span></p> 
+</div>	
 	<div id="first">
     	<label>
 			<input type="checkbox"  id="amet" name="amet" checked><b>AIRMET </b><br>
@@ -289,13 +279,12 @@ label {
 			<option value="0">0</option>
 		</select>						
 	</div>
-
 </div>	
 	
 <br>
 <hr>
 <hr>
-<hr>
+
 <hr>
 <table  style="width:90%">
 	<tr>
@@ -308,7 +297,7 @@ label {
    		<th align="left">Report#</th>
        	<td id='f13'></td>
     </tr> <tr>
-		<th align="left">Warning</th>
+		<th align="left">Condition</th>
        	<td id='f14'><a href="#"></a></td>
 </table>
 

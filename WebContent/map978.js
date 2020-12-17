@@ -4,6 +4,8 @@ function onPageLoad() {
     document.getElementById("meta").checked = true;
       document.getElementById("amet").checked = true;
         document.getElementById("smet").checked = true;
+
+document.getElementById("sliderRange").step = "1000";
 }
 
 
@@ -28,26 +30,26 @@ var OpenStreetMap_BlackAndWhite = L.tileLayer('http://{s}.tiles.wmflabs.org/bw-m
 });
 
 function getColor(colf){
-	return 	colf >=	60000 ? '#d75b5b':
-			colf >=	50000 ? '#d7995b':
-			colf >=	43000 ? '#d7b85b':
-			colf >=	42000 ? '#d7d75b':
-			colf >=	40000 ? '#99d75b':
-			colf >=	32000 ? '#5bd77a':
-			colf >=	24000 ? '#5bd7b8':
-			colf >=	22000 ? '#5bd7d7':
-			colf >=	20000 ? '#5bb8d7':
-			colf >=	18000 ? '#d75bd7':
-			colf >=	16000 ? '#99ffe6':
-			colf >=	12000 ? '#99ffff':
-			colf >=	10000 ? '#99e6ff':
-			colf >=	9000  ? '#99ccff':
-			colf >=	8000  ? '#d75bb8':
-			colf >=	7000  ? '#9999ff':
-			colf >=	6000  ? '#b399ff':
-			colf >=	4000  ? '#cc99ff':
-			colf >=	1000  ? '#f0f075':
-			colf >=	0 	  ?	'#ff99ff':
+	return 	colf >=	60000 ? '#67BDE9':
+			colf >=	50000 ? '#6EBAE0':
+			colf >=	43000 ? '#75B7D6':
+			colf >=	42000 ? '#7CB4CD':
+			colf >=	40000 ? '#83B1C3':
+			colf >=	32000 ? '#8AADBA':
+			colf >=	24000 ? '#91AAB0':
+			colf >=	22000 ? '#98A7A7':
+			colf >=	20000 ? '#9FA49D':
+			colf >=	18000 ? '#A6A194':
+			colf >=	16000 ? '#AD9E8A':
+			colf >=	12000 ? '#B49B81':
+			colf >=	10000 ? '#BB9877':
+			colf >=	9000  ? '#C2956E':
+			colf >=	8000  ? '#C99264':
+			colf >=	7000  ? '#D08E5B':
+			colf >=	6000  ? '#D78B51':
+			colf >=	4000  ? '#DE8848':
+			colf >=	1000  ? '#E5853E':
+			colf >=	0 	  ?	'#EC8235':
 							'blue';
 }	
 
@@ -76,11 +78,17 @@ var gairmet = L.realtime({
 					gairmet.start();})		
 			},
 				filter: function(feature, layer) {   
-					var n = document.getElementById("bgalt").value;
-					var nn = parseInt(n, 10);
-					if (nn== -1) return (feature.properties.Alt)
+//					var n = document.getElementById("bgalt").value;
+					var rangeslider = document.getElementById("sliderRange");
+					var output = document.getElementById("demo");
+					if (rangeslider.value== -1000) output.innerHTML = "All"
+					 else output.innerHTML = rangeslider.value;
+				 
+					var nn = parseInt(rangeslider.value, 10);
+//					var nn = parseInt(n, 10);
+					if (nn== -1000) return (feature.properties.Alt)
 					else
-					return (feature.properties.Alt >= (nn-1000) && feature.properties.Alt <= (nn +1000) );
+					return (feature.properties.Alt >= (nn-500) && feature.properties.Alt <= (nn +500) );
 				}
 		}).addTo(map);  //Note turned on to start map with Data, Checkbox has checked property.
 
@@ -200,14 +208,22 @@ document.querySelector("input[name=smet]").addEventListener('change', function()
                   else {map.removeLayer(sigmet),sigmet.stop()}
                 })
 
-document.getElementById("bgalt").onchange = function()
-		{gairmet.update()}
+//document.getElementById("bgalt").onchange = function()
+//		{gairmet.update()}
 		                
 document.getElementById("agalt").onchange = function()
 		{airmet.update()}
 
 document.getElementById("sgalt").onchange = function()
 		{sigmet.update()}  
+		
+document.getElementById("sliderRange").onchange = function()
+	{gairmet.update()}
+
+
+
+//							alert(this.value); }document.getElementById("myRange").onchange = function()
+//		{gaimet.update()}  
 
 //Add layer control
 var baseMaps = {
