@@ -1,13 +1,17 @@
 window.onload = onPageLoad();
 function onPageLoad() {
-  document.getElementById("gmet").checked = true;
-    document.getElementById("meta").checked = true;
-      document.getElementById("amet").checked = true;
-        document.getElementById("smet").checked = true;
+	document.getElementById("gmet").checked = true;
+	document.getElementById("meta").checked = true;
+    document.getElementById("amet").checked = true;
+    document.getElementById("smet").checked = true;
+    document.getElementById("notam").checked = true;
 
-document.getElementById("gmsliderRange").step = "1000";
-document.getElementById("amsliderRange").step = "1000";
-document.getElementById("smsliderRange").step = "1000";
+	document.getElementById("gmsliderRange").step = "1000";
+	document.getElementById("amsliderRange").step = "1000";
+	document.getElementById("smsliderRange").step = "1000";
+	document.getElementById("gmsliderRange").value = "0";
+	document.getElementById("amsliderRange").value = "0";
+	document.getElementById("smsliderRange").value = "0";
 }
 
 function reloadFunc(obj){
@@ -91,7 +95,7 @@ var gairmet = L.realtime({
 					else
 					return (feature.properties.Alt >= (nn-500) && feature.properties.Alt <= (nn +500) );
 				}
-		}).addTo(map);  //Note turned on to start map with Data, Checkbox has checked property.
+		}).addTo(map);  
 
 // AIRMET
 var	airmet = L.realtime({
@@ -129,7 +133,7 @@ var	airmet = L.realtime({
 					else
 					return (feature.properties.Alt >= (nn-500) && feature.properties.Alt <= (nn +500) );
 				}
-		}).addTo(map);;   
+		}).addTo(map);
 
 // SIGMET
 var	sigmet = L.realtime({
@@ -166,12 +170,12 @@ var	sigmet = L.realtime({
 					if (nn== -1000) return (feature.properties.Alt)
 					else
 					return (feature.properties.Alt >= (nn-500) && feature.properties.Alt <= (nn +500) );
-
 				}
 		}).addTo(map);  
 
 // ** METAR 
-var wxIcon = L.icon({iconUrl: 'therm.ico', iconSize: [35,25]});
+
+var wxIcon = L.icon({iconUrl: 'therm.ico', iconSize: [35,35]});
 
 metar = L.realtime({
 	url: 'http://localhost:8000/metar.geojson',
@@ -197,6 +201,32 @@ metar = L.realtime({
 		}
 	}).addTo(map);
 
+// ** NOTAM 
+var wxIcon2 = L.icon({iconUrl: 'wx2.ico', iconSize: [20,20]});
+
+notam = L.realtime({
+	url: 'http://localhost:8000/notam.geojson',
+		crossOrigin: true, type: 'json'
+	}, {interval: 5 * 1000,
+  		getFeatureId: function(featureData) {
+			return featureData.properties.Stn;
+		},
+		pointToLayer: function (feature, latlng) {
+			marker = L.marker(latlng,{icon: wxIcon2});
+    		marker.bindTooltip(feature.properties.Stn);
+ 			marker.on('click', function (e) {
+					$('#f1').html(e.target.feature.properties.Stn);
+					$('#f2').html(e.target.feature.properties.Loc);
+					$('#f3').html(e.target.feature.properties.RepNum);
+					$('#f4').html(e.target.feature.properties.Data);
+//					$('#f5').html(e.target.feature.properties.WindSp);  
+//					$('#f6').html(e.target.feature.properties.Vsby);
+			});
+    		marker.addTo(map);
+    		return marker;
+		}
+	}).addTo(map);
+
 // Handles the check boxes being turned on/off
 document.querySelector("input[name=gmet]").addEventListener('change', function() {
                 if(this.checked) {map.addLayer(gairmet),gairmet.start()}
@@ -211,6 +241,11 @@ document.querySelector("input[name=amet]").addEventListener('change', function()
 document.querySelector("input[name=meta]").addEventListener('change', function() {
                 if(this.checked)  {map.addLayer(metar),metar.start()}
                   else {map.removeLayer(metar),metar.stop()}
+                })
+
+document.querySelector("input[name=notam]").addEventListener('change', function() {
+                if(this.checked)  {map.addLayer(notam),notam.start()}
+                  else {map.removeLayer(notam),notam.stop()}
                 })
 
 document.querySelector("input[name=smet]").addEventListener('change', function() {
@@ -234,9 +269,6 @@ document.getElementById("amsliderRange").onchange = function()
 document.getElementById("smsliderRange").onchange = function()
 	{sigmet.update()}
 
-
-//							alert(this.value); }document.getElementById("myRange").onchange = function()
-//		{gaimet.update()}  
 
 //Add layer control
 var baseMaps = {
