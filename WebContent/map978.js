@@ -58,7 +58,7 @@ function getColor(colf){
 							'blue';
 }	
 
-// G-AIRMET this is a test
+// G-AIRMET
 var gairmet = L.realtime({
      	url: 'http://localhost:8000/gairmet.geojson',
 		crossOrigin: true, type: 'json'
