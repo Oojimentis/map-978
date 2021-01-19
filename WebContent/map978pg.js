@@ -179,23 +179,25 @@ var	sigmet = L.realtime({
 var wxIcon = L.icon({iconUrl: 'therm.ico', iconSize: [35,35]});
 
 metar = L.realtime({
-	url: 'http://localhost:8000/metar.geojson',
+	url:  'http://localhost:4000/sql?q=select s.coords as geom,m.stn_call,s.stn_loc,ob_date,' 
+	+ 'temp,windsp,winddir,altimeter,visby,dewp '
+	+ 'from metar m ,stations s where m.stn_call=s.stn_call',
 		crossOrigin: true, type: 'json'
-	}, {interval: 5 * 1000,
+	}, {interval: 7 * 1000,
   		getFeatureId: function(featureData) {
-			return featureData.properties.Stn;
+			return featureData.properties.stn_call;
 		},
 		pointToLayer: function (feature, latlng) {
 			marker = L.marker(latlng,{icon: wxIcon});
-    		marker.bindTooltip(feature.properties.Stn 
-    				+ '<br>' + feature.properties.Temp   +'&#x2109');
+    		marker.bindTooltip(feature.properties.stn_call 
+    				+ '<br>' + feature.properties.temp   +'&#x2109');
  			marker.on('click', function (e) {
-					$('#f1').html(e.target.feature.properties.Stn);
-					$('#f2').html(e.target.feature.properties.Loc);
-					$('#f3').html(e.target.feature.properties.ObDate);
-					$('#f4').html(e.target.feature.properties.Temp);
-					$('#f5').html(e.target.feature.properties.WindSp);  
-					$('#f6').html(e.target.feature.properties.Vsby);
+					$('#f1').html(e.target.feature.properties.stn_call);
+					$('#f2').html(e.target.feature.properties.stn_loc);
+					$('#f3').html(e.target.feature.properties.ob_date);
+					$('#f4').html(e.target.feature.properties.temp);
+					$('#f5').html(e.target.feature.properties.windsp);  
+					$('#f6').html(e.target.feature.properties.visby);
 			});
     		marker.addTo(map);
     		return marker;
@@ -206,7 +208,8 @@ metar = L.realtime({
 var wxIcon2 = L.icon({iconUrl: 'wx2.ico', iconSize: [20,20]});
 
 notam = L.realtime({
-	url: 'http://localhost:4000/sql?q=select%20coords%20as%20geom,stn_call,stn_loc,rep_num%20from%20notam',
+	url: 'http://localhost:4000/sql?q=select coords as geom,n.stn_call,stn_loc,rep_num,notam_text ' 
+	+ 'from notam n, stations s where n.stn_call=s.stn_call',
 		crossOrigin: true, type: 'json'
 	}, {interval: 9 * 1000,
   		getFeatureId: function(featureData) {
@@ -219,7 +222,7 @@ notam = L.realtime({
 					$('#f1').html(e.target.feature.properties.stn_call);
 					$('#f2').html(e.target.feature.properties.stn_loc);
 					$('#f3').html(e.target.feature.properties.rep_num);
-					$('#f4').html(e.target.feature.properties.Data);
+					$('#f4').html(e.target.feature.properties.notam_text);
 //					$('#f5').html(e.target.feature.properties.WindSp);  
 //					$('#f6').html(e.target.feature.properties.Vsby);
 			});
