@@ -1,4 +1,5 @@
 window.onload = onPageLoad();
+
 function onPageLoad() {
 	document.getElementById("gmet").checked = true;
 	document.getElementById("meta").checked = true;
@@ -272,7 +273,6 @@ document.getElementById("amsliderRange").onchange = function()
 	{airmet.update()}
 document.getElementById("smsliderRange").onchange = function()
 	{sigmet.update()}
-
 
 //Add layer control
 var baseMaps = {
