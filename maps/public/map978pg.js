@@ -1,10 +1,11 @@
 window.onload = onPageLoad();
+
 function onPageLoad() {
 	document.getElementById("gmet").checked = true;
 	document.getElementById("meta").checked = true;
-    document.getElementById("amet").checked = true;
-    document.getElementById("smet").checked = true;
-    document.getElementById("notam").checked = true;
+	document.getElementById("amet").checked = true;
+	document.getElementById("smet").checked = true;
+	document.getElementById("notam").checked = true;
 
 	document.getElementById("gmsliderRange").step = "1000";
 	document.getElementById("amsliderRange").step = "1000";
@@ -59,8 +60,9 @@ function getColor(colf){
 }	
 
 // G-AIRMET
+
 var gairmet = L.realtime({
-     	url: 'http://localhost:8000/gairmet.geojson',
+     	url: 'http://localhost:4000/gairmet.geojson',
 		crossOrigin: true, type: 'json'
 	}, {interval: 12 * 1000,
 		style: function(feature){
@@ -99,7 +101,7 @@ var gairmet = L.realtime({
 
 // AIRMET
 var	airmet = L.realtime({
-     	url: 'http://localhost:8000/airmet.geojson',
+     	url: 'http://localhost:4000/airmet.geojson',
 		crossOrigin: true, type: 'json'
 	}, {interval: 12 * 1020,
 		style: function(feature){
@@ -137,7 +139,7 @@ var	airmet = L.realtime({
 
 // SIGMET
 var	sigmet = L.realtime({
-     	url: 'http://localhost:8000/sigmet.geojson',
+     	url: 'http://localhost:4000/sigmet.geojson',
 		crossOrigin: true, type: 'json'
 	}, {interval: 12 * 1030,
 		style: function(feature){
@@ -178,23 +180,25 @@ var	sigmet = L.realtime({
 var wxIcon = L.icon({iconUrl: 'therm.ico', iconSize: [35,35]});
 
 metar = L.realtime({
-	url: 'http://localhost:8000/metar.geojson',
+	url:  'http://localhost:4000/sql?q=select s.coords as geom,m.stn_call,s.stn_loc,ob_date,' 
+	+ 'temp,windsp,winddir,altimeter,visby,dewp '
+	+ 'from metar m ,stations s where m.stn_call=s.stn_call',
 		crossOrigin: true, type: 'json'
-	}, {interval: 5 * 1000,
+	}, {interval: 17 * 1000,
   		getFeatureId: function(featureData) {
-			return featureData.properties.Stn;
+			return featureData.properties.stn_call;
 		},
 		pointToLayer: function (feature, latlng) {
 			marker = L.marker(latlng,{icon: wxIcon});
-    		marker.bindTooltip(feature.properties.Stn 
-    				+ '<br>' + feature.properties.Temp   +'&#x2109');
+    		marker.bindTooltip(feature.properties.stn_call 
+    				+ '<br>' + feature.properties.temp   +'&#x2109');
  			marker.on('click', function (e) {
-					$('#f1').html(e.target.feature.properties.Stn);
-					$('#f2').html(e.target.feature.properties.Loc);
-					$('#f3').html(e.target.feature.properties.ObDate);
-					$('#f4').html(e.target.feature.properties.Temp);
-					$('#f5').html(e.target.feature.properties.WindSp);  
-					$('#f6').html(e.target.feature.properties.Vsby);
+					$('#f1').html(e.target.feature.properties.stn_call);
+					$('#f2').html(e.target.feature.properties.stn_loc);
+					$('#f3').html(e.target.feature.properties.ob_date);
+					$('#f4').html(e.target.feature.properties.temp);
+					$('#f5').html(e.target.feature.properties.windsp);  
+					$('#f6').html(e.target.feature.properties.visby);
 			});
     		marker.addTo(map);
     		return marker;
@@ -205,20 +209,21 @@ metar = L.realtime({
 var wxIcon2 = L.icon({iconUrl: 'wx2.ico', iconSize: [20,20]});
 
 notam = L.realtime({
-	url: 'http://localhost:8000/notam.geojson',
+	url: 'http://localhost:4000/sql?q=select coords as geom,n.stn_call,stn_loc,rep_num,notam_text ' 
+	+ 'from notam n, stations s where n.stn_call=s.stn_call',
 		crossOrigin: true, type: 'json'
-	}, {interval: 5 * 1000,
+	}, {interval: 19 * 1000,
   		getFeatureId: function(featureData) {
-			return featureData.properties.Stn;
+			return featureData.properties.stn_call;
 		},
 		pointToLayer: function (feature, latlng) {
 			marker = L.marker(latlng,{icon: wxIcon2});
-    		marker.bindTooltip(feature.properties.Stn);
+    		marker.bindTooltip(feature.properties.stn_call);
  			marker.on('click', function (e) {
-					$('#f1').html(e.target.feature.properties.Stn);
-					$('#f2').html(e.target.feature.properties.Loc);
-					$('#f3').html(e.target.feature.properties.RepNum);
-					$('#f4').html(e.target.feature.properties.Data);
+					$('#f1').html(e.target.feature.properties.stn_call);
+					$('#f2').html(e.target.feature.properties.stn_loc);
+					$('#f3').html(e.target.feature.properties.rep_num);
+					$('#f4').html(e.target.feature.properties.notam_text);
 //					$('#f5').html(e.target.feature.properties.WindSp);  
 //					$('#f6').html(e.target.feature.properties.Vsby);
 			});
@@ -268,7 +273,6 @@ document.getElementById("amsliderRange").onchange = function()
 	{airmet.update()}
 document.getElementById("smsliderRange").onchange = function()
 	{sigmet.update()}
-
 
 //Add layer control
 var baseMaps = {
