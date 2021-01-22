@@ -1,3 +1,4 @@
+
 window.onload = onPageLoad();
 
 function onPageLoad() {
@@ -13,11 +14,14 @@ function onPageLoad() {
 	document.getElementById("gmsliderRange").value = "0";
 	document.getElementById("amsliderRange").value = "0";
 	document.getElementById("smsliderRange").value = "0";
-}
+	}
 
 function reloadFunc(obj){
 			  location.reload();
 	}
+
+var serv_port = document.getElementById('port').value;
+var url1 = "http://localhost:";
 
 var map = L.map('map').setView([36.0, -75.26], 5); 
 
@@ -59,10 +63,14 @@ function getColor(colf){
 							'blue';
 }	
 
+
 // G-AIRMET
 
+var url2 ="/gairmet.geojson";
+var url3=url1.concat( serv_port,url2);
+
 var gairmet = L.realtime({
-     	url: 'http://localhost:4000/gairmet.geojson',
+		url: url3,
 		crossOrigin: true, type: 'json'
 	}, {interval: 12 * 1000,
 		style: function(feature){
@@ -100,8 +108,12 @@ var gairmet = L.realtime({
 		}).addTo(map);  
 
 // AIRMET
+
+url2 ="/airmet.geojson";
+url3=url1.concat(serv_port,url2);
+
 var	airmet = L.realtime({
-     	url: 'http://localhost:4000/airmet.geojson',
+		url: url3,
 		crossOrigin: true, type: 'json'
 	}, {interval: 12 * 1020,
 		style: function(feature){
@@ -138,8 +150,12 @@ var	airmet = L.realtime({
 		}).addTo(map);
 
 // SIGMET
+
+url2 ="/sigmet.geojson";
+url3=url1.concat(serv_port,url2);
+
 var	sigmet = L.realtime({
-     	url: 'http://localhost:4000/sigmet.geojson',
+		url: url3,
 		crossOrigin: true, type: 'json'
 	}, {interval: 12 * 1030,
 		style: function(feature){
@@ -179,10 +195,10 @@ var	sigmet = L.realtime({
 
 var wxIcon = L.icon({iconUrl: 'therm.ico', iconSize: [35,35]});
 
+url3=url1.concat(serv_port,"/sql?q=select s.coords as geom,m.stn_call,s.stn_loc,ob_date,temp,windsp,winddir,altimeter,visby,dewp from metar m ,stations s where m.stn_call=s.stn_call");
+
 metar = L.realtime({
-	url:  'http://localhost:4000/sql?q=select s.coords as geom,m.stn_call,s.stn_loc,ob_date,' 
-	+ 'temp,windsp,winddir,altimeter,visby,dewp '
-	+ 'from metar m ,stations s where m.stn_call=s.stn_call',
+		url: url3,
 		crossOrigin: true, type: 'json'
 	}, {interval: 17 * 1000,
   		getFeatureId: function(featureData) {
@@ -206,11 +222,13 @@ metar = L.realtime({
 	}).addTo(map);
 
 // ** NOTAM 
+
 var wxIcon2 = L.icon({iconUrl: 'wx2.ico', iconSize: [20,20]});
 
+ url3=url1.concat(serv_port,"/sql?q=select coords as geom,n.stn_call,stn_loc,rep_num,notam_text from notam n, stations s where n.stn_call=s.stn_call");
+
 notam = L.realtime({
-	url: 'http://localhost:4000/sql?q=select coords as geom,n.stn_call,stn_loc,rep_num,notam_text ' 
-	+ 'from notam n, stations s where n.stn_call=s.stn_call',
+		url: url3,
 		crossOrigin: true, type: 'json'
 	}, {interval: 19 * 1000,
   		getFeatureId: function(featureData) {

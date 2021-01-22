@@ -6,7 +6,8 @@ const app = express()
 var pgp = require("pg-promise")(),
  	dbgeo = require("dbgeo");
 
-var port = 4000;
+//var port = 4000;
+var port = process.env.POSTGRESQL_PORT;
 var connectionString = process.env.POSTGRESQL_CONNECT ;
 
 var db = pgp(connectionString) ;
@@ -17,7 +18,7 @@ app.use(express.static('public'));
 //route to the root 
 
 app.get('/',function (req, res) { 
-	res.render('index');
+	res.render('index' ,{ ptnum: port});
 });
 
 // Expose sql endpoint, grab query as URL parameter and send it to the database
