@@ -103,10 +103,9 @@ var gairmet = L.realtime({
 				}
 		}).addTo(map);  
 
-
 // AIRMET
 
-url3=url1.concat(serv_port,"/sql?q=select coords as geom,rep_num,alt,ob_ele from graphics where prod_id=11");
+url3=url1.concat(serv_port,"/sql?q=select coords as geom,g.rep_num,alt,ob_ele,text_data from graphics g,sigairmet s where(g.prod_id=s.prod_id) and (g.rep_num=s.rep_num and g.prod_id=11)");
 
 var	airmet = L.realtime({
 		url: url3,
@@ -127,7 +126,7 @@ var	airmet = L.realtime({
 					$('#f11').html('AIRMET');
 					$('#f12').html(e.target.feature.properties.alt);
 					$('#f13').html(e.target.feature.properties.rep_num);
-					$('#f14').html('n/a');
+					$('#f14').html(e.target.feature.properties.text_data);
 					airmet.stop();});
 	           layer.on('mouseout',function(e){
 					airmet.start();})		
@@ -147,7 +146,7 @@ var	airmet = L.realtime({
 
 // SIGMET
 
-url3=url1.concat(serv_port,"/sql?q=select coords as geom,rep_num,alt,ob_ele from graphics where prod_id=12");
+url3=url1.concat(serv_port,"/sql?q=select coords as geom,g.rep_num,alt,ob_ele,text_data from graphics g,sigairmet s where(g.prod_id=s.prod_id) and (g.rep_num=s.rep_num and g.prod_id=12)");
 
 var	sigmet = L.realtime({
 		url: url3,
@@ -168,7 +167,7 @@ var	sigmet = L.realtime({
 					$('#f11').html('SIGMET');
 					$('#f12').html(e.target.feature.properties.alt);
 					$('#f13').html(e.target.feature.properties.repnum);
-					$('#f14').html('n/a');
+					$('#f14').html(e.target.feature.properties.text_data);
 					sigmet.stop();});
 	           layer.on('mouseout',function(e){
 					sigmet.start();})		
@@ -220,7 +219,7 @@ metar = L.realtime({
 
 var wxIcon2 = L.icon({iconUrl: 'wx2.ico', iconSize: [20,20]});
 
-url3=url1.concat(serv_port,"/sql?q=select coords as geom,n.stn_call,stn_loc,rep_num,notam_text from notam n, stations s where n.stn_call=s.stn_call");
+url3=url1.concat(serv_port,"/sql?q=select coords as geom,n.stn_call,stn_loc,rep_num,text_data from sigairmet n, stations s where prod_id=8 and n.stn_call=s.stn_call");
 
 notam = L.realtime({
 		url: url3,
@@ -236,7 +235,7 @@ notam = L.realtime({
 					$('#f1').html(e.target.feature.properties.stn_call);
 					$('#f2').html(e.target.feature.properties.stn_loc);
 					$('#f3').html(e.target.feature.properties.rep_num);
-					$('#f4').html(e.target.feature.properties.notam_text);
+					$('#f4').html(e.target.feature.properties.text_data);
 //					$('#f5').html(e.target.feature.properties.WindSp);  
 //					$('#f6').html(e.target.feature.properties.Vsby);
 			});
