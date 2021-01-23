@@ -1,4 +1,3 @@
-
 window.onload = onPageLoad();
 
 function onPageLoad() {
@@ -63,31 +62,29 @@ function getColor(colf){
 							'blue';
 }	
 
-
 // G-AIRMET
 
-var url2 ="/gairmet.geojson";
-var url3=url1.concat( serv_port,url2);
+var url3=url1.concat(serv_port,"/sql?q=select coords as geom,rep_num,alt,ob_ele from graphics where prod_id=14");
 
 var gairmet = L.realtime({
 		url: url3,
 		crossOrigin: true, type: 'json'
 	}, {interval: 12 * 1000,
 		style: function(feature){
-			kolor  = getColor(feature.properties.Alt);
+			kolor  = getColor(feature.properties.alt);
 			return { color: '#5D8C8C', weight: 2, fillColor: kolor,opacity: 1.0,fillOpacity: 0.2};
 		},
 			getFeatureId: function(featureData){
-				return featureData.properties.RepNum;
+				return featureData.properties.rep_num;
 		},
  			onEachFeature: function (feature, layer){
-				layer.bindTooltip('G-AIRMET: Alt '+ feature.properties.Alt);
+				layer.bindTooltip('G-AIRMET: Alt '+ feature.properties.alt);
 	           	layer.on('click',function(e){
 					layer.setStyle({color: 'yellow',opacity: 0.8, fillColor: 'yellow', fillOpacity: 0.5});
 					$('#f11').html('G-AIRMET');
-					$('#f12').html(e.target.feature.properties.Alt);
-					$('#f13').html(e.target.feature.properties.RepNum);
-					$('#f14').html(e.target.feature.properties.Ob);
+					$('#f12').html(e.target.feature.properties.alt);
+					$('#f13').html(e.target.feature.properties.rep_num);
+					$('#f14').html(e.target.feature.properties.ob_ele);
 					gairmet.stop();});
 	           layer.on('mouseout',function(e){
 					gairmet.start();})		
@@ -97,40 +94,39 @@ var gairmet = L.realtime({
 					var rangeslider = document.getElementById("gmsliderRange");
 					var output = document.getElementById("demo");
 					if (rangeslider.value== -1000) output.innerHTML = "All"
-					 else output.innerHTML = rangeslider.value;
-				 
-					var nn = parseInt(rangeslider.value, 10);
+						else output.innerHTML = rangeslider.value;
+				 	var nn = parseInt(rangeslider.value, 10);
 //					var nn = parseInt(n, 10);
-					if (nn== -1000) return (feature.properties.Alt)
-					else
-					return (feature.properties.Alt >= (nn-500) && feature.properties.Alt <= (nn +500) );
+					if (nn== -1000) return (feature.properties.alt)
+						else
+					return (feature.properties.alt >= (nn-500) && feature.properties.alt <= (nn +500) );
 				}
 		}).addTo(map);  
 
+
 // AIRMET
 
-url2 ="/airmet.geojson";
-url3=url1.concat(serv_port,url2);
+url3=url1.concat(serv_port,"/sql?q=select coords as geom,rep_num,alt,ob_ele from graphics where prod_id=11");
 
 var	airmet = L.realtime({
 		url: url3,
 		crossOrigin: true, type: 'json'
 	}, {interval: 12 * 1020,
 		style: function(feature){
-			kolor  = getColor(feature.properties.Alt);
+			kolor  = getColor(feature.properties.alt);
 				return { color: '#00cccc', weight: 2, fillColor: kolor,opacity: 1.0,fillOpacity: 0.2};
 		},
 			getFeatureId: function(featureData){
-				return featureData.properties.RepNum;
+				return featureData.properties.rep_num;
 		},
 			onEachFeature: function (feature, layer) 
 			{
-				layer.bindTooltip('AIRMET: Alt ' + feature.properties.Alt);
+				layer.bindTooltip('AIRMET: Alt ' + feature.properties.alt);
 	           	layer.on('click',function(e){
 					layer.setStyle({fillColor: 'yellow', fillOpacity: 0.5});
 					$('#f11').html('AIRMET');
-					$('#f12').html(e.target.feature.properties.Alt);
-					$('#f13').html(e.target.feature.properties.RepNum);
+					$('#f12').html(e.target.feature.properties.alt);
+					$('#f13').html(e.target.feature.properties.rep_num);
 					$('#f14').html('n/a');
 					airmet.stop();});
 	           layer.on('mouseout',function(e){
@@ -141,38 +137,37 @@ var	airmet = L.realtime({
 					var rangeslider = document.getElementById("amsliderRange");
 					var output = document.getElementById("demo1");
 					if (rangeslider.value== -1000) output.innerHTML = "All"
-					 else output.innerHTML = rangeslider.value;
+						else output.innerHTML = rangeslider.value;
 					var nn = parseInt(rangeslider.value, 10);
-					if (nn== -1000) return (feature.properties.Alt)
-					else
-					return (feature.properties.Alt >= (nn-500) && feature.properties.Alt <= (nn +500) );
+					if (nn== -1000) return (feature.properties.alt)
+						else
+					return (feature.properties.alt >= (nn-500) && feature.properties.alt <= (nn +500) );
 				}
 		}).addTo(map);
 
 // SIGMET
 
-url2 ="/sigmet.geojson";
-url3=url1.concat(serv_port,url2);
+url3=url1.concat(serv_port,"/sql?q=select coords as geom,rep_num,alt,ob_ele from graphics where prod_id=12");
 
 var	sigmet = L.realtime({
 		url: url3,
 		crossOrigin: true, type: 'json'
 	}, {interval: 12 * 1030,
 		style: function(feature){
-			kolor  = getColor(feature.properties.Alt);
+			kolor  = getColor(feature.properties.alt);
 				return { color: '#00cccc', weight: 2, fillColor: kolor,opacity: 1.0,fillOpacity: 0.2};
 		},
 			getFeatureId: function(featureData){
-				return featureData.properties.RepNum;
+				return featureData.properties.rep_num;
 		},
 			onEachFeature: function (feature, layer) 
 			{
-				layer.bindTooltip('SIGMET: Alt ' + feature.properties.Alt);
+				layer.bindTooltip('SIGMET: alt ' + feature.properties.alt);
 	           	layer.on('click',function(e){
 					layer.setStyle({fillColor: 'yellow', fillOpacity: 0.5});
 					$('#f11').html('SIGMET');
-					$('#f12').html(e.target.feature.properties.Alt);
-					$('#f13').html(e.target.feature.properties.RepNum);
+					$('#f12').html(e.target.feature.properties.alt);
+					$('#f13').html(e.target.feature.properties.repnum);
 					$('#f14').html('n/a');
 					sigmet.stop();});
 	           layer.on('mouseout',function(e){
@@ -183,11 +178,11 @@ var	sigmet = L.realtime({
 					var rangeslider = document.getElementById("smsliderRange");
 					var output = document.getElementById("demo2");
 					if (rangeslider.value== -1000) output.innerHTML = "All"
-					 else output.innerHTML = rangeslider.value;
+						else output.innerHTML = rangeslider.value;
 					var nn = parseInt(rangeslider.value, 10);
-					if (nn== -1000) return (feature.properties.Alt)
-					else
-					return (feature.properties.Alt >= (nn-500) && feature.properties.Alt <= (nn +500) );
+					if (nn== -1000) return (feature.properties.alt)
+						else
+					return (feature.properties.alt >= (nn-500) && feature.properties.alt <= (nn +500) );
 				}
 		}).addTo(map);  
 
@@ -225,7 +220,7 @@ metar = L.realtime({
 
 var wxIcon2 = L.icon({iconUrl: 'wx2.ico', iconSize: [20,20]});
 
- url3=url1.concat(serv_port,"/sql?q=select coords as geom,n.stn_call,stn_loc,rep_num,notam_text from notam n, stations s where n.stn_call=s.stn_call");
+url3=url1.concat(serv_port,"/sql?q=select coords as geom,n.stn_call,stn_loc,rep_num,notam_text from notam n, stations s where n.stn_call=s.stn_call");
 
 notam = L.realtime({
 		url: url3,
