@@ -6,6 +6,7 @@ function onPageLoad() {
 	document.getElementById("amet").checked = true;
 	document.getElementById("smet").checked = true;
 	document.getElementById("notam").checked = true;
+	document.getElementById("taf").checked = true;
 
 	document.getElementById("gmsliderRange").step = "1000";
 	document.getElementById("amsliderRange").step = "1000";
@@ -206,6 +207,10 @@ metar = L.realtime({
     		marker.bindTooltip(feature.properties.stn_call 
     				+ '<br>' + feature.properties.temp   +'&#x2109');
  			marker.on('click', function (e) {
+ 					$("#m3").html("Time");
+   		    		$("#m4").html("Temp");
+   			    	$("#m5").html("Winds");
+   			    	$("#m6").html("Visibility");
 					$('#f1').html(e.target.feature.properties.stn_call);
 					$('#f2').html(e.target.feature.properties.stn_loc);
 					$('#f3').html(e.target.feature.properties.ob_date);
@@ -236,12 +241,49 @@ notam = L.realtime({
 			marker = L.marker(latlng,{icon: wxIcon2});
     		marker.bindTooltip(feature.properties.stn_call);
  			marker.on('click', function (e) {
+					$("#m3").html("Report Num");
+					$("#m4").html("Text");
+					$("#m5").html("-");
+					$("#m6").html("-");
 					$('#f1').html(e.target.feature.properties.stn_call);
 					$('#f2').html(e.target.feature.properties.stn_loc);
 					$('#f3').html(e.target.feature.properties.rep_num);
 					$('#f4').html(e.target.feature.properties.text_data);
 					$('#f5').html('n/a');
 					$('#f6').html('n/a');
+			});
+    		marker.addTo(map);
+    		return marker;
+		}
+	}).addTo(map);
+
+// ** TAF
+
+var wxIcon3 = L.icon({iconUrl: 'wx1.ico', iconSize: [20,20]});
+
+var url3_taf=url1.concat(serv_port,"/sql?q=select coords as geom,t.stn_call,stn_loc,issued,current,wind,visby,condx,rep_time from taf t, stations s where t.stn_call=s.stn_call");
+
+taf = L.realtime({
+		url: url3_taf,
+		crossOrigin: true, type: 'json'
+	}, {interval: 19 * 1000,
+  		getFeatureId: function(featureData) {
+			return featureData.properties.stn_call;
+		},
+		pointToLayer: function (feature, latlng) {
+			marker = L.marker(latlng,{icon: wxIcon3});
+    		marker.bindTooltip(feature.properties.stn_call);
+ 			marker.on('click', function (e) {
+					$("#m3").html("Issued");
+					$("#m4").html("Winds");
+					$("#m5").html("Visibility");
+					$("#m6").html("Conditions");
+					$('#f1').html(e.target.feature.properties.stn_call);
+					$('#f2').html(e.target.feature.properties.stn_loc);
+					$('#f3').html(e.target.feature.properties.issued + '<br>' + e.target.feature.properties.current);
+					$('#f4').html(e.target.feature.properties.wind);
+					$('#f5').html(e.target.feature.properties.visby);
+					$('#f6').html(e.target.feature.properties.condx);
 			});
     		marker.addTo(map);
     		return marker;
@@ -267,6 +309,11 @@ document.querySelector("input[name=meta]").addEventListener('change', function()
 document.querySelector("input[name=notam]").addEventListener('change', function() {
                 if(this.checked)  {map.addLayer(notam),notam.start()}
                   else {map.removeLayer(notam),notam.stop()}
+                })
+
+document.querySelector("input[name=taf]").addEventListener('change', function() {
+                if(this.checked)  {map.addLayer(taf),taf.start()}
+                  else {map.removeLayer(taf),taf.stop()}
                 })
 
 document.querySelector("input[name=smet]").addEventListener('change', function() {
