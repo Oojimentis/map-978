@@ -64,10 +64,10 @@ function getColor(colf){
 
 // G-AIRMET
 
-var url3=url1.concat(serv_port,"/sql?q=select coords as geom,rep_num,alt,ob_ele from graphics where prod_id=14");
+var url3_gairmet=url1.concat(serv_port,"/sql?q=select coords as geom,rep_num,alt,ob_ele from graphics where prod_id=14");
 
 var gairmet = L.realtime({
-		url: url3,
+		url: url3_gairmet,
 		crossOrigin: true, type: 'json'
 	}, {interval: 12 * 1000,
 		style: function(feature){
@@ -105,12 +105,13 @@ var gairmet = L.realtime({
 
 // AIRMET
 
-url3=url1.concat(serv_port,"/sql?q=select coords as geom,g.rep_num,alt,ob_ele,text_data from graphics g,sigairmet s where(g.prod_id=s.prod_id) and (g.rep_num=s.rep_num and g.prod_id=11)");
+var url3_airmet=url1.concat(serv_port,"/sql?q=select coords as geom,g.rep_num,alt,ob_ele,text_data \
+			from graphics g,sigairmet s where(g.prod_id=s.prod_id) and (g.rep_num=s.rep_num and g.prod_id=11)");
 
 var	airmet = L.realtime({
-		url: url3,
+		url: url3_airmet,
 		crossOrigin: true, type: 'json'
-	}, {interval: 12 * 1020,
+	}, {interval: 19 * 1020,
 		style: function(feature){
 			kolor  = getColor(feature.properties.alt);
 				return { color: '#00cccc', weight: 2, fillColor: kolor,opacity: 1.0,fillOpacity: 0.2};
@@ -146,12 +147,13 @@ var	airmet = L.realtime({
 
 // SIGMET
 
-url3=url1.concat(serv_port,"/sql?q=select coords as geom,g.rep_num,alt,ob_ele,text_data from graphics g,sigairmet s where(g.prod_id=s.prod_id) and (g.rep_num=s.rep_num and g.prod_id=12)");
+var url3_sigmet=url1.concat(serv_port,"/sql?q=select coords as geom,g.rep_num,alt,ob_ele,text_data \
+				from graphics g,sigairmet s where(g.prod_id=s.prod_id) and (g.rep_num=s.rep_num and g.prod_id=12)");
 
 var	sigmet = L.realtime({
-		url: url3,
+		url: url3_sigmet,
 		crossOrigin: true, type: 'json'
-	}, {interval: 12 * 1030,
+	}, {interval: 15 * 1030,
 		style: function(feature){
 			kolor  = getColor(feature.properties.alt);
 				return { color: '#00cccc', weight: 2, fillColor: kolor,opacity: 1.0,fillOpacity: 0.2};
@@ -166,7 +168,7 @@ var	sigmet = L.realtime({
 					layer.setStyle({fillColor: 'yellow', fillOpacity: 0.5});
 					$('#f11').html('SIGMET');
 					$('#f12').html(e.target.feature.properties.alt);
-					$('#f13').html(e.target.feature.properties.repnum);
+					$('#f13').html(e.target.feature.properties.rep_num);
 					$('#f14').html(e.target.feature.properties.text_data);
 					sigmet.stop();});
 	           layer.on('mouseout',function(e){
@@ -189,10 +191,11 @@ var	sigmet = L.realtime({
 
 var wxIcon = L.icon({iconUrl: 'therm.ico', iconSize: [35,35]});
 
-url3=url1.concat(serv_port,"/sql?q=select s.coords as geom,m.stn_call,s.stn_loc,ob_date,temp,windsp,winddir,altimeter,visby,dewp from metar m ,stations s where m.stn_call=s.stn_call");
+var url3_metar=url1.concat(serv_port,"/sql?q=select  s.coords as geom,m.stn_call,s.stn_loc,ob_date,temp,windsp,\
+winddir,altimeter,visby,dewp from metar m inner join (select stn_call,max(ob_date) as mob from metar group by stn_call) g on m.stn_call=g.stn_call and m.ob_date=g.mob inner join stations s on m.stn_call=s.stn_call");
 
 metar = L.realtime({
-		url: url3,
+		url: url3_metar,
 		crossOrigin: true, type: 'json'
 	}, {interval: 17 * 1000,
   		getFeatureId: function(featureData) {
@@ -219,10 +222,11 @@ metar = L.realtime({
 
 var wxIcon2 = L.icon({iconUrl: 'wx2.ico', iconSize: [20,20]});
 
-url3=url1.concat(serv_port,"/sql?q=select coords as geom,n.stn_call,stn_loc,rep_num,text_data from sigairmet n, stations s where prod_id=8 and n.stn_call=s.stn_call");
+var url3_notam=url1.concat(serv_port,"/sql?q=select coords as geom,n.stn_call,stn_loc,rep_num,text_data \
+		from sigairmet n, stations s where prod_id=8 and n.stn_call=s.stn_call");
 
 notam = L.realtime({
-		url: url3,
+		url: url3_notam,
 		crossOrigin: true, type: 'json'
 	}, {interval: 19 * 1000,
   		getFeatureId: function(featureData) {
@@ -236,8 +240,8 @@ notam = L.realtime({
 					$('#f2').html(e.target.feature.properties.stn_loc);
 					$('#f3').html(e.target.feature.properties.rep_num);
 					$('#f4').html(e.target.feature.properties.text_data);
-//					$('#f5').html(e.target.feature.properties.WindSp);  
-//					$('#f6').html(e.target.feature.properties.Vsby);
+					$('#f5').html('n/a');
+					$('#f6').html('n/a');
 			});
     		marker.addTo(map);
     		return marker;
