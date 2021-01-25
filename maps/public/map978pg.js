@@ -117,7 +117,7 @@ var gairmet = L.realtime({
 // AIRMET
 
 var url3_airmet=url1.concat(serv_port,"/sql?q=select coords as geom,g.rep_num,alt,ob_ele,text_data \
-			from graphics g,sigairmet s where(g.prod_id=s.prod_id) and (g.rep_num=s.rep_num and g.prod_id=11)");
+		from graphics g left join sigairmet s on (g.prod_id=s.prod_id) and (g.rep_num=s.rep_num) where g.prod_id=11");
 
 var	airmet = L.realtime({
 		url: url3_airmet,
@@ -146,6 +146,8 @@ var	airmet = L.realtime({
 					$('#f2').html(e.target.feature.properties.alt);
 					$('#f3').html(e.target.feature.properties.rep_num);
 					$('#f4').html(e.target.feature.properties.text_data);
+					$('#f5').html('-');
+					$('#f6').html('-');
 					airmet.stop();});
 	           layer.on('mouseout',function(e){
 					airmet.start();})		
@@ -166,7 +168,7 @@ var	airmet = L.realtime({
 // SIGMET
 
 var url3_sigmet=url1.concat(serv_port,"/sql?q=select coords as geom,g.rep_num,alt,ob_ele,text_data \
-				from graphics g,sigairmet s where(g.prod_id=s.prod_id) and (g.rep_num=s.rep_num and g.prod_id=12)");
+				from graphics g left join sigairmet s on (g.prod_id=s.prod_id) and (g.rep_num=s.rep_num) where  g.prod_id=12");
 
 var	sigmet = L.realtime({
 		url: url3_sigmet,
@@ -195,6 +197,8 @@ var	sigmet = L.realtime({
 					$('#f2').html(e.target.feature.properties.alt);
 					$('#f3').html(e.target.feature.properties.rep_num);
 					$('#f4').html(e.target.feature.properties.text_data);
+					$('#f5').html('-');
+					$('#f6').html('-');
 					sigmet.stop();});
 	           layer.on('mouseout',function(e){
 					sigmet.start();})		
