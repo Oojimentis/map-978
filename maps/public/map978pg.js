@@ -65,7 +65,7 @@ function getColor(colf){
 
 // G-AIRMET
 
-var url3_gairmet=url1.concat(serv_port,"/sql?q=select coords as geom,rep_num,alt,ob_ele from graphics where prod_id=14");
+var url3_gairmet=url1.concat(serv_port,"/sql?q=select coords as geom,rep_num,alt,ob_ele,start_date,stop_date from graphics where prod_id=14");
 
 var gairmet = L.realtime({
 		url: url3_gairmet,
@@ -87,15 +87,15 @@ var gairmet = L.realtime({
 					$("#m4").html("Altitude");					
 					$("#m3").html("Report Num");
 					$("#m4").html("Condition");
-					$("#m5").html("-");
-					$("#m6").html("-");
+					$("#m5").html("Start");
+					$("#m6").html("Stop");
 						
 					$('#f1').html('G-AIRMET');
 					$('#f2').html(e.target.feature.properties.alt);
 					$('#f3').html(e.target.feature.properties.rep_num);
 					$('#f4').html(e.target.feature.properties.ob_ele);
-					$('#f5').html('-');
-					$('#f6').html('-');
+					$('#f5').html(e.target.feature.properties.start_date);
+					$('#f6').html(e.target.feature.properties.stop_date);
 					gairmet.stop();});
 	           layer.on('mouseout',function(e){
 					gairmet.start();})		
@@ -116,7 +116,7 @@ var gairmet = L.realtime({
 
 // AIRMET
 
-var url3_airmet=url1.concat(serv_port,"/sql?q=select coords as geom,g.rep_num,alt,ob_ele,text_data \
+var url3_airmet=url1.concat(serv_port,"/sql?q=select coords as geom,g.rep_num,alt,ob_ele,text_data,start_date,stop_date \
 		from graphics g left join sigairmet s on (g.prod_id=s.prod_id) and (g.rep_num=s.rep_num) where g.prod_id=11");
 
 var	airmet = L.realtime({
@@ -139,15 +139,15 @@ var	airmet = L.realtime({
 					$("#m4").html("Altitude");					
 					$("#m3").html("Report Num");
 					$("#m4").html("Condition");
-					$("#m5").html("-");
-					$("#m6").html("-");
+					$("#m5").html("Start");
+					$("#m6").html("Stop");
 					
 					$('#f1').html('AIRMET');
 					$('#f2').html(e.target.feature.properties.alt);
 					$('#f3').html(e.target.feature.properties.rep_num);
 					$('#f4').html(e.target.feature.properties.text_data);
-					$('#f5').html('-');
-					$('#f6').html('-');
+					$('#f5').html(e.target.feature.properties.start_date);
+					$('#f6').html(e.target.feature.properties.stop_date);
 					airmet.stop();});
 	           layer.on('mouseout',function(e){
 					airmet.start();})		
@@ -167,7 +167,7 @@ var	airmet = L.realtime({
 
 // SIGMET
 
-var url3_sigmet=url1.concat(serv_port,"/sql?q=select coords as geom,g.rep_num,alt,ob_ele,text_data \
+var url3_sigmet=url1.concat(serv_port,"/sql?q=select coords as geom,g.rep_num,alt,ob_ele,text_data,start_date,stop_date \
 				from graphics g left join sigairmet s on (g.prod_id=s.prod_id) and (g.rep_num=s.rep_num) where  g.prod_id=12");
 
 var	sigmet = L.realtime({
@@ -190,15 +190,15 @@ var	sigmet = L.realtime({
 					$("#m4").html("Altitude");					
 					$("#m3").html("Report Num");
 					$("#m4").html("Condition");
-					$("#m5").html("-");
-					$("#m6").html("-");
+					$("#m5").html("Start");
+					$("#m6").html("Stop");
 					
 					$('#f1').html('SIGMET');
 					$('#f2').html(e.target.feature.properties.alt);
 					$('#f3').html(e.target.feature.properties.rep_num);
 					$('#f4').html(e.target.feature.properties.text_data);
-					$('#f5').html('-');
-					$('#f6').html('-');
+					$('#f5').html(e.target.feature.properties.start_date);
+					$('#f6').html(e.target.feature.properties.stop_date);
 					sigmet.stop();});
 	           layer.on('mouseout',function(e){
 					sigmet.start();})		
