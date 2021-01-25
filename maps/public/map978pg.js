@@ -235,6 +235,7 @@ metar = L.realtime({
     		marker.bindTooltip(feature.properties.stn_call 
     				+ '<br>' + feature.properties.temp   +'&#x2109');
  			marker.on('click', function (e) {
+ 					$("#m1").html("Station");
  					$("#m3").html("Time");
    		    		$("#m4").html("Temp");
    			    	$("#m5").html("Winds");
@@ -269,6 +270,7 @@ notam = L.realtime({
 			marker = L.marker(latlng,{icon: wxIcon2});
     		marker.bindTooltip(feature.properties.stn_call);
  			marker.on('click', function (e) {
+		 			$("#m1").html("Station");
 					$("#m3").html("Report Num");
 					$("#m4").html("Text");
 					$("#m5").html("-");
@@ -302,6 +304,7 @@ taf = L.realtime({
 			marker = L.marker(latlng,{icon: wxIcon3});
     		marker.bindTooltip(feature.properties.stn_call);
  			marker.on('click', function (e) {
+					$("#m1").html("Station");
 					$("#m3").html("Issued");
 					$("#m4").html("Winds");
 					$("#m5").html("Visibility");
