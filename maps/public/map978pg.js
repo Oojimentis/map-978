@@ -82,10 +82,20 @@ var gairmet = L.realtime({
 				layer.bindTooltip('G-AIRMET: Alt '+ feature.properties.alt);
 	           	layer.on('click',function(e){
 					layer.setStyle({color: 'yellow',opacity: 0.8, fillColor: 'yellow', fillOpacity: 0.5});
-					$('#f11').html('G-AIRMET');
-					$('#f12').html(e.target.feature.properties.alt);
-					$('#f13').html(e.target.feature.properties.rep_num);
-					$('#f14').html(e.target.feature.properties.ob_ele);
+					
+					$("#m1").html("Report");
+					$("#m4").html("Altitude");					
+					$("#m3").html("Report Num");
+					$("#m4").html("Condition");
+					$("#m5").html("-");
+					$("#m6").html("-");
+						
+					$('#f1').html('G-AIRMET');
+					$('#f2').html(e.target.feature.properties.alt);
+					$('#f3').html(e.target.feature.properties.rep_num);
+					$('#f4').html(e.target.feature.properties.ob_ele);
+					$('#f5').html('-');
+					$('#f6').html('-');
 					gairmet.stop();});
 	           layer.on('mouseout',function(e){
 					gairmet.start();})		
@@ -125,10 +135,17 @@ var	airmet = L.realtime({
 				layer.bindTooltip('AIRMET: Alt ' + feature.properties.alt);
 	           	layer.on('click',function(e){
 					layer.setStyle({fillColor: 'yellow', fillOpacity: 0.5});
-					$('#f11').html('AIRMET');
-					$('#f12').html(e.target.feature.properties.alt);
-					$('#f13').html(e.target.feature.properties.rep_num);
-					$('#f14').html(e.target.feature.properties.text_data);
+					$("#m1").html("Report");
+					$("#m4").html("Altitude");					
+					$("#m3").html("Report Num");
+					$("#m4").html("Condition");
+					$("#m5").html("-");
+					$("#m6").html("-");
+					
+					$('#f1').html('AIRMET');
+					$('#f2').html(e.target.feature.properties.alt);
+					$('#f3').html(e.target.feature.properties.rep_num);
+					$('#f4').html(e.target.feature.properties.text_data);
 					airmet.stop();});
 	           layer.on('mouseout',function(e){
 					airmet.start();})		
@@ -167,10 +184,17 @@ var	sigmet = L.realtime({
 				layer.bindTooltip('SIGMET: alt ' + feature.properties.alt);
 	           	layer.on('click',function(e){
 					layer.setStyle({fillColor: 'yellow', fillOpacity: 0.5});
-					$('#f11').html('SIGMET');
-					$('#f12').html(e.target.feature.properties.alt);
-					$('#f13').html(e.target.feature.properties.rep_num);
-					$('#f14').html(e.target.feature.properties.text_data);
+					$("#m1").html("Report");
+					$("#m4").html("Altitude");					
+					$("#m3").html("Report Num");
+					$("#m4").html("Condition");
+					$("#m5").html("-");
+					$("#m6").html("-");
+					
+					$('#f1').html('SIGMET');
+					$('#f2').html(e.target.feature.properties.alt);
+					$('#f3').html(e.target.feature.properties.rep_num);
+					$('#f4').html(e.target.feature.properties.text_data);
 					sigmet.stop();});
 	           layer.on('mouseout',function(e){
 					sigmet.start();})		
