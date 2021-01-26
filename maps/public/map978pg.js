@@ -256,8 +256,12 @@ metar = L.realtime({
 
 var wxIcon2 = L.icon({iconUrl: 'wx2.ico', iconSize: [20,20]});
 
-var url3_notam=url1.concat(serv_port,"/sql?q=select coords as geom,n.stn_call,stn_loc,rep_num,text_data \
-		from sigairmet n, stations s where prod_id=8 and n.stn_call=s.stn_call");
+//var url3_notam=url1.concat(serv_port,"/sql?q=select coords as geom,n.stn_call,stn_loc,rep_num,text_data \
+//		from sigairmet n, stations s where prod_id=8 and n.stn_call=s.stn_call");
+
+var url3_notam=url1.concat(serv_port,"/sql?q=select s.coords as geom,n.stn_call,stn_loc,n.rep_num,text_data,start_date,stop_date \
+		from sigairmet n left join graphics g on n.prod_id=g.prod_id and n.rep_num=g.rep_num join stations s on n.stn_call=s.stn_call where n.prod_id=8");
+
 
 notam = L.realtime({
 		url: url3_notam,
@@ -273,14 +277,14 @@ notam = L.realtime({
 		 			$("#m1").html("Station");
 					$("#m3").html("Report Num");
 					$("#m4").html("Text");
-					$("#m5").html("-");
-					$("#m6").html("-");
+					$("#m5").html("Start");
+					$("#m6").html("Stop");
 					$('#f1').html(e.target.feature.properties.stn_call);
 					$('#f2').html(e.target.feature.properties.stn_loc);
 					$('#f3').html(e.target.feature.properties.rep_num);
 					$('#f4').html(e.target.feature.properties.text_data);
-					$('#f5').html('n/a');
-					$('#f6').html('n/a');
+					$('#f5').html(e.target.feature.properties.start_date);
+					$('#f6').html(e.target.feature.properties.stop_date);
 			});
     		marker.addTo(map);
     		return marker;
@@ -320,6 +324,8 @@ taf = L.realtime({
     		return marker;
 		}
 	}).addTo(map);
+	
+
 
 // Handles the check boxes being turned on/off
 document.querySelector("input[name=gmet]").addEventListener('change', function() {

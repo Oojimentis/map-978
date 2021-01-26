@@ -52,7 +52,7 @@
   	display: block;
   	position: relative;
   	padding-left: 1px;
-  	margin-bottom: 12px;
+  	margin-bottom: 8px;
   	cursor: pointer;
   	font-size: 10px;
   	-webkit-user-select: none;
@@ -65,8 +65,8 @@
 	font-weight: bold;
     color:#006400;
 	font-family: "Arial Black";
-	font-size: 20px ;
-    line-height:14px;
+	font-size: 10px ;
+    line-height:10px;
     text-align:center;
    }
    
@@ -93,7 +93,7 @@ tr:nth-child(odd)  {
 		background: #BEE6D5;
 	}
 tbody  tr:hover {
-		background: yellow;
+		background: #97C7F7;
 	}
 table {
 		border-collapse: collapse;
@@ -103,6 +103,30 @@ table {
     display:block;
     text-decoration:none;
 }
+
+
+#table-wrapper {
+  position:relative;
+}
+#table-scroll {
+  height:150px;
+  overflow:auto;  
+  margin-top:10px;
+}
+#table-wrapper table {
+  width:100%;
+
+}
+
+#table-wrapper table thead th .text {
+  position:absolute;   
+  top:-20px;
+  z-index:2;
+  height:20px;
+  width:35%;
+  border:1px solid red;
+}
+
 
 #f1{
 	font-weight:bold
@@ -127,7 +151,7 @@ select {
 
 .select { 
     width: 10%; 
-    height: 33em; 
+    height: 3em; 
     line-height: 3; 
     background: #d3eaf8; 
     overflow: hidden; 
@@ -135,7 +159,7 @@ select {
     }	
 
 label {
-	font:12px arial;
+	font:10px arial;
 }
 
 #first {
@@ -160,10 +184,11 @@ label {
 .slider {
   appearance: none;
   width: 90%; /* Full-width */
-  height: 10px; /* Specified height */
+  height: 1px; /* Specified height */
   background: #d3d3d3; /* Grey background */
-  opacity: 0.7; /* Set transparency (for mouse-over effects on hover) */
+  opacity: 1.7; /* Set transparency (for mouse-over effects on hover) */
  }
+
 
 </style>
 </head>
@@ -176,7 +201,7 @@ label {
 	<div class="sidebar">
 		<p style="text-align:center; font-size: 12px; color:#175B81; 
 			font-weight:bold; "><span id="metar">Details</span></p>	 
-		<div id="ckboxes">
+	<div id="ckboxes">
 			<div class="checkbox">
 				<label>
 				<input type="checkbox"  id="meta" name="meta" checked><b>METAR</b><br>
@@ -192,7 +217,8 @@ label {
 				<input type="checkbox"  id="taf" name="taf" checked><b>TAF</b><br>
         		</label>
  			</div> 	
-			
+	<div id="table-wrapper">
+  <div id="table-scroll">		
 			<table  style="width:90%">
 				<tr>
 					<th id="m1"  align="left">Station</th>
@@ -213,7 +239,8 @@ label {
 					<th id="m6" align="left">Visibility</th>
        				<td id='f6'><a href="#"></a></td>
  			</table>
-<hr>
+  </div>
+</div>
    
 			<div class ='container'>
 				<div id="first">
