@@ -84,7 +84,7 @@ var gairmet = L.realtime({
 					layer.setStyle({color: 'yellow',opacity: 0.8, fillColor: 'yellow', fillOpacity: 0.5});
 					
 					$("#m1").html("Report");
-					$("#m4").html("Altitude");					
+					$("#m2").html("Altitude");					
 					$("#m3").html("Report Num");
 					$("#m4").html("Condition");
 					$("#m5").html("Start");
@@ -136,7 +136,7 @@ var	airmet = L.realtime({
 	           	layer.on('click',function(e){
 					layer.setStyle({fillColor: 'yellow', fillOpacity: 0.5});
 					$("#m1").html("Report");
-					$("#m4").html("Altitude");					
+					$("#m2").html("Altitude");					
 					$("#m3").html("Report Num");
 					$("#m4").html("Condition");
 					$("#m5").html("Start");
@@ -187,7 +187,7 @@ var	sigmet = L.realtime({
 	           	layer.on('click',function(e){
 					layer.setStyle({fillColor: 'yellow', fillOpacity: 0.5});
 					$("#m1").html("Report");
-					$("#m4").html("Altitude");					
+					$("#m2").html("Altitude");					
 					$("#m3").html("Report Num");
 					$("#m4").html("Condition");
 					$("#m5").html("Start");
