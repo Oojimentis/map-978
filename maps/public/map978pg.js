@@ -216,6 +216,59 @@ var	sigmet = L.realtime({
 				}
 		}).addTo(map);  
 
+// Circle
+
+var url3_circle=url1.concat(serv_port,"/sql?q=select bot as geom,start_date,stop_date,rep_num \
+				from circles");
+
+var	cir = L.realtime({
+		url: url3_circle,
+		crossOrigin: true, type: 'json'
+	}, {interval: 15 * 1030,
+		style: function(feature){
+			kolor  = getColor(feature.properties.alt);
+				return { color: '#00cccc', weight: 2, fillColor: kolor,opacity: 1.0,fillOpacity: 0.2};
+		},
+			getFeatureId: function(featureData){
+				return featureData.properties.rep_num;
+		},
+			onEachFeature: function (feature, layer) 
+			{
+				layer.bindTooltip('CIRC: alt ' + feature.properties.alt);
+	           	layer.on('click',function(e){
+					layer.setStyle({fillColor: 'yellow', fillOpacity: 0.5});
+					$("#m1").html("Report");
+					$("#m2").html("Altitude");					
+					$("#m3").html("Report Num");
+					$("#m4").html("Condition");
+					$("#m5").html("Start");
+					$("#m6").html("Stop");
+					
+					$('#f1').html('SIGMET');
+					$('#f2').html(e.target.feature.properties.alt);
+					$('#f3').html(e.target.feature.properties.rep_num);
+					$('#f4').html(e.target.feature.properties.text_data);
+					$('#f5').html(e.target.feature.properties.start_date);
+					$('#f6').html(e.target.feature.properties.stop_date);
+					circ.stop();});
+	           layer.on('mouseout',function(e){
+					circ.start();})		
+			}    //,
+//				filter: function(feature,layer) {   
+//					var n = document.getElementById("sgalt").value;
+//					var rangeslider = document.getElementById("smsliderRange");
+//					var output = document.getElementById("demo2");
+//					if (rangeslider.value== -1000) output.innerHTML = "All"
+//						else output.innerHTML = rangeslider.value;
+//					var nn = parseInt(rangeslider.value, 10);
+//					if (nn== -1000) return (feature.properties.alt)
+//						else
+//					return (feature.properties.alt >= (nn-500) && feature.properties.alt <= (nn +500) );
+//				}
+		}).addTo(map);  
+
+
+
 // ** METAR 
 
 var wxIcon = L.icon({iconUrl: 'therm.ico', iconSize: [35,35]});
