@@ -64,7 +64,6 @@ function getColor(colf){
 }	
 
 // G-AIRMET
-
 var url3_gairmet=url1.concat(serv_port,"/sql?q=select coords as geom,rep_num,alt,ob_ele,start_date,stop_date from graphics where prod_id=14");
 
 var gairmet = L.realtime({
@@ -115,7 +114,6 @@ var gairmet = L.realtime({
 		}).addTo(map);  
 
 // AIRMET
-
 var url3_airmet=url1.concat(serv_port,"/sql?q=select coords as geom,g.rep_num,alt,ob_ele,text_data,start_date,stop_date \
 		from graphics g left join sigairmet s on (g.prod_id=s.prod_id) and (g.rep_num=s.rep_num) where g.prod_id=11");
 
@@ -166,7 +164,6 @@ var	airmet = L.realtime({
 		}).addTo(map);
 
 // SIGMET
-
 var url3_sigmet=url1.concat(serv_port,"/sql?q=select coords as geom,g.rep_num,alt,ob_ele,text_data,start_date,stop_date \
 				from graphics g left join sigairmet s on (g.prod_id=s.prod_id) and (g.rep_num=s.rep_num) where  g.prod_id=12");
 
@@ -216,61 +213,41 @@ var	sigmet = L.realtime({
 				}
 		}).addTo(map);  
 
-// Circle
-
-var url3_circle=url1.concat(serv_port,"/sql?q=select bot as geom,start_date,stop_date,rep_num \
+// ** Circle
+var url3_circle=url1.concat(serv_port,"/sql?q=select bot as geom,start_date,stop_date,rep_num,r_lng,r_lat,alt_top,alt_bot,alpha \
 				from circles");
 
 var	cir = L.realtime({
 		url: url3_circle,
 		crossOrigin: true, type: 'json'
 	}, {interval: 15 * 1030,
-		style: function(feature){
-			kolor  = getColor(feature.properties.alt);
-				return { color: '#00cccc', weight: 2, fillColor: kolor,opacity: 1.0,fillOpacity: 0.2};
-		},
 			getFeatureId: function(featureData){
 				return featureData.properties.rep_num;
 		},
-			onEachFeature: function (feature, layer) 
-			{
-				layer.bindTooltip('CIRC: alt ' + feature.properties.alt);
-	           	layer.on('click',function(e){
-					layer.setStyle({fillColor: 'yellow', fillOpacity: 0.5});
-					$("#m1").html("Report");
-					$("#m2").html("Altitude");					
-					$("#m3").html("Report Num");
-					$("#m4").html("Condition");
-					$("#m5").html("Start");
-					$("#m6").html("Stop");
-					
-					$('#f1').html('SIGMET');
-					$('#f2').html(e.target.feature.properties.alt);
-					$('#f3').html(e.target.feature.properties.rep_num);
-					$('#f4').html(e.target.feature.properties.text_data);
-					$('#f5').html(e.target.feature.properties.start_date);
-					$('#f6').html(e.target.feature.properties.stop_date);
-					circ.stop();});
-	           layer.on('mouseout',function(e){
-					circ.start();})		
-			}    //,
-//				filter: function(feature,layer) {   
-//					var n = document.getElementById("sgalt").value;
-//					var rangeslider = document.getElementById("smsliderRange");
-//					var output = document.getElementById("demo2");
-//					if (rangeslider.value== -1000) output.innerHTML = "All"
-//						else output.innerHTML = rangeslider.value;
-//					var nn = parseInt(rangeslider.value, 10);
-//					if (nn== -1000) return (feature.properties.alt)
-//						else
-//					return (feature.properties.alt >= (nn-500) && feature.properties.alt <= (nn +500) );
-//				}
-		}).addTo(map);  
-
-
+	pointToLayer: function (feature, latlng) {
+		marker = L.circleMarker(latlng,{color: 'red',fillcolor: 'yellow'});
+    		marker.bindTooltip(feature.properties.rep_num 
+    			+ '<br>' + feature.properties.start_date );
+ 		marker.on('click', function (e) {
+ 				$("#m1").html("Altitude");
+ 				$("#m2").html("Radius");
+ 				$("#m3").html("Rep Number");
+   		    	$("#m4").html("Start");
+   			    $("#m5").html("Stop");
+   			    $("#m6").html("Alpha ");
+				$('#f1').html('Bottom ' +e.target.feature.properties.alt_bot + 'ft<br> Top '+e.target.feature.properties.alt_top+'ft');
+				$('#f2').html('Lat: '+ e.target.feature.properties.r_lat + ' Lng: '+e.target.feature.properties.r_lat);
+				$('#f3').html(e.target.feature.properties.rep_num);
+				$('#f4').html(e.target.feature.properties.start_date);
+				$('#f5').html(e.target.feature.properties.stop_date);  
+				$('#f6').html(e.target.feature.properties.alpha);
+			});
+    		marker.addTo(map);
+    		return marker;
+		}
+	}).addTo(map);
 
 // ** METAR 
-
 var wxIcon = L.icon({iconUrl: 'therm.ico', iconSize: [35,35]});
 
 var url3_metar=url1.concat(serv_port,"/sql?q=select  s.coords as geom,m.stn_call,s.stn_loc,ob_date,temp,windsp,\
@@ -289,6 +266,7 @@ metar = L.realtime({
     				+ '<br>' + feature.properties.temp   +'&#x2109');
  			marker.on('click', function (e) {
  					$("#m1").html("Station");
+ 					$("#m2").html("Location");
  					$("#m3").html("Time");
    		    		$("#m4").html("Temp");
    			    	$("#m5").html("Winds");
@@ -306,15 +284,10 @@ metar = L.realtime({
 	}).addTo(map);
 
 // ** NOTAM 
-
 var wxIcon2 = L.icon({iconUrl: 'wx2.ico', iconSize: [20,20]});
-
-//var url3_notam=url1.concat(serv_port,"/sql?q=select coords as geom,n.stn_call,stn_loc,rep_num,text_data \
-//		from sigairmet n, stations s where prod_id=8 and n.stn_call=s.stn_call");
 
 var url3_notam=url1.concat(serv_port,"/sql?q=select s.coords as geom,n.stn_call,stn_loc,n.rep_num,text_data,start_date,stop_date \
 		from sigairmet n left join graphics g on n.prod_id=g.prod_id and n.rep_num=g.rep_num join stations s on n.stn_call=s.stn_call where n.prod_id=8");
-
 
 notam = L.realtime({
 		url: url3_notam,
@@ -328,6 +301,7 @@ notam = L.realtime({
     		marker.bindTooltip(feature.properties.stn_call);
  			marker.on('click', function (e) {
 		 			$("#m1").html("Station");
+		 			$("#m2").html("Location");
 					$("#m3").html("Report Num");
 					$("#m4").html("Text");
 					$("#m5").html("Start");
@@ -345,7 +319,6 @@ notam = L.realtime({
 	}).addTo(map);
 
 // ** TAF
-
 var wxIcon3 = L.icon({iconUrl: 'wx1.ico', iconSize: [20,20]});
 
 var url3_taf=url1.concat(serv_port,"/sql?q=select coords as geom,t.stn_call,stn_loc,issued,current,wind,visby,condx,rep_time from taf t, stations s where t.stn_call=s.stn_call");
@@ -362,6 +335,7 @@ taf = L.realtime({
     		marker.bindTooltip(feature.properties.stn_call);
  			marker.on('click', function (e) {
 					$("#m1").html("Station");
+					$("#m2").html("Location");
 					$("#m3").html("Issued");
 					$("#m4").html("Winds");
 					$("#m5").html("Visibility");
@@ -377,8 +351,6 @@ taf = L.realtime({
     		return marker;
 		}
 	}).addTo(map);
-	
-
 
 // Handles the check boxes being turned on/off
 document.querySelector("input[name=gmet]").addEventListener('change', function() {
