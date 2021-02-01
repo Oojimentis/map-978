@@ -5,15 +5,18 @@ function onPageLoad() {
 	document.getElementById("meta").checked = true;
 	document.getElementById("amet").checked = true;
 	document.getElementById("smet").checked = true;
+	document.getElementById("cwa").checked = true;
 	document.getElementById("notam").checked = true;
 	document.getElementById("taf").checked = true;
 
 	document.getElementById("gmsliderRange").step = "1000";
 	document.getElementById("amsliderRange").step = "1000";
 	document.getElementById("smsliderRange").step = "1000";
+	document.getElementById("cwsliderRange").step = "1000";
 	document.getElementById("gmsliderRange").value = "0";
 	document.getElementById("amsliderRange").value = "0";
 	document.getElementById("smsliderRange").value = "0";
+	document.getElementById("cwsliderRange").value = "0";
 	}
 
 function reloadFunc(obj){
@@ -213,6 +216,58 @@ var	sigmet = L.realtime({
 				}
 		}).addTo(map);  
 
+// CWA
+var url3_cwa=url1.concat(serv_port,"/sql?q=select coords as geom,g.rep_num,alt,ob_ele,text_data,start_date,stop_date \
+				from graphics g left join sigairmet s on (g.prod_id=s.prod_id) and (g.rep_num=s.rep_num) where g.prod_id=15");
+
+var	cwa = L.realtime({
+		url: url3_cwa,
+		crossOrigin: true, type: 'json'
+	}, {interval: 15 * 1030,
+		style: function(feature){
+			kolor  = getColor(feature.properties.alt);
+				return { color: '#00cccc', weight: 2, fillColor: kolor,opacity: 1.0,fillOpacity: 0.2};
+		},
+			getFeatureId: function(featureData){
+				return featureData.properties.rep_num;
+		},
+			onEachFeature: function (feature, layer) 
+			{
+				layer.bindTooltip('CWA: alt ' + feature.properties.alt);
+	           	layer.on('click',function(e){
+					layer.setStyle({fillColor: 'yellow', fillOpacity: 0.5});
+					$("#m1").html("Report");
+					$("#m2").html("Altitude");					
+					$("#m3").html("Report Num");
+					$("#m4").html("Condition");
+					$("#m5").html("Start");
+					$("#m6").html("Stop");
+					
+					$('#f1').html('CWA');
+					$('#f2').html(e.target.feature.properties.alt);
+					$('#f3').html(e.target.feature.properties.rep_num);
+					$('#f4').html(e.target.feature.properties.text_data);
+					$('#f5').html(e.target.feature.properties.start_date);
+					$('#f6').html(e.target.feature.properties.stop_date);
+					sigmet.stop();});
+	           layer.on('mouseout',function(e){
+					cwa.start();})		
+			},
+				filter: function(feature,layer) {   
+//					var n = document.getElementById("cwalt").value;
+					var rangeslider = document.getElementById("cwsliderRange");
+					var output = document.getElementById("demo3");
+					if (rangeslider.value== -1000) output.innerHTML = "All"
+						else output.innerHTML = rangeslider.value;
+					var nn = parseInt(rangeslider.value, 10);
+					if (nn== -1000) return (feature.properties.alt)
+						else
+					return (feature.properties.alt >= (nn-500) && feature.properties.alt <= (nn +500) );
+				}
+		}).addTo(map);  
+
+
+
 // ** Circle
 var url3_circle=url1.concat(serv_port,"/sql?q=select bot as geom,start_date,stop_date,rep_num,r_lng,r_lat,alt_top,alt_bot,alpha \
 				from circles");
@@ -382,7 +437,11 @@ document.querySelector("input[name=smet]").addEventListener('change', function()
                 if(this.checked)  {map.addLayer(sigmet),sigmet.start()}
                   else {map.removeLayer(sigmet),sigmet.stop()}
                 })
-
+                
+document.querySelector("input[name=cwa]").addEventListener('change', function() {
+                if(this.checked)  {map.addLayer(cwa),cwa.start()}
+                  else {map.removeLayer(cwa),cwa.stop()}
+                })
 //document.getElementById("bgalt").onchange = function()
 //		{gairmet.update()}
 		                
@@ -398,6 +457,8 @@ document.getElementById("amsliderRange").onchange = function()
 	{airmet.update()}
 document.getElementById("smsliderRange").onchange = function()
 	{sigmet.update()}
+document.getElementById("cwsliderRange").onchange = function()
+	{cwa.update()}
 
 //Add layer control
 var baseMaps = {
