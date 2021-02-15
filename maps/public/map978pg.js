@@ -103,16 +103,14 @@ var gairmet = L.realtime({
 					gairmet.start();})		
 			},
 				filter: function(feature, layer) {   
-//					var n = document.getElementById("bgalt").value;
 					var rangeslider = document.getElementById("gmsliderRange");
 					var output = document.getElementById("demo");
 					if (rangeslider.value== -1000) output.innerHTML = "All"
 						else output.innerHTML = rangeslider.value;
 				 	var nn = parseInt(rangeslider.value, 10);
-//					var nn = parseInt(n, 10);
-					if (nn== -1000) return (feature.properties.alt)
-						else
-					return (feature.properties.alt >= (nn-500) && feature.properties.alt <= (nn +500) );
+
+					if (nn== -1000) return (feature.properties.alt >= 0)
+						else return (feature.properties.alt >= (nn-500) && feature.properties.alt <= (nn +500) );
 				}
 		}).addTo(map);  
 
@@ -154,15 +152,13 @@ var	airmet = L.realtime({
 					airmet.start();})		
 			},
 				filter: function(feature,layer) {   
-//					var n = document.getElementById("agalt").value;
 					var rangeslider = document.getElementById("amsliderRange");
 					var output = document.getElementById("demo1");
 					if (rangeslider.value== -1000) output.innerHTML = "All"
 						else output.innerHTML = rangeslider.value;
 					var nn = parseInt(rangeslider.value, 10);
-					if (nn== -1000) return (feature.properties.alt)
-						else
-					return (feature.properties.alt >= (nn-500) && feature.properties.alt <= (nn +500) );
+					if (nn== -1000) return (feature.properties.alt >= 0)
+						else return (feature.properties.alt >= (nn-500) && feature.properties.alt <= (nn +500) );
 				}
 		}).addTo(map);
 
@@ -204,15 +200,13 @@ var	sigmet = L.realtime({
 					sigmet.start();})		
 			},
 				filter: function(feature,layer) {   
-//					var n = document.getElementById("sgalt").value;
 					var rangeslider = document.getElementById("smsliderRange");
 					var output = document.getElementById("demo2");
 					if (rangeslider.value== -1000) output.innerHTML = "All"
 						else output.innerHTML = rangeslider.value;
 					var nn = parseInt(rangeslider.value, 10);
-					if (nn== -1000) return (feature.properties.alt)
-						else
-					return (feature.properties.alt >= (nn-500) && feature.properties.alt <= (nn +500) );
+					if (nn== -1000) return (feature.properties.alt >= 0)
+						else return (feature.properties.alt >= (nn-500) && feature.properties.alt <= (nn +500) );
 				}
 		}).addTo(map);  
 
@@ -254,18 +248,15 @@ var	cwa = L.realtime({
 					cwa.start();})		
 			},
 				filter: function(feature,layer) {   
-//					var n = document.getElementById("cwalt").value;
 					var rangeslider = document.getElementById("cwsliderRange");
 					var output = document.getElementById("demo3");
 					if (rangeslider.value== -1000) output.innerHTML = "All"
 						else output.innerHTML = rangeslider.value;
 					var nn = parseInt(rangeslider.value, 10);
-					if (nn== -1000) return (feature.properties.alt)
-						else
-					return (feature.properties.alt >= (nn-500) && feature.properties.alt <= (nn +500) );
+					if (nn== -1000) return (feature.properties.alt >= 0)
+						else return (feature.properties.alt >= (nn-500) && feature.properties.alt <= (nn +500) );
 				}
 		}).addTo(map);  
-
 
 
 // ** Circle
