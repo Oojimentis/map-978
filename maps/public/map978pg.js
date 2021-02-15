@@ -243,7 +243,7 @@ var	cwa = L.realtime({
 					$('#f4').html(e.target.feature.properties.text_data);
 					$('#f5').html(e.target.feature.properties.start_date);
 					$('#f6').html(e.target.feature.properties.stop_date);
-					sigmet.stop();});
+					cwa.stop();});
 	           layer.on('mouseout',function(e){
 					cwa.start();})		
 			},
