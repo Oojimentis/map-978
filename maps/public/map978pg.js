@@ -308,7 +308,7 @@ metar = L.realtime({
 		},
 		pointToLayer: function (feature, latlng) {
 			marker = L.marker(latlng,{icon: wxIcon});
-    		marker.bindTooltip(feature.properties.stn_call 
+    		marker.bindTooltip('METAR' + '<br>' + feature.properties.stn_call 
     				+ '<br>' + feature.properties.temp   +'&#x2109');
  			marker.on('click', function (e) {
  					$("#m1").html("Station");
@@ -317,7 +317,7 @@ metar = L.realtime({
    		    		$("#m4").html("Temp");
    			    	$("#m5").html("Winds");
    			    	$("#m6").html("Visibility");
-					$('#f1').html(e.target.feature.properties.stn_call);
+					$('#f1').html(e.target.feature.properties.stn_call + " (METAR)");
 					$('#f2').html(e.target.feature.properties.stn_loc);
 					$('#f3').html(e.target.feature.properties.ob_date);
 					$('#f4').html(e.target.feature.properties.temp);
@@ -344,7 +344,7 @@ notam = L.realtime({
 		},
 		pointToLayer: function (feature, latlng) {
 			marker = L.marker(latlng,{icon: wxIcon2});
-    		marker.bindTooltip(feature.properties.stn_call);
+    		marker.bindTooltip('NOTAM' + '<br>' + feature.properties.stn_call);
  			marker.on('click', function (e) {
 		 			$("#m1").html("Station");
 		 			$("#m2").html("Location");
@@ -352,7 +352,7 @@ notam = L.realtime({
 					$("#m4").html("Text");
 					$("#m5").html("Start");
 					$("#m6").html("Stop");
-					$('#f1').html(e.target.feature.properties.stn_call);
+					$('#f1').html(e.target.feature.properties.stn_call + " (NOTAM)");
 					$('#f2').html(e.target.feature.properties.stn_loc);
 					$('#f3').html(e.target.feature.properties.rep_num);
 					$('#f4').html(e.target.feature.properties.text_data);
@@ -378,7 +378,7 @@ taf = L.realtime({
 		},
 		pointToLayer: function (feature, latlng) {
 			marker = L.marker(latlng,{icon: wxIcon3});
-    		marker.bindTooltip(feature.properties.stn_call);
+    		marker.bindTooltip('TAF' + '<br>' + feature.properties.stn_call);
  			marker.on('click', function (e) {
 					$("#m1").html("Station");
 					$("#m2").html("Location");
@@ -386,7 +386,7 @@ taf = L.realtime({
 					$("#m4").html("Winds");
 					$("#m5").html("Visibility");
 					$("#m6").html("Conditions");
-					$('#f1').html(e.target.feature.properties.stn_call);
+					$('#f1').html(e.target.feature.properties.stn_call + " (TAF)");
 					$('#f2').html(e.target.feature.properties.stn_loc);
 					$('#f3').html(e.target.feature.properties.issued + '<br>' + e.target.feature.properties.current);
 					$('#f4').html(e.target.feature.properties.wind);

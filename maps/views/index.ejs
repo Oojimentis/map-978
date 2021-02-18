@@ -3,7 +3,6 @@
 <head>
 <meta charset=UTF-8" />
 <title>DUMP978-WX Data</title>
-
  	<input type="hidden" id="port" value="<%=ptnum %>"/>
 
 	<link rel="stylesheet" href="/leaflet/leaflet.css"/>
@@ -12,12 +11,10 @@
 	<script type="text/javascript", src="/leaflet/leaflet-realtime.js"></script>  
 	
 <style>
-
 #wrapper {
 	margin: 0 auto;
   	width: 100%;
 }
-
 #panel{
  	float: left;
 	width: 100%;
@@ -31,7 +28,6 @@
   	width: 80%;
   	height:800px;
 }
-
 .sidebar {
 	float: left;
  	width: 20%;
@@ -45,9 +41,8 @@
 	background-color: #175B81;
 	color: white;
   	width: 100%;
-  	height:20px
+  	height:10px
 }
-
 .container {
   	display: block;
   	position: relative;
@@ -60,7 +55,6 @@
   	-ms-user-select: none;
   	user-select: none;
 }
-
 .text-labels {
 	font-weight: bold;
     color:#006400;
@@ -69,7 +63,7 @@
     line-height:10px;
     text-align:center;
    }
-   
+     
 table, th, td 
 	{
 		margin:0px 5px;
@@ -115,9 +109,7 @@ table {
 }
 #table-wrapper table {
   width:100%;
-
 }
-
 #table-wrapper table thead th .text {
   position:absolute;   
   top:-20px;
@@ -126,18 +118,16 @@ table {
   width:35%;
   border:1px solid red;
 }
-
-
 #f1{
 	font-weight:bold
 }
-
 .p2 {
     font-size: 20px;
 	font-weight:bold;
     position: relative;
     top: 11px;
 	left: 20px;
+	color: yellow
 	}
 
 select { 
@@ -148,7 +138,6 @@ select {
     border:1px solid black; 
     font:14px arial;
   	} 
-
 .select { 
     width: 10%; 
     height: 3em; 
@@ -157,16 +146,13 @@ select {
     overflow: hidden; 
     border-radius: .25em; 
     }	
-
 label {
 	font:10px arial;
 }
-
 #first {
     width: 50%;
     float: left;
 }
-
 #second {
     width: 50%;
     float: left;
@@ -175,11 +161,9 @@ label {
 #ckboxes {	/* pushes checkbox a little from sidebar left edge */
 	padding-left: 1px;
 }
-
 .slidecontainer {
   width: 100%; /* Width of the outside container */
 }
-
 /* The slider itself */
 .slider {
   appearance: none;
@@ -189,63 +173,63 @@ label {
   opacity: 1.7; /* Set transparency (for mouse-over effects on hover) */
  }
 
-
 </style>
 </head>
 <body>
 
 <div id="wrapper">
-	<div id="panel"><span class="p2">DUMP978 - WX Display</span> </div>
+	<div id="panel"><span class="p2">DUMP978 - WX Display: UTC  <a href="https://24timezones.com" style="text-decoration: none" class="clock24" id="tz24-1613672276-tzutc-eyJob3VydHlwZSI6IjI0Iiwic2hvd2RhdGUiOiIwIiwic2hvd3NlY29uZHMiOiIwIiwic2hvd3RpbWV6b25lIjoiMSIsInR5cGUiOiJkIiwibGFuZyI6ImVuIn0=" title="time now" target="_blank" rel="nofollow"></a>
+		<script type="text/javascript" src="//w.24timezones.com/l.js" async></script></span> 
+	</div>
+
   	<div id="map"></div>
-  
 	<div class="sidebar">
 		<p style="text-align:center; font-size: 12px; color:#175B81; 
-			font-weight:bold; "><span id="metar">Details</span></p>	 
-	<div id="ckboxes">
+		font-weight:bold; "><span id="metar">Details</span></p>	
+		<div id="ckboxes">
 			<div class="checkbox">
 				<label>
-				<input type="checkbox"  id="meta" name="meta" checked><b>METAR</b><br>
-	        	</label>
-	 		</div>
-			<div class="checkbox">
-				<label>
-				<input type="checkbox"  id="notam" name="notam" checked><b>NOTAM</b><br>
-    	    	</label>
- 			</div> 	
-			<div class="checkbox">
-				<label>
-				<input type="checkbox"  id="taf" name="taf" checked><b>TAF</b><br>
+					<input type="checkbox"  id="meta" name="meta" checked><b>METAR</b><br>
         		</label>
- 			</div> 	
-	<div id="table-wrapper">
-  <div id="table-scroll">		
-			<table  style="width:90%">
-				<tr>
-					<th id="m1"  align="left">Station</th>
-       				<td id='f1'></td>
-				</tr> <tr>
-       				<th id="m2" align="left">Location</th>
-       				<td id='f2'></td></tr>
-				<tr>
-	   				<th id="m3" align="left">Time</th>
-    	   			<td id='f3'></td>
-    			</tr> <tr>
-					<th id="m4" align="left">Temp</th>
-       				<td id='f4'></td>
-    			</tr> <tr>
-       				<th id="m5" align="left">Wind Speed</th>
-       				<td id='f5'></td></tr>
-     			<tr>
-					<th id="m6" align="left">Visibility</th>
-       				<td id='f6'><a href="#"></a></td>
- 			</table>
-  </div>
-</div>
-   
-			<div class ='container'>
+ 			</div>
+			<div class="checkbox">
+				<label>
+					<input type="checkbox"  id="notam" name="notam" checked><b>NOTAM</b><br>
+   	   		 	</label>
+			</div> 	
+			<div class="checkbox">
+				<label>
+					<input type="checkbox"  id="taf" name="taf" checked><b>TAF</b><br>
+    	   		</label>
+			</div> 	
+			<div id="table-wrapper">
+				<div id="table-scroll">		
+					<table  style="width:90%">
+						<tr>
+							<th id="m1"  align="left">Station</th>
+      		 				<td id='f1'></td>
+						</tr> <tr>
+       						<th id="m2" align="left">Location</th>
+       						<td id='f2'></td></tr>
+						<tr>
+				   			<th id="m3" align="left">Time</th>
+    						<td id='f3'></td>
+		    			</tr> <tr>
+							<th id="m4" align="left">Temp</th>
+    						<td id='f4'></td>
+   				 		</tr> <tr>
+    						<th id="m5" align="left">Wind Speed</th>
+   		 					<td id='f5'></td></tr>
+    					<tr>
+							<th id="m6" align="left">Visibility</th>
+       						<td id='f6'><a href="#"></a></td>
+					</table>
+				</div>
+			</div>
+ 			<div class ='container'>
 				<div id="first">
     				<label>
-					<input type="checkbox"  id="gmet" name="gmet" checked><b>G-AIRMET</b><br>
+						<input type="checkbox"  id="gmet" name="gmet" checked><b>G-AIRMET</b><br>
 	    			</label> 
 				</div>
 				<div class="slidecontainer">
@@ -255,8 +239,8 @@ label {
 				</div>	
 				<div id="first">
     				<label>
-					<input type="checkbox"  id="amet" name="amet" checked><b>AIRMET </b><br>
-	   				</label> 
+						<input type="checkbox"  id="amet" name="amet" checked><b>AIRMET </b><br>
+					</label> 
 				</div>
 				<div class="slidecontainer">
 					<input type="range" min="-1000" max="65000" value="-1000" 
@@ -265,7 +249,7 @@ label {
 				</div>
 				<div id="first">
    					<label>
-					<input type="checkbox"  id="smet" name="smet" checked><b>SIGMET </b><br>
+						<input type="checkbox"  id="smet" name="smet" checked><b>SIGMET </b><br>
    					</label> 
 				</div>	
 				<div class="slidecontainer">
@@ -275,7 +259,7 @@ label {
 				</div>
 				<div id="first">
    					<label>
-					<input type="checkbox"  id="cwa" name="cwa" checked><b>CWA </b><br>
+						<input type="checkbox"  id="cwa" name="cwa" checked><b>CWA </b><br>
    					</label> 
 				</div>	
 				<div class="slidecontainer">
@@ -284,12 +268,11 @@ label {
     				<p>Value: <span id="demo3"></span></p> 
 				</div>
 			</div>	
-
 		</div>
 	</div>
-		<div id="footer">  </div>
+	<div id="footer">  </div>
 </div>
-//<script src="map978pg.js" type="text/javascript"></script>
+<script src="map978pg.js" type="text/javascript"></script>
 <script id="port" src="map978pg.js" </script> 
 
 </body>
