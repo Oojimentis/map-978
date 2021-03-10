@@ -1,26 +1,30 @@
 window.onload = onPageLoad();
 
 function onPageLoad() {
-	document.getElementById("gmet").checked = true;
-	document.getElementById("meta").checked = true;
-	document.getElementById("amet").checked = true;
-	document.getElementById("smet").checked = true;
-	document.getElementById("cwa").checked = true;
-	document.getElementById("notam").checked = true;
-	document.getElementById("taf").checked = true;
+		document.getElementById("gmet").checked = true;
+		document.getElementById("meta").checked = true;
+		document.getElementById("amet").checked = true;
+		document.getElementById("smet").checked = true;
+		document.getElementById("cwa").checked = true;
+		document.getElementById("notam").checked = true;
+		document.getElementById("taf").checked = true;
 
-	document.getElementById("gmsliderRange").step = "1000";
-	document.getElementById("amsliderRange").step = "1000";
-	document.getElementById("smsliderRange").step = "1000";
-	document.getElementById("cwsliderRange").step = "1000";
-	document.getElementById("gmsliderRange").value = "0";
-	document.getElementById("amsliderRange").value = "0";
-	document.getElementById("smsliderRange").value = "0";
-	document.getElementById("cwsliderRange").value = "0";
+		document.getElementById("gmsliderRange").step = "1000";
+		document.getElementById("amsliderRange").step = "1000";
+		document.getElementById("smsliderRange").step = "1000";
+		document.getElementById("cwsliderRange").step = "1000";
+		document.getElementById("gmsliderRange").value = "0";
+		document.getElementById("amsliderRange").value = "0";
+		document.getElementById("smsliderRange").value = "0";
+		document.getElementById("cwsliderRange").value = "0";
 	}
 
-function reloadFunc(obj){
-			  location.reload();
+function reloadFunc(obj) {
+		location.reload();
+	}
+
+function right(str, chr) {
+		return str.slice(str.length-chr,str.length);
 	}
 
 var serv_port = document.getElementById('port').value;
@@ -108,9 +112,10 @@ var gairmet = L.realtime({
 					if (rangeslider.value== -1000) output.innerHTML = "All"
 						else output.innerHTML = rangeslider.value;
 				 	var nn = parseInt(rangeslider.value, 10);
-
-					if (nn== -1000) return (feature.properties.alt >= 0)
-						else return (feature.properties.alt >= (nn-500) && feature.properties.alt <= (nn +500) );
+					var e = document.getElementById("stim");
+					var stim = e.value;
+					if (nn== -1000) return (feature.properties.alt >= 0 	&& right(feature.properties.start_date,5) == stim)
+						else return (feature.properties.alt >= (nn-500) && feature.properties.alt <= (nn +500) 	&& right(feature.properties.start_date,5) == stim); 
 				}
 		}).addTo(map);  
 
@@ -258,6 +263,8 @@ var	cwa = L.realtime({
 				}
 		}).addTo(map);  
 
+//var url4=url1.concat(serv_port,"/sql?q=select ST_AsTIFF(r) from public.rasters2");
+//var layer = L.leafletGeotiff(url4, band=1).addTo(map);
 
 // ** Circle
 var url3_circle=url1.concat(serv_port,"/sql?q=select bot as geom,start_date,stop_date,rep_num,r_lng,r_lat,alt_top,alt_bot,alpha \
@@ -433,15 +440,9 @@ document.querySelector("input[name=cwa]").addEventListener('change', function() 
                 if(this.checked)  {map.addLayer(cwa),cwa.start()}
                   else {map.removeLayer(cwa),cwa.stop()}
                 })
-//document.getElementById("bgalt").onchange = function()
-//		{gairmet.update()}
-		                
-//document.getElementById("agalt").onchange = function()
-//		{airmet.update()}
-
-//document.getElementById("sgalt").onchange = function()
-//		{sigmet.update()}  
 		
+document.getElementById("stim").onchange = function()
+	{gairmet.update()}		
 document.getElementById("gmsliderRange").onchange = function()
 	{gairmet.update()}
 document.getElementById("amsliderRange").onchange = function()
