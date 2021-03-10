@@ -178,8 +178,14 @@ label {
 <body>
 
 <div id="wrapper">
-	<div id="panel"><span class="p2">DUMP978 - WX Display: UTC  <a href="https://24timezones.com" style="text-decoration: none" class="clock24" id="tz24-1613672276-tzutc-eyJob3VydHlwZSI6IjI0Iiwic2hvd2RhdGUiOiIwIiwic2hvd3NlY29uZHMiOiIwIiwic2hvd3RpbWV6b25lIjoiMSIsInR5cGUiOiJkIiwibGFuZyI6ImVuIn0=" title="time now" target="_blank" rel="nofollow"></a>
-		<script type="text/javascript" src="//w.24timezones.com/l.js"></script></span> 
+	<div id="panel"><span class="p2">DUMP978 - WX Display:
+<span id="UTC_za00" style="font-size:20px;color:yellow"></span> &nbspUTC
+<script src="//widget.time.is/t.js">UTC</script>
+<script>
+time_is_widget.init({UTC_za00:{time_format:"hours:minutes"}});
+</script>
+
+
 	</div>
 
   	<div id="map"></div>
@@ -240,6 +246,7 @@ label {
 					    <option value="21:00">21:00</option>
 					</select>
     				<label>
+					<br>
 					<input type="checkbox"  id="gmet" name="gmet" checked><b>G-AIRMET</b><br>
 	    			</label> 
 				</div>
