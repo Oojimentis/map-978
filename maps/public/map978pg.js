@@ -8,6 +8,7 @@ function onPageLoad() {
 		document.getElementById("cwa").checked = true;
 		document.getElementById("notam").checked = true;
 		document.getElementById("taf").checked = true;
+		document.getElementById("pirep").checked = true;
 
 		document.getElementById("gmsliderRange").step = "1000";
 		document.getElementById("amsliderRange").step = "1000";
@@ -301,7 +302,7 @@ var	cir = L.realtime({
 	}).addTo(map);
 
 // ** METAR 
-var wxIcon = L.icon({iconUrl: 'therm.ico', iconSize: [35,35]});
+var wxIcon = L.icon({iconUrl: 'therm.ico', iconSize: [20,20]});
 
 var url3_metar=url1.concat(serv_port,"/sql?q=select  s.coords as geom,m.stn_call,s.stn_loc,ob_date,temp,windsp,\
 winddir,altimeter,visby,dewp from metar m inner join (select stn_call,max(ob_date) as mob from metar group by stn_call) g on m.stn_call=g.stn_call and m.ob_date=g.mob inner join stations s on m.stn_call=s.stn_call");
@@ -337,7 +338,7 @@ metar = L.realtime({
 	}).addTo(map);
 
 // ** NOTAM 
-var wxIcon2 = L.icon({iconUrl: 'wx2.ico', iconSize: [20,20]});
+var wxIcon2 = L.icon({iconUrl: 'wx2.ico', iconSize: [15,15]});
 
 var url3_notam=url1.concat(serv_port,"/sql?q=select s.coords as geom,n.stn_call,stn_loc,n.rep_num,text_data,start_date,stop_date \
 		from sigairmet n left join graphics g on n.prod_id=g.prod_id and n.rep_num=g.rep_num join stations s on n.stn_call=s.stn_call where n.prod_id=8");
@@ -372,7 +373,7 @@ notam = L.realtime({
 	}).addTo(map);
 
 // ** TAF
-var wxIcon3 = L.icon({iconUrl: 'wx1.ico', iconSize: [20,20]});
+var wxIcon3 = L.icon({iconUrl: 'wx1.ico', iconSize: [15,15]});
 
 var url3_taf=url1.concat(serv_port,"/sql?q=select coords as geom,t.stn_call,stn_loc,issued,current,wind,visby,condx,rep_time from taf t, stations s where t.stn_call=s.stn_call");
 
@@ -405,6 +406,52 @@ taf = L.realtime({
 		}
 	}).addTo(map);
 
+// ** PIREP
+var url3_pirep=url1.concat(serv_port,"/sql?q=select coords as geom,p.stn_call,stn_loc,rep_type,fl_lev,ac_type,turbulence,remarks,location from pirep p inner join (select stn_call,max(rep_time) as mx from pirep group by stn_call) g on p.stn_call=g.stn_call and p.rep_time=g.mx inner join stations s on p.stn_call=s.stn_call");
+var wxIcon4 
+pirep = L.realtime({
+		url: url3_pirep,
+		crossOrigin: true, type: 'json'
+	}, {interval: 19 * 1000,
+  		getFeatureId: function(featureData) {
+			return featureData.properties.stn_call;
+		},
+		pointToLayer: function (feature, latlng) {
+		if (feature.properties.rep_type == "Urgent Report")
+				wxIcon4 = L.icon({iconUrl: 'pilot2.ico', iconSize: [17,17]})
+		else
+				wxIcon4 = L.icon({iconUrl: 'pilot.ico', iconSize: [15,15]});
+				
+			marker = L.marker(latlng,{icon: wxIcon4});
+			
+			if (feature.properties.rep_type == "Urgent Report")
+    			marker.bindTooltip('Urgent PIREP' + '<br>' + feature.properties.stn_call);
+ 			else
+ 				marker.bindTooltip('PIREP' + '<br>' + feature.properties.stn_call);
+ 			
+ 			marker.on('click', function (e) {
+					$("#m1").html("Station");
+					$("#m2").html("Location");
+					$("#m3").html("Flvl/AC Type");
+					$("#m4").html("Turbulence");
+					$("#m5").html("Location");
+					$("#m6").html("Remarks");
+					if (feature.properties.rep_type == "Urgent Report")
+						$('#f1').html(e.target.feature.properties.stn_call + " (*Urgent PIREP*)");
+					else
+						$('#f1').html(e.target.feature.properties.stn_call + " (PIREP)");
+					
+					$('#f2').html(e.target.feature.properties.stn_loc);
+					$('#f3').html("FL: " + e.target.feature.properties.fl_lev + "  AC: " + e.target.feature.properties.ac_type);
+					$('#f4').html(e.target.feature.properties.turbulence);
+					$('#f5').html(e.target.feature.properties.location);
+					$('#f6').html(e.target.feature.properties.remarks);
+			});
+    		marker.addTo(map);
+    		return marker;
+		}
+	}).addTo(map);
+
 // Handles the check boxes being turned on/off
 document.querySelector("input[name=gmet]").addEventListener('change', function() {
                 if(this.checked) {map.addLayer(gairmet),gairmet.start()}
@@ -429,6 +476,11 @@ document.querySelector("input[name=notam]").addEventListener('change', function(
 document.querySelector("input[name=taf]").addEventListener('change', function() {
                 if(this.checked)  {map.addLayer(taf),taf.start()}
                   else {map.removeLayer(taf),taf.stop()}
+                })
+
+document.querySelector("input[name=pirep]").addEventListener('change', function() {
+                if(this.checked)  {map.addLayer(pirep),pirep.start()}
+                  else {map.removeLayer(pirep),pirep.stop()}
                 })
 
 document.querySelector("input[name=smet]").addEventListener('change', function() {
