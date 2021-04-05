@@ -32,7 +32,7 @@ function right(str, chr) {
 	return str.slice(str.length - chr, str.length);
 }
 
-var map = L.map('map').setView([36.0, -75.26], 5); 
+var map = L.map('map', {preferCanvas: true}).setView([36.0, -75.26], 5); 
 
 var osm=new L.tileLayer('http://{s}.tile.osm.org/{z}/{x}/{y}.png',{ 
 	attribution: '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'}).addTo(map);;
@@ -70,6 +70,57 @@ function getColor(colf) {
 			colf >=	0 	  ?	'#EC8235':
 							'blue';
 }	
+
+function getColorInt(colf) {
+switch (colf) {
+case 1:
+	golor = '#8C8C74';
+	break;
+case 2:
+	golor = '#B4C8FF';
+	break;
+case 3:
+	golor = '#5F87FF';
+	break;
+case 4:
+	golor = '#1446E6';
+	break;
+case 5:
+	golor = '#6EF54B';
+	break;
+case 6:
+	golor = '#00C300';
+	break;
+case 7:
+	golor = '#007300';
+	break;
+case 8:
+	golor = '#FFFF00';
+	break;	
+case 9:
+	golor = '#FFB430';
+	break;
+case 10:
+	golor = '#FA7D00';
+	break;	
+case 11:
+	golor = '#E62D00';
+	break;
+case 12:
+	golor = '#AF0000';
+	break;	
+case 13:
+	golor = '#690000';
+	break;	
+case 14:
+	golor = '#FA00C8';	
+	break;
+case 15:
+	golor = '#9B00FA';	
+	break;	
+		}
+return golor;
+}
 
 // G-AIRMET
 var url_gairmet = url.concat("select coords as geom, rep_num, alt, ob_ele, start_date, stop_date \
@@ -236,6 +287,35 @@ var	sigmet = L.realtime({
 			}
 		}).addTo(map);  
 
+// Radar
+var url3_rad = url.concat("select coords as geom, intensity ,block_num, cc from nexrad84 where intensity != 19 and prod_id=64 and maptime = '0102'");
+var	rad = L.realtime({
+	url: url3_rad,
+ 	crossOrigin: true, type: 'json'
+	}, {interval: 28 * 1030,
+
+		getFeatureId: function(featureData){ 
+		return featureData.properties.block_num + featureData.properties.cc;
+		},
+
+		pointToLayer: function(feature, latlng) {
+
+    var currentPoint = map.latLngToContainerPoint(latlng);
+    var width = 2;    //5
+    var height = 2;     //5
+    var xDifference = width / 2;
+    var yDifference = height / 2;
+    var southWest = L.point((currentPoint.x - xDifference), (currentPoint.y - yDifference));
+    var northEast = L.point((currentPoint.x + xDifference), (currentPoint.y + yDifference));
+    var bounds = L.latLngBounds(map.containerPointToLatLng(southWest),map.containerPointToLatLng(northEast));
+
+   golor = getColorInt(feature.properties.intensity);
+   var rectOptions = {fillColor: golor, fillOpacity: 0.2, weight: 0}
+    L.rectangle(bounds,rectOptions).addTo(map);
+	}
+	});
+
+
 // CWA
 var url3_cwa = url.concat("select coords as geom, g.rep_num, alt, ob_ele, text_data, start_date, stop_date \
 			from graphics g left join sigairmet s on (g.prod_id = s.prod_id) and (g.rep_num = s.rep_num) \
@@ -244,7 +324,7 @@ var url3_cwa = url.concat("select coords as geom, g.rep_num, alt, ob_ele, text_d
 var	cwa = L.realtime({
 	url: url3_cwa,
 	crossOrigin: true, type: 'json'
-	}, {interval: 19 * 1030,
+	}, {interval: 10 * 1030,
 		style: function(feature){
 			kolor = getColor(feature.properties.alt);
 			return {color: '#00cccc', weight: 2, fillColor: kolor, opacity: 1.0, fillOpacity: 0.2};
