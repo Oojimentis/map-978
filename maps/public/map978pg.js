@@ -284,7 +284,7 @@ var	sigmet = L.realtime({
 
 // Radar
 var url3_rad = url.concat("SELECT coords AS GEOM, intensity ,block_num, cc \
-                           FROM nexrad84 WHERE prod_id = 84 and intensity !=14 and maptime='0000'");
+                           FROM nexrad84 WHERE prod_id = 64 and intensity !=14 ");
 var moose;
 var lays= new L.FeatureGroup();
 var	nrad = L.realtime({
