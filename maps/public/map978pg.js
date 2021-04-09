@@ -5,13 +5,13 @@ var url = url1.concat(serv_port,"/sql?q=");
 window.onload = onPageLoad();
 
 function onPageLoad() {
-	document.getElementById("gmet").checked  = true;
-	document.getElementById("meta").checked  = true;
-	document.getElementById("amet").checked  = true;
-	document.getElementById("smet").checked  = true;
-	document.getElementById("cwa").checked   = true;
+	document.getElementById("gmet").checked = true;
+	document.getElementById("meta").checked = true;
+	document.getElementById("amet").checked = true;
+	document.getElementById("smet").checked = true;
+	document.getElementById("cwa").checked = true;
 	document.getElementById("notam").checked = true;
-	document.getElementById("taf").checked   = true;
+	document.getElementById("taf").checked = true;
 	document.getElementById("pirep").checked = true;
 	document.getElementById("nrad").checked = true;
 
@@ -56,70 +56,70 @@ function getColor(colf) {
 			colf >=	16000 ? '#AD9E8A':
 			colf >=	12000 ? '#B49B81':
 			colf >=	10000 ? '#BB9877':
-			colf >=	9000  ? '#C2956E':
-			colf >=	8000  ? '#C99264':
-			colf >=	7000  ? '#D08E5B':
-			colf >=	6000  ? '#D78B51':
-			colf >=	4000  ? '#DE8848':
-			colf >=	1000  ? '#E5853E':
-			colf >=	0 	  ?	'#EC8235':
-							'blue';
+			colf >=	9000 ? '#C2956E':
+			colf >=	8000 ? '#C99264':
+			colf >=	7000 ? '#D08E5B':
+			colf >=	6000 ? '#D78B51':
+			colf >=	4000 ? '#DE8848':
+			colf >=	1000 ? '#E5853E':
+			colf >=	0	? '#EC8235':
+					'blue';
 }	
 
 function getColorInt(colf) {
-switch (colf) {
-case 1:
-	golor = '#8C8C74';
-	break;
-case 2:
-	golor = '#B4C8FF';
-	break;
-case 3:
-	golor = '#5F87FF';
-	break;
-case 4:
-	golor = '#1446E6';
-	break;
-case 5:
-	golor = '#6EF54B';
-	break;
-case 6:
-	golor = '#00C300';
-	break;
-case 7:
-	golor = '#007300';
-	break;
-case 8:
-	golor = '#FFFF00';
-	break;	
-case 9:
-	golor = '#FFB430';
-	break;
-case 10:
-	golor = '#FA7D00';
-	break;	
-case 11:
-	golor = '#E62D00';
-	break;
-case 12:
-	golor = '#AF0000';
-	break;	
-case 13:
-	golor = '#690000';
-	break;	
-case 14:
-	golor = '#FA00C8';	
-	break;
-case 15:
-	golor = '#9B00FA';	
-	break;	
+	switch (colf) {
+	case 1:
+		golor = '#8C8C74';
+		break;
+	case 2:
+		golor = '#B4C8FF';
+		break;
+	case 3:
+		golor = '#5F87FF';
+		break;
+	case 4:
+		golor = '#1446E6';
+		break;
+	case 5:
+		golor = '#6EF54B';
+		break;
+	case 6:
+		golor = '#00C300';
+		break;
+	case 7:
+		golor = '#007300';
+		break;
+	case 8:
+		golor = '#FFFF00';
+		break;	
+	case 9:
+		golor = '#FFB430';
+		break;
+	case 10:
+		golor = '#FA7D00';
+		break;	
+	case 11:
+		golor = '#E62D00';
+		break;
+	case 12:
+		golor = '#AF0000';
+		break;	
+	case 13:
+		golor = '#690000';
+		break;	
+	case 14:
+		golor = '#FA00C8';	
+		break;
+	case 15:
+		golor = '#9B00FA';	
+		break;	
 		}
 return golor;
 }
 
 // G-AIRMET
 var url_gairmet = url.concat("SELECT coords AS GEOM, rep_num, alt, ob_ele, start_date, stop_date \
-				              FROM graphics WHERE prod_id = 14");
+							FROM graphics WHERE prod_id = 14");
 
 var gairmet = L.realtime({
 	url: url_gairmet,
@@ -154,7 +154,7 @@ var gairmet = L.realtime({
 			layer.on('mouseout', function(e){
 				gairmet.start();})		
 			},
-			filter: function(feature, layer) {   
+			filter: function(feature, layer) {
 				var rangeslider = document.getElementById("gmsliderRange");
 				var output = document.getElementById("demo");
 				if (rangeslider.value == -1000) 
@@ -170,12 +170,12 @@ var gairmet = L.realtime({
 				else 
 					return (feature.properties.alt >= (nn - 500) && feature.properties.alt <= (nn + 500) && right(feature.properties.start_date, 5) == stim); 
 			}
-		}).addTo(map);  
+		}).addTo(map);
 
 // AIRMET
 var url_airmet = url.concat("SELECT coords AS GEOM, g.rep_num, alt, ob_ele, text_data, start_date, stop_date \
-			                 FROM graphics g LEFT JOIN sigairmet s ON (g.prod_id = s.prod_id) AND (g.rep_num = s.rep_num) \
-			                 WHERE g.prod_id = 11");
+							FROM graphics g LEFT JOIN sigairmet s ON (g.prod_id = s.prod_id) \
+							AND (g.rep_num = s.rep_num) WHERE g.prod_id = 11");
 
 var	airmet = L.realtime({
 	url: url_airmet,
@@ -211,7 +211,7 @@ var	airmet = L.realtime({
 			layer.on('mouseout', function(e){
 				airmet.start();})		
 			},
-			filter: function(feature,layer) {   
+			filter: function(feature,layer) {
 				var rangeslider = document.getElementById("gmsliderRange");
 				var output = document.getElementById("demo");
 				if (rangeslider.value == -1000) 
@@ -229,8 +229,8 @@ var	airmet = L.realtime({
 
 // SIGMET
 var url_sigmet = url.concat("SELECT coords AS GEOM, g.rep_num, alt, ob_ele, text_data, start_date, stop_date \
-			                 FROM graphics g LEFT JOIN sigairmet s ON (g.prod_id = s.prod_id) AND (g.rep_num = s.rep_num) \
-			                 WHERE g.prod_id = 12");
+							FROM graphics g LEFT JOIN sigairmet s ON (g.prod_id = s.prod_id) AND \
+							(g.rep_num = s.rep_num)	WHERE g.prod_id = 12");
 
 var	sigmet = L.realtime({
 	url: url_sigmet,
@@ -266,7 +266,7 @@ var	sigmet = L.realtime({
 			layer.on('mouseout',function(e){
 				sigmet.start();})		
 			},
-			filter: function(feature, layer) {   
+			filter: function(feature, layer) {
 				var rangeslider = document.getElementById("gmsliderRange");
 				var output = document.getElementById("demo");
 				if (rangeslider.value == -1000) 
@@ -280,12 +280,12 @@ var	sigmet = L.realtime({
 				else 
 					return (feature.properties.alt >= (nn - 500) && feature.properties.alt <= (nn + 500));
 			}
-		}).addTo(map);  
+		}).addTo(map);
 
 // Radar
 var url3_rad = url.concat("SELECT coords AS GEOM, intensity ,block_num, cc \
-                           FROM nexrad84 WHERE prod_id = 64 and intensity !=14 ");
-var moose;
+							FROM nexrad84 WHERE prod_id = 70 and altitude=10000 ");
+var radar;
 var lays= new L.FeatureGroup();
 var	nrad = L.realtime({
 	url: url3_rad,
@@ -298,31 +298,30 @@ var	nrad = L.realtime({
 
 	pointToLayer: function(feature, latlng) {
 
-    var currentPoint = map.latLngToContainerPoint(latlng);
-    var width = 2;    //5
-    var height = 2;     //5
-    var xDifference = width / 2;
-    var yDifference = height / 2;
-    var southWest = L.point((currentPoint.x - xDifference), (currentPoint.y - yDifference));
-    var northEast = L.point((currentPoint.x + xDifference), (currentPoint.y + yDifference));
-    var bounds = L.latLngBounds(map.containerPointToLatLng(southWest),map.containerPointToLatLng(northEast));
+	var currentPoint = map.latLngToContainerPoint(latlng);
+	var width = 5;    //5
+	var height = 6;     //5
+	var xDifference = width / 2;
+	var yDifference = height / 2;
+	var southWest = L.point((currentPoint.x - xDifference), (currentPoint.y - yDifference));
+	var northEast = L.point((currentPoint.x + xDifference), (currentPoint.y + yDifference));
+	var bounds = L.latLngBounds(map.containerPointToLatLng(southWest),map.containerPointToLatLng(northEast));
 
-   	golor = getColorInt(feature.properties.intensity);
-   	var rectOptions = {fillColor: golor, fillOpacity: 0.9, weight: 0}
-    moose = L.rectangle(bounds,rectOptions);
+	golor = getColorInt(feature.properties.intensity);
+	var rectOptions = {fillColor: golor, fillOpacity: 0.4, weight: 0}
+	radar = L.rectangle(bounds,rectOptions);
 
-	lays.addLayer(moose);
+	lays.addLayer(radar);
 	map.addLayer(lays);
 
 	nrad.stop();
-   	}
+	}
 });
-
 
 // CWA
 var url3_cwa = url.concat("SELECT coords AS GEOM, g.rep_num, alt, ob_ele, text_data, start_date, stop_date \
-						   FROM graphics g LEFT JOIN sigairmet s ON (g.prod_id = s.prod_id) AND (g.rep_num = s.rep_num) \
-			               WHERE g.prod_id = 15");
+							FROM graphics g LEFT JOIN sigairmet s ON (g.prod_id = s.prod_id) AND \
+							(g.rep_num = s.rep_num) WHERE g.prod_id = 15");
 
 var	cwa = L.realtime({
 	url: url3_cwa,
@@ -358,7 +357,7 @@ var	cwa = L.realtime({
 			layer.on('mouseout', function(e){
 				cwa.start();})		
 			},
-			filter: function(feature,layer) {   
+			filter: function(feature,layer) {
 				var rangeslider = document.getElementById("gmsliderRange");
 				var output = document.getElementById("demo");
 				if (rangeslider.value == -1000) 
@@ -372,35 +371,35 @@ var	cwa = L.realtime({
 				else 
 					return (feature.properties.alt >= (nn - 500) && feature.properties.alt <= (nn + 500));
 			}
-		}).addTo(map);  
+		}).addTo(map);
 
 
 // ** Circle
-var url_circle = url.concat("SELECT bot AS GEOM, start_date, stop_date, rep_num, r_lng, r_lat, alt_top, alt_bot, alpha \
-		                     FROM circles");
+var url_circle = url.concat("SELECT bot AS GEOM, start_date, stop_date, rep_num, r_lng, r_lat, alt_top, \
+							alt_bot, alpha 	FROM circles");
 
 var	cir = L.realtime({
 	url: url_circle,
 	crossOrigin: true, type: 'json'
-	}, {interval: 28 * 1030,
+	}, {interval: 50 * 1030,
 		getFeatureId: function(featureData){
 		return featureData.properties.rep_num;
 		},
 		pointToLayer: function(feature, latlng) {
 			marker = L.circleMarker(latlng, {color: 'red', fillcolor: 'yellow'});
-    		marker.bindTooltip(feature.properties.rep_num + '<br>' + feature.properties.start_date );
+ 		marker.bindTooltip(feature.properties.rep_num + '<br>' + feature.properties.start_date );
  			marker.on('click', function (e) {
  				$("#m1").html("Altitude");
  				$("#m2").html("Radius");
  				$("#m3").html("Rep Number");
-   		    	$("#m4").html("Start");
-   			    $("#m5").html("Stop");
-   			    $("#m6").html("Alpha ");
+ 		 		$("#m4").html("Start");
+ 				$("#m5").html("Stop");
+ 				$("#m6").html("Alpha ");
 				$('#f1').html('Bottom ' + e.target.feature.properties.alt_bot + 'ft<br> Top ' + e.target.feature.properties.alt_top + 'ft');
 				$('#f2').html('Lat: ' + e.target.feature.properties.r_lat + ' Lng: ' + e.target.feature.properties.r_lat);
 				$('#f3').html(e.target.feature.properties.rep_num);
 				$('#f4').html(e.target.feature.properties.start_date);
-				$('#f5').html(e.target.feature.properties.stop_date);  
+				$('#f5').html(e.target.feature.properties.stop_date);
 				$('#f6').html(e.target.feature.properties.alpha);
 			});
 			marker.addTo(map);
@@ -411,9 +410,11 @@ var	cir = L.realtime({
 // ** METAR 
 var wxIcon = L.icon({iconUrl: 'therm.ico', iconSize: [20,20]});
 
-var url_metar = url.concat("SELECT s.coords AS GEOM, m.stn_call, s.stn_loc, ob_date, temp, windsp, winddir, altimeter, visby, dewp \
-			                FROM metar m INNER JOIN (SELECT stn_call, max(ob_date) AS mob FROM metar GROUP BY stn_call) g \
-			                ON m.stn_call = g.stn_call AND m.ob_date = g.mob INNER JOIN stations s ON m.stn_call = s.stn_call");
+var url_metar = url.concat("SELECT s.coords AS GEOM, m.stn_call, s.stn_loc, ob_date, temp, windsp, \
+							winddir, altimeter, visby, dewp \
+							FROM metar m INNER JOIN (SELECT stn_call, max(ob_date) AS mob FROM metar \
+							GROUP BY stn_call) g ON m.stn_call = g.stn_call AND m.ob_date = g.mob \
+							INNER JOIN stations s ON m.stn_call = s.stn_call");
 
 metar = L.realtime({
 	url: url_metar,
@@ -430,14 +431,14 @@ metar = L.realtime({
 				$("#m1").html("Station");
 				$("#m2").html("Location");
 				$("#m3").html("Time");
-	    		$("#m4").html("Temp");
-		    	$("#m5").html("Winds");
-		    	$("#m6").html("Visibility");
+				$("#m4").html("Temp");
+				$("#m5").html("Winds");
+				$("#m6").html("Visibility");
 				$('#f1').html(e.target.feature.properties.stn_call + " (METAR)");
 				$('#f2').html(e.target.feature.properties.stn_loc);
 				$('#f3').html(e.target.feature.properties.ob_date);
 				$('#f4').html(e.target.feature.properties.temp);
-				$('#f5').html(e.target.feature.properties.windsp);  
+				$('#f5').html(e.target.feature.properties.windsp);
 				$('#f6').html(e.target.feature.properties.visby);
 			});
 			marker.addTo(map);
@@ -449,8 +450,9 @@ metar = L.realtime({
 var wxIcon2 = L.icon({iconUrl: 'wx2.ico', iconSize: [15,15]});
 
 var url_notam = url.concat("SELECT s.coords AS GEOM, n.stn_call, stn_loc, n.rep_num, text_data, start_date,stop_date \
-			                FROM sigairmet n LEFT JOIN graphics g ON n.prod_id = g.prod_id AND n.rep_num = g.rep_num \
-			                JOIN stations s ON n.stn_call = s.stn_call WHERE n.prod_id = 8");
+							FROM sigairmet n LEFT JOIN graphics g ON n.prod_id = g.prod_id \
+							AND n.rep_num = g.rep_num \
+							JOIN stations s ON n.stn_call = s.stn_call WHERE n.prod_id = 8");
 
 notam = L.realtime({
 	url: url_notam,
@@ -461,7 +463,7 @@ notam = L.realtime({
 		},
 		pointToLayer: function(feature, latlng) {
 			marker = L.marker(latlng, {icon: wxIcon2});
-	   		marker.bindTooltip('NOTAM' + '<br>' + feature.properties.stn_call);
+	 		marker.bindTooltip('NOTAM' + '<br>' + feature.properties.stn_call);
 			marker.on('click', function(e) {
 				$("#m1").html("Station");
 				$("#m2").html("Location");
@@ -485,7 +487,7 @@ notam = L.realtime({
 var wxIcon3 = L.icon({iconUrl: 'wx1.ico', iconSize: [15,15]});
 
 var url_taf = url.concat("SELECT coords AS GEOM, t.stn_call, stn_loc, issued, current, wind, visby, condx, rep_time \
-			              FROM taf t, stations s WHERE t.stn_call = s.stn_call");
+							FROM taf t, stations s WHERE t.stn_call = s.stn_call");
 
 taf = L.realtime({
 	url: url_taf,
@@ -517,9 +519,11 @@ taf = L.realtime({
 	}).addTo(map);
 
 // ** PIREP
-var url_pirep = url.concat("SELECT coords AS GEOM, p.stn_call, stn_loc, rep_type, fl_lev, ac_type, turbulence, remarks, location \
-			                FROM pirep p INNER JOIN (SELECT stn_call, MAX(rep_time) AS mx FROM pirep GROUP BY stn_call) g \
-			                ON p.stn_call = g.stn_call AND p.rep_time = g.mx INNER JOIN stations s ON p.stn_call = s.stn_call");
+var url_pirep = url.concat("SELECT coords AS GEOM, p.stn_call, stn_loc, rep_type, fl_lev, ac_type, \
+							turbulence, remarks, location \
+							FROM pirep p INNER JOIN (SELECT stn_call, MAX(rep_time) AS mx FROM pirep \
+							GROUP BY stn_call) g ON p.stn_call = g.stn_call AND p.rep_time = g.mx \
+							INNER JOIN stations s ON p.stn_call = s.stn_call");
 
 var wxIcon4 
 pirep = L.realtime({
@@ -624,10 +628,10 @@ document.querySelector("input[name = cwa]").addEventListener('change', function(
 
 document.querySelector("input[name = nrad]").addEventListener('change', function() {
 	if(this.checked) {
-		lays.addLayer(moose),
+		lays.addLayer(radar),
 		map.addLayer(lays); nrad.start()}
 	else {
-   		lays.clearLayers(),moose.stop()} 
+ 		lays.clearLayers(),radar.stop()} 
 })
 
 document.getElementById("stim").onchange = function()
