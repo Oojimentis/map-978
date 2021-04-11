@@ -120,7 +120,6 @@ return golor;
 // G-AIRMET
 var url_gairmet = url.concat("SELECT coords AS GEOM, rep_num, alt, ob_ele, start_date, stop_date \
 							FROM graphics WHERE prod_id = 14");
-
 var gairmet = L.realtime({
 	url: url_gairmet,
 	crossOrigin: true, type: 'json'
@@ -283,11 +282,59 @@ var	sigmet = L.realtime({
 		}).addTo(map);
 
 // Radar
-var url3_rad = url.concat("SELECT coords AS GEOM, intensity ,block_num, cc \
-							FROM nexrad84 WHERE prod_id = 70 and altitude=10000 ");
-var radar;
+//var url3_rad = url.concat("SELECT coords AS GEOM, intensity ,block_num, cc 	FROM nexrad84 WHERE prod_id = 70 and altitude=10000 ");
+console.log("moooooooooooooooooose");
+
+function getNexrad() {
+
+var rad_prod = document.getElementById('prodid').value;
+var rad_alt = document.getElementById('altrad').value;
+console.log(rad_prod);
+var rad_prodid = 63
+switch(rad_prod) {
+	case 1:
+		rad_prodid = 64
+		rad_alt = 0;
+		break;
+	case 2:
+		rad_prodid = 63
+		rad_alt = 0;
+		break;		
+	case 3:
+		if (rad_alt > 16000) 
+			rad_prodid = 71;
+		else
+			rad_prodid = 70;
+		break;
+	case 4:
+		if (rad_alt > 16000) 
+			rad_prodid = 91;
+		else
+			rad_prodid = 90;
+		break;
+	case 5:
+		rad_prodid = 84;
+		rad_alt = 0;
+		break;
+	case 6:
+		rad_prodid = 103;
+		rad_alt = 0;
+		break;
+		}
+var rad_pre = `SELECT  m.prod_id, m.intensity,m.maptime, m.block_num,m.cc \
+FROM nexrad m INNER JOIN (SELECT max(maptime) AS mob FROM nexrad where prod_id = ${rad_prodid} ) g \
+ON m.maptime = g.mob and m.prod_id = ${rad_prodid} and altitude = ${rad_alt}`;
+		
+	return rad_pre;
+	}	
+		
+//var radar;
+var url3_rad_pre = getNexrad();
+var url3_rad = url.concat(url3_rad_pre);
+
+
 var lays= new L.FeatureGroup();
-var	nrad = L.realtime({
+var	radar = L.realtime({
 	url: url3_rad,
  	crossOrigin: true, type: 'json'
 	}, {interval: 7 * 1000,
@@ -314,7 +361,7 @@ var	nrad = L.realtime({
 	lays.addLayer(radar);
 	map.addLayer(lays);
 
-	nrad.stop();
+	radar.stop();
 	}
 });
 
@@ -628,8 +675,11 @@ document.querySelector("input[name = cwa]").addEventListener('change', function(
 
 document.querySelector("input[name = nrad]").addEventListener('change', function() {
 	if(this.checked) {
+var url3_rad_pre = getNexrad();
+var url3_rad = url.concat(url3_rad_pre);
+
 		lays.addLayer(radar),
-		map.addLayer(lays); nrad.start()}
+		map.addLayer(lays); radar.start()}
 	else {
  		lays.clearLayers(),radar.stop()} 
 })
