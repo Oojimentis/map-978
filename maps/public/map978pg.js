@@ -347,7 +347,7 @@ var	nrad = L.realtime({
 	},
 
 	pointToLayer: function(feature, latlng) {
-
+		
 	var currentPoint = map.latLngToContainerPoint(latlng);
 	var width = 5;    //5
 	var height = 6;     //5
@@ -363,9 +363,9 @@ var	nrad = L.realtime({
 
 	lays.addLayer(radar);
 	map.addLayer(lays);
-
 	nrad.stop();
 	}
+
 });
 
 // CWA
@@ -375,7 +375,7 @@ var url3_cwa = url.concat("SELECT coords AS GEOM, g.rep_num, alt, ob_ele, text_d
 
 var	cwa = L.realtime({
 	url: url3_cwa,
-	crossOrigin: true, type: 'json'
+	crossOrigin: true, type: 'json'  
 	}, {interval: 10 * 1030,
 		style: function(feature){
 			kolor = getColor(feature.properties.alt);
@@ -681,12 +681,14 @@ document.querySelector("input[name = nrad]").addEventListener('change', function
 		lays.clearLayers();
 		url_nx = getNexrad();
 		url3_rad = url.concat(url_nx);
+		nrad.start();
 		nrad.setUrl(url3_rad);
 		nrad.update();
 		lays.addLayer(radar);
 		map.addLayer(lays)}
 	else {
-		lays.clearLayers()} 
+		lays.clearLayers();
+		nrad.stop();} 
 })
 
 document.getElementById("stim").onchange = function()
