@@ -9,7 +9,6 @@ Constructive comments and advice are most welcome!
 Uses Leaflet (© 2010–2019 Vladimir Agafonkin. https://leafletjs.com) 
 and Leaflet Realtime (https://github.com/perliedman/leaflet-realtime)
 
-<<<<<<< HEAD
 ## Recent Changes
 * 4/12/21 Added NEXRAD radar data.
   * Still experimental. Large data sets like Cloud Tops can freeze browser.
