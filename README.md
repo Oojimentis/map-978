@@ -57,7 +57,3 @@ TAF details:
 G-AIRMET:
 
 ![g-airmet-map](https://user-images.githubusercontent.com/60933475/109404987-a5ff4980-7939-11eb-9540-0c9206a752ca.jpg)
-
-
->>>>>>> 3ddd388518859adcfba1f7504c318af70664fe53
-
