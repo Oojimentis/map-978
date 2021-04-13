@@ -9,6 +9,7 @@ Constructive comments and advice are most welcome!
 Uses Leaflet (© 2010–2019 Vladimir Agafonkin. https://leafletjs.com) 
 and Leaflet Realtime (https://github.com/perliedman/leaflet-realtime)
 
+<<<<<<< HEAD
 ## Recent Changes
 * 4/12/21 Added NEXRAD radar data.
   * Still experimental. Large data sets like Cloud Tops can freeze browser.
@@ -39,4 +40,25 @@ PIREP:
 
 METAR:
 ![metar](https://user-images.githubusercontent.com/60933475/114482662-f1fa0b00-9bd4-11eb-94d8-936185d87a0c.png)
+=======
+## TODO
+* Filter by start/end dates.
+* Add NEXRAD radar data - Any ideas how to do this?
+
+## Screenshots
+
+AIRMET with text report details:
+
+![airmet-map](https://user-images.githubusercontent.com/60933475/109404981-9bdd4b00-7939-11eb-8176-dbc68a1d339c.jpg)
+
+TAF details:
+
+![taf-map](https://user-images.githubusercontent.com/60933475/109404985-a4358600-7939-11eb-9852-cf42b59b018e.jpg)
+
+G-AIRMET:
+
+![g-airmet-map](https://user-images.githubusercontent.com/60933475/109404987-a5ff4980-7939-11eb-9540-0c9206a752ca.jpg)
+
+
+>>>>>>> 3ddd388518859adcfba1f7504c318af70664fe53
 
