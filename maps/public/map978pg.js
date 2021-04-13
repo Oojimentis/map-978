@@ -349,8 +349,8 @@ var	nrad = L.realtime({
 	pointToLayer: function(feature, latlng) {
 		
 	var currentPoint = map.latLngToContainerPoint(latlng);
-	var width = 5;    //5
-	var height = 6;     //5
+	var width = 6;    //5
+	var height = 5;     //5
 	var xDifference = width / 2;
 	var yDifference = height / 2;
 	var southWest = L.point((currentPoint.x - xDifference), (currentPoint.y - yDifference));
@@ -358,7 +358,7 @@ var	nrad = L.realtime({
 	var bounds = L.latLngBounds(map.containerPointToLatLng(southWest),map.containerPointToLatLng(northEast));
 
 	golor = getColorInt(feature.properties.intensity);
-	var rectOptions = {fillColor: golor, fillOpacity: 0.4, weight: 0}
+	var rectOptions = {fillColor: golor, fillOpacity: 0.2, weight: 0}
 	radar = L.rectangle(bounds,rectOptions);
 
 	lays.addLayer(radar);
