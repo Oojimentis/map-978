@@ -11,7 +11,7 @@ and Leaflet Realtime (https://github.com/perliedman/leaflet-realtime)
 
 ## Recent Changes
 * 4/12/21 Added NEXRAD radar data.
-  * Still experimental. Large data sets like CLoud Tops can freeze browser.
+  * Still experimental. Large data sets like Cloud Tops can freeze browser.
 
 
 ## Screenshots
