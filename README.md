@@ -22,7 +22,7 @@ CONUS:
 Turbulence:
 ![turb](https://user-images.githubusercontent.com/60933475/114481364-67181100-9bd2-11eb-8b1e-0c2444922202.png)
 
-CLoud Tops:
+Cloud Tops:
 ![cloud](https://user-images.githubusercontent.com/60933475/114481385-6ed7b580-9bd2-11eb-9bf4-80d632e3e41f.png)
 
 AIRMET with text report details:
