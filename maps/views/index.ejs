@@ -224,12 +224,13 @@ label {
 
 <div id="wrapper">
 	<div id="panel"><span class="p2">DUMP978 - WX Display:
-	<span id="UTC_za00" style="font-size:20px;color:yellow"></span> &nbspUTC
-	<script src="//widget.time.is/t.js">UTC</script>
-	<script>
-		time_is_widget.init({UTC_za00:{time_format:"hours:minutes"}});
-	</script>
+		<span id="UTC_za00" style="font-size:20px;color:yellow"></span> &nbspUTC
+		<script src="//widget.time.is/t.js">UTC</script>
+		<script>
+			time_is_widget.init({UTC_za00:{}});
+		</script>
 	</div>
+	<a href="https://time.is/UTC" id="time_is_link" rel="nofollow" style="font-size:20px;color:yellow;background:blue"></a>
 
 	<div id="map"></div>
 	<div class="sidebar">
@@ -302,7 +303,7 @@ label {
 			<div class="slidecontainer">
 				<input type="range" min="-1000" max="65000" value="-1000" 
  					class="slider" id="gmsliderRange">
- 					Altitude: <span id="demo"></span> 
+ 					Altitude: <span id="slidealt"></span> 
 			</div>	
 		
 			<div id="ckboxes">
