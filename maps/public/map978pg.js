@@ -423,7 +423,6 @@ var	cwa = L.realtime({
 			}
 		}).addTo(map);
 
-
 // ** Circle
 var url_circle = url.concat("SELECT bot AS GEOM, start_date, stop_date, rep_num, r_lng, r_lat, alt_top, \
 					alt_bot, alpha 	FROM circles");

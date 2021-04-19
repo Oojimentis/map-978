@@ -9,7 +9,9 @@
 	<script src="/leaflet/leaflet.js"></script>
 	<script src="/leaflet/jquery.js"></script> 
 	<script src="/leaflet/leaflet-realtime.js"></script>
+
 <style>
+
 #wrapper {
 	margin: 0 auto;
 	width: 100%;
@@ -98,7 +100,7 @@ table {
 	position:relative;
 }
 #table-scroll {
-	height:200px;
+	height:350px;
 	overflow:auto;
 	margin-top:10px;
 }
@@ -163,16 +165,18 @@ label {
 }
 .checkboxes label {
 	display: inline-block;
-	padding-right: 1px;
+	width: 40px;
+	padding-right: 0px;
 	white-space: nowrap;
 
 }
 .checkboxes input {
 	vertical-align: middle;
-	box-shadow: 4px 4px #ccc;
+	box-shadow: 2px 2px #ccc;
 }
 .checkboxes label span {
 	vertical-align: middle;
+
 }
 
 .slidecontainer {
@@ -225,122 +229,114 @@ label {
 <div id="wrapper">
 	<div id="panel"><span class="p2">DUMP978 - WX Display:
 		<span id="UTC_za00" style="font-size:20px;color:yellow"></span> &nbspUTC
-		<script src="//widget.time.is/t.js">UTC</script>
-		<script>
-			time_is_widget.init({UTC_za00:{}});
-		</script>
+			<script src="//widget.time.is/t.js">UTC</script>
+			<script>time_is_widget.init({UTC_za00:{}});	</script>
 	</div>
 	<a href="https://time.is/UTC" id="time_is_link" rel="nofollow" style="font-size:20px;color:yellow;background:blue"></a>
 
 	<div id="map"></div>
-	<div class="sidebar">
-		<p style="text-align:center; font-size: 12px; color:#175B81; 
-		font-weight:bold; "><span id="metar">Details</span></p>	
-		<div id="ckboxes">
-			<div class="checkboxes">
-				<label><b>METAR</b></label>
-					<input type="checkbox" id="meta" name="meta" checked>
-				<label><b>NOTAM</b></label>
-					<input type="checkbox" id="notam" name="notam" checked>
-				<label><b>TAF</b></label>
-					<input type="checkbox" id="taf" name="taf" checked>
-				<label><b>PIREP</b></label>
-					<input type="checkbox" id="pirep" name="pirep" checked>
-			</div> 
-		
+		<div class="sidebar">
+			<p style="text-align:center; font-size: 12px; color:#175B81; 
+			font-weight:bold; "><span id="metar">Details</span></p>	
+			<div id="ckboxes">
+				<div class="checkboxes">
+					<label><b>METAR:</b></label>
+						<input type="checkbox" id="meta" name="meta" checked>
+					<label><b>NOTAM:</b></label>
+						<input type="checkbox" id="notam" name="notam" checked>
+					<br>
+					<label><b>TAF:</b></label>
+						<input type="checkbox" id="taf" name="taf" checked>
+					<label><b>PIREP:</b></label>
+						<input type="checkbox" id="pirep" name="pirep" checked>
+ 					<br>
+ 					<label><b>G-AIRMET</b></label> 
+						<input type="checkbox" id="gmet" name="gmet" checked>
+					<label>Start time:</label>
+	 				<select class="tbox" id="stim">
+						 <option value="00:00">00:00</option>
+						 <option value="03:00">03:00</option>
+						 <option value="06:00">06:00</option>
+						 <option value="09:00">09:00</option>
+						 <option value="15:00">15:00</option>
+						 <option value="18:00">18:00</option>
+						 <option value="21:00">21:00</option>
+					</select> 
+					<br>
+ 					<label><b>AIRMET</b></label> 
+						<input type="checkbox" id="amet" name="amet" checked>
+					<label><b>&nbsp&nbsp&nbsp&nbspSIGMET</b></label> 
+						<input type="checkbox" id="smet" name="smet" checked>
+					<label><b>&nbsp&nbsp&nbsp&nbsp&nbspCWA </b></label> 
+						<input type="checkbox" id="cwa" name="cwa" checked>
+			
+					<div class="slidecontainer">
+						<input type="range" min="-1000" max="65000" value="-1000" 
+ 							class="slider" id="gmsliderRange">
+ 							Altitude: <span id="slidealt"></span> 
+						<br>
+ 						<label><b>NEXRAD</b></label> 
+							<input type="checkbox" id="nrad" name="nrad" checked>				
+					</div>
+					<div>
+						<select class="box" id="prodid">
+							<option value="1">CONUS NEXRAD</option>
+							<option value="2">Regional NEXRAD</option>
+							<option value="3">Icing</option>
+							<option value="4">Turbulence</option>
+							<option value="5">Cloud Tops</option>
+							<option value="6">Lightning</option>
+						</select>
+			
+						<select class="box" id="altrad">
+							<option value="0" selected>0 ft</option>
+							<option value="2000" > 2,000 ft</option>
+							<option value="4000" > 4,000 ft</option>
+							<option value="6000" > 6,000 ft</option>
+							<option value="8000" > 8,000 ft</option>
+ 							<option value="10000">10,000 ft</option>
+ 							<option value="12000">12,000 ft</option>
+							<option value="14000">14,000 ft</option>
+							<option value="16000">16,000 ft</option>
+							<option value="18000">18,000 ft</option>
+							<option value="20000">20,000 ft</option>
+							<option value="22000">22,000 ft</option>
+							<option value="24000">24,000 ft</option>
+						</select>
+					</div>
+				</div>
+			</div>
+			
 			<div id="table-wrapper">
 				<div id="table-scroll">		
 					<table style="width:90%">
 						<tr>
 							<th id="m1" align="left">Station</th>
- 		 				<td id='f1'></td>
-						</tr> <tr>
- 						<th id="m2" align="left">Location</th>
- 						<td id='f2'></td></tr>
+ 		 					<td id='f1'></td>
+						</tr>
 						<tr>
-				 			<th id="m3" align="left">Time</th>
- 						<td id='f3'></td>
-		 			</tr> <tr>
-							<th id="m4" align="left">Temp</th>
- 						<td id='f4'></td>
- 				 		</tr> <tr>
- 						<th id="m5" align="left">Wind Speed</th>
- 		 					<td id='f5'></td></tr>
- 					<tr>
-							<th id="m6" align="left">Visibility</th>
- 						<td id='f6'><a href="#"></a></td>
+							<th id="m2" align="left">Location</th>
+ 							<td id='f2'></td>
+ 						</tr>
+						<tr>
+							<th id="m3" align="left">Time</th>
+ 							<td id='f3'></td>
+		 				</tr>
+		 				<tr>
+		 					<th id="m4" align="left">Temp</th>
+ 							<td id='f4'></td>
+ 				 		</tr>
+ 				 		<tr>
+ 				 			<th id="m5" align="left">Wind Speed</th>
+ 		 					<td id='f5'></td>
+ 		 				</tr>
+ 		 				<tr>
+ 		 					<th id="m6" align="left">Visibility</th>
+ 							<td id='f6'><a href="#"></a></td>
 					</table>
 				</div>
 			</div>
-
-			<div>
-				<label>Start time:</label>
-				<select class="tbox" id="stim">
-					 <option value="00:00">00:00</option>
-					 <option value="03:00">03:00</option>
-					 <option value="06:00">06:00</option>
-					 <option value="09:00">09:00</option>
-					 <option value="15:00">15:00</option>
-					 <option value="18:00">18:00</option>
-					 <option value="21:00">21:00</option>
-				</select>
-			</div>
-			<br>
-			<div id="ckboxes">
-				<div class="checkboxes">		
- 					<label><b>G-AIRMET</b></label> 
-						<input type="checkbox" id="gmet" name="gmet" checked>
- 					<label><b>AIRMET</b></label> 
-						<input type="checkbox" id="amet" name="amet" checked>
-					<br>
-					<label><b>&nbsp&nbsp&nbsp&nbspSIGMET</b></label> 
-						<input type="checkbox" id="smet" name="smet" checked>
-					<label><b>&nbsp&nbsp&nbsp&nbsp&nbspCWA </b></label> 
-						<input type="checkbox" id="cwa" name="cwa" checked>
-				</div>	
-	 		</div>
-			
-			<div class="slidecontainer">
-				<input type="range" min="-1000" max="65000" value="-1000" 
- 					class="slider" id="gmsliderRange">
- 					Altitude: <span id="slidealt"></span> 
-			</div>	
-		
-			<div id="ckboxes">
-				<div class="checkboxes">		
- 					<label><b>NEXRAD</b></label> 
-						<input type="checkbox" id="nrad" name="nrad" checked>				
-				</div>
-			
-				<div>
-					<select class="box" id="prodid">
-						<option value="1">CONUS NEXRAD</option>
-						<option value="2">Regional NEXRAD</option>
-						<option value="3">Icing</option>
-						<option value="4">Turbulence</option>
-						<option value="5">Cloud Tops</option>
-						<option value="6">Lightning</option>
-					</select>
-			
-					<select class="box" id="altrad">
-						<option value="0" selected>0 ft</option>
-						<option value="2000">2,000 ft</option>
-						<option value="4000">4,000 ft</option>
-						<option value="6000">6,000 ft</option>
-						<option value="8000">8,000 ft</option>
- 						<option value="10000">10,000 ft</option>
- 						<option value="12000">12,000 ft</option>
-						<option value="14000">14,000 ft</option>
-						<option value="16000">16,000 ft</option>
-						<option value="18000">18,000 ft</option>
-						<option value="20000">20,000 ft</option>
-						<option value="22000">22,000 ft</option>
-						<option value="24000">24,000 ft</option>
-					</select>
-				</div>
-			</div>
 		</div>
-	</div>
 	<div id="footer"></div>
 </div>
 
