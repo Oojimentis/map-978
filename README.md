@@ -17,26 +17,43 @@ and Leaflet Realtime (https://github.com/perliedman/leaflet-realtime)
 ## Screenshots
 
 CONUS:
-![conus](https://user-images.githubusercontent.com/60933475/114481337-5a93b880-9bd2-11eb-8ac9-e6aedc3dcf35.png)
-
-Turbulence:
-![turb](https://user-images.githubusercontent.com/60933475/114481364-67181100-9bd2-11eb-8b1e-0c2444922202.png)
-
-Cloud Tops:
-![cloud](https://user-images.githubusercontent.com/60933475/114481385-6ed7b580-9bd2-11eb-9bf4-80d632e3e41f.png)
-
-AIRMET with text report details:
-![airmet](https://user-images.githubusercontent.com/60933475/114482518-b2cbba00-9bd4-11eb-8602-59d221f4840d.png)
-
-TAF details:
-![taf](https://user-images.githubusercontent.com/60933475/114482549-bb23f500-9bd4-11eb-8777-2d5ca843c77a.png)
-
-G-AIRMET:
-![g-airmet](https://user-images.githubusercontent.com/60933475/114482564-c414c680-9bd4-11eb-8c4a-b399f0174723.png)
-
-PIREP:
-![pirep](https://user-images.githubusercontent.com/60933475/114482593-d262e280-9bd4-11eb-9482-3f1266b9b591.png)
+![conus](https://user-images.githubusercontent.com/60933475/115439241-5bcd7280-a1dc-11eb-825f-672ffd8db74a.png)
 
 METAR:
-![metar](https://user-images.githubusercontent.com/60933475/114482662-f1fa0b00-9bd4-11eb-94d8-936185d87a0c.png)
+![metar](https://user-images.githubusercontent.com/60933475/115439270-61c35380-a1dc-11eb-86d3-20b9bd1d9c2f.png)
 
+Regional NEXRAD:
+![regional](https://user-images.githubusercontent.com/60933475/115440181-748a5800-a1dd-11eb-8261-b5679b37154f.png)
+
+Turbulence:
+![turb](https://user-images.githubusercontent.com/60933475/115439584-bcf54600-a1dc-11eb-8514-caa212ac9a9e.png)
+
+TAF with report details:
+![taf](https://user-images.githubusercontent.com/60933475/115439629-c8487180-a1dc-11eb-8ccd-2ea1c2ff62d6.png)
+
+G-AIRMET:
+![gairmet](https://user-images.githubusercontent.com/60933475/115439650-cda5bc00-a1dc-11eb-9da4-0fcb88617b52.png)
+
+Cloud Tops:
+![cloud](https://user-images.githubusercontent.com/60933475/115439660-d26a7000-a1dc-11eb-9e8b-3bf2788c7afa.png)
+
+AIRMET with text report details:
+![airmet](https://user-images.githubusercontent.com/60933475/115440209-7bb16600-a1dd-11eb-85b4-1a356883701d.png)
+
+SIGMET:
+![sigmet](https://user-images.githubusercontent.com/60933475/115440220-7fdd8380-a1dd-11eb-9c94-98f379eae496.png)
+
+NOTAM with text report:
+![notam](https://user-images.githubusercontent.com/60933475/115440251-8a981880-a1dd-11eb-944d-3964b14e0691.png)
+
+Icing:
+![ice](https://user-images.githubusercontent.com/60933475/115440279-8ff56300-a1dd-11eb-9966-06bf78162da7.png)
+
+PIREP:
+![pirep](https://user-images.githubusercontent.com/60933475/115440352-a4396000-a1dd-11eb-9b21-fa290d17db32.png)
+
+SIGMET:
+![sigmet](https://user-images.githubusercontent.com/60933475/115440368-a8fe1400-a1dd-11eb-92b3-5c342503bf6a.png)
+
+CWA:
+![cwa](https://user-images.githubusercontent.com/60933475/115440382-ac919b00-a1dd-11eb-858e-ade59579797f.png)
