@@ -1,23 +1,23 @@
 var serv_port = document.getElementById('port').value;
 var url1 = "http://localhost:";
-var url = url1.concat(serv_port,"/sql?q=");
+var url = url1.concat(serv_port, "/sql?q=");
 var url3_rad = " ";
 var url_nx = " ";
 
 window.onload = onPageLoad();
 
 function onPageLoad() {
-	document.getElementById("gmet").checked = true;
-	document.getElementById("meta").checked = true;
-	document.getElementById("amet").checked = true;
-	document.getElementById("smet").checked = true;
-	document.getElementById("cwa").checked = true;
+	document.getElementById("gmet").checked  = true;
+	document.getElementById("meta").checked  = true;
+	document.getElementById("amet").checked  = true;
+	document.getElementById("smet").checked  = true;
+	document.getElementById("cwa").checked   = true;
 	document.getElementById("notam").checked = true;
-	document.getElementById("taf").checked = true;
+	document.getElementById("taf").checked   = true;
 	document.getElementById("pirep").checked = true;
-	document.getElementById("nrad").checked = true;
+	document.getElementById("nrad").checked  = true;
 
-	document.getElementById("gmsliderRange").step = "1000";
+	document.getElementById("gmsliderRange").step  = "1000";
 	document.getElementById("gmsliderRange").value = "0";
 }
 
@@ -31,7 +31,7 @@ function right(str, chr) {
 
 var map = L.map('map', {preferCanvas: true}).setView([36.0, -75.26], 5); 
 
-var osm=new L.tileLayer('http://{s}.tile.osm.org/{z}/{x}/{y}.png',{ 
+var osm=new L.tileLayer('http://{s}.tile.osm.org/{z}/{x}/{y}.png', { 
 	attribution: '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'});
 var Esri_WorldImagery = L.tileLayer('http://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
 	attribution: 'Tiles &copy; Esri &mdash; Source: Esri, i-cubed, USDA, USGS, AEX, GeoEye, Getmapping, Aerogrid, IGN, IGP, UPR-EGP, and the GIS User Community'
@@ -58,13 +58,13 @@ function getColor(colf) {
 			colf >=	16000 ? '#AD9E8A':
 			colf >=	12000 ? '#B49B81':
 			colf >=	10000 ? '#BB9877':
-			colf >=	9000 ? '#C2956E':
-			colf >=	8000 ? '#C99264':
-			colf >=	7000 ? '#D08E5B':
-			colf >=	6000 ? '#D78B51':
-			colf >=	4000 ? '#DE8848':
-			colf >=	1000 ? '#E5853E':
-			colf >=	0	? '#EC8235':
+			colf >=	9000  ? '#C2956E':
+			colf >=	8000  ? '#C99264':
+			colf >=	7000  ? '#D08E5B':
+			colf >=	6000  ? '#D78B51':
+			colf >=	4000  ? '#DE8848':
+			colf >=	1000  ? '#E5853E':
+			colf >=	0	  ? '#EC8235':
 					'blue';
 }	
 
@@ -108,9 +108,9 @@ function getNexrad() {
 			break;
 	}
 	
-	var rad_pre = `SELECT  coords as geom, m.prod_id, m.intensity,m.maptime, m.block_num,m.cc \
-			FROM nexrad m INNER JOIN (SELECT max(maptime) AS mob FROM nexrad where prod_id = ${rad_prodid} ) g \
-			ON m.maptime = g.mob and m.prod_id = ${rad_prodid} and altitude = ${rad_alt}`;
+	var rad_pre = `SELECT coords AS GEOM, m.prod_id, m.intensity, m.maptime, m.block_num, m.cc \
+			FROM nexrad m INNER JOIN (SELECT MAX(maptime) AS mob FROM nexrad WHERE prod_id = ${rad_prodid}) g \
+			ON m.maptime = g.mob AND m.prod_id = ${rad_prodid} AND altitude = ${rad_alt}`;
 
 	return rad_pre;
 }	
@@ -173,7 +173,7 @@ var url_gairmet = url.concat("SELECT coords AS GEOM, rep_num, alt, ob_ele, start
 var gairmet = L.realtime({
 	url: url_gairmet,
 	crossOrigin: true, type: 'json'
-	}, {interval: 12 * 1000,
+	}, {interval: 16 * 2000,
 		style: function(feature){
 			kolor = getColor(feature.properties.alt);
 			return {color: '#5D8C8C', weight: 2, fillColor: kolor, opacity: 1.0, fillOpacity: 0.2};
@@ -203,9 +203,9 @@ var gairmet = L.realtime({
 			layer.on('mouseout', function(e){
 				gairmet.start();})		
 			},
-			filter: function(feature, layer) {
+			filter: function(feature, layer){
 				var rangeslider = document.getElementById("gmsliderRange");
-				var output = document.getElementById("demo");
+				var output = document.getElementById("slidealt");
 				if (rangeslider.value == -1000) 
 					output.innerHTML = "All"
 				else 
@@ -229,7 +229,7 @@ var url_airmet = url.concat("SELECT coords AS GEOM, g.rep_num, alt, ob_ele, text
 var	airmet = L.realtime({
 	url: url_airmet,
 	crossOrigin: true, type: 'json'
-	}, {interval: 19 * 1020,
+	}, {interval: 19 * 2020,
 		style: function(feature){
 			kolor = getColor(feature.properties.alt);
 			return {color: '#00cccc', weight: 2, fillColor: kolor, opacity: 1.0, fillOpacity: 0.2};
@@ -260,9 +260,9 @@ var	airmet = L.realtime({
 			layer.on('mouseout', function(e){
 				airmet.start();})		
 			},
-			filter: function(feature,layer) {
+			filter: function(feature, layer) {
 				var rangeslider = document.getElementById("gmsliderRange");
-				var output = document.getElementById("demo");
+				var output = document.getElementById("slidealt");
 				if (rangeslider.value == -1000) 
 					output.innerHTML = "All"
 				else 
@@ -284,7 +284,7 @@ var url_sigmet = url.concat("SELECT coords AS GEOM, g.rep_num, alt, ob_ele, text
 var	sigmet = L.realtime({
 	url: url_sigmet,
 	crossOrigin: true, type: 'json'
-	}, {interval: 15 * 1030,
+	}, {interval: 25 * 3030,
 		style: function(feature){
 			kolor = getColor(feature.properties.alt);
 			return {color: '#00cccc', weight: 2, fillColor: kolor, opacity: 1.0, fillOpacity: 0.2};
@@ -312,12 +312,12 @@ var	sigmet = L.realtime({
 				$('#f6').html(e.target.feature.properties.stop_date);
 				
 				sigmet.stop();});
-			layer.on('mouseout',function(e){
+			layer.on('mouseout', function(e) {
 				sigmet.start();})		
 			},
 			filter: function(feature, layer) {
 				var rangeslider = document.getElementById("gmsliderRange");
-				var output = document.getElementById("demo");
+				var output = document.getElementById("slidealt");
 				if (rangeslider.value == -1000) 
 					output.innerHTML = "All"
 				else 
@@ -340,7 +340,7 @@ var lays= new L.FeatureGroup();
 var	nrad = L.realtime({
 	url: url3_rad,
  	crossOrigin: true, type: 'json'
-	}, {interval: 7 * 1000,
+	}, {interval: 17 * 1000,
 
 	getFeatureId: function(featureData){ 
 	return featureData.properties.block_num + featureData.properties.cc;
@@ -355,11 +355,11 @@ var	nrad = L.realtime({
 	var yDifference = height / 2;
 	var southWest = L.point((currentPoint.x - xDifference), (currentPoint.y - yDifference));
 	var northEast = L.point((currentPoint.x + xDifference), (currentPoint.y + yDifference));
-	var bounds = L.latLngBounds(map.containerPointToLatLng(southWest),map.containerPointToLatLng(northEast));
+	var bounds = L.latLngBounds(map.containerPointToLatLng(southWest), map.containerPointToLatLng(northEast));
 
 	golor = getColorInt(feature.properties.intensity);
 	var rectOptions = {fillColor: golor, fillOpacity: 0.2, weight: 0}
-	radar = L.rectangle(bounds,rectOptions);
+	radar = L.rectangle(bounds, rectOptions);
 
 	lays.addLayer(radar);
 	map.addLayer(lays);
@@ -376,7 +376,7 @@ var url3_cwa = url.concat("SELECT coords AS GEOM, g.rep_num, alt, ob_ele, text_d
 var	cwa = L.realtime({
 	url: url3_cwa,
 	crossOrigin: true, type: 'json'  
-	}, {interval: 10 * 1030,
+	}, {interval: 50 * 9000,
 		style: function(feature){
 			kolor = getColor(feature.properties.alt);
 			return {color: '#00cccc', weight: 2, fillColor: kolor, opacity: 1.0, fillOpacity: 0.2};
@@ -409,7 +409,7 @@ var	cwa = L.realtime({
 			},
 			filter: function(feature,layer) {
 				var rangeslider = document.getElementById("gmsliderRange");
-				var output = document.getElementById("demo");
+				var output = document.getElementById("slidealt");
 				if (rangeslider.value == -1000) 
 					output.innerHTML = "All"
 				else 
@@ -423,7 +423,6 @@ var	cwa = L.realtime({
 			}
 		}).addTo(map);
 
-
 // ** Circle
 var url_circle = url.concat("SELECT bot AS GEOM, start_date, stop_date, rep_num, r_lng, r_lat, alt_top, \
 					alt_bot, alpha 	FROM circles");
@@ -431,7 +430,7 @@ var url_circle = url.concat("SELECT bot AS GEOM, start_date, stop_date, rep_num,
 var	cir = L.realtime({
 	url: url_circle,
 	crossOrigin: true, type: 'json'
-	}, {interval: 50 * 1030,
+	}, {interval: 60 * 7030,
 		getFeatureId: function(featureData){
 		return featureData.properties.rep_num;
 		},
@@ -462,14 +461,14 @@ var wxIcon = L.icon({iconUrl: 'therm.ico', iconSize: [20,20]});
 
 var url_metar = url.concat("SELECT s.coords AS GEOM, m.stn_call, s.stn_loc, ob_date, temp, windsp, \
 					winddir, altimeter, visby, dewp \
-					FROM metar m INNER JOIN (SELECT stn_call, max(ob_date) AS mob FROM metar \
+					FROM metar m INNER JOIN (SELECT stn_call, MAX(ob_date) AS mob FROM metar \
 					GROUP BY stn_call) g ON m.stn_call = g.stn_call AND m.ob_date = g.mob \
 					INNER JOIN stations s ON m.stn_call = s.stn_call");
 
 metar = L.realtime({
 	url: url_metar,
 	crossOrigin: true, type: 'json'
-	}, {interval: 17 * 1000,
+	}, {interval: 17 * 2002,
 		getFeatureId: function(featureData) {
 		return featureData.properties.stn_call;
 		},
@@ -499,7 +498,7 @@ metar = L.realtime({
 // ** NOTAM 
 var wxIcon2 = L.icon({iconUrl: 'wx2.ico', iconSize: [15,15]});
 
-var url_notam = url.concat("SELECT s.coords AS GEOM, n.stn_call, stn_loc, n.rep_num, text_data, start_date,stop_date \
+var url_notam = url.concat("SELECT s.coords AS GEOM, n.stn_call, stn_loc, n.rep_num, text_data, start_date, stop_date \
 					FROM sigairmet n LEFT JOIN graphics g ON n.prod_id = g.prod_id \
 					AND n.rep_num = g.rep_num \
 					JOIN stations s ON n.stn_call = s.stn_call WHERE n.prod_id = 8");
@@ -507,7 +506,7 @@ var url_notam = url.concat("SELECT s.coords AS GEOM, n.stn_call, stn_loc, n.rep_
 notam = L.realtime({
 	url: url_notam,
 	crossOrigin: true, type: 'json'
-	}, {interval: 19 * 1000,
+	}, {interval: 19 * 2004,
 		getFeatureId: function(featureData) {
 		return featureData.properties.stn_call;
 		},
@@ -542,7 +541,7 @@ var url_taf = url.concat("SELECT coords AS GEOM, t.stn_call, stn_loc, issued, cu
 taf = L.realtime({
 	url: url_taf,
 	crossOrigin: true, type: 'json'
-	}, {interval: 14 * 1000,
+	}, {interval: 14 * 2005,
 		getFeatureId: function(featureData) {
 		return featureData.properties.stn_call;
 		},
@@ -579,7 +578,7 @@ var wxIcon4
 pirep = L.realtime({
 	url: url_pirep,
 	crossOrigin: true, type: 'json'
-	}, {interval: 19 * 1060,
+	}, {interval: 19 * 3060,
 		getFeatureId: function(featureData) {
 		return featureData.properties.stn_call;
 		},
@@ -695,7 +694,7 @@ document.getElementById("stim").onchange = function()
 	{gairmet.update()}		
 
 document.getElementById("gmsliderRange").onchange = function()
-	{gairmet.update(),airmet.update(),sigmet.update(),cwa.update()}
+	{gairmet.update(), airmet.update(), sigmet.update(), cwa.update()}
 
 document.getElementById("prodid").onchange = function() {
 	var rprod_str = document.getElementById('prodid').value;
