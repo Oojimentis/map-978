@@ -15,7 +15,6 @@ function onPageLoad() {
 	document.getElementById("notam").checked = true;
 	document.getElementById("taf").checked   = true;
 	document.getElementById("pirep").checked = true;
-	document.getElementById("nrad").checked  = true;
 
 	document.getElementById("gmsliderRange").step  = "1000";
 	document.getElementById("gmsliderRange").value = "0";
@@ -75,15 +74,19 @@ function getNexrad() {
 	var rad_prod = parseInt(rad_prod_str);
 	var rad_alt = parseInt(rad_alt_str);
 
-	var rad_prodid = 63
+	var rad_prodid = 0
 
 	switch(rad_prod) {
+		case 0:
+		   	rad_prodid = 0;
+			rad_alt = 0;
+			break;
 		case 1:
-			rad_prodid = 64
+			rad_prodid = 64;
 			rad_alt = 0;
 			break;
 		case 2:
-			rad_prodid = 63
+			rad_prodid = 63;
 			rad_alt = 0;
 			break;		
 		case 3:
@@ -340,7 +343,7 @@ var lays= new L.FeatureGroup();
 var	nrad = L.realtime({
 	url: url3_rad,
  	crossOrigin: true, type: 'json'
-	}, {interval: 17 * 1000,
+	}, {interval: 55 * 1000,
 
 	getFeatureId: function(featureData){ 
 	return featureData.properties.block_num + featureData.properties.cc;
@@ -569,7 +572,7 @@ taf = L.realtime({
 
 // ** PIREP
 var url_pirep = url.concat("SELECT coords AS GEOM, p.stn_call, stn_loc, rep_type, fl_lev, ac_type, \
-					turbulence, remarks, location \
+					turbulence, remarks, location, cloud, weather, temperature, wind_spd_dir, icing, rep_time \
 					FROM pirep p INNER JOIN (SELECT stn_call, MAX(rep_time) AS mx FROM pirep \
 					GROUP BY stn_call) g ON p.stn_call = g.stn_call AND p.rep_time = g.mx \
 					INNER JOIN stations s ON p.stn_call = s.stn_call");
@@ -597,20 +600,20 @@ pirep = L.realtime({
 
 			marker.on('click', function(e) {
 				$("#m1").html("Station");
-				$("#m2").html("Location");
-				$("#m3").html("Flvl/AC Type");
-				$("#m4").html("Turbulence");
-				$("#m5").html("Location");
+				$("#m2").html("Location" + '<br>' + "Time: " + e.target.feature.properties.rep_time + "z");
+				$("#m3").html("Flt Lev:" + '<br>' + "AC Type:");
+				$("#m4").html("Turbulence:" + '<br>' + "Icing:");
+				$("#m5").html("WX");
 				$("#m6").html("Remarks");
 				if (feature.properties.rep_type == "Urgent Report")
 					$('#f1').html(e.target.feature.properties.stn_call + " (*Urgent PIREP*)");
 				else
 					$('#f1').html(e.target.feature.properties.stn_call + " (PIREP)");
 
-				$('#f2').html(e.target.feature.properties.stn_loc);
-				$('#f3').html("FL: " + e.target.feature.properties.fl_lev + "  AC: " + e.target.feature.properties.ac_type);
-				$('#f4').html(e.target.feature.properties.turbulence);
-				$('#f5').html(e.target.feature.properties.location);
+				$('#f2').html(e.target.feature.properties.stn_loc + "<br><i>Loc: " + e.target.feature.properties.location);
+				$('#f3').html("<i>Flt lev: " + e.target.feature.properties.fl_lev + "<br><i>a/c: " + e.target.feature.properties.ac_type);
+				$('#f4').html("<i>Turb: " + e.target.feature.properties.turbulence + "<br><i>Ice: " + e.target.feature.properties.icing);
+				$('#f5').html("<i>Cloud: " +e.target.feature.properties.cloud + "<br><i>Temp: " + e.target.feature.properties.temperature + "<br><i>Wind: " + e.target.feature.properties.wind_spd_dir + "<br><i>WX: " + e.target.feature.properties.weather);
 				$('#f6').html(e.target.feature.properties.remarks);
 			});
 			marker.addTo(map);
@@ -675,23 +678,16 @@ document.querySelector("input[name = cwa]").addEventListener('change', function(
 		map.removeLayer(cwa), cwa.stop()}
 })
 
-document.querySelector("input[name = nrad]").addEventListener('change', function() {
-	if(this.checked) {
-		lays.clearLayers();
-		url_nx = getNexrad();
-		url3_rad = url.concat(url_nx);
-		nrad.start();
-		nrad.setUrl(url3_rad);
-		nrad.update();
-		lays.addLayer(radar);
-		map.addLayer(lays)}
-	else {
-		lays.clearLayers();
-		nrad.stop();} 
-})
-
 document.getElementById("stim").onchange = function()
 	{gairmet.update()}		
+		
+document.getElementById("altrad").onchange = function()
+	{lays.clearLayers();
+		url_nx = getNexrad();
+		url3_rad = url.concat(url_nx);
+		nrad.setUrl(url3_rad);
+		lays.addLayer(radar);
+		map.addLayer(lays)}	
 
 document.getElementById("gmsliderRange").onchange = function()
 	{gairmet.update(), airmet.update(), sigmet.update(), cwa.update()}
@@ -719,6 +715,12 @@ document.getElementById("prodid").onchange = function() {
 			document.getElementById("altrad").disabled = true;
 			break;
 	}
+	lays.clearLayers();
+		url_nx = getNexrad();
+		url3_rad = url.concat(url_nx);
+		nrad.setUrl(url3_rad);
+		lays.addLayer(radar);
+		map.addLayer(lays)
 }
 
 //Add layer control
