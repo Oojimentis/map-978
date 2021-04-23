@@ -50,7 +50,7 @@ Icing:
 ![ice](https://user-images.githubusercontent.com/60933475/115440279-8ff56300-a1dd-11eb-9966-06bf78162da7.png)
 
 PIREP:
-![pirep](https://user-images.githubusercontent.com/60933475/115440352-a4396000-a1dd-11eb-9b21-fa290d17db32.png)
+![pirep](https://user-images.githubusercontent.com/60933475/115805185-75281780-a3b2-11eb-9f22-a96359cbf2fc.png)
 
 SIGMET:
 ![sigmet](https://user-images.githubusercontent.com/60933475/115440368-a8fe1400-a1dd-11eb-92b3-5c342503bf6a.png)
