@@ -52,13 +52,6 @@ Icing:
 PIREP:
 ![pirep](https://user-images.githubusercontent.com/60933475/115440352-a4396000-a1dd-11eb-9b21-fa290d17db32.png)
 
-<<<<<<< HEAD
-METAR:
-![metar](https://user-images.githubusercontent.com/60933475/114482662-f1fa0b00-9bd4-11eb-94d8-936185d87a0c.png)
-=======
-SIGMET:
-![sigmet](https://user-images.githubusercontent.com/60933475/115440368-a8fe1400-a1dd-11eb-92b3-5c342503bf6a.png)
-
 CWA:
 ![cwa](https://user-images.githubusercontent.com/60933475/115440382-ac919b00-a1dd-11eb-858e-ade59579797f.png)
 >>>>>>> map_nodejs
