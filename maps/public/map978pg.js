@@ -3,6 +3,10 @@ var url1 = "http://localhost:";
 var url = url1.concat(serv_port, "/sql?q=");
 var url3_rad = " ";
 var url_nx = " ";
+var turblegend;
+var icelegend;
+var cloudlegend;
+var nexlegend;
 
 window.onload = onPageLoad();
 
@@ -78,34 +82,45 @@ function getNexrad() {
 
 	switch(rad_prod) {
 		case 0:
+//			map.removeControl(nexlegend);
+//			map.removeControl(turbegend);
+//			map.removeControl(icelegend);
+//			map.removeControl(lightlegend);
+//			map.removeControl(cloudlegend);
 		   	rad_prodid = 0;
 			rad_alt = 0;
 			break;
 		case 1:
+			nexlegend.addTo(map);
 			rad_prodid = 64;
 			rad_alt = 0;
 			break;
 		case 2:
+			nexlegend.addTo(map);
 			rad_prodid = 63;
 			rad_alt = 0;
 			break;		
 		case 3:
+			icelegend.addTo(map);
 			if (rad_alt > 16000) 
 				rad_prodid = 71;
 			else
 				rad_prodid = 70;
 			break;
 		case 4:
+			turblegend.addTo(map);
 			if (rad_alt > 16000) 
 				rad_prodid = 91;
 			else
 				rad_prodid = 90;
 			break;
 		case 5:
+			cloudlegend.addTo(map);
 			rad_prodid = 84;
 			rad_alt = 0;
 			break;
 		case 6:
+			lightlegend.addTo(map);
 			rad_prodid = 103;
 			rad_alt = 0;
 			break;
@@ -459,6 +474,100 @@ var	cir = L.realtime({
 		}
 	}).addTo(map);
 
+turblegend = L.control({ position: "topright" });
+
+turblegend.onAdd = function(mop) {
+  var div = L.DomUtil.create("div", "legend");
+  div.innerHTML += "<h4>Turbulence</h4>";
+  div.innerHTML += '<i style="background: #8C8C74"></i><span>EDR  7-13</span><br>';
+  div.innerHTML += '<i style="background: #B4C8FF"></i><span>EDR 14-20</span><br>';
+  div.innerHTML += '<i style="background: #5F87FF"></i><span>EDR 21-27</span><br>';
+  div.innerHTML += '<i style="background: #1446E6"></i><span>EDR 28-34</span><br>';
+  div.innerHTML += '<i style="background: #6EF54B"></i><span>EDR 35-41</span><br>';
+  div.innerHTML += '<i style="background: #00C300"></i><span>EDR 42-48</span><br>';
+  div.innerHTML += '<i style="background: #007300"></i><span>EDR 49-55</span><br>';
+  div.innerHTML += '<i style="background: #FFFF00"></i><span>EDR 56-62</span><br>';
+  div.innerHTML += '<i style="background: #FFB430"></i><span>EDR 63-69</span><br>';
+  div.innerHTML += '<i style="background: #FA7D00"></i><span>EDR 70-76</span><br>';
+  div.innerHTML += '<i style="background: #E62D00"></i><span>EDR 77-83</span><br>';
+  div.innerHTML += '<i style="background: #AF0000"></i><span>EDR 84-90</span><br>';
+  div.innerHTML += '<i style="background: #690000"></i><span>EDR 91-97</span><br>';
+  div.innerHTML += '<i style="background: #FA00C8"></i><span>EDR >=98</span><br>';
+  div.innerHTML += '<i style="background: #9B00FA"></i><span>EDR No Data</span><br>'; 
+  return div;
+};
+
+cloudlegend = L.control({ position: "topright" });
+
+cloudlegend.onAdd = function(mop) {
+  var div = L.DomUtil.create("div", "legend");
+  div.innerHTML += "<h4>Cloud Tops</h4>";
+  div.innerHTML += '<i style="background: #8C8C74"></i><span><= 1,500ft</span><br>';
+  div.innerHTML += '<i style="background: #B4C8FF"></i><span>1,501ft-3,000ft</span><br>';
+  div.innerHTML += '<i style="background: #5F87FF"></i><span>3,001ft-4,500ft</span><br>';
+  div.innerHTML += '<i style="background: #1446E6"></i><span>4,501ft-6,00ft</span><br>';
+  div.innerHTML += '<i style="background: #6EF54B"></i><span>6,001ft-7,500ft</span><br>';
+  div.innerHTML += '<i style="background: #00C300"></i><span>7,501ft-9,000ft</span><br>';
+  div.innerHTML += '<i style="background: #007300"></i><span>9,001ft-10,500ft</span><br>';
+  div.innerHTML += '<i style="background: #FFFF00"></i><span>10,501ft-12,000ft</span><br>';
+  div.innerHTML += '<i style="background: #FFB430"></i><span>12,001ft-13,500ft</span><br>';
+  div.innerHTML += '<i style="background: #FA7D00"></i><span>13,501ft-15,000ft</span><br>';
+  div.innerHTML += '<i style="background: #E62D00"></i><span>15,001ft-18,000ft</span><br>';
+  div.innerHTML += '<i style="background: #AF0000"></i><span>18,001ft-21,000ft</span><br>';
+  div.innerHTML += '<i style="background: #690000"></i><span>21,001ft-24,000ft</span><br>';
+  div.innerHTML += '<i style="background: #FA00C8"></i><span>>24,000ft</span><br>';
+  div.innerHTML += '<i style="background: #9B00FA"></i><span>No Data</span><br>'; 
+  return div;
+};
+
+icelegend = L.control({ position: "topright" });
+
+icelegend.onAdd = function(mop) {
+  var div = L.DomUtil.create("div", "legend");
+  div.innerHTML += "<h4>Icing</h4>";
+  div.innerHTML += '<i style="background: #8C8C74"></i><span>Trace</span><br>';
+  div.innerHTML += '<i style="background: #B4C8FF"></i><span>Light</span><br>';
+  div.innerHTML += '<i style="background: #5F87FF"></i><span>Moderate</span><br>';
+  div.innerHTML += '<i style="background: #1446E6"></i><span>Severe</span><br>';
+  div.innerHTML += '<i style="background: #6EF54B"></i><span>Heavy</span><br>';
+  div.innerHTML += '<i style="background: #00C300"></i><span>Reserved</span><br>';
+  div.innerHTML += '<i style="background: #007300"></i><span>No Data</span><br>';
+ 
+  return div;
+};
+
+lightlegend = L.control({ position: "topright" });
+
+lightlegend.onAdd = function(mop) {
+  var div = L.DomUtil.create("div", "legend");
+  div.innerHTML += "<h4>Lightning</h4>";
+  div.innerHTML += '<i style="background: #8C8C74"></i><span>1 Strike</span><br>';
+  div.innerHTML += '<i style="background: #B4C8FF"></i><span>2 Strikes</span><br>';
+  div.innerHTML += '<i style="background: #5F87FF"></i><span>3-5 Strikes</span><br>';
+  div.innerHTML += '<i style="background: #1446E6"></i><span>6-10 Strikes</span><br>';
+  div.innerHTML += '<i style="background: #6EF54B"></i><span>11-15 Strikes</span><br>';
+  div.innerHTML += '<i style="background: #00C300"></i><span>>15 Strikes</span><br>';
+  div.innerHTML += '<i style="background: #007300"></i><span>No Data</span><br>';
+ 
+  return div;
+};
+
+nexlegend = L.control({ position: "topright" });
+
+nexlegend.onAdd = function(mop) {
+  var div = L.DomUtil.create("div", "legend");
+  div.innerHTML += "<h4>NEXRAD</h4>";
+  div.innerHTML += '<i style="background: #8C8C74"></i><span>None</span><br>';
+  div.innerHTML += '<i style="background: #B4C8FF"></i><span>Light</span><br>';
+  div.innerHTML += '<i style="background: #5F87FF"></i><span>Light to Moderate</span><br>';
+  div.innerHTML += '<i style="background: #1446E6"></i><span>Moderate to Heavy</span><br>';
+  div.innerHTML += '<i style="background: #6EF54B"></i><span>Heavy</span><br>';
+  div.innerHTML += '<i style="background: #00C300"></i><span>Very Heavy</span><br>';
+  div.innerHTML += '<i style="background: #007300"></i><span>Very Heavy+Hail</span><br>';
+ 
+  return div;
+};
+
 // ** METAR 
 var wxIcon = L.icon({iconUrl: 'therm.ico', iconSize: [20,20]});
 
@@ -637,9 +746,9 @@ document.querySelector("input[name = amet]").addEventListener('change', function
 })
 
 document.querySelector("input[name = meta]").addEventListener('change', function() {
-	if(this.checked) {
+	if(this.checked) { 
 		map.addLayer(metar), metar.start()}
-	else {
+	else { 
 		map.removeLayer(metar), metar.stop()}
 })
 
@@ -695,6 +804,12 @@ document.getElementById("gmsliderRange").onchange = function()
 document.getElementById("prodid").onchange = function() {
 	var rprod_str = document.getElementById('prodid').value;
 	var rprod = parseInt(rprod_str);
+	map.removeControl(nexlegend);
+	map.removeControl(turblegend);
+	map.removeControl(icelegend);
+	map.removeControl(lightlegend);
+	map.removeControl(cloudlegend);
+
 	switch(rprod) {
 		case 1:
 			document.getElementById("altrad").disabled = true;
