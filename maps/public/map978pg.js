@@ -82,11 +82,6 @@ function getNexrad() {
 
 	switch(rad_prod) {
 		case 0:
-//			map.removeControl(nexlegend);
-//			map.removeControl(turbegend);
-//			map.removeControl(icelegend);
-//			map.removeControl(lightlegend);
-//			map.removeControl(cloudlegend);
 		   	rad_prodid = 0;
 			rad_alt = 0;
 			break;
@@ -192,16 +187,16 @@ var gairmet = L.realtime({
 	url: url_gairmet,
 	crossOrigin: true, type: 'json'
 	}, {interval: 16 * 2000,
-		style: function(feature){
+		style: function(feature) {
 			kolor = getColor(feature.properties.alt);
 			return {color: '#5D8C8C', weight: 2, fillColor: kolor, opacity: 1.0, fillOpacity: 0.2};
 		},
-		getFeatureId: function(featureData){
+		getFeatureId: function(featureData) {
 			return featureData.properties.rep_num;
 		},
-		onEachFeature: function(feature, layer){
+		onEachFeature: function(feature, layer) {
 			layer.bindTooltip('G-AIRMET: Alt '+ feature.properties.alt + '<br>' + feature.properties.ob_ele);
-			layer.on('click', function(e){
+			layer.on('click', function(e) {
 				layer.setStyle({color: 'yellow', opacity: 0.8, fillColor: 'yellow', fillOpacity: 0.5});
 				$("#m1").html("Report");
 				$("#m2").html("Altitude");					
@@ -218,10 +213,10 @@ var gairmet = L.realtime({
 				$('#f6').html(e.target.feature.properties.stop_date);
 
 				gairmet.stop();});
-			layer.on('mouseout', function(e){
+			layer.on('mouseout', function(e) {
 				gairmet.start();})		
 			},
-			filter: function(feature, layer){
+			filter: function(feature, layer) {
 				var rangeslider = document.getElementById("gmsliderRange");
 				var output = document.getElementById("slidealt");
 				if (rangeslider.value == -1000) 
@@ -248,16 +243,16 @@ var	airmet = L.realtime({
 	url: url_airmet,
 	crossOrigin: true, type: 'json'
 	}, {interval: 19 * 2020,
-		style: function(feature){
+		style: function(feature) {
 			kolor = getColor(feature.properties.alt);
 			return {color: '#00cccc', weight: 2, fillColor: kolor, opacity: 1.0, fillOpacity: 0.2};
 		},
-		getFeatureId: function(featureData){
+		getFeatureId: function(featureData) {
 			return featureData.properties.rep_num;
 		},
 		onEachFeature: function(feature, layer) {
 			layer.bindTooltip('AIRMET: Alt ' + feature.properties.alt);
-			layer.on('click', function(e){
+			layer.on('click', function(e) {
 				layer.setStyle({fillColor: 'yellow', fillOpacity: 0.5});
 
 				$("#m1").html("Report");
@@ -275,7 +270,7 @@ var	airmet = L.realtime({
 				$('#f6').html(e.target.feature.properties.stop_date);
 
 				airmet.stop();});
-			layer.on('mouseout', function(e){
+			layer.on('mouseout', function(e) {
 				airmet.start();})		
 			},
 			filter: function(feature, layer) {
@@ -303,16 +298,16 @@ var	sigmet = L.realtime({
 	url: url_sigmet,
 	crossOrigin: true, type: 'json'
 	}, {interval: 25 * 3030,
-		style: function(feature){
+		style: function(feature) {
 			kolor = getColor(feature.properties.alt);
 			return {color: '#00cccc', weight: 2, fillColor: kolor, opacity: 1.0, fillOpacity: 0.2};
 		},
-		getFeatureId: function(featureData){
+		getFeatureId: function(featureData) {
 			return featureData.properties.rep_num;
 		},
 		onEachFeature: function(feature, layer) {
 			layer.bindTooltip('SIGMET: Alt ' + feature.properties.alt);
-			layer.on('click', function(e){
+			layer.on('click', function(e) {
 				layer.setStyle({fillColor: 'yellow', fillOpacity: 0.5});
 
 				$("#m1").html("Report");
@@ -360,7 +355,7 @@ var	nrad = L.realtime({
  	crossOrigin: true, type: 'json'
 	}, {interval: 55 * 1000,
 
-	getFeatureId: function(featureData){ 
+	getFeatureId: function(featureData) { 
 	return featureData.properties.block_num + featureData.properties.cc;
 	},
 
@@ -395,16 +390,16 @@ var	cwa = L.realtime({
 	url: url3_cwa,
 	crossOrigin: true, type: 'json'  
 	}, {interval: 50 * 9000,
-		style: function(feature){
+		style: function(feature) {
 			kolor = getColor(feature.properties.alt);
 			return {color: '#00cccc', weight: 2, fillColor: kolor, opacity: 1.0, fillOpacity: 0.2};
 		},
-		getFeatureId: function(featureData){
+		getFeatureId: function(featureData) {
 			return featureData.properties.rep_num;
 		},
 		onEachFeature: function(feature, layer) {
 			layer.bindTooltip('CWA: Alt ' + feature.properties.alt);
-			layer.on('click', function(e){
+			layer.on('click', function(e) {
 				layer.setStyle({fillColor: 'yellow', fillOpacity: 0.5});
 
 				$("#m1").html("Report");
@@ -422,7 +417,7 @@ var	cwa = L.realtime({
 				$('#f6').html(e.target.feature.properties.stop_date);
 
 				cwa.stop();});
-			layer.on('mouseout', function(e){
+			layer.on('mouseout', function(e) {
 				cwa.start();})		
 			},
 			filter: function(feature,layer) {
@@ -449,7 +444,7 @@ var	cir = L.realtime({
 	url: url_circle,
 	crossOrigin: true, type: 'json'
 	}, {interval: 60 * 7030,
-		getFeatureId: function(featureData){
+		getFeatureId: function(featureData) {
 		return featureData.properties.rep_num;
 		},
 		pointToLayer: function(feature, latlng) {
