@@ -121,7 +121,7 @@ function getNexrad() {
 			break;
 	}
 	
-	var rad_pre = `SELECT coords AS GEOM, m.prod_id, m.intensity, m.maptime, m.block_num, m.cc \
+	var rad_pre = `SELECT coords AS GEOM, m.prod_id, m.intensity, m.maptime, m.block_num \
 			FROM nexrad m INNER JOIN (SELECT MAX(maptime) AS mob FROM nexrad WHERE prod_id = ${rad_prodid}) g \
 			ON m.maptime = g.mob AND m.prod_id = ${rad_prodid} AND altitude = ${rad_alt}`;
 
@@ -356,7 +356,7 @@ var	nrad = L.realtime({
 	}, {interval: 55 * 1000,
 
 	getFeatureId: function(featureData) { 
-	return featureData.properties.block_num + featureData.properties.cc;
+	return featureData.properties.block_num ;
 	},
 
 	pointToLayer: function(feature, latlng) {
