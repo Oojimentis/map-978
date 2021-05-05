@@ -3,6 +3,10 @@ var url1 = "http://localhost:";
 var url = url1.concat(serv_port, "/sql?q=");
 var url3_rad = " ";
 var url_nx = " ";
+var turblegend;
+var icelegend;
+var cloudlegend;
+var nexlegend;
 
 window.onload = onPageLoad();
 
@@ -15,7 +19,6 @@ function onPageLoad() {
 	document.getElementById("notam").checked = true;
 	document.getElementById("taf").checked   = true;
 	document.getElementById("pirep").checked = true;
-	document.getElementById("nrad").checked  = true;
 
 	document.getElementById("gmsliderRange").step  = "1000";
 	document.getElementById("gmsliderRange").value = "0";
@@ -75,40 +78,50 @@ function getNexrad() {
 	var rad_prod = parseInt(rad_prod_str);
 	var rad_alt = parseInt(rad_alt_str);
 
-	var rad_prodid = 63
+	var rad_prodid = 0
 
 	switch(rad_prod) {
+		case 0:
+		   	rad_prodid = 0;
+			rad_alt = 0;
+			break;
 		case 1:
-			rad_prodid = 64
+			nexlegend.addTo(map);
+			rad_prodid = 64;
 			rad_alt = 0;
 			break;
 		case 2:
-			rad_prodid = 63
+			nexlegend.addTo(map);
+			rad_prodid = 63;
 			rad_alt = 0;
 			break;		
 		case 3:
+			icelegend.addTo(map);
 			if (rad_alt > 16000) 
 				rad_prodid = 71;
 			else
 				rad_prodid = 70;
 			break;
 		case 4:
+			turblegend.addTo(map);
 			if (rad_alt > 16000) 
 				rad_prodid = 91;
 			else
 				rad_prodid = 90;
 			break;
 		case 5:
+			cloudlegend.addTo(map);
 			rad_prodid = 84;
 			rad_alt = 0;
 			break;
 		case 6:
+			lightlegend.addTo(map);
 			rad_prodid = 103;
 			rad_alt = 0;
 			break;
 	}
 	
-	var rad_pre = `SELECT coords AS GEOM, m.prod_id, m.intensity, m.maptime, m.block_num, m.cc \
+	var rad_pre = `SELECT coords AS GEOM, m.prod_id, m.intensity, m.maptime, m.block_num \
 			FROM nexrad m INNER JOIN (SELECT MAX(maptime) AS mob FROM nexrad WHERE prod_id = ${rad_prodid}) g \
 			ON m.maptime = g.mob AND m.prod_id = ${rad_prodid} AND altitude = ${rad_alt}`;
 
@@ -174,16 +187,16 @@ var gairmet = L.realtime({
 	url: url_gairmet,
 	crossOrigin: true, type: 'json'
 	}, {interval: 16 * 2000,
-		style: function(feature){
+		style: function(feature) {
 			kolor = getColor(feature.properties.alt);
 			return {color: '#5D8C8C', weight: 2, fillColor: kolor, opacity: 1.0, fillOpacity: 0.2};
 		},
-		getFeatureId: function(featureData){
+		getFeatureId: function(featureData) {
 			return featureData.properties.rep_num;
 		},
-		onEachFeature: function(feature, layer){
+		onEachFeature: function(feature, layer) {
 			layer.bindTooltip('G-AIRMET: Alt '+ feature.properties.alt + '<br>' + feature.properties.ob_ele);
-			layer.on('click', function(e){
+			layer.on('click', function(e) {
 				layer.setStyle({color: 'yellow', opacity: 0.8, fillColor: 'yellow', fillOpacity: 0.5});
 				$("#m1").html("Report");
 				$("#m2").html("Altitude");					
@@ -200,10 +213,10 @@ var gairmet = L.realtime({
 				$('#f6').html(e.target.feature.properties.stop_date);
 
 				gairmet.stop();});
-			layer.on('mouseout', function(e){
+			layer.on('mouseout', function(e) {
 				gairmet.start();})		
 			},
-			filter: function(feature, layer){
+			filter: function(feature, layer) {
 				var rangeslider = document.getElementById("gmsliderRange");
 				var output = document.getElementById("slidealt");
 				if (rangeslider.value == -1000) 
@@ -230,16 +243,16 @@ var	airmet = L.realtime({
 	url: url_airmet,
 	crossOrigin: true, type: 'json'
 	}, {interval: 19 * 2020,
-		style: function(feature){
+		style: function(feature) {
 			kolor = getColor(feature.properties.alt);
 			return {color: '#00cccc', weight: 2, fillColor: kolor, opacity: 1.0, fillOpacity: 0.2};
 		},
-		getFeatureId: function(featureData){
+		getFeatureId: function(featureData) {
 			return featureData.properties.rep_num;
 		},
 		onEachFeature: function(feature, layer) {
 			layer.bindTooltip('AIRMET: Alt ' + feature.properties.alt);
-			layer.on('click', function(e){
+			layer.on('click', function(e) {
 				layer.setStyle({fillColor: 'yellow', fillOpacity: 0.5});
 
 				$("#m1").html("Report");
@@ -257,7 +270,7 @@ var	airmet = L.realtime({
 				$('#f6').html(e.target.feature.properties.stop_date);
 
 				airmet.stop();});
-			layer.on('mouseout', function(e){
+			layer.on('mouseout', function(e) {
 				airmet.start();})		
 			},
 			filter: function(feature, layer) {
@@ -285,16 +298,16 @@ var	sigmet = L.realtime({
 	url: url_sigmet,
 	crossOrigin: true, type: 'json'
 	}, {interval: 25 * 3030,
-		style: function(feature){
+		style: function(feature) {
 			kolor = getColor(feature.properties.alt);
 			return {color: '#00cccc', weight: 2, fillColor: kolor, opacity: 1.0, fillOpacity: 0.2};
 		},
-		getFeatureId: function(featureData){
+		getFeatureId: function(featureData) {
 			return featureData.properties.rep_num;
 		},
 		onEachFeature: function(feature, layer) {
 			layer.bindTooltip('SIGMET: Alt ' + feature.properties.alt);
-			layer.on('click', function(e){
+			layer.on('click', function(e) {
 				layer.setStyle({fillColor: 'yellow', fillOpacity: 0.5});
 
 				$("#m1").html("Report");
@@ -340,10 +353,10 @@ var lays= new L.FeatureGroup();
 var	nrad = L.realtime({
 	url: url3_rad,
  	crossOrigin: true, type: 'json'
-	}, {interval: 17 * 1000,
+	}, {interval: 55 * 1000,
 
-	getFeatureId: function(featureData){ 
-	return featureData.properties.block_num + featureData.properties.cc;
+	getFeatureId: function(featureData) { 
+	return featureData.properties.block_num ;
 	},
 
 	pointToLayer: function(feature, latlng) {
@@ -377,16 +390,16 @@ var	cwa = L.realtime({
 	url: url3_cwa,
 	crossOrigin: true, type: 'json'  
 	}, {interval: 50 * 9000,
-		style: function(feature){
+		style: function(feature) {
 			kolor = getColor(feature.properties.alt);
 			return {color: '#00cccc', weight: 2, fillColor: kolor, opacity: 1.0, fillOpacity: 0.2};
 		},
-		getFeatureId: function(featureData){
+		getFeatureId: function(featureData) {
 			return featureData.properties.rep_num;
 		},
 		onEachFeature: function(feature, layer) {
 			layer.bindTooltip('CWA: Alt ' + feature.properties.alt);
-			layer.on('click', function(e){
+			layer.on('click', function(e) {
 				layer.setStyle({fillColor: 'yellow', fillOpacity: 0.5});
 
 				$("#m1").html("Report");
@@ -404,7 +417,7 @@ var	cwa = L.realtime({
 				$('#f6').html(e.target.feature.properties.stop_date);
 
 				cwa.stop();});
-			layer.on('mouseout', function(e){
+			layer.on('mouseout', function(e) {
 				cwa.start();})		
 			},
 			filter: function(feature,layer) {
@@ -431,7 +444,7 @@ var	cir = L.realtime({
 	url: url_circle,
 	crossOrigin: true, type: 'json'
 	}, {interval: 60 * 7030,
-		getFeatureId: function(featureData){
+		getFeatureId: function(featureData) {
 		return featureData.properties.rep_num;
 		},
 		pointToLayer: function(feature, latlng) {
@@ -455,6 +468,100 @@ var	cir = L.realtime({
 			return marker;
 		}
 	}).addTo(map);
+
+turblegend = L.control({ position: "topright" });
+
+turblegend.onAdd = function(mop) {
+  var div = L.DomUtil.create("div", "legend");
+  div.innerHTML += "<h4>Turbulence</h4>";
+  div.innerHTML += '<i style="background: #8C8C74"></i><span>EDR  7-13</span><br>';
+  div.innerHTML += '<i style="background: #B4C8FF"></i><span>EDR 14-20</span><br>';
+  div.innerHTML += '<i style="background: #5F87FF"></i><span>EDR 21-27</span><br>';
+  div.innerHTML += '<i style="background: #1446E6"></i><span>EDR 28-34</span><br>';
+  div.innerHTML += '<i style="background: #6EF54B"></i><span>EDR 35-41</span><br>';
+  div.innerHTML += '<i style="background: #00C300"></i><span>EDR 42-48</span><br>';
+  div.innerHTML += '<i style="background: #007300"></i><span>EDR 49-55</span><br>';
+  div.innerHTML += '<i style="background: #FFFF00"></i><span>EDR 56-62</span><br>';
+  div.innerHTML += '<i style="background: #FFB430"></i><span>EDR 63-69</span><br>';
+  div.innerHTML += '<i style="background: #FA7D00"></i><span>EDR 70-76</span><br>';
+  div.innerHTML += '<i style="background: #E62D00"></i><span>EDR 77-83</span><br>';
+  div.innerHTML += '<i style="background: #AF0000"></i><span>EDR 84-90</span><br>';
+  div.innerHTML += '<i style="background: #690000"></i><span>EDR 91-97</span><br>';
+  div.innerHTML += '<i style="background: #FA00C8"></i><span>EDR >=98</span><br>';
+  div.innerHTML += '<i style="background: #9B00FA"></i><span>EDR No Data</span><br>'; 
+  return div;
+};
+
+cloudlegend = L.control({ position: "topright" });
+
+cloudlegend.onAdd = function(mop) {
+  var div = L.DomUtil.create("div", "legend");
+  div.innerHTML += "<h4>Cloud Tops</h4>";
+  div.innerHTML += '<i style="background: #8C8C74"></i><span><= 1,500ft</span><br>';
+  div.innerHTML += '<i style="background: #B4C8FF"></i><span>1,501ft-3,000ft</span><br>';
+  div.innerHTML += '<i style="background: #5F87FF"></i><span>3,001ft-4,500ft</span><br>';
+  div.innerHTML += '<i style="background: #1446E6"></i><span>4,501ft-6,00ft</span><br>';
+  div.innerHTML += '<i style="background: #6EF54B"></i><span>6,001ft-7,500ft</span><br>';
+  div.innerHTML += '<i style="background: #00C300"></i><span>7,501ft-9,000ft</span><br>';
+  div.innerHTML += '<i style="background: #007300"></i><span>9,001ft-10,500ft</span><br>';
+  div.innerHTML += '<i style="background: #FFFF00"></i><span>10,501ft-12,000ft</span><br>';
+  div.innerHTML += '<i style="background: #FFB430"></i><span>12,001ft-13,500ft</span><br>';
+  div.innerHTML += '<i style="background: #FA7D00"></i><span>13,501ft-15,000ft</span><br>';
+  div.innerHTML += '<i style="background: #E62D00"></i><span>15,001ft-18,000ft</span><br>';
+  div.innerHTML += '<i style="background: #AF0000"></i><span>18,001ft-21,000ft</span><br>';
+  div.innerHTML += '<i style="background: #690000"></i><span>21,001ft-24,000ft</span><br>';
+  div.innerHTML += '<i style="background: #FA00C8"></i><span>>24,000ft</span><br>';
+  div.innerHTML += '<i style="background: #9B00FA"></i><span>No Data</span><br>'; 
+  return div;
+};
+
+icelegend = L.control({ position: "topright" });
+
+icelegend.onAdd = function(mop) {
+  var div = L.DomUtil.create("div", "legend");
+  div.innerHTML += "<h4>Icing</h4>";
+  div.innerHTML += '<i style="background: #8C8C74"></i><span>Trace</span><br>';
+  div.innerHTML += '<i style="background: #B4C8FF"></i><span>Light</span><br>';
+  div.innerHTML += '<i style="background: #5F87FF"></i><span>Moderate</span><br>';
+  div.innerHTML += '<i style="background: #1446E6"></i><span>Severe</span><br>';
+  div.innerHTML += '<i style="background: #6EF54B"></i><span>Heavy</span><br>';
+  div.innerHTML += '<i style="background: #00C300"></i><span>Reserved</span><br>';
+  div.innerHTML += '<i style="background: #007300"></i><span>No Data</span><br>';
+ 
+  return div;
+};
+
+lightlegend = L.control({ position: "topright" });
+
+lightlegend.onAdd = function(mop) {
+  var div = L.DomUtil.create("div", "legend");
+  div.innerHTML += "<h4>Lightning</h4>";
+  div.innerHTML += '<i style="background: #8C8C74"></i><span>1 Strike</span><br>';
+  div.innerHTML += '<i style="background: #B4C8FF"></i><span>2 Strikes</span><br>';
+  div.innerHTML += '<i style="background: #5F87FF"></i><span>3-5 Strikes</span><br>';
+  div.innerHTML += '<i style="background: #1446E6"></i><span>6-10 Strikes</span><br>';
+  div.innerHTML += '<i style="background: #6EF54B"></i><span>11-15 Strikes</span><br>';
+  div.innerHTML += '<i style="background: #00C300"></i><span>>15 Strikes</span><br>';
+  div.innerHTML += '<i style="background: #007300"></i><span>No Data</span><br>';
+ 
+  return div;
+};
+
+nexlegend = L.control({ position: "topright" });
+
+nexlegend.onAdd = function(mop) {
+  var div = L.DomUtil.create("div", "legend");
+  div.innerHTML += "<h4>NEXRAD</h4>";
+  div.innerHTML += '<i style="background: #8C8C74"></i><span>None</span><br>';
+  div.innerHTML += '<i style="background: #B4C8FF"></i><span>Light</span><br>';
+  div.innerHTML += '<i style="background: #5F87FF"></i><span>Light to Moderate</span><br>';
+  div.innerHTML += '<i style="background: #1446E6"></i><span>Moderate to Heavy</span><br>';
+  div.innerHTML += '<i style="background: #6EF54B"></i><span>Heavy</span><br>';
+  div.innerHTML += '<i style="background: #00C300"></i><span>Very Heavy</span><br>';
+  div.innerHTML += '<i style="background: #007300"></i><span>Very Heavy+Hail</span><br>';
+ 
+  return div;
+};
 
 // ** METAR 
 var wxIcon = L.icon({iconUrl: 'therm.ico', iconSize: [20,20]});
@@ -569,7 +676,7 @@ taf = L.realtime({
 
 // ** PIREP
 var url_pirep = url.concat("SELECT coords AS GEOM, p.stn_call, stn_loc, rep_type, fl_lev, ac_type, \
-					turbulence, remarks, location \
+					turbulence, remarks, location, cloud, weather, temperature, wind_spd_dir, icing, rep_time \
 					FROM pirep p INNER JOIN (SELECT stn_call, MAX(rep_time) AS mx FROM pirep \
 					GROUP BY stn_call) g ON p.stn_call = g.stn_call AND p.rep_time = g.mx \
 					INNER JOIN stations s ON p.stn_call = s.stn_call");
@@ -597,20 +704,20 @@ pirep = L.realtime({
 
 			marker.on('click', function(e) {
 				$("#m1").html("Station");
-				$("#m2").html("Location");
-				$("#m3").html("Flvl/AC Type");
-				$("#m4").html("Turbulence");
-				$("#m5").html("Location");
+				$("#m2").html("Location" + '<br>' + "Time: " + e.target.feature.properties.rep_time + "z");
+				$("#m3").html("Flt Lev:" + '<br>' + "AC Type:");
+				$("#m4").html("Turbulence:" + '<br>' + "Icing:");
+				$("#m5").html("WX");
 				$("#m6").html("Remarks");
 				if (feature.properties.rep_type == "Urgent Report")
 					$('#f1').html(e.target.feature.properties.stn_call + " (*Urgent PIREP*)");
 				else
 					$('#f1').html(e.target.feature.properties.stn_call + " (PIREP)");
 
-				$('#f2').html(e.target.feature.properties.stn_loc);
-				$('#f3').html("FL: " + e.target.feature.properties.fl_lev + "  AC: " + e.target.feature.properties.ac_type);
-				$('#f4').html(e.target.feature.properties.turbulence);
-				$('#f5').html(e.target.feature.properties.location);
+				$('#f2').html(e.target.feature.properties.stn_loc + "<br><i>Loc: " + e.target.feature.properties.location);
+				$('#f3').html("<i>Flt lev: " + e.target.feature.properties.fl_lev + "<br><i>a/c: " + e.target.feature.properties.ac_type);
+				$('#f4').html("<i>Turb: " + e.target.feature.properties.turbulence + "<br><i>Ice: " + e.target.feature.properties.icing);
+				$('#f5').html("<i>Cloud: " +e.target.feature.properties.cloud + "<br><i>Temp: " + e.target.feature.properties.temperature + "<br><i>Wind: " + e.target.feature.properties.wind_spd_dir + "<br><i>WX: " + e.target.feature.properties.weather);
 				$('#f6').html(e.target.feature.properties.remarks);
 			});
 			marker.addTo(map);
@@ -634,9 +741,9 @@ document.querySelector("input[name = amet]").addEventListener('change', function
 })
 
 document.querySelector("input[name = meta]").addEventListener('change', function() {
-	if(this.checked) {
+	if(this.checked) { 
 		map.addLayer(metar), metar.start()}
-	else {
+	else { 
 		map.removeLayer(metar), metar.stop()}
 })
 
@@ -675,23 +782,16 @@ document.querySelector("input[name = cwa]").addEventListener('change', function(
 		map.removeLayer(cwa), cwa.stop()}
 })
 
-document.querySelector("input[name = nrad]").addEventListener('change', function() {
-	if(this.checked) {
-		lays.clearLayers();
-		url_nx = getNexrad();
-		url3_rad = url.concat(url_nx);
-		nrad.start();
-		nrad.setUrl(url3_rad);
-		nrad.update();
-		lays.addLayer(radar);
-		map.addLayer(lays)}
-	else {
-		lays.clearLayers();
-		nrad.stop();} 
-})
-
 document.getElementById("stim").onchange = function()
 	{gairmet.update()}		
+		
+document.getElementById("altrad").onchange = function()
+	{lays.clearLayers();
+		url_nx = getNexrad();
+		url3_rad = url.concat(url_nx);
+		nrad.setUrl(url3_rad);
+		lays.addLayer(radar);
+		map.addLayer(lays)}	
 
 document.getElementById("gmsliderRange").onchange = function()
 	{gairmet.update(), airmet.update(), sigmet.update(), cwa.update()}
@@ -699,6 +799,12 @@ document.getElementById("gmsliderRange").onchange = function()
 document.getElementById("prodid").onchange = function() {
 	var rprod_str = document.getElementById('prodid').value;
 	var rprod = parseInt(rprod_str);
+	map.removeControl(nexlegend);
+	map.removeControl(turblegend);
+	map.removeControl(icelegend);
+	map.removeControl(lightlegend);
+	map.removeControl(cloudlegend);
+
 	switch(rprod) {
 		case 1:
 			document.getElementById("altrad").disabled = true;
@@ -719,6 +825,12 @@ document.getElementById("prodid").onchange = function() {
 			document.getElementById("altrad").disabled = true;
 			break;
 	}
+	lays.clearLayers();
+		url_nx = getNexrad();
+		url3_rad = url.concat(url_nx);
+		nrad.setUrl(url3_rad);
+		lays.addLayer(radar);
+		map.addLayer(lays)
 }
 
 //Add layer control

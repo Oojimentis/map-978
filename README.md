@@ -50,7 +50,7 @@ Icing:
 ![ice](https://user-images.githubusercontent.com/60933475/115440279-8ff56300-a1dd-11eb-9966-06bf78162da7.png)
 
 PIREP:
-![pirep](https://user-images.githubusercontent.com/60933475/115440352-a4396000-a1dd-11eb-9b21-fa290d17db32.png)
+![pirep](https://user-images.githubusercontent.com/60933475/115805185-75281780-a3b2-11eb-9f22-a96359cbf2fc.png)
 
 CWA:
 ![cwa](https://user-images.githubusercontent.com/60933475/115440382-ac919b00-a1dd-11eb-858e-ade59579797f.png)
