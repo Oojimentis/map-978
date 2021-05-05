@@ -5,7 +5,7 @@
 -- Dumped from database version 11.11 (Ubuntu 11.11-1.pgdg18.04+1)
 -- Dumped by pg_dump version 11.11 (Ubuntu 11.11-1.pgdg18.04+1)
 
--- Started on 2021-05-05 09:57:13 EDT
+-- Started on 2021-05-05 18:08:27 EDT
 
 SET statement_timeout = 0;
 SET lock_timeout = 0;
@@ -128,7 +128,11 @@ CREATE TABLE postgis.metar (
     dewp character varying(5),
     visby character varying(5),
     windsp character(5),
-    altimeter character(10)
+    altimeter character(10),
+    hrly_precip character varying(5),
+    slp character varying(10),
+    windvar character varying(10),
+    windgust character varying(10)
 );
 
 
@@ -363,7 +367,7 @@ COPY postgis.graphics (coords, alt, ob_ele, rep_num, prod_id, start_date, stop_d
 -- Data for Name: metar; Type: TABLE DATA; Schema: postgis; Owner: postgres
 --
 
-COPY postgis.metar (stn_call, ob_date, winddir, temp, dewp, visby, windsp, altimeter) FROM stdin;
+COPY postgis.metar (stn_call, ob_date, winddir, temp, dewp, visby, windsp, altimeter, hrly_precip, slp, windvar, windgust) FROM stdin;
 \.
 
 
@@ -1355,7 +1359,7 @@ ALTER TABLE ONLY postgis.taf
     ADD CONSTRAINT taf_pkey PRIMARY KEY (stn_call, rep_time);
 
 
--- Completed on 2021-05-05 09:57:13 EDT
+-- Completed on 2021-05-05 18:08:27 EDT
 
 --
 -- PostgreSQL database dump complete
