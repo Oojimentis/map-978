@@ -1,0 +1,5 @@
+select prod_id,fisb_product_desc,altitude,count(*)
+from nexrad,fisb_products
+where prod_id = fisb_product_id
+group by prod_id,fisb_product_desc,altitude
+order by prod_id,altitude
