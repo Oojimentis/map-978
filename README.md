@@ -19,17 +19,20 @@ and Leaflet Realtime (https://github.com/perliedman/leaflet-realtime)
 
 ## Screenshots
 
+Winds Aloft:
+![winds](https://user-images.githubusercontent.com/60933475/117853332-489b4900-b256-11eb-82a0-abb861f67805.png)
+
 CONUS:
-![conus](https://user-images.githubusercontent.com/60933475/115439241-5bcd7280-a1dc-11eb-825f-672ffd8db74a.png)
+![conus](https://user-images.githubusercontent.com/60933475/117853355-5224b100-b256-11eb-8a25-6d4504cb741d.png)
 
 METAR:
 ![metar](https://user-images.githubusercontent.com/60933475/115439270-61c35380-a1dc-11eb-86d3-20b9bd1d9c2f.png)
 
 Regional NEXRAD:
-![regional](https://user-images.githubusercontent.com/60933475/115440181-748a5800-a1dd-11eb-8261-b5679b37154f.png)
+![regional](https://user-images.githubusercontent.com/60933475/117853527-87310380-b256-11eb-8ae3-e72233f1cb29.png)
 
 Turbulence:
-![turb](https://user-images.githubusercontent.com/60933475/115439584-bcf54600-a1dc-11eb-8514-caa212ac9a9e.png)
+![turb](https://user-images.githubusercontent.com/60933475/117853554-91eb9880-b256-11eb-8983-b9952d9d69c9.png)
 
 TAF with report details:
 ![taf](https://user-images.githubusercontent.com/60933475/115439629-c8487180-a1dc-11eb-8ccd-2ea1c2ff62d6.png)
@@ -38,7 +41,7 @@ G-AIRMET:
 ![gairmet](https://user-images.githubusercontent.com/60933475/115439650-cda5bc00-a1dc-11eb-9da4-0fcb88617b52.png)
 
 Cloud Tops:
-![cloud](https://user-images.githubusercontent.com/60933475/115439660-d26a7000-a1dc-11eb-9e8b-3bf2788c7afa.png)
+![cloud](https://user-images.githubusercontent.com/60933475/117853390-5ea90980-b256-11eb-8628-d1f7e47e3336.png)
 
 AIRMET with text report details:
 ![airmet](https://user-images.githubusercontent.com/60933475/115440209-7bb16600-a1dd-11eb-85b4-1a356883701d.png)
@@ -50,10 +53,10 @@ NOTAM with text report:
 ![notam](https://user-images.githubusercontent.com/60933475/115440251-8a981880-a1dd-11eb-944d-3964b14e0691.png)
 
 Icing:
-![ice](https://user-images.githubusercontent.com/60933475/115440279-8ff56300-a1dd-11eb-9966-06bf78162da7.png)
+![ice](https://user-images.githubusercontent.com/60933475/117853440-69fc3500-b256-11eb-8e63-1370fbbf93e6.png)
 
 PIREP:
-![pirep](https://user-images.githubusercontent.com/60933475/115805185-75281780-a3b2-11eb-9f22-a96359cbf2fc.png)
+![pirep](https://user-images.githubusercontent.com/60933475/117853479-78e2e780-b256-11eb-91c5-6a4c0dc8fdde.png)
 
 SIGMET:
 ![sigmet](https://user-images.githubusercontent.com/60933475/115440368-a8fe1400-a1dd-11eb-92b3-5c342503bf6a.png)
