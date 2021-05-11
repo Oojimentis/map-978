@@ -11,14 +11,6 @@ var nexlegend;
 window.onload = onPageLoad();
 
 function onPageLoad() {
-	document.getElementById("gmet").checked  = true;
-	document.getElementById("meta").checked  = true;
-	document.getElementById("amet").checked  = true;
-	document.getElementById("smet").checked  = true;
-	document.getElementById("cwa").checked   = true;
-	document.getElementById("notam").checked = true;
-	document.getElementById("taf").checked   = true;
-	document.getElementById("pirep").checked = true;
 
 	document.getElementById("gmsliderRange").step  = "1000";
 	document.getElementById("gmsliderRange").value = "0";
@@ -458,7 +450,7 @@ var	cir = L.realtime({
  				$("#m5").html("Stop");
  				$("#m6").html("Alpha ");
 				$('#f1').html('Bottom ' + e.target.feature.properties.alt_bot + 'ft<br> Top ' + e.target.feature.properties.alt_top + 'ft');
-				$('#f2').html('Lat: ' + e.target.feature.properties.r_lat + ' Lng: ' + e.target.feature.properties.r_lat);
+				$('#f2').html('Lat: '   + e.target.feature.properties.r_lat   + ' Lng: ' + e.target.feature.properties.r_lat);
 				$('#f3').html(e.target.feature.properties.rep_num);
 				$('#f4').html(e.target.feature.properties.start_date);
 				$('#f5').html(e.target.feature.properties.stop_date);
@@ -593,9 +585,9 @@ metar = L.realtime({
 				$('#f1').html(e.target.feature.properties.stn_call + " (METAR)");
 				$('#f2').html(e.target.feature.properties.stn_loc);
 				$('#f3').html(e.target.feature.properties.ob_date);
-				$('#f4').html(e.target.feature.properties.temp);
-				$('#f5').html(e.target.feature.properties.windsp);
-				$('#f6').html(e.target.feature.properties.visby);
+				$('#f4').html(e.target.feature.properties.temp + "\xB0F");
+				$('#f5').html(e.target.feature.properties.windsp + "kts");
+				$('#f6').html(e.target.feature.properties.visby );
 			});
 			marker.addTo(map);
 			return marker;
@@ -674,6 +666,51 @@ taf = L.realtime({
 		}
 	}).addTo(map);
 
+// ** Winds Aloft
+var url_winds = url.concat("SELECT coords AS GEOM, w.stn_call, stn_loc, issue_date, alt1,dir1, spd1,temp1, \
+ 					alt2,dir2, spd2,temp2, alt3,dir3, spd3,temp3, alt4,dir4, spd4,temp4, alt5,dir5, spd5,temp5, \
+					alt6,dir6, spd6,temp6, alt7,dir7, spd7,temp7, alt8,dir8, spd8,temp8, alt9,dir9, spd9,temp9 \
+					FROM winds w INNER JOIN (SELECT stn_call, MAX(proc_time) AS mx FROM winds \
+					GROUP BY stn_call) g ON w.stn_call = g.stn_call AND w.proc_time = g.mx \
+					INNER JOIN stations s ON w.stn_call = s.stn_call");
+
+var wxIcon5 = L.icon({iconUrl: 'wind.ico', iconSize: [12,12]});
+ 
+winds = L.realtime({
+	url: url_winds,
+	crossOrigin: true, type: 'json'
+	}, {interval: 19 * 3060,
+		getFeatureId: function(featureData) {
+		return featureData.properties.stn_call;
+		},
+		pointToLayer: function(feature, latlng) {
+			marker = L.marker(latlng, {icon: wxIcon5});
+
+			marker.bindTooltip('Winds' + '<br>' + feature.properties.stn_call);
+
+			marker.on('click', function(e) {
+				$("#m1").html("Station" + '<br>'  + e.target.feature.properties.issue_date );
+				$("#m2").html(e.target.feature.properties.alt1 + "ft" + '<br>'  + e.target.feature.properties.alt2 + "ft");
+				$("#m3").html(e.target.feature.properties.alt3 + "ft" + '<br>'  + e.target.feature.properties.alt4 + "ft");
+				$("#m4").html(e.target.feature.properties.alt5 + "ft" + '<br>'  + e.target.feature.properties.alt6 + "ft");
+				$("#m5").html(e.target.feature.properties.alt7 + "ft" + '<br>'  + e.target.feature.properties.alt8 + "ft");
+				$("#m6").html(e.target.feature.properties.alt9 + "ft");
+				$('#f1').html(e.target.feature.properties.stn_call + " (Winds)" + '<br>' + e.target.feature.properties.stn_loc); 
+				$('#f2').html(e.target.feature.properties.dir1 + "\xB0 " + e.target.feature.properties.spd1 + "kt " +  e.target.feature.properties.temp1 + "\xB0C"
+				+ '<br>' + e.target.feature.properties.dir2    + "\xB0 " + e.target.feature.properties.spd2 + "kt " +  e.target.feature.properties.temp2 + "\xB0C");
+				$('#f3').html(e.target.feature.properties.dir3 + "\xB0 " + e.target.feature.properties.spd3 + "kt " +  e.target.feature.properties.temp3 + "\xB0C"
+				+ '<br>' + e.target.feature.properties.dir4    + "\xB0 " + e.target.feature.properties.spd4 + "kt " +  e.target.feature.properties.temp4 + "\xB0C");	
+				$('#f4').html(e.target.feature.properties.dir5 + "\xB0 " + e.target.feature.properties.spd5 + "kt " +  e.target.feature.properties.temp5 + "\xB0C"
+				+ '<br>' + e.target.feature.properties.dir6    + "\xB0 " + e.target.feature.properties.spd6 + "kt " +  e.target.feature.properties.temp6 + "\xB0C");
+				$('#f5').html(e.target.feature.properties.dir7 + "\xB0 " + e.target.feature.properties.spd7 + "kt " +  e.target.feature.properties.temp7 + "\xB0C"
+				+ '<br>' + e.target.feature.properties.dir8    + "\xB0 " + e.target.feature.properties.spd8 + "kt " +  e.target.feature.properties.temp8 + "\xB0C");
+				$('#f6').html(e.target.feature.properties.dir9 + "\xB0 " + e.target.feature.properties.spd9 + "kt " +  e.target.feature.properties.temp9 + "\xB0C");
+			});
+			marker.addTo(map);
+			return marker;
+		}
+	}).addTo(map);
+
 // ** PIREP
 var url_pirep = url.concat("SELECT coords AS GEOM, p.stn_call, stn_loc, rep_type, fl_lev, ac_type, \
 					turbulence, remarks, location, cloud, weather, temperature, wind_spd_dir, icing, rep_time \
@@ -715,9 +752,9 @@ pirep = L.realtime({
 					$('#f1').html(e.target.feature.properties.stn_call + " (PIREP)");
 
 				$('#f2').html(e.target.feature.properties.stn_loc + "<br><i>Loc: " + e.target.feature.properties.location);
-				$('#f3').html("<i>Flt lev: " + e.target.feature.properties.fl_lev + "<br><i>a/c: " + e.target.feature.properties.ac_type);
-				$('#f4').html("<i>Turb: " + e.target.feature.properties.turbulence + "<br><i>Ice: " + e.target.feature.properties.icing);
-				$('#f5').html("<i>Cloud: " +e.target.feature.properties.cloud + "<br><i>Temp: " + e.target.feature.properties.temperature + "<br><i>Wind: " + e.target.feature.properties.wind_spd_dir + "<br><i>WX: " + e.target.feature.properties.weather);
+				$('#f3').html("<i>Flt lev: " + e.target.feature.properties.fl_lev  + "<br><i>a/c: "  + e.target.feature.properties.ac_type);
+				$('#f4').html("<i>Turb: " + e.target.feature.properties.turbulence + "<br><i>Ice: "  + e.target.feature.properties.icing);
+				$('#f5').html("<i>Cloud: " +e.target.feature.properties.cloud      + "<br><i>Temp: " + e.target.feature.properties.temperature + "<br><i>Wind: " + e.target.feature.properties.wind_spd_dir + "<br><i>WX: " + e.target.feature.properties.weather);
 				$('#f6').html(e.target.feature.properties.remarks);
 			});
 			marker.addTo(map);
@@ -766,6 +803,13 @@ document.querySelector("input[name = pirep]").addEventListener('change', functio
 		map.addLayer(pirep), pirep.start()}
 	else {
 		map.removeLayer(pirep), pirep.stop()}
+})
+
+document.querySelector("input[name = winds]").addEventListener('change', function() {
+	if(this.checked) {
+		map.addLayer(winds), winds.start()}
+	else {
+		map.removeLayer(winds), winds.stop()}
 })
 
 document.querySelector("input[name = smet]").addEventListener('change', function() {

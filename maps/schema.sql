@@ -5,7 +5,7 @@
 -- Dumped from database version 11.11 (Ubuntu 11.11-1.pgdg18.04+1)
 -- Dumped by pg_dump version 11.11 (Ubuntu 11.11-1.pgdg18.04+1)
 
--- Started on 2021-05-05 18:08:27 EDT
+-- Started on 2021-05-11 12:02:03 EDT
 
 SET statement_timeout = 0;
 SET lock_timeout = 0;
@@ -275,7 +275,57 @@ CREATE TABLE postgis.taf (
 ALTER TABLE postgis.taf OWNER TO postgres;
 
 --
--- TOC entry 4425 (class 0 OID 17416)
+-- TOC entry 233 (class 1259 OID 50311)
+-- Name: winds; Type: TABLE; Schema: postgis; Owner: postgres
+--
+
+CREATE TABLE postgis.winds (
+    issue_date character varying NOT NULL,
+    proc_time character varying NOT NULL,
+    alt1 character varying,
+    alt2 character varying,
+    alt3 character varying,
+    alt4 character varying,
+    alt5 character varying,
+    alt6 character varying,
+    alt7 character varying,
+    alt8 character varying,
+    alt9 character varying,
+    dir1 character varying,
+    dir2 character varying,
+    dir3 character varying,
+    dir4 character varying,
+    dir5 character varying,
+    dir6 character varying,
+    dir7 character varying,
+    dir8 character varying,
+    dir9 character varying,
+    spd1 character varying,
+    spd2 character varying,
+    spd3 character varying,
+    spd4 character varying,
+    spd5 character varying,
+    spd6 character varying,
+    spd7 character varying,
+    spd8 character varying,
+    spd9 character varying,
+    temp1 character varying,
+    temp2 character varying,
+    temp3 character varying,
+    temp4 character varying,
+    temp5 character varying,
+    temp6 character varying,
+    temp7 character varying,
+    temp8 character varying,
+    temp9 character varying,
+    stn_call character varying(5) NOT NULL
+);
+
+
+ALTER TABLE postgis.winds OWNER TO postgres;
+
+--
+-- TOC entry 4432 (class 0 OID 17416)
 -- Dependencies: 200
 -- Data for Name: airspace_ob_ele; Type: TABLE DATA; Schema: postgis; Owner: postgres
 --
@@ -317,7 +367,7 @@ COPY postgis.airspace_ob_ele (airspace_ob_ele_id, airspace_ob_ele_desc) FROM std
 
 
 --
--- TOC entry 4431 (class 0 OID 17495)
+-- TOC entry 4438 (class 0 OID 17495)
 -- Dependencies: 206
 -- Data for Name: circles; Type: TABLE DATA; Schema: postgis; Owner: postgres
 --
@@ -327,7 +377,7 @@ COPY postgis.circles (alt_top, alt_bot, alpha, prod_id, rec_count, rep_num, rep_
 
 
 --
--- TOC entry 4426 (class 0 OID 17422)
+-- TOC entry 4433 (class 0 OID 17422)
 -- Dependencies: 201
 -- Data for Name: fisb_products; Type: TABLE DATA; Schema: postgis; Owner: postgres
 --
@@ -352,7 +402,7 @@ COPY postgis.fisb_products (fisb_product_id, fisb_product_desc) FROM stdin;
 
 
 --
--- TOC entry 4434 (class 0 OID 21049)
+-- TOC entry 4441 (class 0 OID 21049)
 -- Dependencies: 224
 -- Data for Name: graphics; Type: TABLE DATA; Schema: postgis; Owner: postgres
 --
@@ -362,7 +412,7 @@ COPY postgis.graphics (coords, alt, ob_ele, rep_num, prod_id, start_date, stop_d
 
 
 --
--- TOC entry 4427 (class 0 OID 17434)
+-- TOC entry 4434 (class 0 OID 17434)
 -- Dependencies: 202
 -- Data for Name: metar; Type: TABLE DATA; Schema: postgis; Owner: postgres
 --
@@ -372,7 +422,7 @@ COPY postgis.metar (stn_call, ob_date, winddir, temp, dewp, visby, windsp, altim
 
 
 --
--- TOC entry 4436 (class 0 OID 30864)
+-- TOC entry 4443 (class 0 OID 30864)
 -- Dependencies: 232
 -- Data for Name: nexrad; Type: TABLE DATA; Schema: postgis; Owner: postgres
 --
@@ -382,7 +432,7 @@ COPY postgis.nexrad (intensity, coords, altitude, prod_id, block_num, maptime, i
 
 
 --
--- TOC entry 4428 (class 0 OID 17454)
+-- TOC entry 4435 (class 0 OID 17454)
 -- Dependencies: 203
 -- Data for Name: overlay_geo_opt; Type: TABLE DATA; Schema: postgis; Owner: postgres
 --
@@ -407,7 +457,7 @@ COPY postgis.overlay_geo_opt (overlay_geo_opt_id, overlay_geo_opt_desc) FROM std
 
 
 --
--- TOC entry 4429 (class 0 OID 17460)
+-- TOC entry 4436 (class 0 OID 17460)
 -- Dependencies: 204
 -- Data for Name: pirep; Type: TABLE DATA; Schema: postgis; Owner: postgres
 --
@@ -417,7 +467,7 @@ COPY postgis.pirep (rep_type, fl_lev, ac_type, cloud, weather, temperature, wind
 
 
 --
--- TOC entry 4433 (class 0 OID 21038)
+-- TOC entry 4440 (class 0 OID 21038)
 -- Dependencies: 223
 -- Data for Name: sigairmet; Type: TABLE DATA; Schema: postgis; Owner: postgres
 --
@@ -427,7 +477,7 @@ COPY postgis.sigairmet (prod_id, rep_num, text_data, stn_call, rep_time) FROM st
 
 
 --
--- TOC entry 4430 (class 0 OID 17463)
+-- TOC entry 4437 (class 0 OID 17463)
 -- Dependencies: 205
 -- Data for Name: stations; Type: TABLE DATA; Schema: postgis; Owner: postgres
 --
@@ -1232,7 +1282,7 @@ COPY postgis.stations (coords, stn_call, stn_loc, lat, lng, state) FROM stdin;
 
 
 --
--- TOC entry 4435 (class 0 OID 29657)
+-- TOC entry 4442 (class 0 OID 29657)
 -- Dependencies: 231
 -- Data for Name: sua; Type: TABLE DATA; Schema: postgis; Owner: postgres
 --
@@ -1242,7 +1292,7 @@ COPY postgis.sua (rep_time, rep_year, rep_num, sched_id, airsp_id, sched_status,
 
 
 --
--- TOC entry 4432 (class 0 OID 17504)
+-- TOC entry 4439 (class 0 OID 17504)
 -- Dependencies: 207
 -- Data for Name: taf; Type: TABLE DATA; Schema: postgis; Owner: postgres
 --
@@ -1252,7 +1302,17 @@ COPY postgis.taf (issued, current, wind, visby, condx, rep_time, stn_call) FROM 
 
 
 --
--- TOC entry 4274 (class 2606 OID 17470)
+-- TOC entry 4444 (class 0 OID 50311)
+-- Dependencies: 233
+-- Data for Name: winds; Type: TABLE DATA; Schema: postgis; Owner: postgres
+--
+
+COPY postgis.winds (issue_date, proc_time, alt1, alt2, alt3, alt4, alt5, alt6, alt7, alt8, alt9, dir1, dir2, dir3, dir4, dir5, dir6, dir7, dir8, dir9, spd1, spd2, spd3, spd4, spd5, spd6, spd7, spd8, spd9, temp1, temp2, temp3, temp4, temp5, temp6, temp7, temp8, temp9, stn_call) FROM stdin;
+\.
+
+
+--
+-- TOC entry 4279 (class 2606 OID 17470)
 -- Name: airspace_ob_ele airspace_ob_ele_pkey; Type: CONSTRAINT; Schema: postgis; Owner: postgres
 --
 
@@ -1261,7 +1321,7 @@ ALTER TABLE ONLY postgis.airspace_ob_ele
 
 
 --
--- TOC entry 4286 (class 2606 OID 17502)
+-- TOC entry 4291 (class 2606 OID 17502)
 -- Name: circles circles_pkey; Type: CONSTRAINT; Schema: postgis; Owner: postgres
 --
 
@@ -1270,7 +1330,7 @@ ALTER TABLE ONLY postgis.circles
 
 
 --
--- TOC entry 4276 (class 2606 OID 17472)
+-- TOC entry 4281 (class 2606 OID 17472)
 -- Name: fisb_products fisb_products_pkey; Type: CONSTRAINT; Schema: postgis; Owner: postgres
 --
 
@@ -1279,7 +1339,7 @@ ALTER TABLE ONLY postgis.fisb_products
 
 
 --
--- TOC entry 4292 (class 2606 OID 21056)
+-- TOC entry 4297 (class 2606 OID 21056)
 -- Name: graphics graphics_pkey; Type: CONSTRAINT; Schema: postgis; Owner: postgres
 --
 
@@ -1288,7 +1348,7 @@ ALTER TABLE ONLY postgis.graphics
 
 
 --
--- TOC entry 4278 (class 2606 OID 17476)
+-- TOC entry 4283 (class 2606 OID 17476)
 -- Name: metar metar_pkey; Type: CONSTRAINT; Schema: postgis; Owner: postgres
 --
 
@@ -1297,7 +1357,7 @@ ALTER TABLE ONLY postgis.metar
 
 
 --
--- TOC entry 4296 (class 2606 OID 46862)
+-- TOC entry 4301 (class 2606 OID 46862)
 -- Name: nexrad nexrad_pkey; Type: CONSTRAINT; Schema: postgis; Owner: postgres
 --
 
@@ -1306,7 +1366,7 @@ ALTER TABLE ONLY postgis.nexrad
 
 
 --
--- TOC entry 4280 (class 2606 OID 17480)
+-- TOC entry 4285 (class 2606 OID 17480)
 -- Name: overlay_geo_opt overlay_geo_opt_pkey; Type: CONSTRAINT; Schema: postgis; Owner: postgres
 --
 
@@ -1315,7 +1375,7 @@ ALTER TABLE ONLY postgis.overlay_geo_opt
 
 
 --
--- TOC entry 4282 (class 2606 OID 17482)
+-- TOC entry 4287 (class 2606 OID 17482)
 -- Name: pirep pirep_pkey; Type: CONSTRAINT; Schema: postgis; Owner: postgres
 --
 
@@ -1324,7 +1384,7 @@ ALTER TABLE ONLY postgis.pirep
 
 
 --
--- TOC entry 4290 (class 2606 OID 21045)
+-- TOC entry 4295 (class 2606 OID 21045)
 -- Name: sigairmet sigairmet_pkey; Type: CONSTRAINT; Schema: postgis; Owner: postgres
 --
 
@@ -1333,7 +1393,7 @@ ALTER TABLE ONLY postgis.sigairmet
 
 
 --
--- TOC entry 4284 (class 2606 OID 21075)
+-- TOC entry 4289 (class 2606 OID 21075)
 -- Name: stations stations_pkey; Type: CONSTRAINT; Schema: postgis; Owner: postgres
 --
 
@@ -1342,7 +1402,7 @@ ALTER TABLE ONLY postgis.stations
 
 
 --
--- TOC entry 4294 (class 2606 OID 29664)
+-- TOC entry 4299 (class 2606 OID 29664)
 -- Name: sua sua_pkey; Type: CONSTRAINT; Schema: postgis; Owner: postgres
 --
 
@@ -1351,7 +1411,7 @@ ALTER TABLE ONLY postgis.sua
 
 
 --
--- TOC entry 4288 (class 2606 OID 17511)
+-- TOC entry 4293 (class 2606 OID 17511)
 -- Name: taf taf_pkey; Type: CONSTRAINT; Schema: postgis; Owner: postgres
 --
 
@@ -1359,7 +1419,16 @@ ALTER TABLE ONLY postgis.taf
     ADD CONSTRAINT taf_pkey PRIMARY KEY (stn_call, rep_time);
 
 
--- Completed on 2021-05-05 18:08:27 EDT
+--
+-- TOC entry 4303 (class 2606 OID 50318)
+-- Name: winds winds_pkey; Type: CONSTRAINT; Schema: postgis; Owner: postgres
+--
+
+ALTER TABLE ONLY postgis.winds
+    ADD CONSTRAINT winds_pkey PRIMARY KEY (stn_call, issue_date);
+
+
+-- Completed on 2021-05-11 12:02:03 EDT
 
 --
 -- PostgreSQL database dump complete
