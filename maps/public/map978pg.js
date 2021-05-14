@@ -428,6 +428,47 @@ var	cwa = L.realtime({
 			}
 		}).addTo(map);
 
+// SUA
+var url3_sua = url.concat("SELECT coords AS GEOM, airsp_id, airsp_name \
+					FROM sua_airspace");
+
+var	sua = L.realtime({
+	url: url3_sua,
+	crossOrigin: true, type: 'json'  
+	}, {interval: 50 * 1000,
+		style: function(feature) {
+			kolor = getColor(feature.properties.airsp_id);
+			return {color: '#00cccc', weight: 2, fillColor: kolor, opacity: 1.0, fillOpacity: 0.2};
+		},
+		getFeatureId: function(featureData) {
+			return featureData.properties.airsp_name;
+		},
+		onEachFeature: function(feature, layer) {
+			layer.bindTooltip('SUA: ' + feature.properties.airsp_name);
+			layer.on('click', function(e) {
+				layer.setStyle({fillColor: 'yellow', fillOpacity: 0.5});
+
+				$("#m1").html("Report");
+				$("#m2").html("Altitude");					
+				$("#m3").html("Report Num");
+				$("#m4").html("Condition");
+				$("#m5").html("Start");
+				$("#m6").html("Stop");
+					
+				$('#f1').html('SUA');
+				$('#f2').html(e.target.feature.properties.airsp_id);
+				$('#f3').html(e.target.feature.properties.airsp_name);
+				$('#f4').html(e.target.feature.properties.text_data);
+				$('#f5').html(e.target.feature.properties.start_date);
+				$('#f6').html(e.target.feature.properties.stop_date);
+
+				sua.stop();});
+			layer.on('mouseout', function(e) {
+				sua.start();})		
+			},
+
+		}).addTo(map);
+
 // ** Circle
 var url_circle = url.concat("SELECT bot AS GEOM, start_date, stop_date, rep_num, r_lng, r_lat, alt_top, \
 					alt_bot, alpha 	FROM circles");
