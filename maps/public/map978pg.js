@@ -715,7 +715,7 @@ var url_winds = url.concat("SELECT coords AS GEOM, w.stn_call, stn_loc, issue_da
 					GROUP BY stn_call) g ON w.stn_call = g.stn_call AND w.proc_time = g.mx \
 					INNER JOIN stations s ON w.stn_call = s.stn_call");
 
-var wxIcon5 = L.icon({iconUrl: 'wind.ico', iconSize: [12,12]});
+var wxIcon5 = L.icon({iconUrl: 'wind.ico', iconSize: [15,15]});
  
 winds = L.realtime({
 	url: url_winds,
