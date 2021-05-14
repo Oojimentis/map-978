@@ -428,7 +428,7 @@ var	cwa = L.realtime({
 			}
 		}).addTo(map);
 
-// SUA
+// SUA work in progress
 var url3_sua = url.concat("SELECT coords AS GEOM, airsp_id, airsp_name \
 					FROM sua_airspace");
 
