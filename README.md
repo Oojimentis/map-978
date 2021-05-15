@@ -10,6 +10,7 @@ Uses Leaflet (© 2010–2019 Vladimir Agafonkin. https://leafletjs.com)
 and Leaflet Realtime (https://github.com/perliedman/leaflet-realtime)
 
 ## Recent Changes
+* 5/14/21 SUA reports added.
 * 5/11/21 Winds Aloft reports added.
 * 5/7/21 Reduced Cloud Tops resolution for less browser stress.
 * 5/1/21 Map legends added for NEXRAD.
@@ -18,6 +19,9 @@ and Leaflet Realtime (https://github.com/perliedman/leaflet-realtime)
 
 
 ## Screenshots
+
+SUA:
+![sua](https://user-images.githubusercontent.com/60933475/118346158-765ae900-b507-11eb-85c6-4d21f181f623.png)
 
 Winds Aloft:
 ![winds](https://user-images.githubusercontent.com/60933475/117853332-489b4900-b256-11eb-82a0-abb861f67805.png)

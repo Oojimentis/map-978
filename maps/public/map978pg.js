@@ -428,6 +428,49 @@ var	cwa = L.realtime({
 			}
 		}).addTo(map);
 
+// SUA
+var url3_sua = url.concat("SELECT s.airsp_id, rep_time, s.airsp_name, sua_airsp_desc, sua_status_desc,\
+					start_time, end_time, high_alt, low_alt, coords AS GEOM, dafif_name, sep_rule, shape_ind \
+					FROM sua s INNER JOIN sua_airspace a ON a.airsp_id = s.airsp_id \
+					INNER JOIN sua_airspace_type t ON t.sua_airsp_type = s.airsp_type \
+					INNER JOIN sua_sched_status c ON c.sua_status = s.sched_status");
+
+var	sua = L.realtime({
+	url: url3_sua,
+	crossOrigin: true, type: 'json'  
+	}, {interval: 50 * 1000,
+		style: function(feature) {
+			return {color: '#2e052a', weight: 3, fillColor: '#2e052a', opacity: 0.5, fillOpacity: 0.5};
+		},
+		getFeatureId: function(featureData) {
+			return featureData.properties.airsp_name;
+		},
+		onEachFeature: function(feature, layer) {
+			layer.bindTooltip('SUA: ' + feature.properties.airsp_name);
+			layer.on('mouseover', function(e) {
+				layer.setStyle({color: 'yellow', fillColor: 'yellow', fillOpacity: 0.5});
+
+				$("#m1").html("Report");
+				$("#m2").html("Status");					
+				$("#m3").html("Times");
+				$("#m4").html("Altitudes L/H");
+				$("#m5").html("Sep/shape");
+				$("#m6").html("DAFIF");
+					
+				$('#f1').html('SUA - ' + e.target.feature.properties.airsp_name);
+				$('#f2').html(e.target.feature.properties.sua_airsp_desc + ' <br>' + e.target.feature.properties.sua_status_desc);
+				$('#f3').html(e.target.feature.properties.start_time + ' <br>' + e.target.feature.properties.end_time);
+				$('#f4').html(e.target.feature.properties.low_alt + ' <br>' + e.target.feature.properties.high_alt);
+				$('#f5').html(e.target.feature.properties.sep_rule + '  '+ e.target.feature.properties.shape_ind);
+				$('#f6').html(e.target.feature.properties.dafif_name);
+
+				sua.stop();});
+			layer.on('mouseout', function(e) {
+				sua.start();})		
+			},
+
+		}).addTo(map);
+
 // ** Circle
 var url_circle = url.concat("SELECT bot AS GEOM, start_date, stop_date, rep_num, r_lng, r_lat, alt_top, \
 					alt_bot, alpha 	FROM circles");
@@ -674,7 +717,7 @@ var url_winds = url.concat("SELECT coords AS GEOM, w.stn_call, stn_loc, issue_da
 					GROUP BY stn_call) g ON w.stn_call = g.stn_call AND w.proc_time = g.mx \
 					INNER JOIN stations s ON w.stn_call = s.stn_call");
 
-var wxIcon5 = L.icon({iconUrl: 'wind.ico', iconSize: [12,12]});
+var wxIcon5 = L.icon({iconUrl: 'wind.ico', iconSize: [15,15]});
  
 winds = L.realtime({
 	url: url_winds,
@@ -789,6 +832,13 @@ document.querySelector("input[name = notam]").addEventListener('change', functio
 		map.addLayer(notam), notam.start()}
 	else {
 		map.removeLayer(notam), notam.stop()}
+})
+
+document.querySelector("input[name = sua]").addEventListener('change', function() {
+	if(this.checked) {
+		map.addLayer(sua), sua.start()}
+	else {
+		map.removeLayer(sua), sua.stop()}
 })
 
 document.querySelector("input[name = taf]").addEventListener('change', function() {
