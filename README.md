@@ -10,12 +10,13 @@ Uses Leaflet (© 2010–2019 Vladimir Agafonkin. https://leafletjs.com)
 and Leaflet Realtime (https://github.com/perliedman/leaflet-realtime)
 
 ## Recent Changes
+* 5/24/21 Additional METAR data displayed.
+* 5/23/21 Improvements to Cloud Tops performance.
 * 5/14/21 SUA reports added.
 * 5/11/21 Winds Aloft reports added.
 * 5/7/21 Reduced Cloud Tops resolution for less browser stress.
 * 5/1/21 Map legends added for NEXRAD.
 * 4/12/21 Added NEXRAD radar data.
-  * Still experimental. Large data sets like Cloud Tops can freeze browser.
 
 
 ## Screenshots
@@ -30,7 +31,7 @@ CONUS:
 ![conus](https://user-images.githubusercontent.com/60933475/117853355-5224b100-b256-11eb-8a25-6d4504cb741d.png)
 
 METAR:
-![metar](https://user-images.githubusercontent.com/60933475/115439270-61c35380-a1dc-11eb-86d3-20b9bd1d9c2f.png)
+![metar](https://user-images.githubusercontent.com/60933475/119374554-b482a600-bc87-11eb-9aad-39743a4ae095.png)
 
 Regional NEXRAD:
 ![regional](https://user-images.githubusercontent.com/60933475/117853527-87310380-b256-11eb-8ae3-e72233f1cb29.png)
