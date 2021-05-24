@@ -7,12 +7,14 @@ var turblegend;
 var icelegend;
 var cloudlegend;
 var nexlegend;
+var rprod = 0;
 
 window.onload = onPageLoad();
 
 function onPageLoad() {
-	document.getElementById("gmsliderRange").step  = "1000";
+	document.getElementById("gmsliderRange").step = "1000";
 	document.getElementById("gmsliderRange").value = "0";
+	document.getElementById("altrad").disabled = true;
 }
 
 function reloadFunc(obj) {
@@ -58,7 +60,7 @@ function getColor(colf) {
 			colf >=	6000  ? '#D78B51':
 			colf >=	4000  ? '#DE8848':
 			colf >=	1000  ? '#E5853E':
-			colf >=	0	  ? '#EC8235':
+			colf >=	0	? '#EC8235':
 					'blue';
 }	
 
@@ -71,7 +73,7 @@ function getNexrad() {
 
 	switch(rad_prod) {
 		case 0:
-		   	rad_prodid = 0;
+		 	rad_prodid = 0;
 			rad_alt = 0;
 			break;
 		case 1:
@@ -111,7 +113,8 @@ function getNexrad() {
 	}
 
 	var rad_pre = `SELECT coords AS GEOM, m.prod_id, m.intensity, m.maptime, m.block_num,seq \
-			FROM nexrad m INNER JOIN (SELECT MAX(maptime) AS mob FROM nexrad WHERE prod_id = ${rad_prodid}) g \
+			FROM nexrad m INNER JOIN (SELECT MAX(maptime) AS mob FROM nexrad \
+			WHERE prod_id = ${rad_prodid}) g \
 			ON m.maptime = g.mob AND m.prod_id = ${rad_prodid} AND altitude = ${rad_alt}`;
 
 	return rad_pre;
@@ -184,7 +187,8 @@ var gairmet = L.realtime({
 			return featureData.properties.rep_num;
 		},
 		onEachFeature: function(feature, layer) {
-			layer.bindTooltip('G-AIRMET: Alt '+ feature.properties.alt + '<br>' + feature.properties.ob_ele);
+			layer.bindTooltip('G-AIRMET: Alt '+ feature.properties.alt + 
+				'<br>' + feature.properties.ob_ele);
 			layer.on('click', function(e) {
 				layer.setStyle({color: 'yellow', opacity: 0.8, fillColor: 'yellow', fillOpacity: 0.5});
 				$("#m1").html("Report");
@@ -217,14 +221,18 @@ var gairmet = L.realtime({
 				var e = document.getElementById("stim");
 				var stim = e.value;
 				if (nn == -1000) 
-					return (feature.properties.alt >= 0 && right(feature.properties.start_date, 5) == stim)
+					return (feature.properties.alt >= 0 && 
+						right(feature.properties.start_date, 5) == stim)
 				else 
-					return (feature.properties.alt >= (nn - 500) && feature.properties.alt <= (nn + 500) && right(feature.properties.start_date, 5) == stim); 
+					return (feature.properties.alt >= (nn - 500) && 
+						feature.properties.alt <= (nn + 500) && 
+						right(feature.properties.start_date, 5) == stim);
 			}
 		}).addTo(map);
 
 // AIRMET
-var url_airmet = url.concat("SELECT coords AS GEOM, g.rep_num, alt, ob_ele, text_data, start_date, stop_date \
+var url_airmet = url.concat("SELECT coords AS GEOM, g.rep_num, alt, ob_ele, text_data, \
+					start_date, stop_date \
 					FROM graphics g LEFT JOIN sigairmet s ON (g.prod_id = s.prod_id) \
 					AND (g.rep_num = s.rep_num) WHERE g.prod_id = 11");
 
@@ -274,12 +282,14 @@ var	airmet = L.realtime({
 				if (nn == -1000) 
 					return (feature.properties.alt >= 0)
 				else 
-					return (feature.properties.alt >= (nn - 500) && feature.properties.alt <= (nn + 500));
+					return (feature.properties.alt >= (nn - 500) &&
+						feature.properties.alt <= (nn + 500));
 			}
 		}).addTo(map);
 
 // SIGMET
-var url_sigmet = url.concat("SELECT coords AS GEOM, g.rep_num, alt, ob_ele, text_data, start_date, stop_date \
+var url_sigmet = url.concat("SELECT coords AS GEOM, g.rep_num, alt, ob_ele, text_data, \
+					start_date, stop_date \
 					FROM graphics g LEFT JOIN sigairmet s ON (g.prod_id = s.prod_id) AND \
 					(g.rep_num = s.rep_num)	WHERE g.prod_id = 12");
 
@@ -320,7 +330,7 @@ var	sigmet = L.realtime({
 			filter: function(feature, layer) {
 				var rangeslider = document.getElementById("gmsliderRange");
 				var output = document.getElementById("slidealt");
-				if (rangeslider.value == -1000) 
+				if (rangeslider.value == -1000)
 					output.innerHTML = "All"
 				else 
 					output.innerHTML = rangeslider.value;
@@ -329,7 +339,8 @@ var	sigmet = L.realtime({
 				if (nn == -1000) 
 					return (feature.properties.alt >= 0)
 				else 
-					return (feature.properties.alt >= (nn - 500) && feature.properties.alt <= (nn + 500));
+					return (feature.properties.alt >= (nn - 500) &&
+						feature.properties.alt <= (nn + 500));
 			}
 		}).addTo(map);
 
@@ -344,7 +355,7 @@ var	nrad = L.realtime({
  	crossOrigin: true, type: 'json'
 	}, {interval: 55 * 1000,
 
-	getFeatureId: function(featureData) { 
+	getFeatureId: function(featureData) {
 	return featureData.properties.seq;
 	},
 
@@ -358,13 +369,14 @@ var	nrad = L.realtime({
 	pointToLayer: function(feature, latlng) {
 		if (feature.properties.prod_id != 84 ) {		
 			var currentPoint = map.latLngToContainerPoint(latlng);
-			var width = 5;    //5
-			var height = 5;     //5
+			var width = 5;		//5
+			var height = 5;		//5
 			var xDifference = width / 2;
 			var yDifference = height / 2;
 			var southWest = L.point((currentPoint.x - xDifference), (currentPoint.y - yDifference));
 			var northEast = L.point((currentPoint.x + xDifference), (currentPoint.y + yDifference));
-			var bounds = L.latLngBounds(map.containerPointToLatLng(southWest), map.containerPointToLatLng(northEast));
+			var bounds = L.latLngBounds(map.containerPointToLatLng(southWest),
+				map.containerPointToLatLng(northEast));
 
 			golor = getColorInt(feature.properties.intensity);
 			var rectOptions = {fillColor: golor, fillOpacity: 0.2, weight: 0}
@@ -378,13 +390,14 @@ var	nrad = L.realtime({
 }).addTo(map)
 
 // CWA
-var url3_cwa = url.concat("SELECT coords AS GEOM, g.rep_num, alt, ob_ele, text_data, start_date, stop_date \
+var url3_cwa = url.concat("SELECT coords AS GEOM, g.rep_num, alt, ob_ele, text_data, \
+					start_date, stop_date \
 					FROM graphics g LEFT JOIN sigairmet s ON (g.prod_id = s.prod_id) AND \
 					(g.rep_num = s.rep_num) WHERE g.prod_id = 15");
 
 var	cwa = L.realtime({
 	url: url3_cwa,
-	crossOrigin: true, type: 'json'  
+	crossOrigin: true, type: 'json'
 	}, {interval: 50 * 9000,
 		style: function(feature) {
 			kolor = getColor(feature.properties.alt);
@@ -419,7 +432,7 @@ var	cwa = L.realtime({
 			filter: function(feature,layer) {
 				var rangeslider = document.getElementById("gmsliderRange");
 				var output = document.getElementById("slidealt");
-				if (rangeslider.value == -1000) 
+				if (rangeslider.value == -1000)
 					output.innerHTML = "All"
 				else 
 					output.innerHTML = rangeslider.value;
@@ -428,13 +441,15 @@ var	cwa = L.realtime({
 				if (nn == -1000) 
 					return (feature.properties.alt >= 0)
 				else 
-					return (feature.properties.alt >= (nn - 500) && feature.properties.alt <= (nn + 500));
+					return (feature.properties.alt >= (nn - 500) &&
+						feature.properties.alt <= (nn + 500));
 			}
 		}).addTo(map);
 
 // SUA
-var url3_sua = url.concat("SELECT s.airsp_id, rep_time, s.airsp_name, sua_airsp_desc, sua_status_desc,\
-					start_time, end_time, high_alt, low_alt, coords AS GEOM, dafif_name, sep_rule, shape_ind \
+var url3_sua = url.concat("SELECT s.airsp_id, rep_time, s.airsp_name, sua_airsp_desc, \
+					sua_status_desc, start_time, end_time, high_alt, low_alt, \
+					coords AS GEOM, dafif_name, sep_rule, shape_ind \
 					FROM sua s INNER JOIN sua_airspace a ON a.airsp_id = s.airsp_id \
 					INNER JOIN sua_airspace_type t ON t.sua_airsp_type = s.airsp_type \
 					INNER JOIN sua_sched_status c ON c.sua_status = s.sched_status");
@@ -443,7 +458,7 @@ var sk = document.getElementById("sua")
 
 var	sua = L.realtime({
 	url: url3_sua,
-	crossOrigin: true, type: 'json'  
+	crossOrigin: true, type: 'json'
 	}, {interval: 50 * 1000,
 		style: function(feature) {
 			return {color: '#2e052a', weight: 3, fillColor: '#2e052a', opacity: 0.5, fillOpacity: 0.5};
@@ -464,10 +479,14 @@ var	sua = L.realtime({
 				$("#m6").html("DAFIF");
 					
 				$('#f1').html('SUA - ' + e.target.feature.properties.airsp_name);
-				$('#f2').html(e.target.feature.properties.sua_airsp_desc + ' <br>' + e.target.feature.properties.sua_status_desc);
-				$('#f3').html(e.target.feature.properties.start_time + ' <br>' + e.target.feature.properties.end_time);
-				$('#f4').html(e.target.feature.properties.low_alt + ' <br>' + e.target.feature.properties.high_alt);
-				$('#f5').html(e.target.feature.properties.sep_rule + '  '+ e.target.feature.properties.shape_ind);
+				$('#f2').html(e.target.feature.properties.sua_airsp_desc + ' <br>' +
+					e.target.feature.properties.sua_status_desc);
+				$('#f3').html(e.target.feature.properties.start_time + ' <br>' +
+					e.target.feature.properties.end_time);
+				$('#f4').html(e.target.feature.properties.low_alt +
+					' <br>' + e.target.feature.properties.high_alt);
+				$('#f5').html(e.target.feature.properties.sep_rule + '  ' +
+					e.target.feature.properties.shape_ind);
 				$('#f6').html(e.target.feature.properties.dafif_name);
 
 				sua.stop();});
@@ -486,8 +505,8 @@ var	sua = L.realtime({
 	}
 
 // ** Circle
-var url_circle = url.concat("SELECT bot AS GEOM, start_date, stop_date, rep_num, r_lng, r_lat, alt_top, \
-					alt_bot, alpha 	FROM circles");
+var url_circle = url.concat("SELECT bot AS GEOM, start_date, stop_date, rep_num, r_lng, \
+					r_lat, alt_top, alt_bot, alpha 	FROM circles");
 
 var	cir = L.realtime({
 	url: url_circle,
@@ -506,8 +525,10 @@ var	cir = L.realtime({
  		 		$("#m4").html("Start");
  				$("#m5").html("Stop");
  				$("#m6").html("Alpha ");
-				$('#f1').html('Bottom ' + e.target.feature.properties.alt_bot + 'ft<br> Top ' + e.target.feature.properties.alt_top + 'ft');
-				$('#f2').html('Lat: '   + e.target.feature.properties.r_lat   + ' Lng: ' + e.target.feature.properties.r_lat);
+				$('#f1').html('Bottom ' + e.target.feature.properties.alt_bot + 'ft<br> Top ' +
+					e.target.feature.properties.alt_top + 'ft');
+				$('#f2').html('Lat: ' + e.target.feature.properties.r_lat + ' Lng: ' +
+					e.target.feature.properties.r_lat);
 				$('#f3').html(e.target.feature.properties.rep_num);
 				$('#f4').html(e.target.feature.properties.start_date);
 				$('#f5').html(e.target.feature.properties.stop_date);
@@ -522,7 +543,7 @@ var	cir = L.realtime({
 var wxIcon = L.icon({iconUrl: 'therm.ico', iconSize: [20,20]});
 
 var url_metar = url.concat("SELECT s.coords AS GEOM, m.stn_call, s.stn_loc, ob_date, temp, windsp, \
-					winddir, altimeter, visby, dewp \
+					winddir, altimeter, visby, dewp, hrly_precip, slp, windvar, windgust \
 					FROM metar m INNER JOIN (SELECT stn_call, MAX(ob_date) AS mob FROM metar \
 					GROUP BY stn_call) g ON m.stn_call = g.stn_call AND m.ob_date = g.mob \
 					INNER JOIN stations s ON m.stn_call = s.stn_call");
@@ -538,28 +559,36 @@ metar = L.realtime({
 		},
 		pointToLayer: function(feature, latlng) {
 			marker = L.marker(latlng, {icon: wxIcon});
-			marker.bindTooltip('METAR' + '<br>' + feature.properties.stn_call 
+			marker.bindTooltip('METAR' + '<br>' + feature.properties.stn_call
 				+ '<br>' + feature.properties.temp + '&#x2109');
 			marker.on('click', function(e) {
-				$("#m1").html("Station");
+				$("#m1").html("Station" );
 				$("#m2").html("Location");
-				$("#m3").html("Time");
-				$("#m4").html("Temp");
-				$("#m5").html("Winds");
-				$("#m6").html("Visibility");
-				$('#f1').html(e.target.feature.properties.stn_call + " (METAR)");
+				$("#m3").html("Temp");
+				$("#m4").html("Winds");
+				$("#m5").html("Visibility");
+				$("#m6").html("Pressure");
+				$('#f1').html(e.target.feature.properties.stn_call + " - " +
+								e.target.feature.properties.ob_date + 'z');
 				$('#f2').html(e.target.feature.properties.stn_loc);
-				$('#f3').html(e.target.feature.properties.ob_date);
-				$('#f4').html(e.target.feature.properties.temp + "\xB0F");
-				$('#f5').html(e.target.feature.properties.windsp + "kts");
-				$('#f6').html(e.target.feature.properties.visby );
+				$('#f3').html(e.target.feature.properties.temp + "\xB0F" +
+						"  dp:" + e.target.feature.properties.dewp +
+						"\xB0F<br> Hrly Precip:" +
+						e.target.feature.properties.hrly_precip);
+				$('#f4').html(e.target.feature.properties.windsp + "kts " +
+						e.target.feature.properties.winddir + "° " +
+						e.target.feature.properties.windvar + "  gusts:" +
+						e.target.feature.properties.windgust + "kts");
+				$('#f5').html(e.target.feature.properties.visby);
+				$('#f6').html("SLP:" + e.target.feature.properties.slp +
+					"<br>Altimeter:" + e.target.feature.properties.altimeter );
 			});
 			marker.addTo(map);
 			
 			if (!mk.checked){
 				map.removeLayer(marker), metar.stop()
 			}
-			return marker; 
+			return marker;
 		}
 	}).addTo(map);
 	
@@ -567,10 +596,11 @@ metar = L.realtime({
 		map.removeLayer(metar), metar.stop()
 	}
 
-// ** NOTAM 
+// ** NOTAM
 var wxIcon2 = L.icon({iconUrl: 'wx2.ico', iconSize: [15,15]});
 
-var url_notam = url.concat("SELECT s.coords AS GEOM, n.stn_call, stn_loc, n.rep_num, text_data, start_date, stop_date \
+var url_notam = url.concat("SELECT s.coords AS GEOM, n.stn_call, stn_loc, n.rep_num, text_data, \
+					start_date, stop_date \
 					FROM sigairmet n LEFT JOIN graphics g ON n.prod_id = g.prod_id \
 					AND n.rep_num = g.rep_num \
 					JOIN stations s ON n.stn_call = s.stn_call WHERE n.prod_id = 8");
@@ -618,7 +648,8 @@ notam = L.realtime({
 // ** TAF
 var wxIcon3 = L.icon({iconUrl: 'wx1.ico', iconSize: [15,15]});
 
-var url_taf = url.concat("SELECT coords AS GEOM, t.stn_call, stn_loc, issued, current, wind, visby, condx, rep_time \
+var url_taf = url.concat("SELECT coords AS GEOM, t.stn_call, stn_loc, issued, current, \
+					wind, visby, condx, rep_time \
 					FROM taf t, stations s WHERE t.stn_call = s.stn_call");
 
 var tk = document.getElementById("taf")
@@ -642,7 +673,8 @@ taf = L.realtime({
 				$("#m6").html("Conditions");
 				$('#f1').html(e.target.feature.properties.stn_call + " (TAF)");
 				$('#f2').html(e.target.feature.properties.stn_loc);
-				$('#f3').html(e.target.feature.properties.issued + '<br>' + e.target.feature.properties.current);
+				$('#f3').html(e.target.feature.properties.issued + '<br>' +
+					e.target.feature.properties.current);
 				$('#f4').html(e.target.feature.properties.wind);
 				$('#f5').html(e.target.feature.properties.visby);
 				$('#f6').html(e.target.feature.properties.condx);
@@ -662,9 +694,10 @@ taf = L.realtime({
 	}
 
 // ** Winds Aloft
-var url_winds = url.concat("SELECT coords AS GEOM, w.stn_call, stn_loc, issue_date, alt1,dir1, spd1,temp1, \
- 					alt2,dir2, spd2,temp2, alt3,dir3, spd3,temp3, alt4,dir4, spd4,temp4, alt5,dir5, spd5,temp5, \
-					alt6,dir6, spd6,temp6, alt7,dir7, spd7,temp7, alt8,dir8, spd8,temp8, alt9,dir9, spd9,temp9 \
+var url_winds = url.concat("SELECT coords AS GEOM, w.stn_call, stn_loc, issue_date, alt1, \
+					dir1, spd1, temp1, alt2, dir2, spd2, temp2, alt3, dir3, spd3, temp3, alt4, \
+					dir4, spd4, temp4, alt5, dir5, spd5, temp5, alt6, dir6, spd6, temp6, alt7, \
+					dir7, spd7, temp7, alt8, dir8, spd8, temp8, alt9, dir9, spd9, temp9 \
 					FROM winds w INNER JOIN (SELECT stn_call, MAX(proc_time) AS mx FROM winds \
 					GROUP BY stn_call) g ON w.stn_call = g.stn_call AND w.proc_time = g.mx \
 					INNER JOIN stations s ON w.stn_call = s.stn_call");
@@ -686,22 +719,45 @@ winds = L.realtime({
 			marker.bindTooltip('Winds' + '<br>' + feature.properties.stn_call);
 
 			marker.on('click', function(e) {
-				$("#m1").html("Station" + '<br>'  + e.target.feature.properties.issue_date );
-				$("#m2").html(e.target.feature.properties.alt1 + "ft" + '<br>'  + e.target.feature.properties.alt2 + "ft");
-				$("#m3").html(e.target.feature.properties.alt3 + "ft" + '<br>'  + e.target.feature.properties.alt4 + "ft");
-				$("#m4").html(e.target.feature.properties.alt5 + "ft" + '<br>'  + e.target.feature.properties.alt6 + "ft");
-				$("#m5").html(e.target.feature.properties.alt7 + "ft" + '<br>'  + e.target.feature.properties.alt8 + "ft");
+				$("#m1").html("Station" + '<br>' + e.target.feature.properties.issue_date );
+				$("#m2").html(e.target.feature.properties.alt1 + "ft" + '<br>' +
+					e.target.feature.properties.alt2 + "ft");
+				$("#m3").html(e.target.feature.properties.alt3 + "ft" + '<br>' +
+					e.target.feature.properties.alt4 + "ft");
+				$("#m4").html(e.target.feature.properties.alt5 + "ft" + '<br>' +
+					e.target.feature.properties.alt6 + "ft");
+				$("#m5").html(e.target.feature.properties.alt7 + "ft" + '<br>' +
+					e.target.feature.properties.alt8 + "ft");
 				$("#m6").html(e.target.feature.properties.alt9 + "ft");
-				$('#f1').html(e.target.feature.properties.stn_call + " (Winds)" + '<br>' + e.target.feature.properties.stn_loc); 
-				$('#f2').html(e.target.feature.properties.dir1 + "\xB0 " + e.target.feature.properties.spd1 + "kt " +  e.target.feature.properties.temp1 + "\xB0C"
-				+ '<br>' + e.target.feature.properties.dir2    + "\xB0 " + e.target.feature.properties.spd2 + "kt " +  e.target.feature.properties.temp2 + "\xB0C");
-				$('#f3').html(e.target.feature.properties.dir3 + "\xB0 " + e.target.feature.properties.spd3 + "kt " +  e.target.feature.properties.temp3 + "\xB0C"
-				+ '<br>' + e.target.feature.properties.dir4    + "\xB0 " + e.target.feature.properties.spd4 + "kt " +  e.target.feature.properties.temp4 + "\xB0C");	
-				$('#f4').html(e.target.feature.properties.dir5 + "\xB0 " + e.target.feature.properties.spd5 + "kt " +  e.target.feature.properties.temp5 + "\xB0C"
-				+ '<br>' + e.target.feature.properties.dir6    + "\xB0 " + e.target.feature.properties.spd6 + "kt " +  e.target.feature.properties.temp6 + "\xB0C");
-				$('#f5').html(e.target.feature.properties.dir7 + "\xB0 " + e.target.feature.properties.spd7 + "kt " +  e.target.feature.properties.temp7 + "\xB0C"
-				+ '<br>' + e.target.feature.properties.dir8    + "\xB0 " + e.target.feature.properties.spd8 + "kt " +  e.target.feature.properties.temp8 + "\xB0C");
-				$('#f6').html(e.target.feature.properties.dir9 + "\xB0 " + e.target.feature.properties.spd9 + "kt " +  e.target.feature.properties.temp9 + "\xB0C");
+				$('#f1').html(e.target.feature.properties.stn_call + " (Winds)" +
+					'<br>' + e.target.feature.properties.stn_loc);
+				$('#f2').html(e.target.feature.properties.dir1 + "\xB0 " +
+					e.target.feature.properties.spd1 + "kt " +
+					e.target.feature.properties.temp1 + "\xB0C" +
+					'<br>' + e.target.feature.properties.dir2 + "\xB0 " +
+					e.target.feature.properties.spd2 + "kt " +
+					e.target.feature.properties.temp2 + "\xB0C");
+				$('#f3').html(e.target.feature.properties.dir3 + "\xB0 " +
+					e.target.feature.properties.spd3 + "kt " +
+					e.target.feature.properties.temp3 + "\xB0C" +
+					'<br>' + e.target.feature.properties.dir4 + "\xB0 " +
+					e.target.feature.properties.spd4 + "kt " +
+					e.target.feature.properties.temp4 + "\xB0C");	
+				$('#f4').html(e.target.feature.properties.dir5 + "\xB0 " +
+					e.target.feature.properties.spd5 + "kt " +
+					e.target.feature.properties.temp5 + "\xB0C"	+ '<br>' +
+					e.target.feature.properties.dir6 + "\xB0 " +
+					e.target.feature.properties.spd6 + "kt " +
+					e.target.feature.properties.temp6 + "\xB0C");
+				$('#f5').html(e.target.feature.properties.dir7 + "\xB0 " +
+					e.target.feature.properties.spd7 + "kt " +
+					e.target.feature.properties.temp7 + "\xB0C"	+ '<br>' +
+					e.target.feature.properties.dir8 + "\xB0 " +
+					e.target.feature.properties.spd8 + "kt " +
+					e.target.feature.properties.temp8 + "\xB0C");
+				$('#f6').html(e.target.feature.properties.dir9 + "\xB0 " +
+					e.target.feature.properties.spd9 + "kt " +
+					e.target.feature.properties.temp9 + "\xB0C");
 			});
 			marker.addTo(map);
 
@@ -718,8 +774,9 @@ winds = L.realtime({
 	}
 
 // ** PIREP
-var url_pirep = url.concat("SELECT coords AS GEOM, p.stn_call, stn_loc, rep_type, fl_lev, ac_type, \
-					turbulence, remarks, location, cloud, weather, temperature, wind_spd_dir, icing, rep_time \
+var url_pirep = url.concat("SELECT coords AS GEOM, p.stn_call, stn_loc, rep_type, fl_lev, \
+					ac_type, turbulence, remarks, location, cloud, weather, temperature, \
+					wind_spd_dir, icing, rep_time \
 					FROM pirep p INNER JOIN (SELECT stn_call, MAX(rep_time) AS mx FROM pirep \
 					GROUP BY stn_call) g ON p.stn_call = g.stn_call AND p.rep_time = g.mx \
 					INNER JOIN stations s ON p.stn_call = s.stn_call");
@@ -749,7 +806,8 @@ pirep = L.realtime({
 
 			marker.on('click', function(e) {
 				$("#m1").html("Station");
-				$("#m2").html("Location" + '<br>' + "Time: " + e.target.feature.properties.rep_time + "z");
+				$("#m2").html("Location" + '<br>' + "Time: " + 
+					e.target.feature.properties.rep_time + "z");
 				$("#m3").html("Flt Lev:" + '<br>' + "AC Type:");
 				$("#m4").html("Turbulence:" + '<br>' + "Icing:");
 				$("#m5").html("WX");
@@ -759,10 +817,16 @@ pirep = L.realtime({
 				else
 					$('#f1').html(e.target.feature.properties.stn_call + " (PIREP)");
 
-				$('#f2').html(e.target.feature.properties.stn_loc + "<br><i>Loc: " + e.target.feature.properties.location);
-				$('#f3').html("<i>Flt lev: " + e.target.feature.properties.fl_lev  + "<br><i>a/c: "  + e.target.feature.properties.ac_type);
-				$('#f4').html("<i>Turb: " + e.target.feature.properties.turbulence + "<br><i>Ice: "  + e.target.feature.properties.icing);
-				$('#f5').html("<i>Cloud: " +e.target.feature.properties.cloud      + "<br><i>Temp: " + e.target.feature.properties.temperature + "<br><i>Wind: " + e.target.feature.properties.wind_spd_dir + "<br><i>WX: " + e.target.feature.properties.weather);
+				$('#f2').html(e.target.feature.properties.stn_loc + "<br><i>Loc: "
+					+ e.target.feature.properties.location);
+				$('#f3').html("<i>Flt lev: " + e.target.feature.properties.fl_lev +
+					"<br><i>a/c: " + e.target.feature.properties.ac_type);
+				$('#f4').html("<i>Turb: " + e.target.feature.properties.turbulence +
+					"<br><i>Ice: " + e.target.feature.properties.icing);
+				$('#f5').html("<i>Cloud: " +e.target.feature.properties.cloud +
+					"<br><i>Temp: " + e.target.feature.properties.temperature +
+					"<br><i>Wind: " + e.target.feature.properties.wind_spd_dir +
+					"<br><i>WX: " + e.target.feature.properties.weather);
 				$('#f6').html(e.target.feature.properties.remarks);
 			});
 			marker.addTo(map);
@@ -866,7 +930,7 @@ document.getElementById("gmsliderRange").onchange = function()
 
 document.getElementById("prodid").onchange = function() {
 	var rprod_str = document.getElementById('prodid').value;
-	var rprod = parseInt(rprod_str);
+	rprod = parseInt(rprod_str);
 	map.removeControl(nexlegend);
 	map.removeControl(turblegend);
 	map.removeControl(icelegend);
@@ -874,6 +938,9 @@ document.getElementById("prodid").onchange = function() {
 	map.removeControl(cloudlegend);
 
 	switch(rprod) {
+		case 0:
+			document.getElementById("altrad").disabled = true;
+			break;
 		case 1:
 			document.getElementById("altrad").disabled = true;
 			break;
@@ -906,95 +973,92 @@ document.getElementById("prodid").onchange = function() {
 turblegend = L.control({ position: "topright" });
 
 turblegend.onAdd = function(mop) {
-  var div = L.DomUtil.create("div", "legend");
-  div.innerHTML += "<h4>Turbulence</h4>";
-  div.innerHTML += '<i style="background: #8C8C74"></i><span>EDR  7-13</span><br>';
-  div.innerHTML += '<i style="background: #B4C8FF"></i><span>EDR 14-20</span><br>';
-  div.innerHTML += '<i style="background: #5F87FF"></i><span>EDR 21-27</span><br>';
-  div.innerHTML += '<i style="background: #1446E6"></i><span>EDR 28-34</span><br>';
-  div.innerHTML += '<i style="background: #6EF54B"></i><span>EDR 35-41</span><br>';
-  div.innerHTML += '<i style="background: #00C300"></i><span>EDR 42-48</span><br>';
-  div.innerHTML += '<i style="background: #007300"></i><span>EDR 49-55</span><br>';
-  div.innerHTML += '<i style="background: #FFFF00"></i><span>EDR 56-62</span><br>';
-  div.innerHTML += '<i style="background: #FFB430"></i><span>EDR 63-69</span><br>';
-  div.innerHTML += '<i style="background: #FA7D00"></i><span>EDR 70-76</span><br>';
-  div.innerHTML += '<i style="background: #E62D00"></i><span>EDR 77-83</span><br>';
-  div.innerHTML += '<i style="background: #AF0000"></i><span>EDR 84-90</span><br>';
-  div.innerHTML += '<i style="background: #690000"></i><span>EDR 91-97</span><br>';
-  div.innerHTML += '<i style="background: #FA00C8"></i><span>EDR >=98</span><br>';
-  div.innerHTML += '<i style="background: #9B00FA"></i><span>EDR No Data</span><br>'; 
-  return div;
+	var div = L.DomUtil.create("div", "legend");
+	div.innerHTML += "<h4>Turbulence</h4>";
+	div.innerHTML += '<i style="background: #8C8C74"></i><span>EDR  7-13</span><br>';
+	div.innerHTML += '<i style="background: #B4C8FF"></i><span>EDR 14-20</span><br>';
+	div.innerHTML += '<i style="background: #5F87FF"></i><span>EDR 21-27</span><br>';
+	div.innerHTML += '<i style="background: #1446E6"></i><span>EDR 28-34</span><br>';
+	div.innerHTML += '<i style="background: #6EF54B"></i><span>EDR 35-41</span><br>';
+	div.innerHTML += '<i style="background: #00C300"></i><span>EDR 42-48</span><br>';
+	div.innerHTML += '<i style="background: #007300"></i><span>EDR 49-55</span><br>';
+	div.innerHTML += '<i style="background: #FFFF00"></i><span>EDR 56-62</span><br>';
+	div.innerHTML += '<i style="background: #FFB430"></i><span>EDR 63-69</span><br>';
+	div.innerHTML += '<i style="background: #FA7D00"></i><span>EDR 70-76</span><br>';
+	div.innerHTML += '<i style="background: #E62D00"></i><span>EDR 77-83</span><br>';
+	div.innerHTML += '<i style="background: #AF0000"></i><span>EDR 84-90</span><br>';
+	div.innerHTML += '<i style="background: #690000"></i><span>EDR 91-97</span><br>';
+	div.innerHTML += '<i style="background: #FA00C8"></i><span>EDR >=98</span><br>';
+	div.innerHTML += '<i style="background: #9B00FA"></i><span>EDR No Data</span><br>';
+	return div;
 };
 
 cloudlegend = L.control({ position: "topright" });
 
 cloudlegend.onAdd = function(mop) {
-  var div = L.DomUtil.create("div", "legend");
-  div.innerHTML += "<h4>Cloud Tops</h4>";
-  div.innerHTML += '<i style="background: #8C8C74"></i><span><= 1,500ft</span><br>';
-  div.innerHTML += '<i style="background: #B4C8FF"></i><span>1,501ft-3,000ft</span><br>';
-  div.innerHTML += '<i style="background: #5F87FF"></i><span>3,001ft-4,500ft</span><br>';
-  div.innerHTML += '<i style="background: #1446E6"></i><span>4,501ft-6,00ft</span><br>';
-  div.innerHTML += '<i style="background: #6EF54B"></i><span>6,001ft-7,500ft</span><br>';
-  div.innerHTML += '<i style="background: #00C300"></i><span>7,501ft-9,000ft</span><br>';
-  div.innerHTML += '<i style="background: #007300"></i><span>9,001ft-10,500ft</span><br>';
-  div.innerHTML += '<i style="background: #FFFF00"></i><span>10,501ft-12,000ft</span><br>';
-  div.innerHTML += '<i style="background: #FFB430"></i><span>12,001ft-13,500ft</span><br>';
-  div.innerHTML += '<i style="background: #FA7D00"></i><span>13,501ft-15,000ft</span><br>';
-  div.innerHTML += '<i style="background: #E62D00"></i><span>15,001ft-18,000ft</span><br>';
-  div.innerHTML += '<i style="background: #AF0000"></i><span>18,001ft-21,000ft</span><br>';
-  div.innerHTML += '<i style="background: #690000"></i><span>21,001ft-24,000ft</span><br>';
-  div.innerHTML += '<i style="background: #FA00C8"></i><span>>24,000ft</span><br>';
-  div.innerHTML += '<i style="background: #9B00FA"></i><span>No Data</span><br>'; 
-  return div;
+	var div = L.DomUtil.create("div", "legend");
+	div.innerHTML += "<h4>Cloud Tops</h4>";
+	div.innerHTML += '<i style="background: #8C8C74"></i><span><= 1,500ft</span><br>';
+	div.innerHTML += '<i style="background: #B4C8FF"></i><span>1,501ft-3,000ft</span><br>';
+	div.innerHTML += '<i style="background: #5F87FF"></i><span>3,001ft-4,500ft</span><br>';
+	div.innerHTML += '<i style="background: #1446E6"></i><span>4,501ft-6,00ft</span><br>';
+	div.innerHTML += '<i style="background: #6EF54B"></i><span>6,001ft-7,500ft</span><br>';
+	div.innerHTML += '<i style="background: #00C300"></i><span>7,501ft-9,000ft</span><br>';
+	div.innerHTML += '<i style="background: #007300"></i><span>9,001ft-10,500ft</span><br>';
+	div.innerHTML += '<i style="background: #FFFF00"></i><span>10,501ft-12,000ft</span><br>';
+	div.innerHTML += '<i style="background: #FFB430"></i><span>12,001ft-13,500ft</span><br>';
+	div.innerHTML += '<i style="background: #FA7D00"></i><span>13,501ft-15,000ft</span><br>';
+	div.innerHTML += '<i style="background: #E62D00"></i><span>15,001ft-18,000ft</span><br>';
+	div.innerHTML += '<i style="background: #AF0000"></i><span>18,001ft-21,000ft</span><br>';
+	div.innerHTML += '<i style="background: #690000"></i><span>21,001ft-24,000ft</span><br>';
+	div.innerHTML += '<i style="background: #FA00C8"></i><span>>24,000ft</span><br>';
+	div.innerHTML += '<i style="background: #9B00FA"></i><span>No Data</span><br>';
+	return div;
 };
 
 icelegend = L.control({ position: "topright" });
 
 icelegend.onAdd = function(mop) {
-  var div = L.DomUtil.create("div", "legend");
-  div.innerHTML += "<h4>Icing</h4>";
-  div.innerHTML += '<i style="background: #8C8C74"></i><span>Trace</span><br>';
-  div.innerHTML += '<i style="background: #B4C8FF"></i><span>Light</span><br>';
-  div.innerHTML += '<i style="background: #5F87FF"></i><span>Moderate</span><br>';
-  div.innerHTML += '<i style="background: #1446E6"></i><span>Severe</span><br>';
-  div.innerHTML += '<i style="background: #6EF54B"></i><span>Heavy</span><br>';
-  div.innerHTML += '<i style="background: #00C300"></i><span>Reserved</span><br>';
-  div.innerHTML += '<i style="background: #007300"></i><span>No Data</span><br>';
- 
-  return div;
+	var div = L.DomUtil.create("div", "legend");
+	div.innerHTML += "<h4>Icing</h4>";
+	div.innerHTML += '<i style="background: #8C8C74"></i><span>Trace</span><br>';
+	div.innerHTML += '<i style="background: #B4C8FF"></i><span>Light</span><br>';
+	div.innerHTML += '<i style="background: #5F87FF"></i><span>Moderate</span><br>';
+	div.innerHTML += '<i style="background: #1446E6"></i><span>Severe</span><br>';
+	div.innerHTML += '<i style="background: #6EF54B"></i><span>Heavy</span><br>';
+	div.innerHTML += '<i style="background: #00C300"></i><span>Reserved</span><br>';
+	div.innerHTML += '<i style="background: #007300"></i><span>No Data</span><br>';
+	return div;
 };
 
 lightlegend = L.control({ position: "topright" });
 
 lightlegend.onAdd = function(mop) {
-  var div = L.DomUtil.create("div", "legend");
-  div.innerHTML += "<h4>Lightning</h4>";
-  div.innerHTML += '<i style="background: #8C8C74"></i><span>1 Strike</span><br>';
-  div.innerHTML += '<i style="background: #B4C8FF"></i><span>2 Strikes</span><br>';
-  div.innerHTML += '<i style="background: #5F87FF"></i><span>3-5 Strikes</span><br>';
-  div.innerHTML += '<i style="background: #1446E6"></i><span>6-10 Strikes</span><br>';
-  div.innerHTML += '<i style="background: #6EF54B"></i><span>11-15 Strikes</span><br>';
-  div.innerHTML += '<i style="background: #00C300"></i><span>>15 Strikes</span><br>';
-  div.innerHTML += '<i style="background: #007300"></i><span>No Data</span><br>';
- 
-  return div;
+	var div = L.DomUtil.create("div", "legend");
+	div.innerHTML += "<h4>Lightning</h4>";
+	div.innerHTML += '<i style="background: #8C8C74"></i><span>1 Strike</span><br>';
+	div.innerHTML += '<i style="background: #B4C8FF"></i><span>2 Strikes</span><br>';
+	div.innerHTML += '<i style="background: #5F87FF"></i><span>3-5 Strikes</span><br>';
+	div.innerHTML += '<i style="background: #1446E6"></i><span>6-10 Strikes</span><br>';
+	div.innerHTML += '<i style="background: #6EF54B"></i><span>11-15 Strikes</span><br>';
+	div.innerHTML += '<i style="background: #00C300"></i><span>>15 Strikes</span><br>';
+	div.innerHTML += '<i style="background: #007300"></i><span>No Data</span><br>';
+	return div;
 };
 
 nexlegend = L.control({ position: "topright" });
 
 nexlegend.onAdd = function(mop) {
-  var div = L.DomUtil.create("div", "legend");
-  div.innerHTML += "<h4>NEXRAD</h4>";
-  div.innerHTML += '<i style="background: #8C8C74"></i><span>None</span><br>';
-  div.innerHTML += '<i style="background: #B4C8FF"></i><span>Light</span><br>';
-  div.innerHTML += '<i style="background: #5F87FF"></i><span>Light to Moderate</span><br>';
-  div.innerHTML += '<i style="background: #1446E6"></i><span>Moderate to Heavy</span><br>';
-  div.innerHTML += '<i style="background: #6EF54B"></i><span>Heavy</span><br>';
-  div.innerHTML += '<i style="background: #00C300"></i><span>Very Heavy</span><br>';
-  div.innerHTML += '<i style="background: #007300"></i><span>Very Heavy+Hail</span><br>';
- 
-  return div;
+	var div = L.DomUtil.create("div", "legend");
+	div.innerHTML += "<h4>NEXRAD</h4>";
+	div.innerHTML += '<i style="background: #8C8C74"></i><span>None</span><br>';
+	div.innerHTML += '<i style="background: #B4C8FF"></i><span>Light</span><br>';
+	div.innerHTML += '<i style="background: #5F87FF"></i><span>Light to Moderate</span><br>';
+	div.innerHTML += '<i style="background: #1446E6"></i><span>Moderate to Heavy</span><br>';
+	div.innerHTML += '<i style="background: #6EF54B"></i><span>Heavy</span><br>';
+	div.innerHTML += '<i style="background: #00C300"></i><span>Very Heavy</span><br>';
+	div.innerHTML += '<i style="background: #007300"></i><span>Very Heavy+Hail</span><br>';
+	return div;
 };
 
 // Add layer control
