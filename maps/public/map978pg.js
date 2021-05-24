@@ -11,7 +11,6 @@ var nexlegend;
 window.onload = onPageLoad();
 
 function onPageLoad() {
-
 	document.getElementById("gmsliderRange").step  = "1000";
 	document.getElementById("gmsliderRange").value = "0";
 }
@@ -440,6 +439,8 @@ var url3_sua = url.concat("SELECT s.airsp_id, rep_time, s.airsp_name, sua_airsp_
 					INNER JOIN sua_airspace_type t ON t.sua_airsp_type = s.airsp_type \
 					INNER JOIN sua_sched_status c ON c.sua_status = s.sched_status");
 
+var sk = document.getElementById("sua")
+
 var	sua = L.realtime({
 	url: url3_sua,
 	crossOrigin: true, type: 'json'  
@@ -470,11 +471,19 @@ var	sua = L.realtime({
 				$('#f6').html(e.target.feature.properties.dafif_name);
 
 				sua.stop();});
-			layer.on('mouseout', function(e) {
-				sua.start();})		
-			},
+				
+				layer.on('mouseout', function(e) {
+					sua.start();});
 
+				if (!sk.checked){
+					map.removeLayer(sua), sua.stop()
+				}		
+			},
 		}).addTo(map);
+
+	if (!sk.checked){
+		map.removeLayer(sua), sua.stop()
+	}
 
 // ** Circle
 var url_circle = url.concat("SELECT bot AS GEOM, start_date, stop_date, rep_num, r_lng, r_lat, alt_top, \
@@ -509,8 +518,6 @@ var	cir = L.realtime({
 		}
 	}).addTo(map);
 
-
-
 // ** METAR 
 var wxIcon = L.icon({iconUrl: 'therm.ico', iconSize: [20,20]});
 
@@ -519,6 +526,8 @@ var url_metar = url.concat("SELECT s.coords AS GEOM, m.stn_call, s.stn_loc, ob_d
 					FROM metar m INNER JOIN (SELECT stn_call, MAX(ob_date) AS mob FROM metar \
 					GROUP BY stn_call) g ON m.stn_call = g.stn_call AND m.ob_date = g.mob \
 					INNER JOIN stations s ON m.stn_call = s.stn_call");
+
+var mk = document.getElementById("meta")
 
 metar = L.realtime({
 	url: url_metar,
@@ -546,9 +555,17 @@ metar = L.realtime({
 				$('#f6').html(e.target.feature.properties.visby );
 			});
 			marker.addTo(map);
-			return marker;
+			
+			if (!mk.checked){
+				map.removeLayer(marker), metar.stop()
+			}
+			return marker; 
 		}
 	}).addTo(map);
+	
+	if (!mk.checked){
+		map.removeLayer(metar), metar.stop()
+	}
 
 // ** NOTAM 
 var wxIcon2 = L.icon({iconUrl: 'wx2.ico', iconSize: [15,15]});
@@ -557,6 +574,8 @@ var url_notam = url.concat("SELECT s.coords AS GEOM, n.stn_call, stn_loc, n.rep_
 					FROM sigairmet n LEFT JOIN graphics g ON n.prod_id = g.prod_id \
 					AND n.rep_num = g.rep_num \
 					JOIN stations s ON n.stn_call = s.stn_call WHERE n.prod_id = 8");
+
+var nk = document.getElementById("notam")
 
 notam = L.realtime({
 	url: url_notam,
@@ -583,15 +602,26 @@ notam = L.realtime({
 				$('#f6').html(e.target.feature.properties.stop_date);
 			});
 			marker.addTo(map);
+
+			if (!nk.checked){
+				map.removeLayer(marker), notam.stop()
+			}
+
 			return marker;
 		}
 	}).addTo(map);
 
+	if (!nk.checked){
+		map.removeLayer(notam), notam.stop()
+	}
+	
 // ** TAF
 var wxIcon3 = L.icon({iconUrl: 'wx1.ico', iconSize: [15,15]});
 
 var url_taf = url.concat("SELECT coords AS GEOM, t.stn_call, stn_loc, issued, current, wind, visby, condx, rep_time \
 					FROM taf t, stations s WHERE t.stn_call = s.stn_call");
+
+var tk = document.getElementById("taf")
 
 taf = L.realtime({
 	url: url_taf,
@@ -618,9 +648,18 @@ taf = L.realtime({
 				$('#f6').html(e.target.feature.properties.condx);
 			});
 			marker.addTo(map);
+
+			if (!tk.checked){
+				map.removeLayer(marker), taf.stop()
+			}
+
 			return marker;
 		}
 	}).addTo(map);
+	
+	if (!nk.checked){
+		map.removeLayer(taf), taf.stop()
+	}
 
 // ** Winds Aloft
 var url_winds = url.concat("SELECT coords AS GEOM, w.stn_call, stn_loc, issue_date, alt1,dir1, spd1,temp1, \
@@ -631,6 +670,8 @@ var url_winds = url.concat("SELECT coords AS GEOM, w.stn_call, stn_loc, issue_da
 					INNER JOIN stations s ON w.stn_call = s.stn_call");
 
 var wxIcon5 = L.icon({iconUrl: 'wind.ico', iconSize: [15,15]});
+
+var wk = document.getElementById("winds")
  
 winds = L.realtime({
 	url: url_winds,
@@ -663,9 +704,18 @@ winds = L.realtime({
 				$('#f6').html(e.target.feature.properties.dir9 + "\xB0 " + e.target.feature.properties.spd9 + "kt " +  e.target.feature.properties.temp9 + "\xB0C");
 			});
 			marker.addTo(map);
+
+			if (!wk.checked){
+				map.removeLayer(marker), winds.stop()
+			}
+
 			return marker;
 		}
 	}).addTo(map);
+	
+	if (!wk.checked){
+		map.removeLayer(winds), winds.stop()
+	}
 
 // ** PIREP
 var url_pirep = url.concat("SELECT coords AS GEOM, p.stn_call, stn_loc, rep_type, fl_lev, ac_type, \
@@ -675,6 +725,8 @@ var url_pirep = url.concat("SELECT coords AS GEOM, p.stn_call, stn_loc, rep_type
 					INNER JOIN stations s ON p.stn_call = s.stn_call");
 
 var wxIcon4 
+var pk = document.getElementById("pirep")
+
 pirep = L.realtime({
 	url: url_pirep,
 	crossOrigin: true, type: 'json'
@@ -714,9 +766,18 @@ pirep = L.realtime({
 				$('#f6').html(e.target.feature.properties.remarks);
 			});
 			marker.addTo(map);
+			
+			if (!pk.checked){
+				map.removeLayer(marker), pirep.stop()
+			}
+
 			return marker;
 		}
 	}).addTo(map);
+
+	if (!pk.checked){
+		map.removeLayer(pirep), pirep.stop()
+	}
 
 // Handles the check boxes being turned on/off
 document.querySelector("input[name = gmet]").addEventListener('change', function() {
