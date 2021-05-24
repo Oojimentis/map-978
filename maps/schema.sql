@@ -2,10 +2,10 @@
 -- PostgreSQL database dump
 --
 
--- Dumped from database version 13.2 (Ubuntu 13.2-1.pgdg18.04+1)
--- Dumped by pg_dump version 13.2 (Ubuntu 13.2-1.pgdg18.04+1)
+-- Dumped from database version 11.12 (Ubuntu 11.12-1.pgdg18.04+1)
+-- Dumped by pg_dump version 11.12 (Ubuntu 11.12-1.pgdg18.04+1)
 
--- Started on 2021-05-16 15:15:08 EDT
+-- Started on 2021-05-24 11:52:28 EDT
 
 SET statement_timeout = 0;
 SET lock_timeout = 0;
@@ -19,7 +19,7 @@ SET client_min_messages = warning;
 SET row_security = off;
 
 --
--- TOC entry 7 (class 2615 OID 16385)
+-- TOC entry 10 (class 2615 OID 16394)
 -- Name: postgis; Type: SCHEMA; Schema: -; Owner: postgres
 --
 
@@ -28,29 +28,12 @@ CREATE SCHEMA postgis;
 
 ALTER SCHEMA postgis OWNER TO postgres;
 
---
--- TOC entry 2 (class 3079 OID 16386)
--- Name: postgis; Type: EXTENSION; Schema: -; Owner: -
---
-
-CREATE EXTENSION IF NOT EXISTS postgis WITH SCHEMA postgis;
-
-
---
--- TOC entry 3969 (class 0 OID 0)
--- Dependencies: 2
--- Name: EXTENSION postgis; Type: COMMENT; Schema: -; Owner: 
---
-
-COMMENT ON EXTENSION postgis IS 'PostGIS geometry and geography spatial types and functions';
-
-
 SET default_tablespace = '';
 
-SET default_table_access_method = heap;
+SET default_with_oids = false;
 
 --
--- TOC entry 207 (class 1259 OID 17409)
+-- TOC entry 200 (class 1259 OID 17416)
 -- Name: airspace_ob_ele; Type: TABLE; Schema: postgis; Owner: postgres
 --
 
@@ -63,13 +46,11 @@ CREATE TABLE postgis.airspace_ob_ele (
 ALTER TABLE postgis.airspace_ob_ele OWNER TO postgres;
 
 --
--- TOC entry 217 (class 1259 OID 17690)
+-- TOC entry 206 (class 1259 OID 17495)
 -- Name: circles; Type: TABLE; Schema: postgis; Owner: postgres
 --
 
 CREATE TABLE postgis.circles (
-    bot postgis.geometry NOT NULL,
-    top postgis.geometry NOT NULL,
     alt_top integer,
     alt_bot integer,
     alpha integer,
@@ -81,14 +62,16 @@ CREATE TABLE postgis.circles (
     stop_date character varying,
     geo_opt integer NOT NULL,
     r_lng integer,
-    r_lat integer
+    r_lat integer,
+    bot public.geometry NOT NULL,
+    top public.geometry NOT NULL
 );
 
 
 ALTER TABLE postgis.circles OWNER TO postgres;
 
 --
--- TOC entry 208 (class 1259 OID 17415)
+-- TOC entry 201 (class 1259 OID 17422)
 -- Name: fisb_products; Type: TABLE; Schema: postgis; Owner: postgres
 --
 
@@ -101,24 +84,24 @@ CREATE TABLE postgis.fisb_products (
 ALTER TABLE postgis.fisb_products OWNER TO postgres;
 
 --
--- TOC entry 209 (class 1259 OID 17421)
+-- TOC entry 224 (class 1259 OID 21049)
 -- Name: graphics; Type: TABLE; Schema: postgis; Owner: postgres
 --
 
 CREATE TABLE postgis.graphics (
-    coords postgis.geometry,
+    coords public.geometry,
+    alt integer NOT NULL,
     ob_ele character varying,
     rep_num integer NOT NULL,
     prod_id integer NOT NULL,
     start_date character varying,
     stop_date character varying,
     geo_overlay_opt integer NOT NULL,
-    alt integer NOT NULL,
-    stn_call character(5),
+    stn_call character varying(5),
     obj_par_val integer,
     obj_param_type integer,
     object_qualifier integer,
-    obj_labelt character varying(50),
+    obj_labelt character varying(80),
     obj_label integer,
     overlay_rec_id integer,
     rec_len integer,
@@ -133,19 +116,19 @@ CREATE TABLE postgis.graphics (
 ALTER TABLE postgis.graphics OWNER TO postgres;
 
 --
--- TOC entry 219 (class 1259 OID 17940)
+-- TOC entry 202 (class 1259 OID 17434)
 -- Name: metar; Type: TABLE; Schema: postgis; Owner: postgres
 --
 
 CREATE TABLE postgis.metar (
-    stn_call character varying(5) NOT NULL,
-    ob_date character varying NOT NULL,
-    temp character varying,
-    windsp character varying,
-    winddir character varying,
-    altimeter character varying,
-    visby character varying,
-    dewp character varying,
+    stn_call character(5) NOT NULL,
+    ob_date character(15) NOT NULL,
+    winddir character varying(5),
+    temp character varying(5),
+    dewp character varying(5),
+    visby character varying(5),
+    windsp character(5),
+    altimeter character(10),
     hrly_precip character varying(5),
     slp character varying(10),
     windvar character varying(10),
@@ -156,90 +139,27 @@ CREATE TABLE postgis.metar (
 ALTER TABLE postgis.metar OWNER TO postgres;
 
 --
--- TOC entry 221 (class 1259 OID 19344)
+-- TOC entry 232 (class 1259 OID 30864)
 -- Name: nexrad; Type: TABLE; Schema: postgis; Owner: postgres
 --
 
 CREATE TABLE postgis.nexrad (
-    intensity integer,
-    coords postgis.geometry NOT NULL,
+    intensity integer NOT NULL,
+    coords public.geometry NOT NULL,
     altitude integer NOT NULL,
     prod_id integer NOT NULL,
     block_num integer NOT NULL,
     maptime character varying(6) NOT NULL,
     ice_sld integer,
-    ice_prob integer
+    ice_prob integer,
+    seq integer
 );
 
 
 ALTER TABLE postgis.nexrad OWNER TO postgres;
 
 --
--- TOC entry 210 (class 1259 OID 17433)
--- Name: nexrad-old; Type: TABLE; Schema: postgis; Owner: postgres
---
-
-CREATE TABLE postgis."nexrad-old" (
-    prod_id integer NOT NULL,
-    nexrad character varying NOT NULL,
-    maptype character varying NOT NULL,
-    scale_factor integer NOT NULL,
-    lat_n integer NOT NULL,
-    lon_w integer NOT NULL,
-    lat_size integer NOT NULL,
-    lon_size integer NOT NULL,
-    level integer,
-    block_data character varying NOT NULL,
-    maptime character varying NOT NULL,
-    counter integer NOT NULL
-);
-
-
-ALTER TABLE postgis."nexrad-old" OWNER TO postgres;
-
---
--- TOC entry 216 (class 1259 OID 17495)
--- Name: nexrad_counter_seq; Type: SEQUENCE; Schema: postgis; Owner: postgres
---
-
-CREATE SEQUENCE postgis.nexrad_counter_seq
-    AS integer
-    START WITH 1
-    INCREMENT BY 1
-    NO MINVALUE
-    NO MAXVALUE
-    CACHE 1;
-
-
-ALTER TABLE postgis.nexrad_counter_seq OWNER TO postgres;
-
---
--- TOC entry 3970 (class 0 OID 0)
--- Dependencies: 216
--- Name: nexrad_counter_seq; Type: SEQUENCE OWNED BY; Schema: postgis; Owner: postgres
---
-
-ALTER SEQUENCE postgis.nexrad_counter_seq OWNED BY postgis."nexrad-old".counter;
-
-
---
--- TOC entry 218 (class 1259 OID 17921)
--- Name: nexrad_new; Type: TABLE; Schema: postgis; Owner: postgres
---
-
-CREATE TABLE postgis.nexrad_new (
-    prod_id integer NOT NULL,
-    block_num integer NOT NULL,
-    maptime character varying NOT NULL,
-    alt integer,
-    coords character varying NOT NULL
-);
-
-
-ALTER TABLE postgis.nexrad_new OWNER TO postgres;
-
---
--- TOC entry 211 (class 1259 OID 17441)
+-- TOC entry 203 (class 1259 OID 17454)
 -- Name: overlay_geo_opt; Type: TABLE; Schema: postgis; Owner: postgres
 --
 
@@ -252,18 +172,18 @@ CREATE TABLE postgis.overlay_geo_opt (
 ALTER TABLE postgis.overlay_geo_opt OWNER TO postgres;
 
 --
--- TOC entry 212 (class 1259 OID 17447)
+-- TOC entry 204 (class 1259 OID 17460)
 -- Name: pirep; Type: TABLE; Schema: postgis; Owner: postgres
 --
 
 CREATE TABLE postgis.pirep (
-    rep_type character varying(30) NOT NULL,
+    rep_type character varying(20) NOT NULL,
     fl_lev character varying(10),
     ac_type character varying(10),
     cloud character varying(50),
     weather character varying(50),
-    temperature character varying(20),
-    wind_spd_dir character varying(30),
+    temperature character varying(10),
+    wind_spd_dir character varying(15),
     turbulence character varying(50),
     icing character varying(50),
     remarks character varying(100),
@@ -276,7 +196,7 @@ CREATE TABLE postgis.pirep (
 ALTER TABLE postgis.pirep OWNER TO postgres;
 
 --
--- TOC entry 213 (class 1259 OID 17450)
+-- TOC entry 223 (class 1259 OID 21038)
 -- Name: sigairmet; Type: TABLE; Schema: postgis; Owner: postgres
 --
 
@@ -284,7 +204,7 @@ CREATE TABLE postgis.sigairmet (
     prod_id integer NOT NULL,
     rep_num integer NOT NULL,
     text_data character varying,
-    stn_call character varying(5),
+    stn_call character varying(5) NOT NULL,
     rep_time character varying
 );
 
@@ -292,12 +212,12 @@ CREATE TABLE postgis.sigairmet (
 ALTER TABLE postgis.sigairmet OWNER TO postgres;
 
 --
--- TOC entry 214 (class 1259 OID 17456)
+-- TOC entry 205 (class 1259 OID 17463)
 -- Name: stations; Type: TABLE; Schema: postgis; Owner: postgres
 --
 
 CREATE TABLE postgis.stations (
-    coords postgis.geometry NOT NULL,
+    coords public.geometry NOT NULL,
     stn_call character(5) NOT NULL,
     stn_loc character(70) NOT NULL,
     lat numeric NOT NULL,
@@ -309,7 +229,7 @@ CREATE TABLE postgis.stations (
 ALTER TABLE postgis.stations OWNER TO postgres;
 
 --
--- TOC entry 220 (class 1259 OID 18914)
+-- TOC entry 231 (class 1259 OID 29657)
 -- Name: sua; Type: TABLE; Schema: postgis; Owner: postgres
 --
 
@@ -338,12 +258,12 @@ CREATE TABLE postgis.sua (
 ALTER TABLE postgis.sua OWNER TO postgres;
 
 --
--- TOC entry 223 (class 1259 OID 42603)
+-- TOC entry 234 (class 1259 OID 51032)
 -- Name: sua_airspace; Type: TABLE; Schema: postgis; Owner: postgres
 --
 
 CREATE TABLE postgis.sua_airspace (
-    coords postgis.geometry NOT NULL,
+    coords public.geometry NOT NULL,
     airsp_id integer NOT NULL,
     airsp_name character varying(35) NOT NULL
 );
@@ -352,7 +272,7 @@ CREATE TABLE postgis.sua_airspace (
 ALTER TABLE postgis.sua_airspace OWNER TO postgres;
 
 --
--- TOC entry 224 (class 1259 OID 42609)
+-- TOC entry 236 (class 1259 OID 51782)
 -- Name: sua_airspace_type; Type: TABLE; Schema: postgis; Owner: postgres
 --
 
@@ -365,7 +285,7 @@ CREATE TABLE postgis.sua_airspace_type (
 ALTER TABLE postgis.sua_airspace_type OWNER TO postgres;
 
 --
--- TOC entry 225 (class 1259 OID 42612)
+-- TOC entry 235 (class 1259 OID 51777)
 -- Name: sua_sched_status; Type: TABLE; Schema: postgis; Owner: postgres
 --
 
@@ -378,7 +298,7 @@ CREATE TABLE postgis.sua_sched_status (
 ALTER TABLE postgis.sua_sched_status OWNER TO postgres;
 
 --
--- TOC entry 215 (class 1259 OID 17462)
+-- TOC entry 207 (class 1259 OID 17504)
 -- Name: taf; Type: TABLE; Schema: postgis; Owner: postgres
 --
 
@@ -396,7 +316,7 @@ CREATE TABLE postgis.taf (
 ALTER TABLE postgis.taf OWNER TO postgres;
 
 --
--- TOC entry 222 (class 1259 OID 33883)
+-- TOC entry 233 (class 1259 OID 50311)
 -- Name: winds; Type: TABLE; Schema: postgis; Owner: postgres
 --
 
@@ -446,16 +366,8 @@ CREATE TABLE postgis.winds (
 ALTER TABLE postgis.winds OWNER TO postgres;
 
 --
--- TOC entry 3775 (class 2604 OID 17497)
--- Name: nexrad-old counter; Type: DEFAULT; Schema: postgis; Owner: postgres
---
-
-ALTER TABLE ONLY postgis."nexrad-old" ALTER COLUMN counter SET DEFAULT nextval('postgis.nexrad_counter_seq'::regclass);
-
-
---
--- TOC entry 3945 (class 0 OID 17409)
--- Dependencies: 207
+-- TOC entry 4451 (class 0 OID 17416)
+-- Dependencies: 200
 -- Data for Name: airspace_ob_ele; Type: TABLE DATA; Schema: postgis; Owner: postgres
 --
 
@@ -496,18 +408,18 @@ COPY postgis.airspace_ob_ele (airspace_ob_ele_id, airspace_ob_ele_desc) FROM std
 
 
 --
--- TOC entry 3955 (class 0 OID 17690)
--- Dependencies: 217
+-- TOC entry 4457 (class 0 OID 17495)
+-- Dependencies: 206
 -- Data for Name: circles; Type: TABLE DATA; Schema: postgis; Owner: postgres
 --
 
-COPY postgis.circles (bot, top, alt_top, alt_bot, alpha, prod_id, rec_count, rep_num, rep_year, start_date, stop_date, geo_opt, r_lng, r_lat) FROM stdin;
+COPY postgis.circles (alt_top, alt_bot, alpha, prod_id, rec_count, rep_num, rep_year, start_date, stop_date, geo_opt, r_lng, r_lat, bot, top) FROM stdin;
 \.
 
 
 --
--- TOC entry 3946 (class 0 OID 17415)
--- Dependencies: 208
+-- TOC entry 4452 (class 0 OID 17422)
+-- Dependencies: 201
 -- Data for Name: fisb_products; Type: TABLE DATA; Schema: postgis; Owner: postgres
 --
 
@@ -531,58 +443,38 @@ COPY postgis.fisb_products (fisb_product_id, fisb_product_desc) FROM stdin;
 
 
 --
--- TOC entry 3947 (class 0 OID 17421)
--- Dependencies: 209
+-- TOC entry 4460 (class 0 OID 21049)
+-- Dependencies: 224
 -- Data for Name: graphics; Type: TABLE DATA; Schema: postgis; Owner: postgres
 --
 
-COPY postgis.graphics (coords, ob_ele, rep_num, prod_id, start_date, stop_date, geo_overlay_opt, alt, stn_call, obj_par_val, obj_param_type, object_qualifier, obj_labelt, obj_label, overlay_rec_id, rec_len, obj_status, param_flag, element_flag, overlay_op, overlay_vert_cnt) FROM stdin;
+COPY postgis.graphics (coords, alt, ob_ele, rep_num, prod_id, start_date, stop_date, geo_overlay_opt, stn_call, obj_par_val, obj_param_type, object_qualifier, obj_labelt, obj_label, overlay_rec_id, rec_len, obj_status, param_flag, element_flag, overlay_op, overlay_vert_cnt) FROM stdin;
 \.
 
 
 --
--- TOC entry 3957 (class 0 OID 17940)
--- Dependencies: 219
+-- TOC entry 4453 (class 0 OID 17434)
+-- Dependencies: 202
 -- Data for Name: metar; Type: TABLE DATA; Schema: postgis; Owner: postgres
 --
 
-COPY postgis.metar (stn_call, ob_date, temp, windsp, winddir, altimeter, visby, dewp, hrly_precip, slp, windvar, windgust) FROM stdin;
+COPY postgis.metar (stn_call, ob_date, winddir, temp, dewp, visby, windsp, altimeter, hrly_precip, slp, windvar, windgust) FROM stdin;
 \.
 
 
 --
--- TOC entry 3959 (class 0 OID 19344)
--- Dependencies: 221
+-- TOC entry 4462 (class 0 OID 30864)
+-- Dependencies: 232
 -- Data for Name: nexrad; Type: TABLE DATA; Schema: postgis; Owner: postgres
 --
 
-COPY postgis.nexrad (intensity, coords, altitude, prod_id, block_num, maptime, ice_sld, ice_prob) FROM stdin;
+COPY postgis.nexrad (intensity, coords, altitude, prod_id, block_num, maptime, ice_sld, ice_prob, seq) FROM stdin;
 \.
 
 
 --
--- TOC entry 3948 (class 0 OID 17433)
--- Dependencies: 210
--- Data for Name: nexrad-old; Type: TABLE DATA; Schema: postgis; Owner: postgres
---
-
-COPY postgis."nexrad-old" (prod_id, nexrad, maptype, scale_factor, lat_n, lon_w, lat_size, lon_size, level, block_data, maptime, counter) FROM stdin;
-\.
-
-
---
--- TOC entry 3956 (class 0 OID 17921)
--- Dependencies: 218
--- Data for Name: nexrad_new; Type: TABLE DATA; Schema: postgis; Owner: postgres
---
-
-COPY postgis.nexrad_new (prod_id, block_num, maptime, alt, coords) FROM stdin;
-\.
-
-
---
--- TOC entry 3949 (class 0 OID 17441)
--- Dependencies: 211
+-- TOC entry 4454 (class 0 OID 17454)
+-- Dependencies: 203
 -- Data for Name: overlay_geo_opt; Type: TABLE DATA; Schema: postgis; Owner: postgres
 --
 
@@ -606,8 +498,8 @@ COPY postgis.overlay_geo_opt (overlay_geo_opt_id, overlay_geo_opt_desc) FROM std
 
 
 --
--- TOC entry 3950 (class 0 OID 17447)
--- Dependencies: 212
+-- TOC entry 4455 (class 0 OID 17460)
+-- Dependencies: 204
 -- Data for Name: pirep; Type: TABLE DATA; Schema: postgis; Owner: postgres
 --
 
@@ -616,8 +508,8 @@ COPY postgis.pirep (rep_type, fl_lev, ac_type, cloud, weather, temperature, wind
 
 
 --
--- TOC entry 3951 (class 0 OID 17450)
--- Dependencies: 213
+-- TOC entry 4459 (class 0 OID 21038)
+-- Dependencies: 223
 -- Data for Name: sigairmet; Type: TABLE DATA; Schema: postgis; Owner: postgres
 --
 
@@ -626,18 +518,8 @@ COPY postgis.sigairmet (prod_id, rep_num, text_data, stn_call, rep_time) FROM st
 
 
 --
--- TOC entry 3773 (class 0 OID 16693)
--- Dependencies: 203
--- Data for Name: spatial_ref_sys; Type: TABLE DATA; Schema: postgis; Owner: postgres
---
-
-COPY postgis.spatial_ref_sys (srid, auth_name, auth_srid, srtext, proj4text) FROM stdin;
-\.
-
-
---
--- TOC entry 3952 (class 0 OID 17456)
--- Dependencies: 214
+-- TOC entry 4456 (class 0 OID 17463)
+-- Dependencies: 205
 -- Data for Name: stations; Type: TABLE DATA; Schema: postgis; Owner: postgres
 --
 
@@ -680,7 +562,7 @@ COPY postgis.stations (coords, stn_call, stn_loc, lat, lng, state) FROM stdin;
 0101000020E6100000C1CAA145B6DB52C0B4C876BE9F6A4340	KDOX 	Dover-Ellendale, DE                                                   	38.833	-75.433	DE 
 0101000020E61000006666666666E652C088855AD3BC9B4340	K33N 	Dover-Cheswold Airpark, DE                                            	39.2167	-75.6	DE 
 0101000020E61000003F355EBA491454C07D3F355EBAC93940	KMIA 	Miami International Airport, FL                                       	25.788	-80.317	FL 
-0101000020E6100000B29DEFA7C6A354C02DB29DEFA7663B40	KSRQ 	Sarasota-Bradenton-Sarasota,Fl                                        	27.401	-82.559	Fl 
+0101000020E6100000B29DEFA7C6A354C02DB29DEFA7663B40	KSRQ 	Sarasota-Bradenton-Sarasota,Fl                                        	27.401	-82.559	FL 
 0101000020E61000008716D9CEF75B54C00AD7A3703D4A3C40	KISM 	Kissimmee Gateway-Orlando, FL                                         	28.29	-81.437	FL 
 0101000020E6100000560E2DB29D4F54C048E17A14AEC73C40	KSFB 	Orlando Sanford International Airport-Orlando, FL                     	28.78	-81.244	FL 
 0101000020E610000023DBF97E6A6C54C01F85EB51B87E3E40	KJAX 	Jacksonville International Airport, Jacksonville, FL                  	30.495	-81.694	FL 
@@ -771,7 +653,7 @@ COPY postgis.stations (coords, stn_call, stn_loc, lat, lng, state) FROM stdin;
 0101000020E6100000CBA145B6F35D53C0C3F5285C8FD24340	KRSP 	NSF Thurmont, MD                                                      	39.645	-77.468	MD 
 0101000020E61000001F85EB51B86E53C0EE7C3F355EDA4340	KHGR 	Hagerstown Regional Airport-Hagerstown, MD                            	39.706	-77.73	MD 
 0101000020E610000071AC8BDB682453C0FFB27BF2B0784340	KANP 	Lee Airport-Annapolis, MD                                             	38.9429	-76.5689	MD 
-0101000020E61000009FCDAACFD51253C027C286A757B24340	KEDG 	Weide Army Heliport-Edgewood Arsenal, Aberdeen Proving Ground, MD     	39.3933	-76.2943	MD 
+0101000020E61000009FCDAACFD51253C027C286A757B24340	KEDG 	Weide Army Heliport-Edgewood Arsenal, Aberdeen Proving Ground,MD      	39.3933	-76.2943	MD 
 0101000020E6100000F0A7C64B373D53C09CA223B9FC5F4340	KVKX 	Potomac Airfield-Friendly, MD                                         	38.7499	-76.9565	MD 
 0101000020E610000033333333332353C0EACF7EA488284340	K2W6 	St Marys (Duke), MD                                                   	38.31667	-76.55	MD 
 0101000020E6100000289B728577C752C0EACF7EA488284340	KN80 	Ocean City, MD                                                        	38.31667	-75.11667	MD 
@@ -802,7 +684,7 @@ COPY postgis.stations (coords, stn_call, stn_loc, lat, lng, state) FROM stdin;
 0101000020E6100000289B7285776751C01630815B77774640	K2B7 	Harmony, ME                                                           	44.93333	-69.61667	ME 
 0101000020E61000008E01D9EBDD8D51C04963B48EAA8A4640	KB21 	Carrabassett, ME                                                      	45.08333	-70.21667	ME 
 0101000020E610000033333333336351C01D03B2D7BBBB4640	K3B1 	Greenville, ME                                                        	45.46667	-69.55	ME 
-0101000020E61000003333333333F350C0E3FC4D2844044740	KCBW 	Houlton-88D, ME                                                       	46.03333	-67.8	ME 
+0101000020E61000003333333333F350C0E3FC4D2844044740	KCBW 	Houlton,-88D, ME                                                      	46.03333	-67.8	ME 
 0101000020E61000005A643BDF4FAD51C0DF4F8D976EB24540	KSFM 	Sanford Seacoast Regional Airport-Sanford, ME                         	43.394	-70.708	ME 
 0101000020E6100000FA7E6ABC749351C01904560E2DD24540	KPWM 	Portland International Jetport-Portland, ME                           	43.642	-70.304	ME 
 0101000020E6100000C1CAA145B67B51C03333333333F34540	KNHZ 	Brunswick NAS, ME                                                     	43.9	-69.933	ME 
@@ -1032,8 +914,8 @@ COPY postgis.stations (coords, stn_call, stn_loc, lat, lng, state) FROM stdin;
 0101000020E6100000D8648D7A881853C0CDCCCCCCCCAC4540	KN00 	Oswego County Airport, Fulton, NY                                     	43.35	-76.38333	NY 
 0101000020E61000006666666666D652C09A99999999B94540	K1B8 	Boonville, NY                                                         	43.45	-75.35	NY 
 0101000020E610000072FE261422A252C09A99999999B94540	KPIC 	Piseco Lake, NY                                                       	43.45	-74.53333	NY 
-0101000020E6100000CDCCCCCCCCDC52C01D03B2D7BBBB4540	KRMX 	Griffiss AFB-88D, NY                                                  	43.46667	-75.45	NY 
-0101000020E61000000B98C0ADBBEB52C00000000000E04540	KTYX 	Fort Drum-88D, NY                                                     	43.75	-75.68333	NY 
+0101000020E6100000CDCCCCCCCCDC52C01D03B2D7BBBB4540	KRMX 	Griffiss AFB,-88D, NY                                                 	43.46667	-75.45	NY 
+0101000020E61000000B98C0ADBBEB52C00000000000E04540	KTYX 	Fort Drum,-88D, NY                                                    	43.75	-75.68333	NY 
 0101000020E6100000CDCCCCCCCCBC52C01630815B77574640	KPTD 	Potsdam Municipal Airport-Potsdam, NY                                 	44.68333	-74.95	NY 
 0101000020E610000033333333339352C0CDCCCCCCCC6C4640	KMAL 	Malone-Dufort Airport-Malone, NY                                      	44.85	-74.3	NY 
 0101000020E610000033333333337352C03333333333734640	KELB 	Ellenburg Depot, NY                                                   	44.9	-73.8	NY 
@@ -1399,7 +1281,7 @@ COPY postgis.stations (coords, stn_call, stn_loc, lat, lng, state) FROM stdin;
 0101000020E610000033333333333352C05036E50AEF8E4540	K8B3 	Ball Mountain, VT                                                     	43.11667	-72.8	VT 
 0101000020E610000066666666664652C07D96E7C1DDFD4540	K6B0 	Middlebury, VT                                                        	43.98333	-73.1	VT 
 0101000020E61000008E01D9EBDD3D52C0EACF7EA488084640	KSOL 	South Lincoln, VT                                                     	44.06667	-72.96667	VT 
-0101000020E61000005BCEA5B8AA4A52C08369183E22424640	KCXX 	Colchester-88D, VT                                                    	44.51667	-73.16667	VT 
+0101000020E61000005BCEA5B8AA4A52C08369183E22424640	KCXX 	Colchester,-88D, VT                                                   	44.51667	-73.16667	VT 
 0101000020E6100000C2340C1F110152C0545227A089484640	K6B8 	Lyndonville, VT                                                       	44.5667	-72.01667	VT 
 0101000020E61000003ECBF3E0EEFE51C03333333333534640	KVT2 	West Burke, VT                                                        	44.65	-71.98333	VT 
 0101000020E610000072FE2614222252C0ACADD85F76774640	KJAY 	Jay Peak, VT                                                          	44.9333	-72.53333	VT 
@@ -1441,8 +1323,8 @@ COPY postgis.stations (coords, stn_call, stn_loc, lat, lng, state) FROM stdin;
 
 
 --
--- TOC entry 3958 (class 0 OID 18914)
--- Dependencies: 220
+-- TOC entry 4461 (class 0 OID 29657)
+-- Dependencies: 231
 -- Data for Name: sua; Type: TABLE DATA; Schema: postgis; Owner: postgres
 --
 
@@ -1451,8 +1333,8 @@ COPY postgis.sua (rep_time, rep_year, rep_num, sched_id, airsp_id, sched_status,
 
 
 --
--- TOC entry 3961 (class 0 OID 42603)
--- Dependencies: 223
+-- TOC entry 4464 (class 0 OID 51032)
+-- Dependencies: 234
 -- Data for Name: sua_airspace; Type: TABLE DATA; Schema: postgis; Owner: postgres
 --
 
@@ -1595,12 +1477,34 @@ COPY postgis.sua_airspace (coords, airsp_id, airsp_name) FROM stdin;
 0103000020E6100000010000000F0000003B55BE67241C5DC0000000000040414052B81E85EB1D5DC0CDCCCCCCCC4C4140691B7FA2B21F5DC066666666665641403B55BE67241C5DC0AC8F87BEBB5B41408EE6C8CA2F125DC0AC8F87BEBB5B414049BDA772DA045DC00000000000584140AF230ED940035DC087A3AB747757414052B81E85EBFD5CC0AC8F87BEBB4B414060200890A1FA5CC0952C27A1F449414052B81E85EBFD5CC0795C548B884841402A38BC2022FE5CC00ADAE4F0493F4140B2D826158D045DC0BBD6DEA7AA3A41404450357A350D5DC09F03CB11323C4140BCAFCA85CA125DC054707841444441403B55BE67241C5DC00000000000404140	5825	2501N
 0103000020E610000001000000090000004450357A350D5DC09F03CB11323C4140B2D826158D045DC0BBD6DEA7AA3A4140D7A3703D0AFF5CC073F56393FC2A414049BDA772DAFC5CC0EE0912DBDD1D41408EE6C8CA2F125DC0EE0912DBDD1D4140B58D3F51D9155DC09A999999992941408C31B08EE3105DC09A9999999929414074CE4F711C135DC085EB51B81E3541404450357A350D5DC09F03CB11323C4140	5830	2501S
 0103000020E610000001000000070000003B55BE67241C5DC00000000000404140BCAFCA85CA125DC054707841444441404450357A350D5DC09F03CB11323C414074CE4F711C135DC085EB51B81E3541408C31B08EE3105DC09A99999999294140B58D3F51D9155DC09A999999992941403B55BE67241C5DC00000000000404140	11470	2501W
+0102000020E61000000400000014AE47E17AE050C006F4C29D0B794540E17A14AE478550C0855E7F129FE945400FBA84436FB34FC08BDF14562A764640CF84268925074EC0E4326E6AA0134740	23974	AR20(NE)
+0102000020E610000005000000D6C743DFDD1D51C0BBD6DEA7AA8A47407061DD78776751C000000000000047402A38BC2022A251C0213D450E119146407061DD78770752C0BBD6DEA7AA4A4640F70489EDEE5E52C0AC8F87BEBBFB4540	23997	AR212(SW)
+0102000020E6100000040000006666666666B651C04529215855554B40C4D155BABB2B51C00000000000804B40D6C743DFDD6D50C0213D450E11B14B40CDCCCCCCCC6C4EC0BBD6DEA7AAEA4B40	25080	AR62(E)
+0103000020E6100000010000000500000066666666665651C0DFC2BAF1EEDE45405D6BEF5355E550C054707841442446403C2EAA4544D450C0BBD6DEA7AAEA454066666666664651C04529215855A5454066666666665651C0DFC2BAF1EEDE4540	24107	AR616A
+0103000020E610000001000000060000002BFBAE08FE0F59C0D7A3703D0A23484043908312668A58C0BE874B8E3B1148409A5FCD01825F58C0D8B628B341024740C8CD70033EC158C0D8B628B341024740D7C05609167F59C0309E4143FFAC47402BFBAE08FE0F59C0D7A3703D0A234840	31172	DICKINSON
+0103000020E61000000100000005000000B5E0455F41345AC046425BCEA5784040FFE7305F5E265AC0A1BE654E97694040C68A1A4CC32A5AC05C1B2AC6F92B4040C139234A7B455AC086032159C0484040B5E0455F41345AC046425BCEA5784040	25404	ABQ-4
+0103000020E610000001000000050000002EE7525C55CC59C0598B4F01308248405648F949B5E558C0598B4F01308248404CA60A4625C158C009168733BFFE46409E077767EDCA59C09B20EA3E003D47402EE7525C55CC59C0598B4F0130824840	31295	A3 ORBIT
+0103000020E6100000010000000A0000005648F949B5E558C0598B4F0130824840FDBCA948850758C0598B4F0130824840E44EE960FDE957C0A4C7EF6DFA37484051F701486DF257C034D769A4A5CE4740F41ABB44F5E257C0AEB6627FD95D4740E44EE960FD4358C0BBB88D06F03E47400CB08F4E5D6B58C0EC12D55B03F34640B875374F758058C07B319413EDF646404CA60A4625C158C009168733BFFE46405648F949B5E558C0598B4F0130824840	31296	A4 ORBIT
+0103000020E61000000100000008000000FDBCA948850758C0598B4F01308248404DD6A887686457C0598B4F01308248404DD6A887686457C0382D78D1575047404BCD1E6805C457C0382D78D157504740F41ABB44F5E257C0AEB6627FD95D474051F701486DF257C034D769A4A5CE4740E44EE960FDE957C0A4C7EF6DFA374840FDBCA948850758C0598B4F0130824840	31297	A5 ORBIT
+0103000020E61000000100000008000000CF66D5E76AEB51C0A1F31ABB44C9434013F241CF66C350C0B6D617096DA54340AA9A20EA3EA050C0B6D617096DA54340AA9A20EA3EA050C0EFE192E34E5D4340520FD1E80ED050C0EFE192E34E5D4340728A8EE4F2CD50C0B0C91AF5107D4340EE258DD13AEE51C03E22A64412A14340CF66D5E76AEB51C0A1F31ABB44C94340	25721	AR777H
+0103000020E61000000100000008000000CF66D5E76AEB51C0A1F31ABB44C9434013F241CF66C350C0B6D617096DA54340AA9A20EA3EA050C0B6D617096DA54340AA9A20EA3EA050C0EFE192E34E5D4340520FD1E80ED050C0EFE192E34E5D4340728A8EE4F2CD50C0B0C91AF5107D4340EE258DD13AEE51C03E22A64412A14340CF66D5E76AEB51C0A1F31ABB44C94340	25720	AR777L
+0103000020E610000001000000180000003EE8D9ACFA0E57C09626A5A0DB0F48407FDE54A4C20A57C09626A5A0DB0F48407FDE54A4C20A57C01F2E39EE9406484024624A24D10357C01F2E39EE9406484024624A24D10357C01BF5108DEE08484089EFC4AC170157C01BF5108DEE08484089EFC4AC170157C0A94D9CDCEF0448406536C82423FD56C0A94D9CDCEF0448406536C82423FD56C0B7EEE6A90E014840D578E92631FE56C05743E21E4BFF474089EFC4AC170157C05743E21E4BFF474089EFC4AC170157C0C156091687FB4740E02D90A0F80157C0C156091687FB4740E02D90A0F80157C0419FC893A4F7474024624A24D10357C0419FC893A4F7474024624A24D10357C05A9E077767F5474080828B15351857C05A9E077767F5474080828B15351857C051A5660FB402484055302AA9131457C051A5660FB402484055302AA9131457C01B649291B30448409626A5A0DB0F57C01B649291B30448409626A5A0DB0F57C054008C67D008484057EC2FBB270F57C054008C67D00848403EE8D9ACFA0E57C09626A5A0DB0F4840	13557	P205
+0102000020E6100000040000007061DD78778759C0CDCCCCCCCCEC454009FB7612112959C0CDCCCCCCCC4C4540C4D155BABB0B59C09A99999999194540909E228788E858C087A3AB7477B74340	24014	AR24(S)
+0102000020E610000004000000F70489EDEE6E55C0DFC2BAF1EEEE45405D6BEF53554555C087A3AB74777746402A38BC20223255C03333333333B3464033333333336355C02FDD240681554640	23925	AR107
+0102000020E6100000040000007061DD78775757C04529215855354740C4D155BABBCB56C06666666666E646409A99999999E955C00000000000E0464000000000005055C00000000000E04640	23928	AR109H(E)
+0102000020E6100000040000007061DD78775757C04529215855354740C4D155BABBCB56C06666666666E646409A99999999E955C00000000000E0464000000000005055C00000000000E04640	23930	AR109L(E)
+0102000020E6100000040000000AD7A3703DDA52C07DCC07043A9D45409A999999996953C000000000008045401F85EB51B8FE53C0A69BC420B0524540022B8716D95A54C0EE0912DBDD4D4540	23988	AR206L
+0102000020E61000000400000001DC2C5E2C215AC048E17A14AEF74240909E2287889059C0EE0912DBDD3542408E739B70AF6D59C09A999999991942403C2EAA45442459C035EB8CEF8BDD4140	31604	AR312H(E)
+0102000020E6100000040000003C2EAA45442459C035EB8CEF8BDD41408E739B70AF6D59C09A99999999194240909E2287889059C0EE0912DBDD35424001DC2C5E2C215AC048E17A14AEF74240	31605	AR312H(W)
+0102000020E610000004000000C6FCDCD0946254C0CDCCCCCCCCBC424015FDA19927BE54C077BE9F1A2FCD42408716D9CEF76355C01B2FDD2406E94240C4D155BABBE355C0B0E595EB6DF94240	24071	AR455(W)
+0103000020E6100000010000000800000000000000006051C04529215855B544405D6BEF53551D51C0CDCCCCCCCCAC44400000000000C050C0DFC2BAF1EEEE44400000000000C050C0213D450E1151454000000000001051C0BBD6DEA7AA2A454000000000002051C0213D450E1111454000000000006051C06666666666E6444000000000006051C04529215855B54440	24098	AR608
+0103000020E61000000100000005000000D09B8A54186756C0C9E53FA4DF5E3D402D78D157901C56C05FB532E197823C40D95F764F1E3456C0ABE7A4F78D1F3C40AC8BDB68007F56C016139B8F6BFB3C40D09B8A54186756C0C9E53FA4DF5E3D40	25412	AW-004
 \.
 
 
 --
--- TOC entry 3962 (class 0 OID 42609)
--- Dependencies: 224
+-- TOC entry 4466 (class 0 OID 51782)
+-- Dependencies: 236
 -- Data for Name: sua_airspace_type; Type: TABLE DATA; Schema: postgis; Owner: postgres
 --
 
@@ -1621,8 +1525,8 @@ T	Refueling Track
 
 
 --
--- TOC entry 3963 (class 0 OID 42612)
--- Dependencies: 225
+-- TOC entry 4465 (class 0 OID 51777)
+-- Dependencies: 235
 -- Data for Name: sua_sched_status; Type: TABLE DATA; Schema: postgis; Owner: postgres
 --
 
@@ -1634,8 +1538,8 @@ H	Activated for Use
 
 
 --
--- TOC entry 3953 (class 0 OID 17462)
--- Dependencies: 215
+-- TOC entry 4458 (class 0 OID 17504)
+-- Dependencies: 207
 -- Data for Name: taf; Type: TABLE DATA; Schema: postgis; Owner: postgres
 --
 
@@ -1644,8 +1548,8 @@ COPY postgis.taf (issued, current, wind, visby, condx, rep_time, stn_call) FROM 
 
 
 --
--- TOC entry 3960 (class 0 OID 33883)
--- Dependencies: 222
+-- TOC entry 4463 (class 0 OID 50311)
+-- Dependencies: 233
 -- Data for Name: winds; Type: TABLE DATA; Schema: postgis; Owner: postgres
 --
 
@@ -1654,16 +1558,7 @@ COPY postgis.winds (issue_date, proc_time, alt1, alt2, alt3, alt4, alt5, alt6, a
 
 
 --
--- TOC entry 3971 (class 0 OID 0)
--- Dependencies: 216
--- Name: nexrad_counter_seq; Type: SEQUENCE SET; Schema: postgis; Owner: postgres
---
-
-SELECT pg_catalog.setval('postgis.nexrad_counter_seq', 797950, true);
-
-
---
--- TOC entry 3779 (class 2606 OID 17469)
+-- TOC entry 4292 (class 2606 OID 17470)
 -- Name: airspace_ob_ele airspace_ob_ele_pkey; Type: CONSTRAINT; Schema: postgis; Owner: postgres
 --
 
@@ -1672,7 +1567,7 @@ ALTER TABLE ONLY postgis.airspace_ob_ele
 
 
 --
--- TOC entry 3795 (class 2606 OID 17697)
+-- TOC entry 4304 (class 2606 OID 17502)
 -- Name: circles circles_pkey; Type: CONSTRAINT; Schema: postgis; Owner: postgres
 --
 
@@ -1681,7 +1576,7 @@ ALTER TABLE ONLY postgis.circles
 
 
 --
--- TOC entry 3781 (class 2606 OID 17476)
+-- TOC entry 4294 (class 2606 OID 17472)
 -- Name: fisb_products fisb_products_pkey; Type: CONSTRAINT; Schema: postgis; Owner: postgres
 --
 
@@ -1690,34 +1585,34 @@ ALTER TABLE ONLY postgis.fisb_products
 
 
 --
--- TOC entry 3783 (class 2606 OID 18894)
+-- TOC entry 4310 (class 2606 OID 21056)
 -- Name: graphics graphics_pkey; Type: CONSTRAINT; Schema: postgis; Owner: postgres
 --
 
 ALTER TABLE ONLY postgis.graphics
-    ADD CONSTRAINT graphics_pkey PRIMARY KEY (alt, rep_num, prod_id, geo_overlay_opt);
+    ADD CONSTRAINT graphics_pkey PRIMARY KEY (rep_num, prod_id, alt);
 
 
 --
--- TOC entry 3799 (class 2606 OID 17947)
--- Name: metar metar_new_pkey; Type: CONSTRAINT; Schema: postgis; Owner: postgres
+-- TOC entry 4296 (class 2606 OID 17476)
+-- Name: metar metar_pkey; Type: CONSTRAINT; Schema: postgis; Owner: postgres
 --
 
 ALTER TABLE ONLY postgis.metar
-    ADD CONSTRAINT metar_new_pkey PRIMARY KEY (ob_date, stn_call);
+    ADD CONSTRAINT metar_pkey PRIMARY KEY (stn_call, ob_date);
 
 
 --
--- TOC entry 3797 (class 2606 OID 17928)
--- Name: nexrad_new nexrad_new_pkey; Type: CONSTRAINT; Schema: postgis; Owner: postgres
+-- TOC entry 4314 (class 2606 OID 46862)
+-- Name: nexrad nexrad_pkey; Type: CONSTRAINT; Schema: postgis; Owner: postgres
 --
 
-ALTER TABLE ONLY postgis.nexrad_new
-    ADD CONSTRAINT nexrad_new_pkey PRIMARY KEY (prod_id, block_num, maptime);
+ALTER TABLE ONLY postgis.nexrad
+    ADD CONSTRAINT nexrad_pkey PRIMARY KEY (coords, prod_id, block_num, maptime);
 
 
 --
--- TOC entry 3785 (class 2606 OID 17484)
+-- TOC entry 4298 (class 2606 OID 17480)
 -- Name: overlay_geo_opt overlay_geo_opt_pkey; Type: CONSTRAINT; Schema: postgis; Owner: postgres
 --
 
@@ -1726,25 +1621,25 @@ ALTER TABLE ONLY postgis.overlay_geo_opt
 
 
 --
--- TOC entry 3787 (class 2606 OID 17486)
+-- TOC entry 4300 (class 2606 OID 17482)
 -- Name: pirep pirep_pkey; Type: CONSTRAINT; Schema: postgis; Owner: postgres
 --
 
 ALTER TABLE ONLY postgis.pirep
-    ADD CONSTRAINT pirep_pkey PRIMARY KEY (stn_call, rep_time);
+    ADD CONSTRAINT pirep_pkey PRIMARY KEY (rep_time, stn_call);
 
 
 --
--- TOC entry 3789 (class 2606 OID 17488)
+-- TOC entry 4308 (class 2606 OID 21045)
 -- Name: sigairmet sigairmet_pkey; Type: CONSTRAINT; Schema: postgis; Owner: postgres
 --
 
 ALTER TABLE ONLY postgis.sigairmet
-    ADD CONSTRAINT sigairmet_pkey PRIMARY KEY (prod_id, rep_num);
+    ADD CONSTRAINT sigairmet_pkey PRIMARY KEY (prod_id, rep_num, stn_call);
 
 
 --
--- TOC entry 3791 (class 2606 OID 17490)
+-- TOC entry 4302 (class 2606 OID 21075)
 -- Name: stations stations_pkey; Type: CONSTRAINT; Schema: postgis; Owner: postgres
 --
 
@@ -1753,7 +1648,7 @@ ALTER TABLE ONLY postgis.stations
 
 
 --
--- TOC entry 3805 (class 2606 OID 42616)
+-- TOC entry 4318 (class 2606 OID 51039)
 -- Name: sua_airspace sua_airspace_pkey; Type: CONSTRAINT; Schema: postgis; Owner: postgres
 --
 
@@ -1762,7 +1657,7 @@ ALTER TABLE ONLY postgis.sua_airspace
 
 
 --
--- TOC entry 3807 (class 2606 OID 42618)
+-- TOC entry 4322 (class 2606 OID 51786)
 -- Name: sua_airspace_type sua_airspace_type_pkey; Type: CONSTRAINT; Schema: postgis; Owner: postgres
 --
 
@@ -1771,7 +1666,7 @@ ALTER TABLE ONLY postgis.sua_airspace_type
 
 
 --
--- TOC entry 3801 (class 2606 OID 18918)
+-- TOC entry 4312 (class 2606 OID 29664)
 -- Name: sua sua_pkey; Type: CONSTRAINT; Schema: postgis; Owner: postgres
 --
 
@@ -1780,7 +1675,7 @@ ALTER TABLE ONLY postgis.sua
 
 
 --
--- TOC entry 3809 (class 2606 OID 42620)
+-- TOC entry 4320 (class 2606 OID 51781)
 -- Name: sua_sched_status sua_sched_status_pkey; Type: CONSTRAINT; Schema: postgis; Owner: postgres
 --
 
@@ -1789,7 +1684,7 @@ ALTER TABLE ONLY postgis.sua_sched_status
 
 
 --
--- TOC entry 3793 (class 2606 OID 17492)
+-- TOC entry 4306 (class 2606 OID 17511)
 -- Name: taf taf_pkey; Type: CONSTRAINT; Schema: postgis; Owner: postgres
 --
 
@@ -1798,7 +1693,7 @@ ALTER TABLE ONLY postgis.taf
 
 
 --
--- TOC entry 3803 (class 2606 OID 33892)
+-- TOC entry 4316 (class 2606 OID 50318)
 -- Name: winds winds_pkey; Type: CONSTRAINT; Schema: postgis; Owner: postgres
 --
 
@@ -1806,9 +1701,8 @@ ALTER TABLE ONLY postgis.winds
     ADD CONSTRAINT winds_pkey PRIMARY KEY (stn_call, issue_date);
 
 
--- Completed on 2021-05-16 15:15:10 EDT
+-- Completed on 2021-05-24 11:52:29 EDT
 
 --
 -- PostgreSQL database dump complete
 --
-
