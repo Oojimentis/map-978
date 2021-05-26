@@ -360,9 +360,10 @@ var	nrad = L.realtime({
 	},
 
 	style: function(feature) {
-		if (feature.properties.prod_id == 84 ) {
+		if (feature.properties.prod_id == 84 || feature.properties.prod_id == 90 || feature.properties.prod_id == 91 ) {
+// if (feature.properties.prod_id == 84 ) {
 			golor = getColorInt(feature.properties.intensity);
-			return {color: golor, weight: 4, fillColor: golor, opacity: 0.1, fillOpacity: 0.2}
+			return {color: golor, weight: 4, fillColor: golor, opacity: 0.5, fillOpacity: 0.5}
 		}
 	},
 
@@ -505,8 +506,13 @@ var	sua = L.realtime({
 	}
 
 // ** Circle
-var url_circle = url.concat("SELECT bot AS GEOM, start_date, stop_date, rep_num, r_lng, \
-					r_lat, alt_top, alt_bot, alpha 	FROM circles");
+//var url_circle = url.concat("SELECT bot AS GEOM, start_date, stop_date, rep_num, r_lng, \
+//					r_lat, alt_top, alt_bot, alpha 	FROM circles");
+
+var url_circle = url.concat("SELECT bot AS GEOM, c.start_date, c.stop_date, c.rep_num, c.r_lng, \
+c.r_lat, c.alt_top, c.alt_bot, c.alpha,s.text_data FROM circles c \
+left join sigairmet s on s.rep_num = c.rep_num");
+
 
 var	cir = L.realtime({
 	url: url_circle,
@@ -524,15 +530,15 @@ var	cir = L.realtime({
  				$("#m3").html("Rep Number");
  		 		$("#m4").html("Start");
  				$("#m5").html("Stop");
- 				$("#m6").html("Alpha ");
+ 				$("#m6").html("Text ");
 				$('#f1').html('Bottom ' + e.target.feature.properties.alt_bot + 'ft<br> Top ' +
 					e.target.feature.properties.alt_top + 'ft');
 				$('#f2').html('Lat: ' + e.target.feature.properties.r_lat + ' Lng: ' +
-					e.target.feature.properties.r_lat);
+					e.target.feature.properties.r_lat + ' Alpha: ' + e.target.feature.properties.alpha);
 				$('#f3').html(e.target.feature.properties.rep_num);
 				$('#f4').html(e.target.feature.properties.start_date);
 				$('#f5').html(e.target.feature.properties.stop_date);
-				$('#f6').html(e.target.feature.properties.alpha);
+				$('#f6').html(e.target.feature.properties.text_data);
 			});
 			marker.addTo(map);
 			return marker;
