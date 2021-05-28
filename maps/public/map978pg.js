@@ -506,18 +506,15 @@ var	sua = L.realtime({
 	}
 
 // ** Circle
-//var url_circle = url.concat("SELECT bot AS GEOM, start_date, stop_date, rep_num, r_lng, \
-//					r_lat, alt_top, alt_bot, alpha 	FROM circles");
 
 var url_circle = url.concat("SELECT bot AS GEOM, c.start_date, c.stop_date, c.rep_num, c.r_lng, \
 c.r_lat, c.alt_top, c.alt_bot, c.alpha,s.text_data FROM circles c \
 left join sigairmet s on s.rep_num = c.rep_num");
 
-
 var	cir = L.realtime({
 	url: url_circle,
 	crossOrigin: true, type: 'json'
-	}, {interval: 60 * 7030,
+	}, {interval: 6 * 7030,
 		getFeatureId: function(featureData) {
 		return featureData.properties.rep_num;
 		},
