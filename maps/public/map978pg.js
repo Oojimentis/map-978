@@ -542,6 +542,52 @@ var	cir = L.realtime({
 		}
 	}).addTo(map);
 
+
+// ** Segmented NOTAMS
+
+var url_seg_notam = url.concat("select coords as geom,alt,g.rep_num,start_date,stop_date,text_data \
+			from graphics g inner join sigairmet s on s.rep_num = g.rep_num \
+			where g.segmented = 1");
+			
+var	seg = L.realtime({
+	url: url_seg_notam,
+	crossOrigin: true, type: 'json'
+	}, {interval: 1 * 9000,
+		style: function(feature) {
+			kolor = getColor(feature.properties.alt);
+			return {color: '#00cccc', weight: 2, fillColor: kolor, opacity: 1.0, fillOpacity: 0.2};
+		},
+		getFeatureId: function(featureData) {
+			return featureData.properties.rep_num;
+		},
+		onEachFeature: function(feature, layer) {
+			layer.bindTooltip('CWA: Alt ' + feature.properties.alt);
+			layer.on('click', function(e) {
+				layer.setStyle({fillColor: 'yellow', fillOpacity: 0.5});
+
+				$("#m1").html("Report");
+				$("#m2").html("Altitude");					
+				$("#m3").html("Report Num");
+				$("#m4").html("Condition");
+				$("#m5").html("Start");
+				$("#m6").html("Stop");
+					
+				$('#f1').html('Graphical NOTAM');
+				$('#f2').html(e.target.feature.properties.alt);
+				$('#f3').html(e.target.feature.properties.rep_num);
+				$('#f4').html(e.target.feature.properties.text_data);
+				$('#f5').html(e.target.feature.properties.start_date);
+				$('#f6').html(e.target.feature.properties.stop_date);
+
+				seg.stop();});
+			layer.on('mouseout', function(e) {
+				seg.start();})		
+			},
+
+		}).addTo(map);
+
+
+
 // ** METAR 
 var wxIcon = L.icon({iconUrl: 'therm.ico', iconSize: [20,20]});
 
