@@ -23,9 +23,8 @@ and Leaflet Realtime (https://github.com/perliedman/leaflet-realtime)
 ## Screenshots
 
 NOTAM-TFR:
-![notam-tfr](https://user-images.githubusercontent.com/60933475/120909386-9d0dca80-c642-11eb-8725-33e3daeeb685.png)
-![notam-tfr2](https://user-images.githubusercontent.com/60933475/120909387-a139e800-c642-11eb-96fc-585c3796184c.png)
-
+![notam-tfr](https://user-images.githubusercontent.com/60933475/120909427-f249dc00-c642-11eb-9ad8-a611994967be.png)
+![notam-tfr2](https://user-images.githubusercontent.com/60933475/120909429-f4ac3600-c642-11eb-8c48-c211d39d179b.png)
 
 SUA:
 ![sua](https://user-images.githubusercontent.com/60933475/118346158-765ae900-b507-11eb-85c6-4d21f181f623.png)
