@@ -470,7 +470,7 @@ var	sua = L.realtime({
 		onEachFeature: function(feature, layer) {
 			layer.bindTooltip('SUA: ' + feature.properties.airsp_name);
 			layer.on('mouseover', function(e) {
-				layer.setStyle({color: 'yellow', fillColor: 'yellow', fillOpacity: 0.5});
+				layer.setStyle({color: 'yellow', fillColor: 'orange', fillOpacity: 0.5});
 
 				$("#m1").html("Report");
 				$("#m2").html("Status");					
@@ -561,7 +561,7 @@ var	seg = L.realtime({
 			return featureData.properties.rep_num;
 		},
 		onEachFeature: function(feature, layer) {
-			layer.bindTooltip('CWA: Alt ' + feature.properties.alt);
+			layer.bindTooltip('NOTAM: Alt ' + feature.properties.alt);
 			layer.on('click', function(e) {
 				layer.setStyle({fillColor: 'yellow', fillOpacity: 0.5});
 
