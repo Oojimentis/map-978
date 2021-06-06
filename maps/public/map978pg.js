@@ -72,50 +72,50 @@ function getNexrad() {
 	var rad_prodid = 0
 
 	switch(rad_prod) {
-		case 0:
-		 	rad_prodid = 0;
-			rad_alt = 0;
-			break;
-		case 1:
-			nexlegend.addTo(map);
-			rad_prodid = 64;
-			rad_alt = 0;
-			break;
-		case 2:
-			nexlegend.addTo(map);
-			rad_prodid = 63;
-			rad_alt = 0;
-			break;		
-		case 3:
-			icelegend.addTo(map);
-			if (rad_alt > 16000) 
-				rad_prodid = 71;
-			else
-				rad_prodid = 70;
-			break;
-		case 4:
-			turblegend.addTo(map);
-			if (rad_alt > 16000) 
-				rad_prodid = 91;
-			else
-				rad_prodid = 90;
-			break;
-		case 5:
-			cloudlegend.addTo(map);
-			rad_prodid = 84;
-			rad_alt = 0;
-			break;
-		case 6:
-			lightlegend.addTo(map);
-			rad_prodid = 103;
-			rad_alt = 0;
-			break;
+	case 0:
+	 	rad_prodid = 0;
+		rad_alt = 0;
+		break;
+	case 1:
+		nexlegend.addTo(map);
+		rad_prodid = 64;
+		rad_alt = 0;
+		break;
+	case 2:
+		nexlegend.addTo(map);
+		rad_prodid = 63;
+		rad_alt = 0;
+		break;		
+	case 3:
+		icelegend.addTo(map);
+		if (rad_alt > 16000) 
+			rad_prodid = 71;
+		else
+			rad_prodid = 70;
+		break;
+	case 4:
+		turblegend.addTo(map);
+		if (rad_alt > 16000) 
+			rad_prodid = 91;
+		else
+			rad_prodid = 90;
+		break;
+	case 5:
+		cloudlegend.addTo(map);
+		rad_prodid = 84;
+		rad_alt = 0;
+		break;
+	case 6:
+		lightlegend.addTo(map);
+		rad_prodid = 103;
+		rad_alt = 0;
+		break;
 	}
 
 	var rad_pre = `SELECT coords AS GEOM, m.prod_id, m.intensity, m.maptime, m.block_num,seq \
-			FROM nexrad m INNER JOIN (SELECT MAX(maptime) AS mob FROM nexrad \
-			WHERE prod_id = ${rad_prodid}) g \
-			ON m.maptime = g.mob AND m.prod_id = ${rad_prodid} AND altitude = ${rad_alt}`;
+					FROM nexrad m INNER JOIN (SELECT MAX(maptime) AS mob FROM nexrad \
+					WHERE prod_id = ${rad_prodid}) g \
+					ON m.maptime = g.mob AND m.prod_id = ${rad_prodid} AND altitude = ${rad_alt}`;
 
 	return rad_pre;
 }	
@@ -231,8 +231,7 @@ var gairmet = L.realtime({
 		}).addTo(map);
 
 // AIRMET
-var url_airmet = url.concat("SELECT coords AS GEOM, g.rep_num, alt, ob_ele, text_data, \
-					start_date, stop_date \
+var url_airmet = url.concat("SELECT coords AS GEOM, g.rep_num, alt, ob_ele, text_data, start_date, stop_date \
 					FROM graphics g LEFT JOIN sigairmet s ON (g.prod_id = s.prod_id) \
 					AND (g.rep_num = s.rep_num) WHERE g.prod_id = 11");
 
@@ -288,8 +287,7 @@ var	airmet = L.realtime({
 		}).addTo(map);
 
 // SIGMET
-var url_sigmet = url.concat("SELECT coords AS GEOM, g.rep_num, alt, ob_ele, text_data, \
-					start_date, stop_date \
+var url_sigmet = url.concat("SELECT coords AS GEOM, g.rep_num, alt, ob_ele, text_data, start_date, stop_date \
 					FROM graphics g LEFT JOIN sigairmet s ON (g.prod_id = s.prod_id) AND \
 					(g.rep_num = s.rep_num)	WHERE g.prod_id = 12");
 
@@ -391,8 +389,7 @@ var	nrad = L.realtime({
 }).addTo(map)
 
 // CWA
-var url3_cwa = url.concat("SELECT coords AS GEOM, g.rep_num, alt, ob_ele, text_data, \
-					start_date, stop_date \
+var url3_cwa = url.concat("SELECT coords AS GEOM, g.rep_num, alt, ob_ele, text_data, start_date, stop_date \
 					FROM graphics g LEFT JOIN sigairmet s ON (g.prod_id = s.prod_id) AND \
 					(g.rep_num = s.rep_num) WHERE g.prod_id = 15");
 
@@ -448,9 +445,8 @@ var	cwa = L.realtime({
 		}).addTo(map);
 
 // SUA
-var url3_sua = url.concat("SELECT s.airsp_id, rep_time, s.airsp_name, sua_airsp_desc, \
-					sua_status_desc, start_time, end_time, high_alt, low_alt, \
-					coords AS GEOM, dafif_name, sep_rule, shape_ind \
+var url3_sua = url.concat("SELECT s.airsp_id, rep_time, s.airsp_name, sua_airsp_desc, sua_status_desc, start_time, \
+					end_time, high_alt, low_alt, coords AS GEOM, dafif_name, sep_rule, shape_ind \
 					FROM sua s INNER JOIN sua_airspace a ON a.airsp_id = s.airsp_id \
 					INNER JOIN sua_airspace_type t ON t.sua_airsp_type = s.airsp_type \
 					INNER JOIN sua_sched_status c ON c.sua_status = s.sched_status");
@@ -506,10 +502,9 @@ var	sua = L.realtime({
 	}
 
 // ** Circle
-
 var url_circle = url.concat("SELECT bot AS GEOM, c.start_date, c.stop_date, c.rep_num, c.r_lng, \
-c.r_lat, c.alt_top, c.alt_bot, c.alpha,s.text_data FROM circles c \
-left join sigairmet s on s.rep_num = c.rep_num");
+					c.r_lat, c.alt_top, c.alt_bot, c.alpha, s.text_data FROM circles c \
+					LEFT JOIN sigairmet s ON s.rep_num = c.rep_num");
 
 var	cir = L.realtime({
 	url: url_circle,
@@ -542,12 +537,10 @@ var	cir = L.realtime({
 		}
 	}).addTo(map);
 
-
 // ** Segmented NOTAMS
-
-var url_seg_notam = url.concat("select coords as geom,alt,g.rep_num,start_date,stop_date,text_data \
-			from graphics g inner join sigairmet s on s.rep_num = g.rep_num \
-			where g.segmented = 1");
+var url_seg_notam = url.concat("SELECT coords ASs GEOM, alt, g.rep_num, start_date, stop_date, text_data \
+					FROM graphics g INNER JOIN sigairmet s ON s.rep_num = g.rep_num \
+					WHERE g.segmented = 1");
 			
 var	seg = L.realtime({
 	url: url_seg_notam,
@@ -586,17 +579,14 @@ var	seg = L.realtime({
 
 		}).addTo(map);
 
-
-
 // ** METAR 
-var wxIcon = L.icon({iconUrl: 'therm.ico', iconSize: [20,20]});
-
 var url_metar = url.concat("SELECT s.coords AS GEOM, m.stn_call, s.stn_loc, ob_date, temp, windsp, \
 					winddir, altimeter, visby, dewp, hrly_precip, slp, windvar, windgust \
 					FROM metar m INNER JOIN (SELECT stn_call, MAX(ob_date) AS mob FROM metar \
 					GROUP BY stn_call) g ON m.stn_call = g.stn_call AND m.ob_date = g.mob \
 					INNER JOIN stations s ON m.stn_call = s.stn_call");
 
+var wxIcon = L.icon({iconUrl: 'therm.ico', iconSize: [20,20]});
 var mk = document.getElementById("meta")
 
 metar = L.realtime({
@@ -646,14 +636,13 @@ metar = L.realtime({
 	}
 
 // ** NOTAM
-var wxIcon2 = L.icon({iconUrl: 'wx2.ico', iconSize: [15,15]});
-
 var url_notam = url.concat("SELECT s.coords AS GEOM, n.stn_call, stn_loc, n.rep_num, text_data, \
 					start_date, stop_date \
 					FROM sigairmet n LEFT JOIN graphics g ON n.prod_id = g.prod_id \
 					AND n.rep_num = g.rep_num \
 					JOIN stations s ON n.stn_call = s.stn_call WHERE n.prod_id = 8");
 
+var wxIcon2 = L.icon({iconUrl: 'wx2.ico', iconSize: [15,15]});
 var nk = document.getElementById("notam")
 
 notam = L.realtime({
@@ -695,12 +684,11 @@ notam = L.realtime({
 	}
 	
 // ** TAF
-var wxIcon3 = L.icon({iconUrl: 'wx1.ico', iconSize: [15,15]});
-
 var url_taf = url.concat("SELECT coords AS GEOM, t.stn_call, stn_loc, issued, current, \
 					wind, visby, condx, rep_time \
 					FROM taf t, stations s WHERE t.stn_call = s.stn_call");
-
+					
+var wxIcon3 = L.icon({iconUrl: 'wx1.ico', iconSize: [15,15]});
 var tk = document.getElementById("taf")
 
 taf = L.realtime({
@@ -752,7 +740,6 @@ var url_winds = url.concat("SELECT coords AS GEOM, w.stn_call, stn_loc, issue_da
 					INNER JOIN stations s ON w.stn_call = s.stn_call");
 
 var wxIcon5 = L.icon({iconUrl: 'wind.ico', iconSize: [15,15]});
-
 var wk = document.getElementById("winds")
  
 winds = L.realtime({
@@ -987,27 +974,27 @@ document.getElementById("prodid").onchange = function() {
 	map.removeControl(cloudlegend);
 
 	switch(rprod) {
-		case 0:
-			document.getElementById("altrad").disabled = true;
-			break;
-		case 1:
-			document.getElementById("altrad").disabled = true;
-			break;
-		case 2:
-			document.getElementById("altrad").disabled = true;
-			break;		
-		case 3:
-			document.getElementById("altrad").disabled = false;
-			break;
-		case 4:
-			document.getElementById("altrad").disabled = false;
-			break;
-		case 5:
-			document.getElementById("altrad").disabled = true;
-			break;
-		case 6:
-			document.getElementById("altrad").disabled = true;
-			break;
+	case 0:
+		document.getElementById("altrad").disabled = true;
+		break;
+	case 1:
+		document.getElementById("altrad").disabled = true;
+		break;
+	case 2:
+		document.getElementById("altrad").disabled = true;
+		break;		
+	case 3:
+		document.getElementById("altrad").disabled = false;
+		break;
+	case 4:
+		document.getElementById("altrad").disabled = false;
+		break;
+	case 5:
+		document.getElementById("altrad").disabled = true;
+		break;
+	case 6:
+		document.getElementById("altrad").disabled = true;
+		break;
 	}
 	lays.clearLayers();
 		url_nx = getNexrad();
