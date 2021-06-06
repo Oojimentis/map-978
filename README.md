@@ -27,7 +27,7 @@ NOTAM-TFR:
 ![notam-tfr2](https://user-images.githubusercontent.com/60933475/120909429-f4ac3600-c642-11eb-8c48-c211d39d179b.png)
 
 SUA:
-![sua](https://user-images.githubusercontent.com/60933475/118346158-765ae900-b507-11eb-85c6-4d21f181f623.png)
+![sua1](https://user-images.githubusercontent.com/60933475/120909528-e874a880-c643-11eb-8fb2-f8fc5bb2935e.png)
 
 Winds Aloft:
 ![winds](https://user-images.githubusercontent.com/60933475/117853332-489b4900-b256-11eb-82a0-abb861f67805.png)
