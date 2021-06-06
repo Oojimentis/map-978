@@ -10,6 +10,7 @@ Uses Leaflet (© 2010–2019 Vladimir Agafonkin. https://leafletjs.com)
 and Leaflet Realtime (https://github.com/perliedman/leaflet-realtime)
 
 ## Recent Changes
+* 6/5/21 Segmented NOTAM-TFR reports displayed.
 * 5/24/21 Additional METAR data displayed.
 * 5/23/21 Improvements to Cloud Tops performance.
 * 5/14/21 SUA reports added.
@@ -20,6 +21,11 @@ and Leaflet Realtime (https://github.com/perliedman/leaflet-realtime)
 
 
 ## Screenshots
+
+NOTAM-TFR:
+![notam-tfr](https://user-images.githubusercontent.com/60933475/120909386-9d0dca80-c642-11eb-8725-33e3daeeb685.png)
+![notam-tfr2](https://user-images.githubusercontent.com/60933475/120909387-a139e800-c642-11eb-96fc-585c3796184c.png)
+
 
 SUA:
 ![sua](https://user-images.githubusercontent.com/60933475/118346158-765ae900-b507-11eb-85c6-4d21f181f623.png)
