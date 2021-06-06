@@ -178,7 +178,7 @@ var url_gairmet = url.concat("SELECT coords AS GEOM, rep_num, alt, ob_ele, start
 var gairmet = L.realtime({
 	url: url_gairmet,
 	crossOrigin: true, type: 'json'
-	}, {interval: 16 * 2000,
+	}, {interval: 33000,
 		style: function(feature) {
 			kolor = getColor(feature.properties.alt);
 			return {color: '#5D8C8C', weight: 2, fillColor: kolor, opacity: 1.0, fillOpacity: 0.2};
@@ -239,7 +239,7 @@ var url_airmet = url.concat("SELECT coords AS GEOM, g.rep_num, alt, ob_ele, text
 var	airmet = L.realtime({
 	url: url_airmet,
 	crossOrigin: true, type: 'json'
-	}, {interval: 19 * 2020,
+	}, {interval: 35000,
 		style: function(feature) {
 			kolor = getColor(feature.properties.alt);
 			return {color: '#00cccc', weight: 2, fillColor: kolor, opacity: 1.0, fillOpacity: 0.2};
@@ -296,7 +296,7 @@ var url_sigmet = url.concat("SELECT coords AS GEOM, g.rep_num, alt, ob_ele, text
 var	sigmet = L.realtime({
 	url: url_sigmet,
 	crossOrigin: true, type: 'json'
-	}, {interval: 25 * 3030,
+	}, {interval: 60000,
 		style: function(feature) {
 			kolor = getColor(feature.properties.alt);
 			return {color: '#00cccc', weight: 2, fillColor: kolor, opacity: 1.0, fillOpacity: 0.2};
@@ -353,7 +353,7 @@ var lays = new L.FeatureGroup();
 var	nrad = L.realtime({
 	url: url3_rad,
  	crossOrigin: true, type: 'json'
-	}, {interval: 55 * 1000,
+	}, {interval: 55000,
 
 	getFeatureId: function(featureData) {
 	return featureData.properties.seq;
@@ -399,7 +399,7 @@ var url3_cwa = url.concat("SELECT coords AS GEOM, g.rep_num, alt, ob_ele, text_d
 var	cwa = L.realtime({
 	url: url3_cwa,
 	crossOrigin: true, type: 'json'
-	}, {interval: 50 * 9000,
+	}, {interval: 600000,
 		style: function(feature) {
 			kolor = getColor(feature.properties.alt);
 			return {color: '#00cccc', weight: 2, fillColor: kolor, opacity: 1.0, fillOpacity: 0.2};
@@ -460,7 +460,7 @@ var sk = document.getElementById("sua")
 var	sua = L.realtime({
 	url: url3_sua,
 	crossOrigin: true, type: 'json'
-	}, {interval: 50 * 1000,
+	}, {interval: 50000,
 		style: function(feature) {
 			return {color: '#2e052a', weight: 3, fillColor: '#2e052a', opacity: 0.5, fillOpacity: 0.5};
 		},
@@ -514,13 +514,13 @@ left join sigairmet s on s.rep_num = c.rep_num");
 var	cir = L.realtime({
 	url: url_circle,
 	crossOrigin: true, type: 'json'
-	}, {interval: 6 * 7030,
+	}, {interval: 300000,
 		getFeatureId: function(featureData) {
 		return featureData.properties.rep_num;
 		},
 		pointToLayer: function(feature, latlng) {
 			marker = L.circleMarker(latlng, {color: 'red', fillcolor: 'yellow'});
- 		marker.bindTooltip(feature.properties.rep_num + '<br>' + feature.properties.start_date );
+ 		marker.bindTooltip('NOTAM-TFR<br>' + feature.properties.rep_num );
  			marker.on('click', function (e) {
  				$("#m1").html("Altitude");
  				$("#m2").html("Radius");
@@ -552,7 +552,7 @@ var url_seg_notam = url.concat("select coords as geom,alt,g.rep_num,start_date,s
 var	seg = L.realtime({
 	url: url_seg_notam,
 	crossOrigin: true, type: 'json'
-	}, {interval: 1 * 9000,
+	}, {interval: 70000,
 		style: function(feature) {
 			kolor = getColor(feature.properties.alt);
 			return {color: '#00cccc', weight: 2, fillColor: kolor, opacity: 1.0, fillOpacity: 0.2};
@@ -561,7 +561,7 @@ var	seg = L.realtime({
 			return featureData.properties.rep_num;
 		},
 		onEachFeature: function(feature, layer) {
-			layer.bindTooltip('NOTAM: Alt ' + feature.properties.alt);
+			layer.bindTooltip('NOTAM-TFR<br>Alt ' + feature.properties.alt);
 			layer.on('click', function(e) {
 				layer.setStyle({fillColor: 'yellow', fillOpacity: 0.5});
 
@@ -602,7 +602,7 @@ var mk = document.getElementById("meta")
 metar = L.realtime({
 	url: url_metar,
 	crossOrigin: true, type: 'json'
-	}, {interval: 17 * 2002,
+	}, {interval: 36000,
 		getFeatureId: function(featureData) {
 		return featureData.properties.stn_call;
 		},
@@ -659,7 +659,7 @@ var nk = document.getElementById("notam")
 notam = L.realtime({
 	url: url_notam,
 	crossOrigin: true, type: 'json'
-	}, {interval: 19 * 2004,
+	}, {interval: 38000,
 		getFeatureId: function(featureData) {
 		return featureData.properties.stn_call;
 		},
@@ -706,7 +706,7 @@ var tk = document.getElementById("taf")
 taf = L.realtime({
 	url: url_taf,
 	crossOrigin: true, type: 'json'
-	}, {interval: 14 * 2005,
+	}, {interval: 30000,
 		getFeatureId: function(featureData) {
 		return featureData.properties.stn_call;
 		},
@@ -758,7 +758,7 @@ var wk = document.getElementById("winds")
 winds = L.realtime({
 	url: url_winds,
 	crossOrigin: true, type: 'json'
-	}, {interval: 19 * 3060,
+	}, {interval: 67000,
 		getFeatureId: function(featureData) {
 		return featureData.properties.stn_call;
 		},
@@ -836,7 +836,7 @@ var pk = document.getElementById("pirep")
 pirep = L.realtime({
 	url: url_pirep,
 	crossOrigin: true, type: 'json'
-	}, {interval: 19 * 3060,
+	}, {interval: 50000,
 		getFeatureId: function(featureData) {
 		return featureData.properties.stn_call;
 		},
