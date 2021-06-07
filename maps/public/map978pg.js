@@ -466,6 +466,7 @@ var	sua = L.realtime({
 		onEachFeature: function(feature, layer) {
 			layer.bindTooltip('SUA: ' + feature.properties.airsp_name);
 			layer.on('mouseover', function(e) {
+			 
 				layer.setStyle({color: 'yellow', fillColor: 'orange', fillOpacity: 0.5});
 
 				$("#m1").html("Report");
@@ -487,24 +488,39 @@ var	sua = L.realtime({
 				$('#f6').html(e.target.feature.properties.dafif_name);
 
 				sua.stop();});
-				
+		
 				layer.on('mouseout', function(e) {
 					sua.start();});
-
 				if (!sk.checked){
-					map.removeLayer(sua), sua.stop()
+					map.removeLayer(sua), sua.stop();
 				}		
-			},
-		}).addTo(map);
+  
+
+		},
+		
+
+	}).addTo(map);
 
 	if (!sk.checked){
 		map.removeLayer(sua), sua.stop()
 	}
 
+
+
+
 // ** Circle
 var url_circle = url.concat("SELECT bot AS GEOM, c.start_date, c.stop_date, c.rep_num, c.r_lng, \
 					c.r_lat, c.alt_top, c.alt_bot, c.alpha, s.text_data FROM circles c \
 					LEFT JOIN sigairmet s ON s.rep_num = c.rep_num");
+
+
+
+var markers = L.markerClusterGroup({
+	spiderfyOnMaxZoom: true,
+	showCoverageOnHover: true,
+	zoomToBoundsOnClick: true
+});
+
 
 var	cir = L.realtime({
 	url: url_circle,
@@ -515,6 +531,7 @@ var	cir = L.realtime({
 		},
 		pointToLayer: function(feature, latlng) {
 			marker = L.circleMarker(latlng, {color: 'red', fillcolor: 'yellow'});
+
  		marker.bindTooltip('NOTAM-TFR<br>' + feature.properties.rep_num );
  			marker.on('click', function (e) {
  				$("#m1").html("Altitude");
@@ -531,14 +548,18 @@ var	cir = L.realtime({
 				$('#f4').html(e.target.feature.properties.start_date);
 				$('#f5').html(e.target.feature.properties.stop_date);
 				$('#f6').html(e.target.feature.properties.text_data);
+			marker.addTo(map);	
 			});
-			marker.addTo(map);
+			
+	markers.addLayer(marker);
+	map.addLayer(markers);	
+
 			return marker;
 		}
 	}).addTo(map);
 
 // ** Segmented NOTAMS
-var url_seg_notam = url.concat("SELECT coords ASs GEOM, alt, g.rep_num, start_date, stop_date, text_data \
+var url_seg_notam = url.concat("SELECT coords AS GEOM, alt, g.rep_num, start_date, stop_date, text_data \
 					FROM graphics g INNER JOIN sigairmet s ON s.rep_num = g.rep_num \
 					WHERE g.segmented = 1");
 			
