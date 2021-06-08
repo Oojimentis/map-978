@@ -666,12 +666,20 @@ var url_notam = url.concat("SELECT s.coords AS GEOM, n.stn_call, stn_loc, n.rep_
 var wxIcon2 = L.icon({iconUrl: 'wx2.ico', iconSize: [15,15]});
 var nk = document.getElementById("notam")
 
+var narkers = L.markerClusterGroup({
+
+	spiderfyOnMaxZoom: true,
+	showCoverageOnHover: false,
+	zoomToBoundsOnClick: true
+});
+
+
 notam = L.realtime({
 	url: url_notam,
 	crossOrigin: true, type: 'json'
 	}, {interval: 38000,
 		getFeatureId: function(featureData) {
-		return featureData.properties.stn_call;
+		return featureData.properties.rep_num;
 		},
 		pointToLayer: function(feature, latlng) {
 			marker = L.marker(latlng, {icon: wxIcon2});
@@ -689,18 +697,22 @@ notam = L.realtime({
 				$('#f4').html(e.target.feature.properties.text_data);
 				$('#f5').html(e.target.feature.properties.start_date);
 				$('#f6').html(e.target.feature.properties.stop_date);
-			});
-			marker.addTo(map);
 
+			marker.addTo(map);
+			});
 			if (!nk.checked){
+//			map.removeLayer(narkers),
+			narkers.removeLayer(narkers),
 				map.removeLayer(marker), notam.stop()
 			}
-
+	narkers.addLayer(marker);
+	map.addLayer(narkers);	
 			return marker;
 		}
 	}).addTo(map);
 
 	if (!nk.checked){
+			narkers.removeLayer(narkers),
 		map.removeLayer(notam), notam.stop()
 	}
 	
@@ -926,6 +938,7 @@ document.querySelector("input[name = notam]").addEventListener('change', functio
 	if(this.checked) {
 		map.addLayer(notam), notam.start()}
 	else {
+	narkers.removeLayer(narkers),
 		map.removeLayer(notam), notam.stop()}
 })
 
