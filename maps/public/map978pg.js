@@ -197,7 +197,6 @@ var gairmet = L.realtime({
 				$("#m4").html("Condition");
 				$("#m5").html("Start");
 				$("#m6").html("Stop");
-						
 				$('#f1').html('G-AIRMET');
 				$('#f2').html(e.target.feature.properties.alt);
 				$('#f3').html(e.target.feature.properties.rep_num);
@@ -206,7 +205,7 @@ var gairmet = L.realtime({
 				$('#f6').html(e.target.feature.properties.stop_date);
 
 				gairmet.stop();});
-			layer.on('mouseout', function(e) {
+				layer.on('mouseout', function(e) {
 				gairmet.start();})		
 			},
 			filter: function(feature, layer) {
@@ -250,14 +249,12 @@ var	airmet = L.realtime({
 			layer.bindTooltip('AIRMET: Alt ' + feature.properties.alt);
 			layer.on('click', function(e) {
 				layer.setStyle({fillColor: 'yellow', fillOpacity: 0.5});
-
 				$("#m1").html("Report");
 				$("#m2").html("Altitude");					
 				$("#m3").html("Report Num");
 				$("#m4").html("Condition");
 				$("#m5").html("Start");
 				$("#m6").html("Stop");
-					
 				$('#f1').html('AIRMET');
 				$('#f2').html(e.target.feature.properties.alt);
 				$('#f3').html(e.target.feature.properties.rep_num);
@@ -266,7 +263,7 @@ var	airmet = L.realtime({
 				$('#f6').html(e.target.feature.properties.stop_date);
 
 				airmet.stop();});
-			layer.on('mouseout', function(e) {
+				layer.on('mouseout', function(e) {
 				airmet.start();})		
 			},
 			filter: function(feature, layer) {
@@ -306,14 +303,12 @@ var	sigmet = L.realtime({
 			layer.bindTooltip('SIGMET: Alt ' + feature.properties.alt);
 			layer.on('click', function(e) {
 				layer.setStyle({fillColor: 'yellow', fillOpacity: 0.5});
-
 				$("#m1").html("Report");
 				$("#m2").html("Altitude");					
 				$("#m3").html("Report Num");
 				$("#m4").html("Condition");
 				$("#m5").html("Start");
 				$("#m6").html("Stop");
-					
 				$('#f1').html('SIGMET');
 				$('#f2').html(e.target.feature.properties.alt);
 				$('#f3').html(e.target.feature.properties.rep_num);
@@ -322,7 +317,7 @@ var	sigmet = L.realtime({
 				$('#f6').html(e.target.feature.properties.stop_date);
 				
 				sigmet.stop();});
-			layer.on('mouseout', function(e) {
+				layer.on('mouseout', function(e) {
 				sigmet.start();})		
 			},
 			filter: function(feature, layer) {
@@ -408,14 +403,12 @@ var	cwa = L.realtime({
 			layer.bindTooltip('CWA: Alt ' + feature.properties.alt);
 			layer.on('click', function(e) {
 				layer.setStyle({fillColor: 'yellow', fillOpacity: 0.5});
-
 				$("#m1").html("Report");
 				$("#m2").html("Altitude");					
 				$("#m3").html("Report Num");
 				$("#m4").html("Condition");
 				$("#m5").html("Start");
 				$("#m6").html("Stop");
-					
 				$('#f1').html('CWA');
 				$('#f2').html(e.target.feature.properties.alt);
 				$('#f3').html(e.target.feature.properties.rep_num);
@@ -424,7 +417,7 @@ var	cwa = L.realtime({
 				$('#f6').html(e.target.feature.properties.stop_date);
 
 				cwa.stop();});
-			layer.on('mouseout', function(e) {
+				layer.on('mouseout', function(e) {
 				cwa.start();})		
 			},
 			filter: function(feature,layer) {
@@ -464,18 +457,15 @@ var	sua = L.realtime({
 			return featureData.properties.airsp_name;
 		},
 		onEachFeature: function(feature, layer) {
-			layer.bindTooltip('SUA: ' + feature.properties.airsp_name);
+   			layer.bindTooltip('SUA: ' + feature.properties.airsp_name);
 			layer.on('mouseover', function(e) {
-			 
 				layer.setStyle({color: 'yellow', fillColor: 'orange', fillOpacity: 0.5});
-
 				$("#m1").html("Report");
 				$("#m2").html("Status");					
 				$("#m3").html("Times");
 				$("#m4").html("Altitudes L/H");
 				$("#m5").html("Sep/shape");
 				$("#m6").html("DAFIF");
-					
 				$('#f1').html('SUA - ' + e.target.feature.properties.airsp_name);
 				$('#f2').html(e.target.feature.properties.sua_airsp_desc + ' <br>' +
 					e.target.feature.properties.sua_status_desc);
@@ -486,41 +476,30 @@ var	sua = L.realtime({
 				$('#f5').html(e.target.feature.properties.sep_rule + '  ' +
 					e.target.feature.properties.shape_ind);
 				$('#f6').html(e.target.feature.properties.dafif_name);
-
-				sua.stop();});
-		
-				layer.on('mouseout', function(e) {
-					sua.start();});
+					sua.stop();
+			})
+			layer.on('mouseout', function(e) {
+				sua.start();});
 				if (!sk.checked){
 					map.removeLayer(sua), sua.stop();
 				}		
-  
+  			},
+		}).addTo(map);
 
-		},
-		
-
-	}).addTo(map);
-
-	if (!sk.checked){
-		map.removeLayer(sua), sua.stop()
-	}
-
-
-
+		if (!sk.checked){
+			map.removeLayer(sua), sua.stop()
+		}
 
 // ** Circle
 var url_circle = url.concat("SELECT bot AS GEOM, c.start_date, c.stop_date, c.rep_num, c.r_lng, \
 					c.r_lat, c.alt_top, c.alt_bot, c.alpha, s.text_data FROM circles c \
 					LEFT JOIN sigairmet s ON s.rep_num = c.rep_num");
 
-
-
 var markers = L.markerClusterGroup({
 	spiderfyOnMaxZoom: true,
 	showCoverageOnHover: true,
 	zoomToBoundsOnClick: true
 });
-
 
 var	cir = L.realtime({
 	url: url_circle,
@@ -551,8 +530,8 @@ var	cir = L.realtime({
 			marker.addTo(map);	
 			});
 			
-	markers.addLayer(marker);
-	map.addLayer(markers);	
+			markers.addLayer(marker);
+			map.addLayer(markers);	
 
 			return marker;
 		}
@@ -578,14 +557,12 @@ var	seg = L.realtime({
 			layer.bindTooltip('NOTAM-TFR<br>Alt ' + feature.properties.alt);
 			layer.on('click', function(e) {
 				layer.setStyle({fillColor: 'yellow', fillOpacity: 0.5});
-
 				$("#m1").html("Report");
 				$("#m2").html("Altitude");					
 				$("#m3").html("Report Num");
 				$("#m4").html("Condition");
 				$("#m5").html("Start");
 				$("#m6").html("Stop");
-					
 				$('#f1').html('Graphical NOTAM');
 				$('#f2').html(e.target.feature.properties.alt);
 				$('#f3').html(e.target.feature.properties.rep_num);
@@ -594,10 +571,9 @@ var	seg = L.realtime({
 				$('#f6').html(e.target.feature.properties.stop_date);
 
 				seg.stop();});
-			layer.on('mouseout', function(e) {
+				layer.on('mouseout', function(e) {
 				seg.start();})		
 			},
-
 		}).addTo(map);
 
 // ** METAR 
@@ -659,7 +635,7 @@ metar = L.realtime({
 // ** NOTAM
 var url_notam = url.concat("SELECT s.coords AS GEOM, n.stn_call, stn_loc, n.rep_num, text_data, \
 					start_date, stop_date \
-					FROM sigairmet n LEFT JOIN graphics g ON n.prod_id = g.prod_id \
+					FROM sigairmet n JOIN graphics g ON n.prod_id = g.prod_id and n.stn_call = g.stn_call \
 					AND n.rep_num = g.rep_num \
 					JOIN stations s ON n.stn_call = s.stn_call WHERE n.prod_id = 8");
 
@@ -667,12 +643,11 @@ var wxIcon2 = L.icon({iconUrl: 'wx2.ico', iconSize: [15,15]});
 var nk = document.getElementById("notam")
 
 var narkers = L.markerClusterGroup({
-
 	spiderfyOnMaxZoom: true,
 	showCoverageOnHover: false,
+	maxClusterRadius: 20,
 	zoomToBoundsOnClick: true
 });
-
 
 notam = L.realtime({
 	url: url_notam,
@@ -697,25 +672,23 @@ notam = L.realtime({
 				$('#f4').html(e.target.feature.properties.text_data);
 				$('#f5').html(e.target.feature.properties.start_date);
 				$('#f6').html(e.target.feature.properties.stop_date);
-
-			marker.addTo(map);
 			});
+
 			if (!nk.checked){
-//			map.removeLayer(narkers),
-			narkers.removeLayer(narkers),
+				map.removeLayer(narkers),
+				narkers.removeLayer(narkers),
 				map.removeLayer(marker), notam.stop()
 			}
-	narkers.addLayer(marker);
-	map.addLayer(narkers);	
-			return marker;
+			else {
+				narkers.addLayer(marker);
+				map.addLayer(narkers);	
+				notam.start();
+	
+				return marker;
+			}
 		}
 	}).addTo(map);
 
-	if (!nk.checked){
-			narkers.removeLayer(narkers),
-		map.removeLayer(notam), notam.stop()
-	}
-	
 // ** TAF
 var url_taf = url.concat("SELECT coords AS GEOM, t.stn_call, stn_loc, issued, current, \
 					wind, visby, condx, rep_time \
@@ -784,9 +757,7 @@ winds = L.realtime({
 		},
 		pointToLayer: function(feature, latlng) {
 			marker = L.marker(latlng, {icon: wxIcon5});
-
 			marker.bindTooltip('Winds' + '<br>' + feature.properties.stn_call);
-
 			marker.on('click', function(e) {
 				$("#m1").html("Station" + '<br>' + e.target.feature.properties.issue_date );
 				$("#m2").html(e.target.feature.properties.alt1 + "ft" + '<br>' +
@@ -1041,7 +1012,6 @@ document.getElementById("prodid").onchange = function() {
 // Map legends
 
 turblegend = L.control({ position: "topright" });
-
 turblegend.onAdd = function(mop) {
 	var div = L.DomUtil.create("div", "legend");
 	div.innerHTML += "<h4>Turbulence</h4>";
@@ -1064,7 +1034,6 @@ turblegend.onAdd = function(mop) {
 };
 
 cloudlegend = L.control({ position: "topright" });
-
 cloudlegend.onAdd = function(mop) {
 	var div = L.DomUtil.create("div", "legend");
 	div.innerHTML += "<h4>Cloud Tops</h4>";
@@ -1087,7 +1056,6 @@ cloudlegend.onAdd = function(mop) {
 };
 
 icelegend = L.control({ position: "topright" });
-
 icelegend.onAdd = function(mop) {
 	var div = L.DomUtil.create("div", "legend");
 	div.innerHTML += "<h4>Icing</h4>";
@@ -1102,7 +1070,6 @@ icelegend.onAdd = function(mop) {
 };
 
 lightlegend = L.control({ position: "topright" });
-
 lightlegend.onAdd = function(mop) {
 	var div = L.DomUtil.create("div", "legend");
 	div.innerHTML += "<h4>Lightning</h4>";
@@ -1117,7 +1084,6 @@ lightlegend.onAdd = function(mop) {
 };
 
 nexlegend = L.control({ position: "topright" });
-
 nexlegend.onAdd = function(mop) {
 	var div = L.DomUtil.create("div", "legend");
 	div.innerHTML += "<h4>NEXRAD</h4>";
