@@ -643,8 +643,8 @@ metar = L.realtime({
 
 // ** NOTAM
 var url_notam = url.concat("SELECT s.coords AS GEOM, n.stn_call, stn_loc, n.rep_num, text_data, \
-					start_date, stop_date \
-					FROM sigairmet n JOIN graphics g ON n.prod_id = g.prod_id and n.stn_call = g.stn_call \
+					start_date, stop_date, notam_name \
+					FROM sigairmet n left JOIN graphics g ON n.prod_id = g.prod_id and n.stn_call = g.stn_call \
 					AND n.rep_num = g.rep_num \
 					JOIN stations s ON n.stn_call = s.stn_call WHERE n.prod_id = 8");
 
@@ -667,7 +667,7 @@ notam = L.realtime({
 	},
 	pointToLayer: function(feature, latlng) {
 		marker = L.marker(latlng, {icon: wxIcon2});
- 		marker.bindTooltip('NOTAM' + '<br>' + feature.properties.stn_call);
+ 		marker.bindTooltip(feature.properties.notam_name + '<br>' + feature.properties.stn_call);
 		marker.on('click', function(e) {
 			$("#m1").html("Station");
 			$("#m2").html("Location");
@@ -675,7 +675,7 @@ notam = L.realtime({
 			$("#m4").html("Text");
 			$("#m5").html("Start");
 			$("#m6").html("Stop");
-			$('#f1').html(e.target.feature.properties.stn_call + " (NOTAM)");
+			$('#f1').html(e.target.feature.properties.stn_call + ' - ' + feature.properties.notam_name);
 			$('#f2').html(e.target.feature.properties.stn_loc);
 			$('#f3').html(e.target.feature.properties.rep_num);
 			$('#f4').html(e.target.feature.properties.text_data);
