@@ -41,26 +41,26 @@ var OpenStreetMap_BlackAndWhite = L.tileLayer('http://{s}.tiles.wmflabs.org/bw-m
 });
 
 function getColor(colf) {
-	return 	colf >=	60000 ? '#67BDE9':
-			colf >=	50000 ? '#6EBAE0':
-			colf >=	43000 ? '#75B7D6':
-			colf >=	42000 ? '#7CB4CD':
-			colf >=	40000 ? '#83B1C3':
-			colf >=	32000 ? '#8AADBA':
-			colf >=	24000 ? '#91AAB0':
-			colf >=	22000 ? '#98A7A7':
-			colf >=	20000 ? '#9FA49D':
-			colf >=	18000 ? '#A6A194':
-			colf >=	16000 ? '#AD9E8A':
-			colf >=	12000 ? '#B49B81':
-			colf >=	10000 ? '#BB9877':
-			colf >=	9000  ? '#C2956E':
-			colf >=	8000  ? '#C99264':
-			colf >=	7000  ? '#D08E5B':
-			colf >=	6000  ? '#D78B51':
-			colf >=	4000  ? '#DE8848':
-			colf >=	1000  ? '#E5853E':
-			colf >=	0	? '#EC8235':
+	return 	colf >=	60000	? '#67BDE9':
+			colf >=	50000	? '#6EBAE0':
+			colf >=	43000	? '#75B7D6':
+			colf >=	42000	? '#7CB4CD':
+			colf >=	40000	? '#83B1C3':
+			colf >=	32000	? '#8AADBA':
+			colf >=	24000	? '#91AAB0':
+			colf >=	22000	? '#98A7A7':
+			colf >=	20000	? '#9FA49D':
+			colf >=	18000	? '#A6A194':
+			colf >=	16000	? '#AD9E8A':
+			colf >=	12000	? '#B49B81':
+			colf >=	10000	? '#BB9877':
+			colf >=	9000	? '#C2956E':
+			colf >=	8000	? '#C99264':
+			colf >=	7000	? '#D08E5B':
+			colf >=	6000	? '#D78B51':
+			colf >=	4000	? '#DE8848':
+			colf >=	1000	? '#E5853E':
+			colf >=	0		? '#EC8235':
 					'blue';
 }	
 
@@ -72,50 +72,50 @@ function getNexrad() {
 	var rad_prodid = 0
 
 	switch(rad_prod) {
-		case 0:
-		 	rad_prodid = 0;
-			rad_alt = 0;
-			break;
-		case 1:
-			nexlegend.addTo(map);
-			rad_prodid = 64;
-			rad_alt = 0;
-			break;
-		case 2:
-			nexlegend.addTo(map);
-			rad_prodid = 63;
-			rad_alt = 0;
-			break;		
-		case 3:
-			icelegend.addTo(map);
-			if (rad_alt > 16000) 
-				rad_prodid = 71;
-			else
-				rad_prodid = 70;
-			break;
-		case 4:
-			turblegend.addTo(map);
-			if (rad_alt > 16000) 
-				rad_prodid = 91;
-			else
-				rad_prodid = 90;
-			break;
-		case 5:
-			cloudlegend.addTo(map);
-			rad_prodid = 84;
-			rad_alt = 0;
-			break;
-		case 6:
-			lightlegend.addTo(map);
-			rad_prodid = 103;
-			rad_alt = 0;
-			break;
+	case 0:
+	 	rad_prodid = 0;
+		rad_alt = 0;
+		break;
+	case 1:
+		nexlegend.addTo(map);
+		rad_prodid = 64;
+		rad_alt = 0;
+		break;
+	case 2:
+		nexlegend.addTo(map);
+		rad_prodid = 63;
+		rad_alt = 0;
+		break;		
+	case 3:
+		icelegend.addTo(map);
+		if (rad_alt > 16000) 
+			rad_prodid = 71;
+		else
+			rad_prodid = 70;
+		break;
+	case 4:
+		turblegend.addTo(map);
+		if (rad_alt > 16000) 
+			rad_prodid = 91;
+		else
+			rad_prodid = 90;
+		break;
+	case 5:
+		cloudlegend.addTo(map);
+		rad_prodid = 84;
+		rad_alt = 0;
+		break;
+	case 6:
+		lightlegend.addTo(map);
+		rad_prodid = 103;
+		rad_alt = 0;
+		break;
 	}
 
 	var rad_pre = `SELECT coords AS GEOM, m.prod_id, m.intensity, m.maptime, m.block_num,seq \
-			FROM nexrad m INNER JOIN (SELECT MAX(maptime) AS mob FROM nexrad \
-			WHERE prod_id = ${rad_prodid}) g \
-			ON m.maptime = g.mob AND m.prod_id = ${rad_prodid} AND altitude = ${rad_alt}`;
+					FROM nexrad m INNER JOIN (SELECT MAX(maptime) AS mob FROM nexrad \
+					WHERE prod_id = ${rad_prodid}) g \
+					ON m.maptime = g.mob AND m.prod_id = ${rad_prodid} AND altitude = ${rad_alt}`;
 
 	return rad_pre;
 }	
@@ -178,171 +178,169 @@ var url_gairmet = url.concat("SELECT coords AS GEOM, rep_num, alt, ob_ele, start
 var gairmet = L.realtime({
 	url: url_gairmet,
 	crossOrigin: true, type: 'json'
-	}, {interval: 16 * 2000,
-		style: function(feature) {
-			kolor = getColor(feature.properties.alt);
-			return {color: '#5D8C8C', weight: 2, fillColor: kolor, opacity: 1.0, fillOpacity: 0.2};
-		},
-		getFeatureId: function(featureData) {
-			return featureData.properties.rep_num;
-		},
-		onEachFeature: function(feature, layer) {
-			layer.bindTooltip('G-AIRMET: Alt '+ feature.properties.alt + 
-				'<br>' + feature.properties.ob_ele);
-			layer.on('click', function(e) {
-				layer.setStyle({color: 'yellow', opacity: 0.8, fillColor: 'yellow', fillOpacity: 0.5});
-				$("#m1").html("Report");
-				$("#m2").html("Altitude");					
-				$("#m3").html("Report Num");
-				$("#m4").html("Condition");
-				$("#m5").html("Start");
-				$("#m6").html("Stop");
-						
-				$('#f1').html('G-AIRMET');
-				$('#f2').html(e.target.feature.properties.alt);
-				$('#f3').html(e.target.feature.properties.rep_num);
-				$('#f4').html(e.target.feature.properties.ob_ele);
-				$('#f5').html(e.target.feature.properties.start_date);
-				$('#f6').html(e.target.feature.properties.stop_date);
+	}, {interval: 33000,
+	style: function(feature) {
+		kolor = getColor(feature.properties.alt);
+		return {color: '#5D8C8C', weight: 2, fillColor: kolor, opacity: 1.0, fillOpacity: 0.2};
+	},
+	getFeatureId: function(featureData) {
+		return featureData.properties.rep_num;
+	},
+	onEachFeature: function(feature, layer) {
+		layer.bindTooltip('G-AIRMET: Alt '+ feature.properties.alt + 
+			'<br>' + feature.properties.ob_ele);
+		layer.on('click', function(e) {
+			layer.setStyle({color: 'yellow', opacity: 0.8, fillColor: 'yellow', fillOpacity: 0.5});
+			$("#m1").html("Report");
+			$("#m2").html("Altitude");					
+			$("#m3").html("Report Num");
+			$("#m4").html("Condition");
+			$("#m5").html("Start");
+			$("#m6").html("Stop");
+			$('#f1').html('G-AIRMET');
+			$('#f2').html(e.target.feature.properties.alt);
+			$('#f3').html(e.target.feature.properties.rep_num);
+			$('#f4').html(e.target.feature.properties.ob_ele);
+			$('#f5').html(e.target.feature.properties.start_date);
+			$('#f6').html(e.target.feature.properties.stop_date);
 
-				gairmet.stop();});
-			layer.on('mouseout', function(e) {
-				gairmet.start();})		
-			},
-			filter: function(feature, layer) {
-				var rangeslider = document.getElementById("gmsliderRange");
-				var output = document.getElementById("slidealt");
-				if (rangeslider.value == -1000) 
-					output.innerHTML = "All"
-				else 
-					output.innerHTML = rangeslider.value;
+			gairmet.stop();
+		});
+		layer.on('mouseout', function(e) {
+			gairmet.start();
+		})		
+	},
+	filter: function(feature, layer) {
+		var rangeslider = document.getElementById("gmsliderRange");
+		var output = document.getElementById("slidealt");
+		if (rangeslider.value == -1000) 
+			output.innerHTML = "All"
+		else 
+			output.innerHTML = rangeslider.value;
 
-				var nn = parseInt(rangeslider.value, 10);
-				var e = document.getElementById("stim");
-				var stim = e.value;
-				if (nn == -1000) 
-					return (feature.properties.alt >= 0 && 
-						right(feature.properties.start_date, 5) == stim)
-				else 
-					return (feature.properties.alt >= (nn - 500) && 
-						feature.properties.alt <= (nn + 500) && 
-						right(feature.properties.start_date, 5) == stim);
-			}
-		}).addTo(map);
+		var nn = parseInt(rangeslider.value, 10);
+		var e = document.getElementById("stim");
+		var stim = e.value;
+		if (nn == -1000) 
+			return (feature.properties.alt >= 0 && 
+				right(feature.properties.start_date, 5) == stim)
+		else 
+			return (feature.properties.alt >= (nn - 500) && 
+				feature.properties.alt <= (nn + 500) && 
+				right(feature.properties.start_date, 5) == stim);
+	}
+}).addTo(map);
 
 // AIRMET
-var url_airmet = url.concat("SELECT coords AS GEOM, g.rep_num, alt, ob_ele, text_data, \
-					start_date, stop_date \
+var url_airmet = url.concat("SELECT coords AS GEOM, g.rep_num, alt, ob_ele, text_data, start_date, stop_date \
 					FROM graphics g LEFT JOIN sigairmet s ON (g.prod_id = s.prod_id) \
 					AND (g.rep_num = s.rep_num) WHERE g.prod_id = 11");
 
 var	airmet = L.realtime({
 	url: url_airmet,
 	crossOrigin: true, type: 'json'
-	}, {interval: 19 * 2020,
-		style: function(feature) {
-			kolor = getColor(feature.properties.alt);
-			return {color: '#00cccc', weight: 2, fillColor: kolor, opacity: 1.0, fillOpacity: 0.2};
-		},
-		getFeatureId: function(featureData) {
-			return featureData.properties.rep_num;
-		},
-		onEachFeature: function(feature, layer) {
-			layer.bindTooltip('AIRMET: Alt ' + feature.properties.alt);
-			layer.on('click', function(e) {
-				layer.setStyle({fillColor: 'yellow', fillOpacity: 0.5});
+	}, {interval: 35000,
+	style: function(feature) {
+		kolor = getColor(feature.properties.alt);
+		return {color: '#00cccc', weight: 2, fillColor: kolor, opacity: 1.0, fillOpacity: 0.2};
+	},
+	getFeatureId: function(featureData) {
+		return featureData.properties.rep_num;
+	},
+	onEachFeature: function(feature, layer) {
+		layer.bindTooltip('AIRMET: Alt ' + feature.properties.alt);
+		layer.on('click', function(e) {
+			layer.setStyle({fillColor: 'yellow', fillOpacity: 0.5});
+			$("#m1").html("Report");
+			$("#m2").html("Altitude");					
+			$("#m3").html("Report Num");
+			$("#m4").html("Condition");
+			$("#m5").html("Start");
+			$("#m6").html("Stop");
+			$('#f1').html('AIRMET');
+			$('#f2').html(e.target.feature.properties.alt);
+			$('#f3').html(e.target.feature.properties.rep_num);
+			$('#f4').html(e.target.feature.properties.text_data);
+			$('#f5').html(e.target.feature.properties.start_date);
+			$('#f6').html(e.target.feature.properties.stop_date);
 
-				$("#m1").html("Report");
-				$("#m2").html("Altitude");					
-				$("#m3").html("Report Num");
-				$("#m4").html("Condition");
-				$("#m5").html("Start");
-				$("#m6").html("Stop");
-					
-				$('#f1').html('AIRMET');
-				$('#f2').html(e.target.feature.properties.alt);
-				$('#f3').html(e.target.feature.properties.rep_num);
-				$('#f4').html(e.target.feature.properties.text_data);
-				$('#f5').html(e.target.feature.properties.start_date);
-				$('#f6').html(e.target.feature.properties.stop_date);
+			airmet.stop();
+		});
+	layer.on('mouseout', function(e) {
+		airmet.start();
+	})		
+	},
+	filter: function(feature, layer) {
+		var rangeslider = document.getElementById("gmsliderRange");
+		var output = document.getElementById("slidealt");
+		if (rangeslider.value == -1000) 
+			output.innerHTML = "All"
+		else 
+			output.innerHTML = rangeslider.value;
 
-				airmet.stop();});
-			layer.on('mouseout', function(e) {
-				airmet.start();})		
-			},
-			filter: function(feature, layer) {
-				var rangeslider = document.getElementById("gmsliderRange");
-				var output = document.getElementById("slidealt");
-				if (rangeslider.value == -1000) 
-					output.innerHTML = "All"
-				else 
-					output.innerHTML = rangeslider.value;
-
-				var nn = parseInt(rangeslider.value, 10);
-				if (nn == -1000) 
-					return (feature.properties.alt >= 0)
-				else 
-					return (feature.properties.alt >= (nn - 500) &&
-						feature.properties.alt <= (nn + 500));
-			}
-		}).addTo(map);
+		var nn = parseInt(rangeslider.value, 10);
+		if (nn == -1000) 
+			return (feature.properties.alt >= 0)
+		else 
+			return (feature.properties.alt >= (nn - 500) &&
+				feature.properties.alt <= (nn + 500));
+	}
+}).addTo(map);
 
 // SIGMET
-var url_sigmet = url.concat("SELECT coords AS GEOM, g.rep_num, alt, ob_ele, text_data, \
-					start_date, stop_date \
+var url_sigmet = url.concat("SELECT coords AS GEOM, g.rep_num, alt, ob_ele, text_data, start_date, stop_date \
 					FROM graphics g LEFT JOIN sigairmet s ON (g.prod_id = s.prod_id) AND \
 					(g.rep_num = s.rep_num)	WHERE g.prod_id = 12");
 
 var	sigmet = L.realtime({
 	url: url_sigmet,
 	crossOrigin: true, type: 'json'
-	}, {interval: 25 * 3030,
-		style: function(feature) {
-			kolor = getColor(feature.properties.alt);
-			return {color: '#00cccc', weight: 2, fillColor: kolor, opacity: 1.0, fillOpacity: 0.2};
-		},
-		getFeatureId: function(featureData) {
-			return featureData.properties.rep_num;
-		},
-		onEachFeature: function(feature, layer) {
-			layer.bindTooltip('SIGMET: Alt ' + feature.properties.alt);
-			layer.on('click', function(e) {
-				layer.setStyle({fillColor: 'yellow', fillOpacity: 0.5});
-
-				$("#m1").html("Report");
-				$("#m2").html("Altitude");					
-				$("#m3").html("Report Num");
-				$("#m4").html("Condition");
-				$("#m5").html("Start");
-				$("#m6").html("Stop");
-					
-				$('#f1').html('SIGMET');
-				$('#f2').html(e.target.feature.properties.alt);
-				$('#f3').html(e.target.feature.properties.rep_num);
-				$('#f4').html(e.target.feature.properties.text_data);
-				$('#f5').html(e.target.feature.properties.start_date);
-				$('#f6').html(e.target.feature.properties.stop_date);
+	}, {interval: 60000,
+	style: function(feature) {
+		kolor = getColor(feature.properties.alt);
+		return {color: '#00cccc', weight: 2, fillColor: kolor, opacity: 1.0, fillOpacity: 0.2};
+	},
+	getFeatureId: function(featureData) {
+		return featureData.properties.rep_num;
+	},
+	onEachFeature: function(feature, layer) {
+		layer.bindTooltip('SIGMET: Alt ' + feature.properties.alt);
+		layer.on('click', function(e) {
+			layer.setStyle({fillColor: 'yellow', fillOpacity: 0.5});
+			$("#m1").html("Report");
+			$("#m2").html("Altitude");					
+			$("#m3").html("Report Num");
+			$("#m4").html("Condition");
+			$("#m5").html("Start");
+			$("#m6").html("Stop");
+			$('#f1').html('SIGMET');
+			$('#f2').html(e.target.feature.properties.alt);
+			$('#f3').html(e.target.feature.properties.rep_num);
+			$('#f4').html(e.target.feature.properties.text_data);
+			$('#f5').html(e.target.feature.properties.start_date);
+			$('#f6').html(e.target.feature.properties.stop_date);
 				
-				sigmet.stop();});
-			layer.on('mouseout', function(e) {
-				sigmet.start();})		
-			},
-			filter: function(feature, layer) {
-				var rangeslider = document.getElementById("gmsliderRange");
-				var output = document.getElementById("slidealt");
-				if (rangeslider.value == -1000)
-					output.innerHTML = "All"
-				else 
-					output.innerHTML = rangeslider.value;
+			sigmet.stop();
+		});
+		layer.on('mouseout', function(e) {
+			sigmet.start();})		
+	},
+	filter: function(feature, layer) {
+		var rangeslider = document.getElementById("gmsliderRange");
+		var output = document.getElementById("slidealt");
+		if (rangeslider.value == -1000)
+			output.innerHTML = "All"
+		else 
+			output.innerHTML = rangeslider.value;
 
-				var nn = parseInt(rangeslider.value, 10);
-				if (nn == -1000) 
-					return (feature.properties.alt >= 0)
-				else 
-					return (feature.properties.alt >= (nn - 500) &&
-						feature.properties.alt <= (nn + 500));
-			}
-		}).addTo(map);
+		var nn = parseInt(rangeslider.value, 10);
+		if (nn == -1000) 
+			return (feature.properties.alt >= 0)
+		else 
+			return (feature.properties.alt >= (nn - 500) &&
+				feature.properties.alt <= (nn + 500));
+	}
+}).addTo(map);
 
 // NEXRAD
 var radar;
@@ -353,12 +351,11 @@ var lays = new L.FeatureGroup();
 var	nrad = L.realtime({
 	url: url3_rad,
  	crossOrigin: true, type: 'json'
-	}, {interval: 55 * 1000,
+	}, {interval: 55000,
 
 	getFeatureId: function(featureData) {
-	return featureData.properties.seq;
+		return featureData.properties.seq;
 	},
-
 	style: function(feature) {
 		if (feature.properties.prod_id == 84 || feature.properties.prod_id == 90 || feature.properties.prod_id == 91 ) {
 // if (feature.properties.prod_id == 84 ) {
@@ -366,7 +363,6 @@ var	nrad = L.realtime({
 			return {color: golor, weight: 4, fillColor: golor, opacity: 0.5, fillOpacity: 0.5}
 		}
 	},
-
 	pointToLayer: function(feature, latlng) {
 		if (feature.properties.prod_id != 84 ) {		
 			var currentPoint = map.latLngToContainerPoint(latlng);
@@ -391,66 +387,63 @@ var	nrad = L.realtime({
 }).addTo(map)
 
 // CWA
-var url3_cwa = url.concat("SELECT coords AS GEOM, g.rep_num, alt, ob_ele, text_data, \
-					start_date, stop_date \
+var url3_cwa = url.concat("SELECT coords AS GEOM, g.rep_num, alt, ob_ele, text_data, start_date, stop_date \
 					FROM graphics g LEFT JOIN sigairmet s ON (g.prod_id = s.prod_id) AND \
 					(g.rep_num = s.rep_num) WHERE g.prod_id = 15");
 
 var	cwa = L.realtime({
 	url: url3_cwa,
 	crossOrigin: true, type: 'json'
-	}, {interval: 50 * 9000,
-		style: function(feature) {
-			kolor = getColor(feature.properties.alt);
-			return {color: '#00cccc', weight: 2, fillColor: kolor, opacity: 1.0, fillOpacity: 0.2};
-		},
-		getFeatureId: function(featureData) {
-			return featureData.properties.rep_num;
-		},
-		onEachFeature: function(feature, layer) {
-			layer.bindTooltip('CWA: Alt ' + feature.properties.alt);
-			layer.on('click', function(e) {
-				layer.setStyle({fillColor: 'yellow', fillOpacity: 0.5});
+	}, {interval: 600000,
+	style: function(feature) {
+		kolor = getColor(feature.properties.alt);
+		return {color: '#00cccc', weight: 2, fillColor: kolor, opacity: 1.0, fillOpacity: 0.2};
+	},
+	getFeatureId: function(featureData) {
+		return featureData.properties.rep_num;
+	},
+	onEachFeature: function(feature, layer) {
+		layer.bindTooltip('CWA: Alt ' + feature.properties.alt);
+		layer.on('click', function(e) {
+			layer.setStyle({fillColor: 'yellow', fillOpacity: 0.5});
+			$("#m1").html("Report");
+			$("#m2").html("Altitude");					
+			$("#m3").html("Report Num");
+			$("#m4").html("Condition");
+			$("#m5").html("Start");
+			$("#m6").html("Stop");
+			$('#f1').html('CWA');
+			$('#f2').html(e.target.feature.properties.alt);
+			$('#f3').html(e.target.feature.properties.rep_num);
+			$('#f4').html(e.target.feature.properties.text_data);
+			$('#f5').html(e.target.feature.properties.start_date);
+			$('#f6').html(e.target.feature.properties.stop_date);
 
-				$("#m1").html("Report");
-				$("#m2").html("Altitude");					
-				$("#m3").html("Report Num");
-				$("#m4").html("Condition");
-				$("#m5").html("Start");
-				$("#m6").html("Stop");
-					
-				$('#f1').html('CWA');
-				$('#f2').html(e.target.feature.properties.alt);
-				$('#f3').html(e.target.feature.properties.rep_num);
-				$('#f4').html(e.target.feature.properties.text_data);
-				$('#f5').html(e.target.feature.properties.start_date);
-				$('#f6').html(e.target.feature.properties.stop_date);
+			cwa.stop();
+		});
+		layer.on('mouseout', function(e) {
+			cwa.start();})		
+	},
+	filter: function(feature,layer) {
+		var rangeslider = document.getElementById("gmsliderRange");
+		var output = document.getElementById("slidealt");
+		if (rangeslider.value == -1000)
+			output.innerHTML = "All"
+		else 
+			output.innerHTML = rangeslider.value;
 
-				cwa.stop();});
-			layer.on('mouseout', function(e) {
-				cwa.start();})		
-			},
-			filter: function(feature,layer) {
-				var rangeslider = document.getElementById("gmsliderRange");
-				var output = document.getElementById("slidealt");
-				if (rangeslider.value == -1000)
-					output.innerHTML = "All"
-				else 
-					output.innerHTML = rangeslider.value;
-
-				var nn = parseInt(rangeslider.value, 10);
-				if (nn == -1000) 
-					return (feature.properties.alt >= 0)
-				else 
-					return (feature.properties.alt >= (nn - 500) &&
-						feature.properties.alt <= (nn + 500));
-			}
-		}).addTo(map);
+		var nn = parseInt(rangeslider.value, 10);
+		if (nn == -1000) 
+			return (feature.properties.alt >= 0)
+		else 
+			return (feature.properties.alt >= (nn - 500) &&
+				feature.properties.alt <= (nn + 500));
+	}
+}).addTo(map);
 
 // SUA
-var url3_sua = url.concat("SELECT s.airsp_id, rep_time, s.airsp_name, sua_airsp_desc, \
-					sua_status_desc, start_time, end_time, high_alt, low_alt, \
-					coords AS GEOM, dafif_name, sep_rule, shape_ind \
+var url3_sua = url.concat("SELECT s.airsp_id, rep_time, s.airsp_name, sua_airsp_desc, sua_status_desc, start_time, \
+					end_time, high_alt, low_alt, coords AS GEOM, dafif_name, sep_rule, shape_ind \
 					FROM sua s INNER JOIN sua_airspace a ON a.airsp_id = s.airsp_id \
 					INNER JOIN sua_airspace_type t ON t.sua_airsp_type = s.airsp_type \
 					INNER JOIN sua_sched_status c ON c.sua_status = s.sched_status");
@@ -460,286 +453,299 @@ var sk = document.getElementById("sua")
 var	sua = L.realtime({
 	url: url3_sua,
 	crossOrigin: true, type: 'json'
-	}, {interval: 50 * 1000,
-		style: function(feature) {
-			return {color: '#2e052a', weight: 3, fillColor: '#2e052a', opacity: 0.5, fillOpacity: 0.5};
-		},
-		getFeatureId: function(featureData) {
-			return featureData.properties.airsp_name;
-		},
-		onEachFeature: function(feature, layer) {
-			layer.bindTooltip('SUA: ' + feature.properties.airsp_name);
-			layer.on('mouseover', function(e) {
-				layer.setStyle({color: 'yellow', fillColor: 'orange', fillOpacity: 0.5});
-
-				$("#m1").html("Report");
-				$("#m2").html("Status");					
-				$("#m3").html("Times");
-				$("#m4").html("Altitudes L/H");
-				$("#m5").html("Sep/shape");
-				$("#m6").html("DAFIF");
-					
-				$('#f1').html('SUA - ' + e.target.feature.properties.airsp_name);
-				$('#f2').html(e.target.feature.properties.sua_airsp_desc + ' <br>' +
-					e.target.feature.properties.sua_status_desc);
-				$('#f3').html(e.target.feature.properties.start_time + ' <br>' +
-					e.target.feature.properties.end_time);
-				$('#f4').html(e.target.feature.properties.low_alt +
-					' <br>' + e.target.feature.properties.high_alt);
-				$('#f5').html(e.target.feature.properties.sep_rule + '  ' +
-					e.target.feature.properties.shape_ind);
-				$('#f6').html(e.target.feature.properties.dafif_name);
-
-				sua.stop();});
-				
-				layer.on('mouseout', function(e) {
-					sua.start();});
-
-				if (!sk.checked){
-					map.removeLayer(sua), sua.stop()
-				}		
-			},
-		}).addTo(map);
+	}, {interval: 50000,
+	style: function(feature) {
+		return {color: '#2e052a', weight: 3, fillColor: '#2e052a', opacity: 0.5, fillOpacity: 0.5};
+	},
+	getFeatureId: function(featureData) {
+		return featureData.properties.airsp_name;
+	},
+	onEachFeature: function(feature, layer) {
+		layer.bindTooltip('SUA: ' + feature.properties.airsp_name);
+		layer.on('mouseover', function(e) {
+			layer.setStyle({color: 'yellow', fillColor: 'orange', fillOpacity: 0.5});
+			$("#m1").html("Report");
+			$("#m2").html("Status");					
+			$("#m3").html("Times");
+			$("#m4").html("Altitudes L/H");
+			$("#m5").html("Sep/shape");
+			$("#m6").html("DAFIF");
+			$('#f1').html('SUA - ' + e.target.feature.properties.airsp_name);
+			$('#f2').html(e.target.feature.properties.sua_airsp_desc + ' <br>' +
+				e.target.feature.properties.sua_status_desc);
+			$('#f3').html(e.target.feature.properties.start_time + ' <br>' +
+				e.target.feature.properties.end_time);
+			$('#f4').html(e.target.feature.properties.low_alt +
+				' <br>' + e.target.feature.properties.high_alt);
+			$('#f5').html(e.target.feature.properties.sep_rule + '  ' +
+				e.target.feature.properties.shape_ind);
+			$('#f6').html(e.target.feature.properties.dafif_name);
+				sua.stop();
+		})
+		layer.on('mouseout', function(e) {
+			sua.start();
+		});
+		if (!sk.checked){
+			map.removeLayer(sua), 
+			sua.stop();
+		}		
+	},
+}).addTo(map);
 
 	if (!sk.checked){
-		map.removeLayer(sua), sua.stop()
+		map.removeLayer(sua), 
+		sua.stop()
 	}
 
 // ** Circle
-
 var url_circle = url.concat("SELECT bot AS GEOM, c.start_date, c.stop_date, c.rep_num, c.r_lng, \
-c.r_lat, c.alt_top, c.alt_bot, c.alpha,s.text_data FROM circles c \
-left join sigairmet s on s.rep_num = c.rep_num");
+					c.r_lat, c.alt_top, c.alt_bot, c.alpha, s.text_data FROM circles c \
+					LEFT JOIN sigairmet s ON s.rep_num = c.rep_num");
+
+var markers = L.markerClusterGroup({
+	spiderfyOnMaxZoom: true,
+	showCoverageOnHover: false,
+	zoomToBoundsOnClick: true
+});
 
 var	cir = L.realtime({
 	url: url_circle,
 	crossOrigin: true, type: 'json'
-	}, {interval: 6 * 7030,
-		getFeatureId: function(featureData) {
-		return featureData.properties.rep_num;
-		},
-		pointToLayer: function(feature, latlng) {
-			marker = L.circleMarker(latlng, {color: 'red', fillcolor: 'yellow'});
- 		marker.bindTooltip(feature.properties.rep_num + '<br>' + feature.properties.start_date );
- 			marker.on('click', function (e) {
- 				$("#m1").html("Altitude");
- 				$("#m2").html("Radius");
- 				$("#m3").html("Rep Number");
- 		 		$("#m4").html("Start");
- 				$("#m5").html("Stop");
- 				$("#m6").html("Text ");
-				$('#f1').html('Bottom ' + e.target.feature.properties.alt_bot + 'ft<br> Top ' +
-					e.target.feature.properties.alt_top + 'ft');
-				$('#f2').html('Lat: ' + e.target.feature.properties.r_lat + ' Lng: ' +
-					e.target.feature.properties.r_lat + ' Alpha: ' + e.target.feature.properties.alpha);
-				$('#f3').html(e.target.feature.properties.rep_num);
-				$('#f4').html(e.target.feature.properties.start_date);
-				$('#f5').html(e.target.feature.properties.stop_date);
-				$('#f6').html(e.target.feature.properties.text_data);
-			});
-			marker.addTo(map);
-			return marker;
-		}
-	}).addTo(map);
+	}, {interval: 300000,
+	getFeatureId: function(featureData) {
+	return featureData.properties.rep_num;
+	},
+	pointToLayer: function(feature, latlng) {
+		marker = L.circleMarker(latlng, {color: 'red', fillcolor: 'yellow'});
+ 		marker.bindTooltip('NOTAM-TFR<br>' + feature.properties.rep_num );
+ 		marker.on('click', function (e) {
+ 			$("#m1").html("Altitude");
+ 			$("#m2").html("Radius");
+ 			$("#m3").html("Rep Number");
+ 	 		$("#m4").html("Start");
+ 			$("#m5").html("Stop");
+ 			$("#m6").html("Text ");
+			$('#f1').html('Bottom ' + e.target.feature.properties.alt_bot + 'ft<br> Top ' +
+				e.target.feature.properties.alt_top + 'ft');
+			$('#f2').html('Lat: ' + e.target.feature.properties.r_lat + ' Lng: ' +
+				e.target.feature.properties.r_lat + ' Alpha: ' + e.target.feature.properties.alpha);
+			$('#f3').html(e.target.feature.properties.rep_num);
+			$('#f4').html(e.target.feature.properties.start_date);
+			$('#f5').html(e.target.feature.properties.stop_date);
+			$('#f6').html(e.target.feature.properties.text_data);
+		});
+			
+		markers.addLayer(marker);
+		map.addLayer(markers);	
 
+		return marker;
+	}
+}).addTo(map);
 
 // ** Segmented NOTAMS
-
-var url_seg_notam = url.concat("select coords as geom,alt,g.rep_num,start_date,stop_date,text_data \
-			from graphics g inner join sigairmet s on s.rep_num = g.rep_num \
-			where g.segmented = 1");
+var url_seg_notam = url.concat("SELECT coords AS GEOM, alt, g.rep_num, start_date, stop_date, text_data \
+					FROM graphics g INNER JOIN sigairmet s ON s.rep_num = g.rep_num \
+					WHERE g.segmented = 1");
 			
 var	seg = L.realtime({
 	url: url_seg_notam,
 	crossOrigin: true, type: 'json'
-	}, {interval: 1 * 9000,
-		style: function(feature) {
-			kolor = getColor(feature.properties.alt);
-			return {color: '#00cccc', weight: 2, fillColor: kolor, opacity: 1.0, fillOpacity: 0.2};
-		},
-		getFeatureId: function(featureData) {
-			return featureData.properties.rep_num;
-		},
-		onEachFeature: function(feature, layer) {
-			layer.bindTooltip('NOTAM: Alt ' + feature.properties.alt);
-			layer.on('click', function(e) {
-				layer.setStyle({fillColor: 'yellow', fillOpacity: 0.5});
+	}, {interval: 70000,
+	style: function(feature) {
+		kolor = getColor(feature.properties.alt);
+		return {color: '#00cccc', weight: 2, fillColor: kolor, opacity: 1.0, fillOpacity: 0.2};
+	},
+	getFeatureId: function(featureData) {
+		return featureData.properties.rep_num;
+	},
+	onEachFeature: function(feature, layer) {
+		layer.bindTooltip('NOTAM-TFR<br>Alt ' + feature.properties.alt);
+		layer.on('click', function(e) {
+			layer.setStyle({fillColor: 'yellow', fillOpacity: 0.5});
+			$("#m1").html("Report");
+			$("#m2").html("Altitude");					
+			$("#m3").html("Report Num");
+			$("#m4").html("Condition");
+			$("#m5").html("Start");
+			$("#m6").html("Stop");
+			$('#f1').html('Graphical NOTAM');
+			$('#f2').html(e.target.feature.properties.alt);
+			$('#f3').html(e.target.feature.properties.rep_num);
+			$('#f4').html(e.target.feature.properties.text_data);
+			$('#f5').html(e.target.feature.properties.start_date);
+			$('#f6').html(e.target.feature.properties.stop_date);
 
-				$("#m1").html("Report");
-				$("#m2").html("Altitude");					
-				$("#m3").html("Report Num");
-				$("#m4").html("Condition");
-				$("#m5").html("Start");
-				$("#m6").html("Stop");
-					
-				$('#f1').html('Graphical NOTAM');
-				$('#f2').html(e.target.feature.properties.alt);
-				$('#f3').html(e.target.feature.properties.rep_num);
-				$('#f4').html(e.target.feature.properties.text_data);
-				$('#f5').html(e.target.feature.properties.start_date);
-				$('#f6').html(e.target.feature.properties.stop_date);
-
-				seg.stop();});
-			layer.on('mouseout', function(e) {
-				seg.start();})		
-			},
-
-		}).addTo(map);
-
-
+			seg.stop();
+		});
+		layer.on('mouseout', function(e) {
+			seg.start();
+		})		
+	},
+}).addTo(map);
 
 // ** METAR 
-var wxIcon = L.icon({iconUrl: 'therm.ico', iconSize: [20,20]});
-
 var url_metar = url.concat("SELECT s.coords AS GEOM, m.stn_call, s.stn_loc, ob_date, temp, windsp, \
 					winddir, altimeter, visby, dewp, hrly_precip, slp, windvar, windgust \
 					FROM metar m INNER JOIN (SELECT stn_call, MAX(ob_date) AS mob FROM metar \
 					GROUP BY stn_call) g ON m.stn_call = g.stn_call AND m.ob_date = g.mob \
 					INNER JOIN stations s ON m.stn_call = s.stn_call");
 
+var wxIcon = L.icon({iconUrl: 'therm.ico', iconSize: [20,20]});
 var mk = document.getElementById("meta")
 
 metar = L.realtime({
 	url: url_metar,
 	crossOrigin: true, type: 'json'
-	}, {interval: 17 * 2002,
-		getFeatureId: function(featureData) {
+	}, {interval: 36000,
+	getFeatureId: function(featureData) {
 		return featureData.properties.stn_call;
-		},
-		pointToLayer: function(feature, latlng) {
-			marker = L.marker(latlng, {icon: wxIcon});
-			marker.bindTooltip('METAR' + '<br>' + feature.properties.stn_call
-				+ '<br>' + feature.properties.temp + '&#x2109');
-			marker.on('click', function(e) {
-				$("#m1").html("Station" );
-				$("#m2").html("Location");
-				$("#m3").html("Temp");
-				$("#m4").html("Winds");
-				$("#m5").html("Visibility");
-				$("#m6").html("Pressure");
-				$('#f1').html(e.target.feature.properties.stn_call + " - " +
-								e.target.feature.properties.ob_date + 'z');
-				$('#f2').html(e.target.feature.properties.stn_loc);
-				$('#f3').html(e.target.feature.properties.temp + "\xB0F" +
-						"  dp:" + e.target.feature.properties.dewp +
-						"\xB0F<br> Hrly Precip:" +
-						e.target.feature.properties.hrly_precip);
-				$('#f4').html(e.target.feature.properties.windsp + "kts " +
-						e.target.feature.properties.winddir + "° " +
-						e.target.feature.properties.windvar + "  gusts:" +
-						e.target.feature.properties.windgust + "kts");
-				$('#f5').html(e.target.feature.properties.visby);
-				$('#f6').html("SLP:" + e.target.feature.properties.slp +
+	},
+	pointToLayer: function(feature, latlng) {
+		marker = L.marker(latlng, {icon: wxIcon});
+		marker.bindTooltip('METAR' + '<br>' + feature.properties.stn_call
+			+ '<br>' + feature.properties.temp + '&#x2109');
+		marker.on('click', function(e) {
+			$("#m1").html("Station" );
+			$("#m2").html("Location");
+			$("#m3").html("Temp");
+			$("#m4").html("Winds");
+			$("#m5").html("Visibility");
+			$("#m6").html("Pressure");
+			$('#f1').html(e.target.feature.properties.stn_call + " - " +
+					e.target.feature.properties.ob_date + 'z');
+			$('#f2').html(e.target.feature.properties.stn_loc);
+			$('#f3').html(e.target.feature.properties.temp + "\xB0F" +
+					"  dp:" + e.target.feature.properties.dewp +
+					"\xB0F<br> Hrly Precip:" +
+					e.target.feature.properties.hrly_precip);
+			$('#f4').html(e.target.feature.properties.windsp + "kts " +
+					e.target.feature.properties.winddir + "° " +
+					e.target.feature.properties.windvar + "  gusts:" +
+					e.target.feature.properties.windgust + "kts");
+			$('#f5').html(e.target.feature.properties.visby);
+			$('#f6').html("SLP:" + e.target.feature.properties.slp +
 					"<br>Altimeter:" + e.target.feature.properties.altimeter );
-			});
-			marker.addTo(map);
+		});
+		marker.addTo(map);
 			
-			if (!mk.checked){
-				map.removeLayer(marker), metar.stop()
-			}
-			return marker;
+		if (!mk.checked){
+			map.removeLayer(marker), 
+			metar.stop()
 		}
-	}).addTo(map);
+		return marker;
+	}
+}).addTo(map);
 	
 	if (!mk.checked){
-		map.removeLayer(metar), metar.stop()
+		map.removeLayer(metar), 
+		metar.stop()
 	}
 
 // ** NOTAM
-var wxIcon2 = L.icon({iconUrl: 'wx2.ico', iconSize: [15,15]});
-
 var url_notam = url.concat("SELECT s.coords AS GEOM, n.stn_call, stn_loc, n.rep_num, text_data, \
-					start_date, stop_date \
-					FROM sigairmet n LEFT JOIN graphics g ON n.prod_id = g.prod_id \
+					start_date, stop_date, notam_name \
+					FROM sigairmet n left JOIN graphics g ON n.prod_id = g.prod_id and n.stn_call = g.stn_call \
 					AND n.rep_num = g.rep_num \
 					JOIN stations s ON n.stn_call = s.stn_call WHERE n.prod_id = 8");
 
+var wxIcon2 = L.icon({iconUrl: 'wx2.ico', iconSize: [15,15]});
 var nk = document.getElementById("notam")
+
+var narkers = L.markerClusterGroup({
+	spiderfyOnMaxZoom: true,
+	showCoverageOnHover: false,
+	maxClusterRadius: 20,
+	zoomToBoundsOnClick: true
+});
 
 notam = L.realtime({
 	url: url_notam,
 	crossOrigin: true, type: 'json'
-	}, {interval: 19 * 2004,
-		getFeatureId: function(featureData) {
-		return featureData.properties.stn_call;
-		},
-		pointToLayer: function(feature, latlng) {
-			marker = L.marker(latlng, {icon: wxIcon2});
-	 		marker.bindTooltip('NOTAM' + '<br>' + feature.properties.stn_call);
-			marker.on('click', function(e) {
-				$("#m1").html("Station");
-				$("#m2").html("Location");
-				$("#m3").html("Report Num");
-				$("#m4").html("Text");
-				$("#m5").html("Start");
-				$("#m6").html("Stop");
-				$('#f1').html(e.target.feature.properties.stn_call + " (NOTAM)");
-				$('#f2').html(e.target.feature.properties.stn_loc);
-				$('#f3').html(e.target.feature.properties.rep_num);
-				$('#f4').html(e.target.feature.properties.text_data);
-				$('#f5').html(e.target.feature.properties.start_date);
-				$('#f6').html(e.target.feature.properties.stop_date);
-			});
-			marker.addTo(map);
+	}, {interval: 38000,
+	getFeatureId: function(featureData) {
+		return featureData.properties.rep_num;
+	},
+	pointToLayer: function(feature, latlng) {
+		marker = L.marker(latlng, {icon: wxIcon2});
+ 		marker.bindTooltip(feature.properties.notam_name + '<br>' + feature.properties.stn_call);
+		marker.on('click', function(e) {
+			$("#m1").html("Station");
+			$("#m2").html("Location");
+			$("#m3").html("Report Num");
+			$("#m4").html("Text");
+			$("#m5").html("Start");
+			$("#m6").html("Stop");
+			$('#f1').html(e.target.feature.properties.stn_call + ' - ' + feature.properties.notam_name);
+			$('#f2').html(e.target.feature.properties.stn_loc);
+			$('#f3').html(e.target.feature.properties.rep_num);
+			$('#f4').html(e.target.feature.properties.text_data);
+			$('#f5').html(e.target.feature.properties.start_date);
+			$('#f6').html(e.target.feature.properties.stop_date);
+		});
 
-			if (!nk.checked){
-				map.removeLayer(marker), notam.stop()
-			}
-
+		if (!nk.checked){
+			map.removeLayer(narkers),
+			narkers.removeLayer(narkers),
+			map.removeLayer(marker), 
+			notam.stop()
+		}
+		else {
+			narkers.addLayer(marker);
+			map.addLayer(narkers);	
+			notam.start();
+	
 			return marker;
 		}
-	}).addTo(map);
-
-	if (!nk.checked){
-		map.removeLayer(notam), notam.stop()
 	}
-	
-// ** TAF
-var wxIcon3 = L.icon({iconUrl: 'wx1.ico', iconSize: [15,15]});
+}).addTo(map);
 
+// ** TAF
 var url_taf = url.concat("SELECT coords AS GEOM, t.stn_call, stn_loc, issued, current, \
 					wind, visby, condx, rep_time \
 					FROM taf t, stations s WHERE t.stn_call = s.stn_call");
-
+					
+var wxIcon3 = L.icon({iconUrl: 'wx1.ico', iconSize: [15,15]});
 var tk = document.getElementById("taf")
 
 taf = L.realtime({
 	url: url_taf,
 	crossOrigin: true, type: 'json'
-	}, {interval: 14 * 2005,
-		getFeatureId: function(featureData) {
+	}, {interval: 30000,
+	getFeatureId: function(featureData) {
 		return featureData.properties.stn_call;
-		},
-		pointToLayer: function(feature, latlng) {
-			marker = L.marker(latlng, {icon: wxIcon3});
-			marker.bindTooltip('TAF' + '<br>' + feature.properties.stn_call);
-			marker.on('click', function(e) {
-				$("#m1").html("Station");
-				$("#m2").html("Location");
-				$("#m3").html("Issued");
-				$("#m4").html("Winds");
-				$("#m5").html("Visibility");
-				$("#m6").html("Conditions");
-				$('#f1').html(e.target.feature.properties.stn_call + " (TAF)");
-				$('#f2').html(e.target.feature.properties.stn_loc);
-				$('#f3').html(e.target.feature.properties.issued + '<br>' +
-					e.target.feature.properties.current);
-				$('#f4').html(e.target.feature.properties.wind);
-				$('#f5').html(e.target.feature.properties.visby);
-				$('#f6').html(e.target.feature.properties.condx);
-			});
-			marker.addTo(map);
+	},
+	pointToLayer: function(feature, latlng) {
+		marker = L.marker(latlng, {icon: wxIcon3});
+		marker.bindTooltip('TAF' + '<br>' + feature.properties.stn_call);
+		marker.on('click', function(e) {
+			$("#m1").html("Station");
+			$("#m2").html("Location");
+			$("#m3").html("Issued");
+			$("#m4").html("Winds");
+			$("#m5").html("Visibility");
+			$("#m6").html("Conditions");
+			$('#f1').html(e.target.feature.properties.stn_call + " (TAF)");
+			$('#f2').html(e.target.feature.properties.stn_loc);
+			$('#f3').html(e.target.feature.properties.issued + '<br>' +
+				e.target.feature.properties.current);
+			$('#f4').html(e.target.feature.properties.wind);
+			$('#f5').html(e.target.feature.properties.visby);
+			$('#f6').html(e.target.feature.properties.condx);
+		});
+		marker.addTo(map);
 
-			if (!tk.checked){
-				map.removeLayer(marker), taf.stop()
-			}
-
-			return marker;
+		if (!tk.checked){
+			map.removeLayer(marker), 
+			taf.stop()
 		}
-	}).addTo(map);
+
+		return marker;
+	}
+}).addTo(map);
 	
 	if (!nk.checked){
-		map.removeLayer(taf), taf.stop()
+		map.removeLayer(taf), 
+		taf.stop()
 	}
 
 // ** Winds Aloft
@@ -752,74 +758,73 @@ var url_winds = url.concat("SELECT coords AS GEOM, w.stn_call, stn_loc, issue_da
 					INNER JOIN stations s ON w.stn_call = s.stn_call");
 
 var wxIcon5 = L.icon({iconUrl: 'wind.ico', iconSize: [15,15]});
-
 var wk = document.getElementById("winds")
  
 winds = L.realtime({
 	url: url_winds,
 	crossOrigin: true, type: 'json'
-	}, {interval: 19 * 3060,
-		getFeatureId: function(featureData) {
+	}, {interval: 67000,
+	getFeatureId: function(featureData) {
 		return featureData.properties.stn_call;
-		},
-		pointToLayer: function(feature, latlng) {
-			marker = L.marker(latlng, {icon: wxIcon5});
-
-			marker.bindTooltip('Winds' + '<br>' + feature.properties.stn_call);
-
-			marker.on('click', function(e) {
-				$("#m1").html("Station" + '<br>' + e.target.feature.properties.issue_date );
-				$("#m2").html(e.target.feature.properties.alt1 + "ft" + '<br>' +
-					e.target.feature.properties.alt2 + "ft");
-				$("#m3").html(e.target.feature.properties.alt3 + "ft" + '<br>' +
-					e.target.feature.properties.alt4 + "ft");
-				$("#m4").html(e.target.feature.properties.alt5 + "ft" + '<br>' +
-					e.target.feature.properties.alt6 + "ft");
-				$("#m5").html(e.target.feature.properties.alt7 + "ft" + '<br>' +
-					e.target.feature.properties.alt8 + "ft");
-				$("#m6").html(e.target.feature.properties.alt9 + "ft");
-				$('#f1').html(e.target.feature.properties.stn_call + " (Winds)" +
-					'<br>' + e.target.feature.properties.stn_loc);
-				$('#f2').html(e.target.feature.properties.dir1 + "\xB0 " +
-					e.target.feature.properties.spd1 + "kt " +
-					e.target.feature.properties.temp1 + "\xB0C" +
-					'<br>' + e.target.feature.properties.dir2 + "\xB0 " +
-					e.target.feature.properties.spd2 + "kt " +
-					e.target.feature.properties.temp2 + "\xB0C");
-				$('#f3').html(e.target.feature.properties.dir3 + "\xB0 " +
-					e.target.feature.properties.spd3 + "kt " +
-					e.target.feature.properties.temp3 + "\xB0C" +
-					'<br>' + e.target.feature.properties.dir4 + "\xB0 " +
-					e.target.feature.properties.spd4 + "kt " +
-					e.target.feature.properties.temp4 + "\xB0C");	
-				$('#f4').html(e.target.feature.properties.dir5 + "\xB0 " +
-					e.target.feature.properties.spd5 + "kt " +
-					e.target.feature.properties.temp5 + "\xB0C"	+ '<br>' +
-					e.target.feature.properties.dir6 + "\xB0 " +
-					e.target.feature.properties.spd6 + "kt " +
-					e.target.feature.properties.temp6 + "\xB0C");
-				$('#f5').html(e.target.feature.properties.dir7 + "\xB0 " +
-					e.target.feature.properties.spd7 + "kt " +
-					e.target.feature.properties.temp7 + "\xB0C"	+ '<br>' +
-					e.target.feature.properties.dir8 + "\xB0 " +
-					e.target.feature.properties.spd8 + "kt " +
-					e.target.feature.properties.temp8 + "\xB0C");
+	},
+	pointToLayer: function(feature, latlng) {
+		marker = L.marker(latlng, {icon: wxIcon5});
+		marker.bindTooltip('Winds' + '<br>' + feature.properties.stn_call);
+		marker.on('click', function(e) {
+			$("#m1").html("Station" + '<br>' + e.target.feature.properties.issue_date );
+			$("#m2").html(e.target.feature.properties.alt1 + "ft" + '<br>' +
+				e.target.feature.properties.alt2 + "ft");
+			$("#m3").html(e.target.feature.properties.alt3 + "ft" + '<br>' +
+				e.target.feature.properties.alt4 + "ft");
+			$("#m4").html(e.target.feature.properties.alt5 + "ft" + '<br>' +
+				e.target.feature.properties.alt6 + "ft");
+			$("#m5").html(e.target.feature.properties.alt7 + "ft" + '<br>' +
+				e.target.feature.properties.alt8 + "ft");
+			$("#m6").html(e.target.feature.properties.alt9 + "ft");
+			$('#f1').html(e.target.feature.properties.stn_call + " (Winds)" +
+				'<br>' + e.target.feature.properties.stn_loc);
+			$('#f2').html(e.target.feature.properties.dir1 + "\xB0 " +
+				e.target.feature.properties.spd1 + "kt " +
+				e.target.feature.properties.temp1 + "\xB0C" +
+				'<br>' + e.target.feature.properties.dir2 + "\xB0 " +
+				e.target.feature.properties.spd2 + "kt " +
+				e.target.feature.properties.temp2 + "\xB0C");
+			$('#f3').html(e.target.feature.properties.dir3 + "\xB0 " +
+				e.target.feature.properties.spd3 + "kt " +
+				e.target.feature.properties.temp3 + "\xB0C" +
+				'<br>' + e.target.feature.properties.dir4 + "\xB0 " +
+				e.target.feature.properties.spd4 + "kt " +
+				e.target.feature.properties.temp4 + "\xB0C");	
+			$('#f4').html(e.target.feature.properties.dir5 + "\xB0 " +
+				e.target.feature.properties.spd5 + "kt " +
+				e.target.feature.properties.temp5 + "\xB0C"	+ '<br>' +
+				e.target.feature.properties.dir6 + "\xB0 " +
+				e.target.feature.properties.spd6 + "kt " +
+				e.target.feature.properties.temp6 + "\xB0C");
+			$('#f5').html(e.target.feature.properties.dir7 + "\xB0 " +
+				e.target.feature.properties.spd7 + "kt " +
+				e.target.feature.properties.temp7 + "\xB0C"	+ '<br>' +
+				e.target.feature.properties.dir8 + "\xB0 " +
+				e.target.feature.properties.spd8 + "kt " +
+				e.target.feature.properties.temp8 + "\xB0C");
 				$('#f6').html(e.target.feature.properties.dir9 + "\xB0 " +
-					e.target.feature.properties.spd9 + "kt " +
-					e.target.feature.properties.temp9 + "\xB0C");
-			});
-			marker.addTo(map);
+				e.target.feature.properties.spd9 + "kt " +
+				e.target.feature.properties.temp9 + "\xB0C");
+		});
+		marker.addTo(map);
 
-			if (!wk.checked){
-				map.removeLayer(marker), winds.stop()
-			}
-
-			return marker;
+		if (!wk.checked){
+			map.removeLayer(marker), 
+			winds.stop()
 		}
-	}).addTo(map);
+
+		return marker;
+	}
+}).addTo(map);
 	
 	if (!wk.checked){
-		map.removeLayer(winds), winds.stop()
+		map.removeLayer(winds), 
+		winds.stop()
 	}
 
 // ** PIREP
@@ -836,143 +841,188 @@ var pk = document.getElementById("pirep")
 pirep = L.realtime({
 	url: url_pirep,
 	crossOrigin: true, type: 'json'
-	}, {interval: 19 * 3060,
-		getFeatureId: function(featureData) {
+	}, {interval: 50000,
+	getFeatureId: function(featureData) {
 		return featureData.properties.stn_call;
-		},
-		pointToLayer: function(feature, latlng) {
+	},
+	pointToLayer: function(feature, latlng) {
+		if (feature.properties.rep_type == "Urgent Report")
+			wxIcon4 = L.icon({iconUrl: 'pilot2.ico', iconSize: [17,17]})
+		else
+			wxIcon4 = L.icon({iconUrl: 'pilot.ico', iconSize: [15,15]});
+
+		marker = L.marker(latlng, {icon: wxIcon4});
+
+		if (feature.properties.rep_type == "Urgent Report")
+			marker.bindTooltip('Urgent PIREP' + '<br>' + feature.properties.stn_call);
+		else
+			marker.bindTooltip('PIREP' + '<br>' + feature.properties.stn_call);
+
+		marker.on('click', function(e) {
+			$("#m1").html("Station");
+			$("#m2").html("Location" + '<br>' + "Time: " + 
+				e.target.feature.properties.rep_time + "z");
+			$("#m3").html("Flt Lev:" + '<br>' + "AC Type:");
+			$("#m4").html("Turbulence:" + '<br>' + "Icing:");
+			$("#m5").html("WX");
+			$("#m6").html("Remarks");
 			if (feature.properties.rep_type == "Urgent Report")
-				wxIcon4 = L.icon({iconUrl: 'pilot2.ico', iconSize: [17,17]})
+				$('#f1').html(e.target.feature.properties.stn_call + " (*Urgent PIREP*)");
 			else
-				wxIcon4 = L.icon({iconUrl: 'pilot.ico', iconSize: [15,15]});
+				$('#f1').html(e.target.feature.properties.stn_call + " (PIREP)");
 
-			marker = L.marker(latlng, {icon: wxIcon4});
-
-			if (feature.properties.rep_type == "Urgent Report")
-				marker.bindTooltip('Urgent PIREP' + '<br>' + feature.properties.stn_call);
-			else
-				marker.bindTooltip('PIREP' + '<br>' + feature.properties.stn_call);
-
-			marker.on('click', function(e) {
-				$("#m1").html("Station");
-				$("#m2").html("Location" + '<br>' + "Time: " + 
-					e.target.feature.properties.rep_time + "z");
-				$("#m3").html("Flt Lev:" + '<br>' + "AC Type:");
-				$("#m4").html("Turbulence:" + '<br>' + "Icing:");
-				$("#m5").html("WX");
-				$("#m6").html("Remarks");
-				if (feature.properties.rep_type == "Urgent Report")
-					$('#f1').html(e.target.feature.properties.stn_call + " (*Urgent PIREP*)");
-				else
-					$('#f1').html(e.target.feature.properties.stn_call + " (PIREP)");
-
-				$('#f2').html(e.target.feature.properties.stn_loc + "<br><i>Loc: "
-					+ e.target.feature.properties.location);
-				$('#f3').html("<i>Flt lev: " + e.target.feature.properties.fl_lev +
-					"<br><i>a/c: " + e.target.feature.properties.ac_type);
-				$('#f4').html("<i>Turb: " + e.target.feature.properties.turbulence +
-					"<br><i>Ice: " + e.target.feature.properties.icing);
-				$('#f5').html("<i>Cloud: " +e.target.feature.properties.cloud +
-					"<br><i>Temp: " + e.target.feature.properties.temperature +
-					"<br><i>Wind: " + e.target.feature.properties.wind_spd_dir +
-					"<br><i>WX: " + e.target.feature.properties.weather);
-				$('#f6').html(e.target.feature.properties.remarks);
-			});
-			marker.addTo(map);
+			$('#f2').html(e.target.feature.properties.stn_loc + "<br><i>Loc: "
+				+ e.target.feature.properties.location);
+			$('#f3').html("<i>Flt lev: " + e.target.feature.properties.fl_lev +
+				"<br><i>a/c: " + e.target.feature.properties.ac_type);
+			$('#f4').html("<i>Turb: " + e.target.feature.properties.turbulence +
+				"<br><i>Ice: " + e.target.feature.properties.icing);
+			$('#f5').html("<i>Cloud: " +e.target.feature.properties.cloud +
+				"<br><i>Temp: " + e.target.feature.properties.temperature +
+				"<br><i>Wind: " + e.target.feature.properties.wind_spd_dir +
+				"<br><i>WX: " + e.target.feature.properties.weather);
+			$('#f6').html(e.target.feature.properties.remarks);
+		});
+		marker.addTo(map);
 			
-			if (!pk.checked){
-				map.removeLayer(marker), pirep.stop()
-			}
-
-			return marker;
+		if (!pk.checked){
+			map.removeLayer(marker), 
+			pirep.stop()
 		}
-	}).addTo(map);
+
+		return marker;
+	}
+}).addTo(map);
 
 	if (!pk.checked){
-		map.removeLayer(pirep), pirep.stop()
+		map.removeLayer(pirep), 
+		pirep.stop()
 	}
 
 // Handles the check boxes being turned on/off
 document.querySelector("input[name = gmet]").addEventListener('change', function() {
 	if(this.checked) { 
-		map.addLayer(gairmet), gairmet.start()}
+		map.addLayer(gairmet), 
+		gairmet.start()
+	}
 	else { 
-		map.removeLayer(gairmet), gairmet.stop()}
+		map.removeLayer(gairmet), 
+		gairmet.stop()
+	}
 })
 
 document.querySelector("input[name = amet]").addEventListener('change', function() {
 	if(this.checked) {
-		map.addLayer(airmet), airmet.start()}
+		map.addLayer(airmet), 
+		airmet.start()
+	}
 	else {
-		map.removeLayer(airmet), airmet.stop()}
+		map.removeLayer(airmet), 
+		airmet.stop()
+	}
 })
 
 document.querySelector("input[name = meta]").addEventListener('change', function() {
 	if(this.checked) { 
-		map.addLayer(metar), metar.start()}
+		map.addLayer(metar), 
+		metar.start()
+	}
 	else { 
-		map.removeLayer(metar), metar.stop()}
+		map.removeLayer(metar), 
+		metar.stop()
+	}
 })
 
 document.querySelector("input[name = notam]").addEventListener('change', function() {
 	if(this.checked) {
-		map.addLayer(notam), notam.start()}
+		map.addLayer(notam), 
+		notam.start()
+	}
 	else {
-		map.removeLayer(notam), notam.stop()}
+		narkers.removeLayer(narkers),
+		map.removeLayer(notam), 
+		notam.stop()
+	}
 })
 
 document.querySelector("input[name = sua]").addEventListener('change', function() {
 	if(this.checked) {
-		map.addLayer(sua), sua.start()}
+		map.addLayer(sua), 
+		sua.start()
+	}
 	else {
-		map.removeLayer(sua), sua.stop()}
+		map.removeLayer(sua), 
+		sua.stop()
+	}
 })
 
 document.querySelector("input[name = taf]").addEventListener('change', function() {
 	if(this.checked) {
-		map.addLayer(taf), taf.start()}
+		map.addLayer(taf), 
+		taf.start()
+	}
 	else {
-		map.removeLayer(taf), taf.stop()}
+		map.removeLayer(taf), 
+		taf.stop()
+	}
 })
 
 document.querySelector("input[name = pirep]").addEventListener('change', function() {
 	if(this.checked) {
-		map.addLayer(pirep), pirep.start()}
+		map.addLayer(pirep), 
+		pirep.start()
+	}
 	else {
-		map.removeLayer(pirep), pirep.stop()}
+		map.removeLayer(pirep), 
+		pirep.stop()
+	}
 })
 
 document.querySelector("input[name = winds]").addEventListener('change', function() {
 	if(this.checked) {
-		map.addLayer(winds), winds.start()}
+		map.addLayer(winds), 
+		winds.start()
+	}
 	else {
-		map.removeLayer(winds), winds.stop()}
+		map.removeLayer(winds), 
+		winds.stop()
+	}
 })
 
 document.querySelector("input[name = smet]").addEventListener('change', function() {
 	if(this.checked) {
-		map.addLayer(sigmet), sigmet.start()}
+		map.addLayer(sigmet), 
+		sigmet.start()
+	}
 	else {
-		map.removeLayer(sigmet), sigmet.stop()}
+		map.removeLayer(sigmet), 
+		sigmet.stop()
+	}
 })
 
 document.querySelector("input[name = cwa]").addEventListener('change', function() {
 	if(this.checked) {
-		map.addLayer(cwa), cwa.start()}
+		map.addLayer(cwa), 
+		cwa.start()
+	}
 	else {
-		map.removeLayer(cwa), cwa.stop()}
+		map.removeLayer(cwa), 
+		cwa.stop()
+	}
 })
 
-document.getElementById("stim").onchange = function()
-	{gairmet.update()}		
+document.getElementById("stim").onchange = function() {
+	gairmet.update()
+}		
 		
-document.getElementById("altrad").onchange = function()
-	{lays.clearLayers();
-		url_nx = getNexrad();
-		url3_rad = url.concat(url_nx);
-		nrad.setUrl(url3_rad);
-		lays.addLayer(radar);
-		map.addLayer(lays)}	
+document.getElementById("altrad").onchange = function() {
+	lays.clearLayers();
+	url_nx = getNexrad();
+	url3_rad = url.concat(url_nx);
+	nrad.setUrl(url3_rad);
+	lays.addLayer(radar);
+	map.addLayer(lays)
+}	
 
 document.getElementById("gmsliderRange").onchange = function()
 	{gairmet.update(), airmet.update(), sigmet.update(), cwa.update()}
@@ -987,27 +1037,27 @@ document.getElementById("prodid").onchange = function() {
 	map.removeControl(cloudlegend);
 
 	switch(rprod) {
-		case 0:
-			document.getElementById("altrad").disabled = true;
-			break;
-		case 1:
-			document.getElementById("altrad").disabled = true;
-			break;
-		case 2:
-			document.getElementById("altrad").disabled = true;
-			break;		
-		case 3:
-			document.getElementById("altrad").disabled = false;
-			break;
-		case 4:
-			document.getElementById("altrad").disabled = false;
-			break;
-		case 5:
-			document.getElementById("altrad").disabled = true;
-			break;
-		case 6:
-			document.getElementById("altrad").disabled = true;
-			break;
+	case 0:
+		document.getElementById("altrad").disabled = true;
+		break;
+	case 1:
+		document.getElementById("altrad").disabled = true;
+		break;
+	case 2:
+		document.getElementById("altrad").disabled = true;
+		break;		
+	case 3:
+		document.getElementById("altrad").disabled = false;
+		break;
+	case 4:
+		document.getElementById("altrad").disabled = false;
+		break;
+	case 5:
+		document.getElementById("altrad").disabled = true;
+		break;
+	case 6:
+		document.getElementById("altrad").disabled = true;
+		break;
 	}
 	lays.clearLayers();
 		url_nx = getNexrad();
@@ -1020,7 +1070,6 @@ document.getElementById("prodid").onchange = function() {
 // Map legends
 
 turblegend = L.control({ position: "topright" });
-
 turblegend.onAdd = function(mop) {
 	var div = L.DomUtil.create("div", "legend");
 	div.innerHTML += "<h4>Turbulence</h4>";
@@ -1043,7 +1092,6 @@ turblegend.onAdd = function(mop) {
 };
 
 cloudlegend = L.control({ position: "topright" });
-
 cloudlegend.onAdd = function(mop) {
 	var div = L.DomUtil.create("div", "legend");
 	div.innerHTML += "<h4>Cloud Tops</h4>";
@@ -1066,7 +1114,6 @@ cloudlegend.onAdd = function(mop) {
 };
 
 icelegend = L.control({ position: "topright" });
-
 icelegend.onAdd = function(mop) {
 	var div = L.DomUtil.create("div", "legend");
 	div.innerHTML += "<h4>Icing</h4>";
@@ -1081,7 +1128,6 @@ icelegend.onAdd = function(mop) {
 };
 
 lightlegend = L.control({ position: "topright" });
-
 lightlegend.onAdd = function(mop) {
 	var div = L.DomUtil.create("div", "legend");
 	div.innerHTML += "<h4>Lightning</h4>";
@@ -1096,7 +1142,6 @@ lightlegend.onAdd = function(mop) {
 };
 
 nexlegend = L.control({ position: "topright" });
-
 nexlegend.onAdd = function(mop) {
 	var div = L.DomUtil.create("div", "legend");
 	div.innerHTML += "<h4>NEXRAD</h4>";

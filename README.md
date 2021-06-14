@@ -10,6 +10,8 @@ Uses Leaflet (© 2010–2019 Vladimir Agafonkin. https://leafletjs.com)
 and Leaflet Realtime (https://github.com/perliedman/leaflet-realtime)
 
 ## Recent Changes
+* 6/12/21 Use 'clustering' for NOTAM reports.
+* 6/10/21 Segmented G-AIRMET reports displayed.
 * 6/5/21 Segmented NOTAM-TFR reports displayed.
 * 5/24/21 Additional METAR data displayed.
 * 5/23/21 Improvements to Cloud Tops performance.
@@ -22,9 +24,12 @@ and Leaflet Realtime (https://github.com/perliedman/leaflet-realtime)
 
 ## Screenshots
 
+NOTAM - Cluster:
+![notam-cluster](https://user-images.githubusercontent.com/60933475/121897487-6db92680-ccf0-11eb-9a4b-9804e79ee520.png)
+
 NOTAM-TFR:
 ![notam-tfr](https://user-images.githubusercontent.com/60933475/120909427-f249dc00-c642-11eb-9ad8-a611994967be.png)
-![notam-tfr2](https://user-images.githubusercontent.com/60933475/120909429-f4ac3600-c642-11eb-8c48-c211d39d179b.png)
+![NOTAM-TFR](https://user-images.githubusercontent.com/60933475/121898267-38610880-ccf1-11eb-8d84-0b350db269af.png)
 
 SUA:
 ![sua1](https://user-images.githubusercontent.com/60933475/120909528-e874a880-c643-11eb-8fb2-f8fc5bb2935e.png)
@@ -58,9 +63,6 @@ AIRMET with text report details:
 
 SIGMET:
 ![sigmet](https://user-images.githubusercontent.com/60933475/115440220-7fdd8380-a1dd-11eb-9c94-98f379eae496.png)
-
-NOTAM with text report:
-![notam](https://user-images.githubusercontent.com/60933475/115440251-8a981880-a1dd-11eb-944d-3964b14e0691.png)
 
 Icing:
 ![ice](https://user-images.githubusercontent.com/60933475/117853440-69fc3500-b256-11eb-8e63-1370fbbf93e6.png)
