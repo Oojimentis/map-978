@@ -394,7 +394,7 @@ var url3_cwa = url.concat("SELECT coords AS GEOM, g.rep_num, alt, ob_ele, text_d
 var	cwa = L.realtime({
 	url: url3_cwa,
 	crossOrigin: true, type: 'json'
-	}, {interval: 600000,
+	}, {interval: 77000,
 	style: function(feature) {
 		kolor = getColor(feature.properties.alt);
 		return {color: '#00cccc', weight: 2, fillColor: kolor, opacity: 1.0, fillOpacity: 0.2};
@@ -511,7 +511,7 @@ var markers = L.markerClusterGroup({
 var	cir = L.realtime({
 	url: url_circle,
 	crossOrigin: true, type: 'json'
-	}, {interval: 300000,
+	}, {interval: 70000,
 	getFeatureId: function(featureData) {
 	return featureData.properties.rep_num;
 	},
@@ -643,8 +643,7 @@ metar = L.realtime({
 
 // ** NOTAM
 var url_notam = url.concat("SELECT t.coords AS GEOM, s.stn_call, stn_loc, s.rep_num, text_data, \
-					start_date, stop_date, notam_name \
-					FROM sigairmet s \
+					start_date, stop_date, notam_name FROM sigairmet s \
 					LEFT JOIN graphics g ON (g.stn_call = s.stn_call) AND (g.rep_num = s.rep_num) \
 					JOIN stations t ON t.stn_call = s.stn_call \
 					WHERE s.stn_call != '   ' AND s.prod_id = 8 \
@@ -704,7 +703,9 @@ notam = L.realtime({
 // ** TAF
 var url_taf = url.concat("SELECT coords AS GEOM, t.stn_call, stn_loc, issued, current, \
 					wind, visby, condx, rep_time \
-					FROM taf t, stations s WHERE t.stn_call = s.stn_call");
+					FROM taf t INNER JOIN (SELECT stn_call, MAX(issued) AS mob FROM taf \
+					GROUP BY stn_call) g ON t.stn_call = g.stn_call AND t.issued = g.mob \
+					INNER JOIN stations s ON t.stn_call = s.stn_call");
 					
 var wxIcon3 = L.icon({iconUrl: 'wx1.ico', iconSize: [15,15]});
 var tk = document.getElementById("taf")
