@@ -447,7 +447,7 @@ var url3_sua = url.concat("SELECT s.airsp_id, rep_time, s.airsp_name, sua_airsp_
 					FROM sua s INNER JOIN sua_airspace a ON a.airsp_id = s.airsp_id \
 					INNER JOIN sua_airspace_type t ON t.sua_airsp_type = s.airsp_type \
 					INNER JOIN sua_sched_status c ON c.sua_status = s.sched_status \
-					order by s.airsp_name, rep_num");
+					ORDER BY s.airsp_name, rep_num");
 
 var sk = document.getElementById("sua")
 
