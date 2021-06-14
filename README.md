@@ -29,7 +29,7 @@ NOTAM - Cluster:
 
 NOTAM-TFR:
 ![notam-tfr](https://user-images.githubusercontent.com/60933475/120909427-f249dc00-c642-11eb-9ad8-a611994967be.png)
-![notam-tfr2](https://user-images.githubusercontent.com/60933475/120909429-f4ac3600-c642-11eb-8c48-c211d39d179b.png)
+![NOTAM-TFR](https://user-images.githubusercontent.com/60933475/121898267-38610880-ccf1-11eb-8d84-0b350db269af.png)
 
 SUA:
 ![sua1](https://user-images.githubusercontent.com/60933475/120909528-e874a880-c643-11eb-8fb2-f8fc5bb2935e.png)
