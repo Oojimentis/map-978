@@ -642,11 +642,13 @@ metar = L.realtime({
 	}
 
 // ** NOTAM
-var url_notam = url.concat("SELECT s.coords AS GEOM, n.stn_call, stn_loc, n.rep_num, text_data, \
+var url_notam = url.concat("SELECT t.coords AS GEOM, s.stn_call, stn_loc, s.rep_num, text_data, \
 					start_date, stop_date, notam_name \
-					FROM sigairmet n left JOIN graphics g ON n.prod_id = g.prod_id and n.stn_call = g.stn_call \
-					AND n.rep_num = g.rep_num \
-					JOIN stations s ON n.stn_call = s.stn_call WHERE n.prod_id = 8");
+					FROM sigairmet s \
+					LEFT JOIN graphics g ON (g.stn_call = s.stn_call) AND (g.rep_num = s.rep_num) \
+					JOIN stations t ON t.stn_call = s.stn_call \
+					WHERE s.stn_call != '   ' AND s.prod_id = 8 \
+					ORDER BY s.rep_num");
 
 var wxIcon2 = L.icon({iconUrl: 'wx2.ico', iconSize: [15,15]});
 var nk = document.getElementById("notam")
@@ -663,7 +665,7 @@ notam = L.realtime({
 	crossOrigin: true, type: 'json'
 	}, {interval: 38000,
 	getFeatureId: function(featureData) {
-		return featureData.properties.rep_num;
+		return featureData.properties.stn_call+featureData.properties.rep_num;
 	},
 	pointToLayer: function(feature, latlng) {
 		marker = L.marker(latlng, {icon: wxIcon2});
