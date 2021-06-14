@@ -10,6 +10,8 @@ Uses Leaflet (© 2010–2019 Vladimir Agafonkin. https://leafletjs.com)
 and Leaflet Realtime (https://github.com/perliedman/leaflet-realtime)
 
 ## Recent Changes
+* 6/12/21 Use 'clustering' for NOTAM reports.
+* 6/10/21 Segmented G-AIRMET reports displayed.
 * 6/5/21 Segmented NOTAM-TFR reports displayed.
 * 5/24/21 Additional METAR data displayed.
 * 5/23/21 Improvements to Cloud Tops performance.
