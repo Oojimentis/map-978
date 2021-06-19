@@ -565,8 +565,8 @@ var	cir = L.realtime({
 
 // ** Segmented graphical NOTAMS
 var url_seg_notam = url.concat("SELECT coords AS GEOM, alt, g.rep_num, start_date, stop_date, text_data \
-					FROM graphics g INNER JOIN sigairmet s ON s.rep_num = g.rep_num \
-					WHERE g.segmented = 1");
+					FROM graphics g LEFT JOIN sigairmet s ON s.rep_num = g.rep_num \
+					WHERE g.segmented = 1 AND g.prod_id = 8");
 
 var nk = document.getElementById("notam")			
 
@@ -588,7 +588,7 @@ var	seg = L.realtime({
 			$("#m1").html("Report");
 			$("#m2").html("Altitude");					
 			$("#m3").html("Report Num");
-			$("#m4").html("Condition");
+			$("#m4").html("Text");
 			$("#m5").html("Start");
 			$("#m6").html("Stop");
 			$('#f1').html('Graphical NOTAM');
@@ -686,7 +686,7 @@ var url_maxmin = url.concat("SELECT s.coords AS GEOM, s.stn_call, s.stn_loc, m.t
 		WHERE m.temp IN (SELECT MIN(temp) AS temp FROM metar WHERE temp <>'- ') \
 		ORDER BY temp,ob_date ASC ");
 
-var wxIcon5;
+var wxIcon6;
 var mmk = document.getElementById("mxmn")
 
 maxmin = L.realtime({
@@ -699,33 +699,37 @@ maxmin = L.realtime({
 	},
 	pointToLayer: function(feature, latlng) {
 		if (feature.properties.maxmin == "Max")
-			wxIcon5 = L.icon({iconUrl: 'red.ico', iconSize: [15,15]})
+			wxIcon6 = L.icon({iconUrl: 'red.ico', iconSize: [15,15]})
 		else
-			wxIcon5 = L.icon({iconUrl: 'blue.ico', iconSize: [15,15]});
+			wxIcon6 = L.icon({iconUrl: 'blue.ico', iconSize: [15,15]});
 		
-		mmarker = L.marker(latlng, {icon: wxIcon5});
+		mmarker = L.marker(latlng, {icon: wxIcon6});
 		mmarker.bindTooltip( feature.properties.maxmin + '<br>' + feature.properties.stn_call
 			+ '<br>' + feature.properties.temp + '&#x2109');
 		mmarker.on('click', function(e) {
 			$("#m1").html("Station" );
 			$("#m2").html("Location");
 			$("#m3").html("Temp");
-			$("#m4").html("Winds");
-			$("#m5").html("Visibility");
-			$("#m6").html("Pressure");
+			$("#m4").html(" ");
+			$("#m5").html(" ");
+			$("#m6").html(" ");
 			$('#f1').html(e.target.feature.properties.stn_call + " - " +
 					e.target.feature.properties.ob_date + 'z');
 			$('#f2').html(e.target.feature.properties.stn_loc);
 			$('#f3').html(e.target.feature.properties.temp + "\xB0F" +
 					"  <B>" + e.target.feature.properties.maxmin);
+	
+			$('#f4').html(" ");
+			$('#f5').html(" ");
+			$('#f6').html(" ");
 					
-			$('#f4').html(e.target.feature.properties.windsp + "kts " +
-					e.target.feature.properties.winddir + "° " +
-					e.target.feature.properties.windvar + "  gusts:" +
-					e.target.feature.properties.windgust + "kts");
-			$('#f5').html(e.target.feature.properties.visby);
-			$('#f6').html("SLP:" + e.target.feature.properties.slp +
-					"<br>Altimeter:" + e.target.feature.properties.altimeter );
+//			$('#f4').html(e.target.feature.properties.windsp + "kts " +
+//					e.target.feature.properties.winddir + "° " +
+//					e.target.feature.properties.windvar + "  gusts:" +
+//					e.target.feature.properties.windgust + "kts");
+//			$('#f5').html(e.target.feature.properties.visby);
+//			$('#f6').html("SLP:" + e.target.feature.properties.slp +
+//					"<br>Altimeter:" + e.target.feature.properties.altimeter );
 		});
 		mmarker.addTo(map);
 
