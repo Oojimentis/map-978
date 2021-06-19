@@ -506,9 +506,15 @@ var url_circle = url.concat("SELECT bot AS GEOM, c.start_date, c.stop_date, c.re
 					LEFT JOIN sigairmet s ON s.rep_num = c.rep_num");
 
 var cmarkers = L.markerClusterGroup({
+
+	iconCreateFunction: function(cluster) {
+		var n = cluster.getChildCount();
+		return  L.divIcon({ html: n, className: 'mycluster2' , iconSize: L.point[1,1]});
+	},
 	spiderfyOnMaxZoom: true,
 	showCoverageOnHover: false,
-	zoomToBoundsOnClick: true
+	maxClusterRadius: 20,
+	zoomToBoundsOnClick: true,
 });
 
 var nk = document.getElementById("notam")
@@ -608,7 +614,6 @@ var	seg = L.realtime({
 			seg.start();
 		})		
 	},
-
 }).addTo(map);
 
 // ** METAR 
@@ -670,21 +675,16 @@ if (!mk.checked){
 }
 
 // ** METAR Max/Min
-var url_maxmin = url.concat("SELECT s.coords AS GEOM, s.stn_call, s.stn_loc, m.temp, ob_date, \
-        			windsp, winddir, altimeter, visby, slp, windvar, windgust, 'Max' AS maxmin \
-					FROM metar m \
-					INNER JOIN (SELECT stn_call, MAX(ob_date) AS mob FROM metar \
-					GROUP BY stn_call) g ON m.stn_call = g.stn_call AND m.ob_date = g.mob \
-					INNER JOIN stations s ON s.stn_call = m.stn_call \
-					WHERE m.temp IN (SELECT MAX(temp) AS temp FROM metar) \
-        			UNION \
-					SELECT s.coords AS GEOM, s.stn_call, s.stn_loc, m.temp, ob_date, \
-    	    		windsp, winddir, altimeter, visby, slp, windvar, windgust, 'Min' AS maxmin \
-					FROM metar m \
-					INNER JOIN (SELECT stn_call, MAX(ob_date) AS mob FROM metar \
-					GROUP BY stn_call) g ON m.stn_call = g.stn_call AND m.ob_date = g.mob \
-					INNER JOIN stations s ON s.stn_call = m.stn_call \
-					WHERE m.temp IN (SELECT MIN(temp) FROM metar WHERE temp <>'- ') ");
+var url_maxmin = url.concat("SELECT s.coords AS GEOM, s.stn_call, s.stn_loc, m.temp, ob_date, 'Max' AS maxmin \
+		FROM metar m \
+		INNER JOIN stations s ON s.stn_call = m.stn_call \
+		WHERE m.temp IN (SELECT MAX(temp) AS temp FROM metar) \
+       	UNION \
+		SELECT s.coords AS GEOM, s.stn_call, s.stn_loc, m.temp, ob_date, 'Min' AS maxmin \
+		FROM metar m \
+		INNER JOIN stations s ON s.stn_call = m.stn_call \
+		WHERE m.temp IN (SELECT MIN(temp) AS temp FROM metar WHERE temp <>'- ') \
+		ORDER BY temp,ob_date ASC ");
 
 var wxIcon5;
 var mmk = document.getElementById("mxmn")
@@ -695,10 +695,11 @@ maxmin = L.realtime({
 	}, {interval: 3600,
 	getFeatureId: function(featureData) {
 		return featureData.properties.stn_call+featureData.properties.temp;
+
 	},
 	pointToLayer: function(feature, latlng) {
 		if (feature.properties.maxmin == "Max")
-			wxIcon5 = L.icon({iconUrl: 'red.ico', iconSize: [17,17]})
+			wxIcon5 = L.icon({iconUrl: 'red.ico', iconSize: [15,15]})
 		else
 			wxIcon5 = L.icon({iconUrl: 'blue.ico', iconSize: [15,15]});
 		
@@ -754,10 +755,15 @@ var wxIcon2 = L.icon({iconUrl: 'wx2.ico', iconSize: [15,15]});
 var nk = document.getElementById("notam")
 
 var narkers = L.markerClusterGroup({
+
+	iconCreateFunction: function(cluster) {
+	   var n = cluster.getChildCount();
+		return  L.divIcon({ html: n, className: 'mycluster' , iconSize: L.point[1,1]});
+	},
 	spiderfyOnMaxZoom: true,
 	showCoverageOnHover: false,
 	maxClusterRadius: 20,
-	zoomToBoundsOnClick: true
+	zoomToBoundsOnClick: true,
 });
 
 notam = L.realtime({
