@@ -10,6 +10,8 @@ Uses Leaflet (© 2010–2019 Vladimir Agafonkin. https://leafletjs.com)
 and Leaflet Realtime (https://github.com/perliedman/leaflet-realtime)
 
 ## Recent Changes
+* Include graphical NOTAMS with text NOTAM checkbox.
+* 6/18/21 Add display of METAR stations with max/min temperature.
 * 6/12/21 Use 'clustering' for NOTAM reports.
 * 6/10/21 Segmented G-AIRMET reports displayed.
 * 6/5/21 Segmented NOTAM-TFR reports displayed.
@@ -23,6 +25,9 @@ and Leaflet Realtime (https://github.com/perliedman/leaflet-realtime)
 
 
 ## Screenshots
+
+METAR Max/Min:
+![maxmin](https://user-images.githubusercontent.com/60933475/122658296-6a32fe80-d139-11eb-95a0-594f1a632c42.png)
 
 NOTAM - Cluster:
 ![notam-cluster](https://user-images.githubusercontent.com/60933475/121897487-6db92680-ccf0-11eb-9a4b-9804e79ee520.png)
