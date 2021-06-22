@@ -17,9 +17,16 @@ app.use(express.static('public'));
 
 //route to the root 
 
+
+
 app.get('/',function (req, res) { 
 	res.render('index' ,{ ptnum: port});
 });
+
+app.get('/page2', function(req, res) {
+   res.render('page2',{ ptnum: port});
+}); 
+
 
 // Expose sql endpoint, grab query as URL parameter and send it to the database
 app.get( "/sql", function(req, res) {
