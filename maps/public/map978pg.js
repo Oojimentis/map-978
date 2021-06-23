@@ -13,13 +13,29 @@ window.onload = onPageLoad();
 
 function onPageLoad() {
 	document.getElementById("gmsliderRange").step = "1000";
-	document.getElementById("gmsliderRange").value = "0";
+	document.getElementById("gmsliderRange").value = "-1000";
 	document.getElementById("altrad").disabled = true;
 }
 
-function reloadFunc(obj) {
-	location.reload();
+var formValues = JSON.parse(localStorage.getItem('formValues')) || {};
+var $checkboxez = $("#ckboxes :checkbox");
+
+function updateStorage(){
+  $checkboxez.each(function(){
+    formValues[this.id] = this.checked;
+  });
+
+  localStorage.setItem("formValues", JSON.stringify(formValues));
 }
+
+$checkboxez.on("change", function(){
+  updateStorage();
+});
+
+// On page load
+$.each(formValues, function(key, value) {
+  $("#" + key).prop('checked', value);
+});
 
 function right(str, chr) {
 	return str.slice(str.length - chr, str.length);
@@ -178,6 +194,7 @@ return golor;
 var url_gairmet = url.concat("SELECT coords AS GEOM, rep_num, alt, ob_ele, start_date, stop_date \
 					FROM graphics WHERE prod_id = 14");
 
+var gk = document.getElementById("gmet")
 var gairmet = L.realtime({
 	url: url_gairmet,
 	crossOrigin: true, type: 'json'
@@ -234,11 +251,16 @@ var gairmet = L.realtime({
 	}
 }).addTo(map);
 
+if (!gk.checked){
+	map.removeLayer(gairmet), 
+	gairmet.stop()
+}
+
 // ** AIRMET
 var url_airmet = url.concat("SELECT coords AS GEOM, g.rep_num, alt, ob_ele, text_data, start_date, stop_date \
 					FROM graphics g LEFT JOIN sigairmet s ON (g.prod_id = s.prod_id) \
 					AND (g.rep_num = s.rep_num) WHERE g.prod_id = 11");
-
+var ak = document.getElementById("amet")
 var	airmet = L.realtime({
 	url: url_airmet,
 	crossOrigin: true, type: 'json'
@@ -290,11 +312,17 @@ var	airmet = L.realtime({
 	}
 }).addTo(map);
 
+if (!ak.checked){
+	map.removeLayer(airmet), 
+	airmet.stop()
+}
+
 // ** SIGMET
 var url_sigmet = url.concat("SELECT coords AS GEOM, g.rep_num, alt, ob_ele, text_data, start_date, stop_date \
 					FROM graphics g LEFT JOIN sigairmet s ON (g.prod_id = s.prod_id) AND \
 					(g.rep_num = s.rep_num)	WHERE g.prod_id = 12");
 
+var sk = document.getElementById("smet")
 var	sigmet = L.realtime({
 	url: url_sigmet,
 	crossOrigin: true, type: 'json'
@@ -345,6 +373,11 @@ var	sigmet = L.realtime({
 	}
 }).addTo(map);
 
+if (!sk.checked){
+	map.removeLayer(sigmet), 
+	sigmet.stop()
+}
+
 // ** NEXRAD
 var radar;
 	url_nx = getNexrad();
@@ -393,6 +426,7 @@ var url3_cwa = url.concat("SELECT coords AS GEOM, g.rep_num, alt, ob_ele, text_d
 					FROM graphics g LEFT JOIN sigairmet s ON (g.prod_id = s.prod_id) AND \
 					(g.rep_num = s.rep_num) WHERE g.prod_id = 15");
 
+var ck = document.getElementById("cwa")
 var	cwa = L.realtime({
 	url: url3_cwa,
 	crossOrigin: true, type: 'json'
@@ -443,6 +477,11 @@ var	cwa = L.realtime({
 	}
 }).addTo(map);
 
+if (!ck.checked){
+	map.removeLayer(cwa), 
+	cwa.stop()
+}
+
 // ** SUA 
 var url3_sua = url.concat("SELECT s.airsp_id, rep_time, s.airsp_name, sua_airsp_desc, sua_status_desc, start_time, \
 					end_time, high_alt, low_alt, coords AS GEOM, dafif_name, sep_rule, shape_ind \
@@ -452,7 +491,6 @@ var url3_sua = url.concat("SELECT s.airsp_id, rep_time, s.airsp_name, sua_airsp_
 					ORDER BY s.airsp_name, rep_num");
 
 var sk = document.getElementById("sua")
-
 var	sua = L.realtime({
 	url: url3_sua,
 	crossOrigin: true, type: 'json'
@@ -506,7 +544,6 @@ var url_circle = url.concat("SELECT bot AS GEOM, c.start_date, c.stop_date, c.re
 					LEFT JOIN sigairmet s ON s.rep_num = c.rep_num");
 
 var cmarkers = L.markerClusterGroup({
-
 	iconCreateFunction: function(cluster) {
 		var n = cluster.getChildCount();
 		return  L.divIcon({ html: n, className: 'mycluster2' , iconSize: L.point[1,1]});
@@ -621,7 +658,7 @@ var url_metar = url.concat("SELECT s.coords AS GEOM, m.stn_call, s.stn_loc, ob_d
 					winddir, altimeter, visby, dewp, hrly_precip, slp, windvar, windgust \
 					FROM metar m INNER JOIN (SELECT stn_call, MAX(ob_date) AS mob FROM metar \
 					GROUP BY stn_call) g ON m.stn_call = g.stn_call AND m.ob_date = g.mob \
-					INNER JOIN stations s ON m.stn_call = s.stn_call");
+					INNER JOIN stations2 s ON m.stn_call = s.stn_call");
 
 var wxIcon = L.icon({iconUrl: 'therm.ico', iconSize: [20,20]});
 var mk = document.getElementById("meta")
@@ -665,6 +702,7 @@ metar = L.realtime({
 			map.removeLayer(marker), 
 			metar.stop()
 		}
+		
 		return marker;
 	}
 }).addTo(map);
@@ -677,12 +715,12 @@ if (!mk.checked){
 // ** METAR Max/Min
 var url_maxmin = url.concat("SELECT s.coords AS GEOM, s.stn_call, s.stn_loc, m.temp, ob_date, 'Max' AS maxmin \
 		FROM metar m \
-		INNER JOIN stations s ON s.stn_call = m.stn_call \
+		INNER JOIN stations2 s ON s.stn_call = m.stn_call \
 		WHERE m.temp IN (SELECT MAX(temp) AS temp FROM metar) \
        	UNION \
 		SELECT s.coords AS GEOM, s.stn_call, s.stn_loc, m.temp, ob_date, 'Min' AS maxmin \
 		FROM metar m \
-		INNER JOIN stations s ON s.stn_call = m.stn_call \
+		INNER JOIN stations2 s ON s.stn_call = m.stn_call \
 		WHERE m.temp IN (SELECT MIN(temp) AS temp FROM metar WHERE temp <>'- ') \
 		ORDER BY temp,ob_date ASC ");
 
@@ -751,7 +789,7 @@ if (!mmk.checked){
 var url_notam = url.concat("SELECT t.coords AS GEOM, s.stn_call, stn_loc, s.rep_num, text_data, \
 					start_date, stop_date, notam_name FROM sigairmet s \
 					LEFT JOIN graphics g ON (g.stn_call = s.stn_call) AND (g.rep_num = s.rep_num) \
-					JOIN stations t ON t.stn_call = s.stn_call \
+					JOIN stations2 t ON t.stn_call = s.stn_call \
 					WHERE s.stn_call != '   ' AND s.prod_id = 8 \
 					ORDER BY s.rep_num");
 
@@ -816,7 +854,7 @@ var url_taf = url.concat("SELECT coords AS GEOM, t.stn_call, stn_loc, issued, cu
 					wind, visby, condx, rep_time \
 					FROM taf t INNER JOIN (SELECT stn_call, MAX(issued) AS mob FROM taf \
 					GROUP BY stn_call) g ON t.stn_call = g.stn_call AND t.issued = g.mob \
-					INNER JOIN stations s ON t.stn_call = s.stn_call");
+					INNER JOIN stations2 s ON t.stn_call = s.stn_call");
 					
 var wxIcon3 = L.icon({iconUrl: 'wx1.ico', iconSize: [15,15]});
 var tk = document.getElementById("taf")
@@ -857,7 +895,7 @@ taf = L.realtime({
 	}
 }).addTo(map);
 	
-if (!nk.checked){
+if (!tk.checked){
 	map.removeLayer(taf), 
 	taf.stop()
 }
@@ -869,7 +907,7 @@ var url_winds = url.concat("SELECT coords AS GEOM, w.stn_call, stn_loc, issue_da
 					dir7, spd7, temp7, alt8, dir8, spd8, temp8, alt9, dir9, spd9, temp9 \
 					FROM winds w INNER JOIN (SELECT stn_call, MAX(proc_time) AS mx FROM winds \
 					GROUP BY stn_call) g ON w.stn_call = g.stn_call AND w.proc_time = g.mx \
-					INNER JOIN stations s ON w.stn_call = s.stn_call");
+					INNER JOIN stations2 s ON w.stn_call = s.stn_call");
 
 var wxIcon5 = L.icon({iconUrl: 'wind.ico', iconSize: [15,15]});
 var wk = document.getElementById("winds")
@@ -947,7 +985,7 @@ var url_pirep = url.concat("SELECT coords AS GEOM, p.stn_call, stn_loc, rep_type
 					wind_spd_dir, icing, rep_time \
 					FROM pirep p INNER JOIN (SELECT stn_call, MAX(rep_time) AS mx FROM pirep \
 					GROUP BY stn_call) g ON p.stn_call = g.stn_call AND p.rep_time = g.mx \
-					INNER JOIN stations s ON p.stn_call = s.stn_call");
+					INNER JOIN stations2 s ON p.stn_call = s.stn_call");
 
 var wxIcon4 
 var pk = document.getElementById("pirep")
@@ -1039,30 +1077,25 @@ document.querySelector("input[name = amet]").addEventListener('change', function
 // ** Toggle METAR and Max/Min
 document.querySelector("input[name = meta]").addEventListener('change', function() {
 	if(this.checked) { 
-		document.getElementById("mxmn").checked = false;
-		map.removeLayer(maxmin), 
-		maxmin.stop()
 		map.addLayer(metar), 
-		metar.start()
+		metar.start()		
 	}
-	else { 
-		map.removeLayer(metar), 
-		metar.stop()
+	else {
+		map.removeLayer(metar),
+		metar.stop() 
 	}
+	
 })
 
 // Toggle Max/Min and METAR
 document.querySelector("input[name = mxmn]").addEventListener('change', function() {
 	if(this.checked) { 
 		map.addLayer(maxmin), 
-		maxmin.start(),
-		document.getElementById("meta").checked = false;
-		map.removeLayer(metar), 
-		metar.stop()
+		maxmin.start()
 	}
-	else { 
-		map.removeLayer(maxmin), 
-		maxmin.stop()
+	else {
+	 map.removeLayer(maxmin),
+	 maxmin.stop() 
 	}
 })
 

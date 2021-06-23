@@ -14,7 +14,7 @@ var url_tfr = url.concat("SELECT '0101000020E6100000A01A2FDD24F263C09A9999999959
 var	tfr = L.realtime({
 	url: url_tfr,
 	crossOrigin: true, type: 'json'
-	}, {interval: 12000,
+	}, {interval: 60000,
 	getFeatureId: function(featureData) {
 		return featureData.properties.rep_num;
 	},
