@@ -1,7 +1,7 @@
 <!DOCTYPE html>
-<html> 
+<html lang="en"> 
 <head>
-<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta charset="utf-8" />
 
 <title>DUMP978-WX Data</title>
 	<input type="hidden" id="port" value="<%=ptnum %>"/>
@@ -10,17 +10,11 @@
 	<script src="/leaflet/leaflet.js"></script>
 	<script src="/leaflet/jquery.js"></script> 
 	<script src="/leaflet/leaflet-realtime.js"></script>
-
-<style>
-table, td {
-  border: 1px solid black;
-}
-</style>
 </head>
 <body>
 
 <div class="topnav">
-	<a href="https://time.is/UTC" id="time_is_link" rel="nofollow" ></a>
+	<a href="https://time.is/UTC" id="time_is_link" rel="nofollow"></a>
 	<a class="active" href="/">Home</a>
 	<a href="page2">New Page</a>
 	<a href="#news">News</a>
@@ -32,7 +26,6 @@ table, td {
 		<script  src="//widget.time.is/t.js"></script>
 		<script>time_is_widget.init({UTC_za00:{}});	</script></a>
 </div>
-
 <div >
 	<p style="text-align:center; font-size: 12px; color:#175B81; 
 		font-weight:bold; "><span id="metar">Details</span></p>	
@@ -41,7 +34,7 @@ table, td {
 </div>
 <div id="footer"></div>
 
-<script src="map978p2.js" type="text/javascript"></script>
+<script src="map978p2.js"></script>
 
 </body>
 </html>

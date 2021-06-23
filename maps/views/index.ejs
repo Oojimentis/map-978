@@ -1,7 +1,7 @@
-<!DOCTYPE html>
-<html> 
+﻿<!DOCTYPE html>
+<html lang="en"> 
 <head>
-<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta charset="utf-8"/>
 
 <title>DUMP978-WX Data</title>
 	<input type="hidden" id="port" value="<%=ptnum %>"/>
@@ -17,7 +17,7 @@
 <body>
 
 <div class="topnav">
-	<a href="https://time.is/UTC" id="time_is_link" rel="nofollow" ></a>			
+	<a href="https://time.is/UTC" id="time_is_link" rel="nofollow"></a>			
 	<a class="active" href="/">Home</a>
 	<a href="page2">New Page</a>
 	<a href="#news">News</a>
@@ -37,21 +37,21 @@
 			<div id="ckboxes">
 				<div class="checkboxes">
 					<label>Max/Min:</label>
-						<input type="checkbox" id="mxmn" name="mxmn" >
+						<input type="checkbox" id="mxmn" name="mxmn">
 					<br>				
 					<label>METAR:</label>
-						<input type="checkbox" id="meta" name="meta" >
+						<input type="checkbox" id="meta" name="meta">
 					<label>NOTAM:</label>
-						<input type="checkbox" id="notam" name="notam" >
+						<input type="checkbox" id="notam" name="notam">
 					<label>SUA:</label>
-						<input type="checkbox" id="sua" name="sua" >
+						<input type="checkbox" id="sua" name="sua">
 					<br>
 					<label>TAF:</label>
-						<input type="checkbox" id="taf" name="taf" >
+						<input type="checkbox" id="taf" name="taf">
 					<label>PIREP:</label>
-						<input type="checkbox" id="pirep" name="pirep" >
+						<input type="checkbox" id="pirep" name="pirep">
 					<label>WINDS:</label>
-						<input type="checkbox" id="winds" name="winds" >
+						<input type="checkbox" id="winds" name="winds">
  					<br>
  					<label>G-AIRMET</label> 
 						<input type="checkbox" id="gmet" name="gmet" checked>
@@ -91,7 +91,7 @@
 						</select>
 			
 						<select class="box" id="altrad">
-							<option hidden= value="0" selected>0 ft</option>
+							<option value="0" disabled selected> 0 ft</option>
 							<option value="2000" > 2,000 ft</option>
 							<option value="4000" > 4,000 ft</option>
 							<option value="6000" > 6,000 ft</option>
@@ -113,37 +113,35 @@
 				<div id="table-scroll">		
 					<table style="width:90%">
 						<tr>
-							<th id="m1" align="left">Station</th>
- 		 					<td id='f1'></td>
+							<th id="m1">Station</th>
+ 		 					<td id="f1"></td>
 						</tr>
 						<tr>
-							<th id="m2" align="left">Location</th>
- 							<td id='f2'></td>
+							<th id="m2">Location</th>
+ 							<td id="f2"></td>
  						</tr>
 						<tr>
-							<th id="m3" align="left">Time</th>
- 							<td id='f3'></td>
+							<th id="m3">Time</th>
+ 							<td id="f3"></td>
 		 				</tr>
 		 				<tr>
-		 					<th id="m4" align="left">Temp</th>
- 							<td id='f4'></td>
+		 					<th id="m4">Temp</th>
+ 							<td id="f4"></td>
  				 		</tr>
  				 		<tr>
- 				 			<th id="m5" align="left">Wind Speed</th>
- 		 					<td id='f5'></td>
+ 				 			<th id="m5">Wind Speed</th>
+ 		 					<td id="f5"></td>
  		 				</tr>
  		 				<tr>
- 		 					<th id="m6" align="left">Visibility</th>
- 							<td id='f6'><a href="#"></a></td>
+ 		 					<th id="m6">Visibility</th>
+ 							<td id="f6"></td>
 					</table>
 				</div>
 			</div>
 		</div>
 	<div id="footer"></div>
-</div>
 
-<script src="map978pg.js" type="text/javascript"></script>
-<script id="port" src="map978pg.js"></script> 
+<script src="map978pg.js"></script> 
 
 </body>
 </html>

@@ -60,6 +60,7 @@ table, th, td {
 	border:solid 1px #333; 
 	padding:2px 4px;
 	font:10px arial;
+	text-align: left;
 }
 th {
 	font-size:11px;
