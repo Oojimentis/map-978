@@ -621,7 +621,7 @@ var url_metar = url.concat("SELECT s.coords AS GEOM, m.stn_call, s.stn_loc, ob_d
 					winddir, altimeter, visby, dewp, hrly_precip, slp, windvar, windgust \
 					FROM metar m INNER JOIN (SELECT stn_call, MAX(ob_date) AS mob FROM metar \
 					GROUP BY stn_call) g ON m.stn_call = g.stn_call AND m.ob_date = g.mob \
-					INNER JOIN stations2 s ON m.stn_call = s.stn_call");
+					INNER JOIN stations s ON m.stn_call = s.stn_call");
 
 var wxIcon = L.icon({iconUrl: 'therm.ico', iconSize: [20,20]});
 var mk = document.getElementById("meta")
@@ -677,12 +677,12 @@ if (!mk.checked){
 // ** METAR Max/Min
 var url_maxmin = url.concat("SELECT s.coords AS GEOM, s.stn_call, s.stn_loc, m.temp, ob_date, 'Max' AS maxmin \
 		FROM metar m \
-		INNER JOIN stations2 s ON s.stn_call = m.stn_call \
+		INNER JOIN stations s ON s.stn_call = m.stn_call \
 		WHERE m.temp IN (SELECT MAX(temp) AS temp FROM metar) \
        	UNION \
 		SELECT s.coords AS GEOM, s.stn_call, s.stn_loc, m.temp, ob_date, 'Min' AS maxmin \
 		FROM metar m \
-		INNER JOIN stations2 s ON s.stn_call = m.stn_call \
+		INNER JOIN stations s ON s.stn_call = m.stn_call \
 		WHERE m.temp IN (SELECT MIN(temp) AS temp FROM metar WHERE temp <>'- ') \
 		ORDER BY temp,ob_date ASC ");
 
@@ -751,7 +751,7 @@ if (!mmk.checked){
 var url_notam = url.concat("SELECT t.coords AS GEOM, s.stn_call, stn_loc, s.rep_num, text_data, \
 					start_date, stop_date, notam_name FROM sigairmet s \
 					LEFT JOIN graphics g ON (g.stn_call = s.stn_call) AND (g.rep_num = s.rep_num) \
-					JOIN stations2 t ON t.stn_call = s.stn_call \
+					JOIN stations t ON t.stn_call = s.stn_call \
 					WHERE s.stn_call != '   ' AND s.prod_id = 8 \
 					ORDER BY s.rep_num");
 
@@ -816,7 +816,7 @@ var url_taf = url.concat("SELECT coords AS GEOM, t.stn_call, stn_loc, issued, cu
 					wind, visby, condx, rep_time \
 					FROM taf t INNER JOIN (SELECT stn_call, MAX(issued) AS mob FROM taf \
 					GROUP BY stn_call) g ON t.stn_call = g.stn_call AND t.issued = g.mob \
-					INNER JOIN stations2 s ON t.stn_call = s.stn_call");
+					INNER JOIN stations s ON t.stn_call = s.stn_call");
 					
 var wxIcon3 = L.icon({iconUrl: 'wx1.ico', iconSize: [15,15]});
 var tk = document.getElementById("taf")
@@ -869,7 +869,7 @@ var url_winds = url.concat("SELECT coords AS GEOM, w.stn_call, stn_loc, issue_da
 					dir7, spd7, temp7, alt8, dir8, spd8, temp8, alt9, dir9, spd9, temp9 \
 					FROM winds w INNER JOIN (SELECT stn_call, MAX(proc_time) AS mx FROM winds \
 					GROUP BY stn_call) g ON w.stn_call = g.stn_call AND w.proc_time = g.mx \
-					INNER JOIN stations2 s ON w.stn_call = s.stn_call");
+					INNER JOIN stations s ON w.stn_call = s.stn_call");
 
 var wxIcon5 = L.icon({iconUrl: 'wind.ico', iconSize: [15,15]});
 var wk = document.getElementById("winds")
@@ -947,7 +947,7 @@ var url_pirep = url.concat("SELECT coords AS GEOM, p.stn_call, stn_loc, rep_type
 					wind_spd_dir, icing, rep_time \
 					FROM pirep p INNER JOIN (SELECT stn_call, MAX(rep_time) AS mx FROM pirep \
 					GROUP BY stn_call) g ON p.stn_call = g.stn_call AND p.rep_time = g.mx \
-					INNER JOIN stations2 s ON p.stn_call = s.stn_call");
+					INNER JOIN stations s ON p.stn_call = s.stn_call");
 
 var wxIcon4 
 var pk = document.getElementById("pirep")

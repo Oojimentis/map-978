@@ -8,7 +8,7 @@ var table;
 var url_tfr = url.concat("SELECT '0101000020E6100000A01A2FDD24F263C09A99999999594F40' AS GEOM, \
 					s.rep_num, text_data, notam_name FROM sigairmet s \
 					LEFT JOIN graphics g ON g.rep_num = s.rep_num \
-					WHERE s.prod_id = 8 AND SUBSTRING(s.stn_call,1,1) = ' ' \
+					WHERE s.prod_id = 8 AND (SUBSTRING(s.stn_call,1,1) = ' ' OR s.stn_call ='')\
 					AND g.rep_num IS NULL");
 
 var	tfr = L.realtime({
