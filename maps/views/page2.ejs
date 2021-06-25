@@ -26,15 +26,31 @@
 		<script  src="//widget.time.is/t.js"></script>
 		<script>time_is_widget.init({UTC_za00:{}});	</script></a>
 </div>
-<div >
-	<p style="text-align:center; font-size: 12px; color:#175B81; 
-		font-weight:bold; "><span id="metar">Details</span></p>	
-		<table id="myTable"></table>
-		<br>
+  
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>  
+
+<br>
+<button>Station List</button>
+<div class="tableFixHead">
+	<table id="stntbl"> <tbody>
+    	<thead>
+        	<tr>
+            	<th>Product</th><th>Altitude</th><th>Count</th>
+        	</tr>
+    	</thead>
+	</tbody></table>
 </div>
+
+	<p style="text-align:center; font-size: 12px; color:#175B81; 
+		font-weight:bold; "><span id="metar">Spoddle</span></p>	
+   <div class="tableFixHead">
+		<table id="myTable"></table>
+
+
+ </div> 
 <div id="footer"></div>
 
-<script src="map978p2.js"></script>
+<script src="map978p2.js"></script> 
 
 </body>
 </html>
