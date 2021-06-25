@@ -287,35 +287,43 @@ label {
 	float: left !important;
 	color:#fce94f !important;
 }
-  .tableFixHead {
-        overflow-y: auto;
-        height: 200px;
-        width: 50%;
-      }
-      .tableFixHead thead th {
-        position: sticky;
-        top: 0;
-      }
+.tableFixHead {
+	overflow-y: auto;
+	height: 200px;
+	width: 50%;
+}
+.tableFixHead thead th {
+	position: sticky;
+	top: 0;
+}
 
-      .tableFixHead td {
-        box-shadow: inset 1px -1px #000;
-      }
-      .tableFixHead th {
-        box-shadow: inset 1px 1px #000, 0 1px #000;
-      }
-#stntbl table {
-	 border-collapse: collapse;
-        width: 2%;
-	}      
-   
-#stntbl  th,
-      td {
-        padding: 8px 16px;
-      }  
-   
-#stntbl  th {
-        background: #c4a000;
-      }  
-   
-   
-   
+.tableFixHead td {
+	box-shadow: inset 1px -1px #000;
+}
+.tableFixHead th {
+	box-shadow: inset 1px 1px #000, 0 1px #000;
+}
+#stntbl  table {
+	border-collapse: collapse;
+	width: 2%;
+}
+
+#stntbl   th, td {
+	padding: 8px 16px;
+}  
+
+#stntbl   th {
+	background: #c4a000;
+}
+#myTable  table {
+	border-collapse: collapse;
+	width: 2%;
+}
+
+#myTable   th, td {
+	padding: 8px 16px;
+}  
+
+#myTable   th {
+	background: #c4a000;
+}

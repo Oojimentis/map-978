@@ -1,7 +1,7 @@
 var serv_port = document.getElementById('port').value;
 var url1 = "http://localhost:";
 var url = url1.concat(serv_port, "/sql?q=");
-var table; 
+var table;
 
 // NEXRAD Count
 $(document).ready(function(){
@@ -9,16 +9,17 @@ $(document).ready(function(){
 		var row = "";
 		var sqltext = 'http://localhost:8000/sqlx?q=select prod_id,fisb_product_desc, \
 		altitude,count(*) as count from nexrad,fisb_products where prod_id = fisb_product_id \
-        group by prod_id,fisb_product_desc,altitude order by prod_id,altitude';
+		group by prod_id,fisb_product_desc,altitude order by prod_id,altitude';
 		$('#stntbl tbody').empty();
-   		$.get(sqltext, {}, function(data){
-	   		$.each(data, function (index, features) {
-           		row += "<tr><td>" + features.fisb_product_desc + "</td><td>" 
-           		+ features.altitude + "</td><<td>" + features.count + "</td></tr>";
-       		});
-	       	$("#stntbl tbody").append(row);
-   		});
- 	});
+		$.get(sqltext, {}, function(data){
+			$.each(data, function (index, features) {
+				row += "<tr><td>" + features.fisb_product_desc + "</td><td>" 
+				+ features.altitude + "</td><<td>" + features.count + "</td></tr>";
+			});
+			$("#stntbl tbody").append(row);
+			
+		});
+	});
 });
 
 // ** NOTAM TFR 
@@ -37,7 +38,7 @@ var	tfr = L.realtime({
 		return featureData.properties.rep_num;
 	},
 	onEachFeature: function(feature, layer) {
-		table = document.getElementById("myTable");
+		table = document.getElementById("tbody");
 		var row = table.insertRow(0);
 		var cell1 = row.insertCell(0);
 		var cell2 = row.insertCell(1);
