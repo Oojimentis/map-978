@@ -654,7 +654,7 @@ var	seg = L.realtime({
 }).addTo(map);
 
 // ** METAR 
-var url_metar = url.concat("SELECT s.coords AS GEOM, m.stn_call, s.stn_loc, ob_date, temp, windsp, \
+var url_metar = url.concat("SELECT s.coords AS GEOM, m.stn_call, s.stn_loc, state, ob_date, temp, windsp, \
 					winddir, altimeter, visby, dewp, hrly_precip, slp, windvar, windgust \
 					FROM metar m INNER JOIN (SELECT stn_call, MAX(ob_date) AS mob FROM metar \
 					GROUP BY stn_call) g ON m.stn_call = g.stn_call AND m.ob_date = g.mob \
@@ -683,7 +683,8 @@ metar = L.realtime({
 			$("#m6").html("Pressure");
 			$('#f1').html(e.target.feature.properties.stn_call + " - " +
 					e.target.feature.properties.ob_date + 'z');
-			$('#f2').html(e.target.feature.properties.stn_loc);
+			$('#f2').html(e.target.feature.properties.stn_loc + ", " +
+					e.target.feature.properties.state);
 			$('#f3').html(e.target.feature.properties.temp + "\xB0F" +
 					"  dp:" + e.target.feature.properties.dewp +
 					"\xB0F<br> Hrly Precip:" +

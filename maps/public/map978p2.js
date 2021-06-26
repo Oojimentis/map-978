@@ -5,21 +5,29 @@ var table;
 
 // NEXRAD Count
 $(document).ready(function(){
-	$("button").click(function(){
-		var row = "";
-		var sqltext = 'http://localhost:8000/sqlx?q=select prod_id,fisb_product_desc, \
+	setInterval(gettext,5000);
+
+	var sqltext = 'http://localhost:8000/sqlx?q=select prod_id,fisb_product_desc, \
 		altitude,count(*) as count from nexrad,fisb_products where prod_id = fisb_product_id \
 		group by prod_id,fisb_product_desc,altitude order by prod_id,altitude';
-		$('#stntbl tbody').empty();
-		$.get(sqltext, {}, function(data){
-			$.each(data, function (index, features) {
-				row += "<tr><td>" + features.fisb_product_desc + "</td><td>" 
-				+ features.altitude + "</td><<td>" + features.count + "</td></tr>";
-			});
-			$("#stntbl tbody").append(row);
-			
-		});
-	});
+
+	function gettext(){
+		var row = "";
+
+		$.ajax({
+			type: "Get",
+			url: sqltext,
+			success: function (data){
+				$('#stntbl tbody').empty();
+				$.each(data, function (index, features) {
+					row += "<tr><td>" + features.fisb_product_desc + "</td><td>" 
+					+ features.altitude + "</td><<td>" + features.count + "</td></tr>";
+				});
+				$("#stntbl tbody").append(row);
+			},
+		});		
+	};
+	gettext();
 });
 
 // ** NOTAM TFR 

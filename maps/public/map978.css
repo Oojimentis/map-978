@@ -2,7 +2,6 @@
 	margin: 0 auto;
 	width: 100%;
 }
-
 #panel{
 	float: left;
 	width: 100%;
@@ -10,13 +9,11 @@
 	background-color: #175B81;
 	color: yellow;
 }
-
 #map {
 	float: left;
 	width: 80%;
 	height:800px;
 }
-
 .sidebar {
 	float: left;
 	width: 20%;
@@ -24,7 +21,6 @@
 	background-color: #dadee0;
 	color: #073273;
 }
-
 #footer {
 	float: left;
 	background-color: #175B81;
@@ -32,7 +28,6 @@
 	width: 100%;
 	height:10px
 }
-
 .container {
 	display: block;
 	position: relative;
@@ -45,30 +40,29 @@
 	-ms-user-select: none;
 	user-select: none;
 }
-
 .text-labels {
 	font-weight: bold;
 	color:#006400;
 	font-family: "Arial Black";
 	font-size: 10px ;
 	line-height:10px;
-	text-align:center;
 }
-
 table, th, td {
 	margin:0px 5px;
 	border:solid 1px #333; 
-	padding:2px 4px;
-	font:10px arial;
+	padding:1px 2px;
+	font:20px arial;
 	text-align: left;
 }
 th {
 	font-size:11px;
 	font-weight:bold;
+	text-align: left;
 }
 td {
 	font-size:11px;
-	font-weight:normal
+	font-weight:normal;
+		text-align: left;
 }
 tr:nth-child(even) {
 	background: #E6BECF;
@@ -86,8 +80,8 @@ table {
 	display:block;
 	text-decoration:none;
 }
-
 #table-wrapper {
+	text-align: left;
 	position:relative;
 }
 #table-scroll {
@@ -96,21 +90,21 @@ table {
 	margin-top:10px;
 }
 #table-wrapper table {
+	text-align: left;
 	width:100%;
 }
 #table-wrapper table thead th .text {
-	position:absolute;
-	top:-20px;
+	text-align: left;
+	top:-10px;
 	z-index:2;
-	height:20px;
+	height:10px;
 	width:35%;
 	border:1px solid red;
 }
-
 #f1{
+	text-align: left;
 	font-weight:bold
 }
-
 .p2 {
 	font-size: 20px;
 	font-weight:bold;
@@ -119,7 +113,6 @@ table {
 	left: 20px;
 	color: yellow
 }
-
 select { 
 	appearance: none; 
 	outline: 0; 
@@ -136,11 +129,9 @@ select {
 	overflow: hidden; 
 	border-radius: .25em; 
 }	
-
 label {
 	font:9px arial;
 }
-
 #first {
 	width: 50%;
 	float: left;
@@ -149,12 +140,10 @@ label {
 	width: 50%;
 	float: left;
 }
-
 .selBox {
 	width: 80px !important;
 	height: 10px !important;
 }
-
 #ckboxes {
 	padding-left: 5px;
 }
@@ -171,7 +160,6 @@ label {
 .checkboxes label span {
 	vertical-align: middle;
 }
-
 .slidecontainer {
 	width: 100%; /* Width of the outside container */
 	font-size: 10px;
@@ -183,7 +171,6 @@ label {
 	background: #d3d3d3; /* Grey background */
 	opacity: 1.7; /* Set transparency (for mouse-over effects on hover) */
 }
-
 .tbox {
 	width: 40px;
 	height: 20px;
@@ -199,7 +186,6 @@ label {
 	appearance: none;
 	cursor: pointer;
 }
-
 .box {
 	width: 90px;
 	height: 20px;
@@ -215,7 +201,6 @@ label {
 	appearance: none;
 	cursor: pointer;
 }
-
 .legend {
 	padding: 3px 3px;
 	font: 10px Arial Black;
@@ -247,7 +232,6 @@ label {
 	background-size: 12px;
 	background-color: rgba(255, 255, 255, 1);
 }
-
 .mycluster {
 	width: 13px;
 	height: 13px;
@@ -296,7 +280,6 @@ label {
 	position: sticky;
 	top: 0;
 }
-
 .tableFixHead td {
 	box-shadow: inset 1px -1px #000;
 }
@@ -307,11 +290,9 @@ label {
 	border-collapse: collapse;
 	width: 2%;
 }
-
 #stntbl   th, td {
 	padding: 8px 16px;
 }  
-
 #stntbl   th {
 	background: #c4a000;
 }
@@ -319,11 +300,9 @@ label {
 	border-collapse: collapse;
 	width: 2%;
 }
-
 #myTable   th, td {
-	padding: 8px 16px;
+	padding: 2px 5px;
 }  
-
 #myTable   th {
 	background: #c4a000;
 }
