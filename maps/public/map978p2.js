@@ -5,7 +5,7 @@ var table;
 
 // NEXRAD Count
 $(document).ready(function(){
-	setInterval(gettext,5000);
+	setInterval(gettext,30000);
 
 	var sqltext = 'http://localhost:8000/sqlx?q=select prod_id,fisb_product_desc, \
 		altitude,count(*) as count from nexrad,fisb_products where prod_id = fisb_product_id \
@@ -28,6 +28,35 @@ $(document).ready(function(){
 		});		
 	};
 	gettext();
+});
+
+
+
+// SUA no coords
+$(document).ready(function(){
+	setInterval(getsua,60000);
+
+	var sqltextsua = 'http://localhost:8000/sqlx?q=select distinct s.airsp_id, \
+	s.airsp_name,s.airsp_type from sua s left join sua_airspace a on a.airsp_id = s.airsp_id \
+	where a.airsp_name IS NULL order by s.airsp_name';
+
+	function getsua(){
+		var row = "";
+
+		$.ajax({
+			type: "Get",
+			url: sqltextsua,
+			success: function (data){
+				$('#suatbl tbody').empty();
+				$.each(data, function (index, features) {
+					row += "<tr><td>" + features.airsp_id + "</td><td>" 
+					+ features.airsp_name + "</td><<td>" + features.airsp_type + "</td></tr>";
+				});
+				$("#suatbl tbody").append(row);
+			},
+		});		
+	};
+	getsua();
 });
 
 // ** NOTAM TFR 

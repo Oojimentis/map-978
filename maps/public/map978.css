@@ -18,12 +18,12 @@
 	float: left;
 	width: 20%;
 	height:800px;
-	background-color: #dadee0;
-	color: #073273;
+	background-color: #81d3ab;
+	color: #2e3436;
 }
 #footer {
 	float: left;
-	background-color: #175B81;
+	background-color: #333;
 	color: white;
 	width: 100%;
 	height:10px
@@ -155,7 +155,7 @@ label {
 }
 .checkboxes input {
 	vertical-align: middle;
-	box-shadow: 2px 2px #ccc;
+	box-shadow: 2px 2px #868984;
 }
 .checkboxes label span {
 	vertical-align: middle;
@@ -179,7 +179,7 @@ label {
 	color: #175B81;
 	background-color: #eee;
 	border-radius: 1px;
-	box-shadow: 4px 4px #ccc;
+	box-shadow: 4px 4px #868984;
 	display: inline-block;
 	-webkit-appearance: none;
 	-moz-appearance: none;
@@ -194,7 +194,7 @@ label {
 	color: #175B81;
 	background-color: #eee;
 	border-radius: 1px;
-	box-shadow: 4px 4px #ccc;
+	box-shadow: 4px 4px #868984;
 	display: inline-block;
 	-webkit-appearance: none;
 	-moz-appearance: none;
@@ -206,7 +206,7 @@ label {
 	font: 10px Arial Black;
 	background: white;
 	background: rgba(255, 255, 255, 0.8);
-	box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);
+	box-shadow: 0 0 15px #868984;
 	border-radius: 5px;
 	line-height: 20px;
 	color: #555;
@@ -273,8 +273,8 @@ label {
 }
 .tableFixHead {
 	overflow-y: auto;
-	height: 200px;
-	width: 50%;
+	height: 291px;
+	width: 80%;
 }
 .tableFixHead thead th {
 	position: sticky;
@@ -286,23 +286,56 @@ label {
 .tableFixHead th {
 	box-shadow: inset 1px 1px #000, 0 1px #000;
 }
-#stntbl  table {
+#stntbl   {
 	border-collapse: collapse;
-	width: 2%;
+	width: 95%;
 }
 #stntbl   th, td {
 	padding: 8px 16px;
 }  
 #stntbl   th {
-	background: #c4a000;
+	background: #ad7fa8;
 }
-#myTable  table {
+
+#suatbl   {
 	border-collapse: collapse;
-	width: 2%;
+	width: 95%;
 }
-#myTable   th, td {
-	padding: 2px 5px;
+#suatbl   th, td {
+	padding: 6px 5px;
+}  
+#suatbl   th {
+	background: #ad7fa8;
+}
+
+#myTable   {
+	border-collapse: collapse;
+	width: 95%;
+}
+#myTable th   {
+	padding: 8px 15px;
 }  
 #myTable   th {
-	background: #c4a000;
+	background: #ad7fa8;
+}
+
+* {
+  box-sizing: border-box;
+}
+.row {
+  margin-left:-5px;
+  margin-right:-5px;
+}
+  
+.column {
+  float: left;
+  width: 50%;
+  padding: 5px;
+}
+
+/* Clearfix (clear floats) */
+.row::after {
+  content: "";
+  clear: both;
+  display: table;
 }

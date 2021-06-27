@@ -30,8 +30,9 @@
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>  
 
 <br>
-<button>NEXRAD Count</button>
 
+<div class="row">
+<div class="column">
 <div class="tableFixHead">
 	<table id="stntbl"> <tbody>
 		<thead>
@@ -41,8 +42,22 @@
 		</thead>
 	</tbody></table>
 </div>
+</div>
 
-<p style="text-align:center; font-size: 12px; color:#175B81; 
+<div class="column">
+<div class="tableFixHead">
+	<table id="suatbl"> <tbody>
+		<thead>
+			<tr>
+				<th>Airspace ID</th><th>Airspace Name</th><th>Airspace Type</th>
+			</tr>
+		</thead>
+	</tbody></table>
+</div>
+  </div>
+</div>
+
+<p style="text-align:left; font-size: 12px; color:#175B81; 
 	font-weight:bold; "><span id="metar">Spoddle</span></p>	
 
 <div class="tableFixHead">
@@ -57,6 +72,7 @@
 	</table>
 </div> 
 
+<br>
 <div id="footer"></div>
 
 <script src="map978p2.js"></script> 
