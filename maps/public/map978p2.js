@@ -30,11 +30,9 @@ $(document).ready(function(){
 	gettext();
 });
 
-
-
 // SUA no coords
 $(document).ready(function(){
-	setInterval(getsua,60000);
+	setInterval(getsua,57000);
 
 	var sqltextsua = 'http://localhost:8000/sqlx?q=select distinct s.airsp_id, \
 	s.airsp_name,s.airsp_type from sua s left join sua_airspace a on a.airsp_id = s.airsp_id \
