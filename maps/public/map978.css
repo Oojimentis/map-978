@@ -249,14 +249,14 @@ label {
 #suatbl   th {
 	background: #ad7fa8;
 }
-#myTable   {
+#tfrtbl   {
 	border-collapse: collapse;
 	width: 99%;
 }
-#myTable th   {
+#tfrtbl th   {
 	padding: 8px 15px;
 }  
-#myTable   th {
+#tfrtbl   th {
 	background: #ad7fa8;
 }
 * {
@@ -275,4 +275,23 @@ label {
   content: "";
   clear: both;
   display: table;
+}
+.custompopup .leaflet-popup-content-wrapper  {
+    background: #333;
+    color: #fce94f;
+}
+.custompopup .leaflet-popup-content-wrapper a {
+    background: #333;
+    color: #ffffff;
+}
+.custompopup .leaflet-popup-tip-container {
+         color: #ffffff;
+} 
+.custompopup .leaflet-popup-content  {
+	margin-top: 4px;
+	margin-bottom: 4px;
+    margin-right: 2px;
+    padding-right: 2px;
+    margin-left: 2px;
+    padding-left: 2px;
 }

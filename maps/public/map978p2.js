@@ -7,9 +7,9 @@ var table;
 $(document).ready(function(){
 	setInterval(gettext,30000);
 
-	var sqltext = 'http://localhost:8000/sqlx?q=select prod_id,fisb_product_desc, \
-		altitude,count(*) as count from nexrad,fisb_products where prod_id = fisb_product_id \
-		group by prod_id,fisb_product_desc,altitude order by prod_id,altitude';
+	var sqltext = 'http://localhost:8000/sqlx?q=SELECT prod_id, fisb_product_desc, \
+					altitude, COUNT(*) AS count FROM nexrad, fisb_products WHERE prod_id = fisb_product_id \
+					GROUP BY prod_id, fisb_product_desc, altitude ORDER BY prod_id, altitude';
 
 	function gettext(){
 		var row = "";
@@ -19,9 +19,10 @@ $(document).ready(function(){
 			url: sqltext,
 			success: function (data){
 				$('#stntbl tbody').empty();
-				$.each(data, function (index, features) {
+				$.each(data, function (index, features){
 					row += "<tr><td>" + features.fisb_product_desc + "</td><td>" 
-					+ features.altitude + "</td><<td>" + features.count + "</td></tr>";
+					+ features.altitude + "</td><<td>" 
+					+ features.count + "</td></tr>";
 				});
 				$("#stntbl tbody").append(row);
 			},
@@ -34,9 +35,9 @@ $(document).ready(function(){
 $(document).ready(function(){
 	setInterval(getsua,57000);
 
-	var sqltextsua = 'http://localhost:8000/sqlx?q=select distinct s.airsp_id, \
-	s.airsp_name,s.airsp_type from sua s left join sua_airspace a on a.airsp_id = s.airsp_id \
-	where a.airsp_name IS NULL order by s.airsp_name';
+	var sqltextsua = 'http://localhost:8000/sqlx?q=SELECT DISTINCT s.airsp_id, s.airsp_name, s.airsp_type \
+					FROM sua s LEFT JOIN sua_airspace a ON a.airsp_id = s.airsp_id \
+					WHERE a.airsp_name IS NULL ORDER BY s.airsp_name';
 
 	function getsua(){
 		var row = "";
@@ -48,7 +49,8 @@ $(document).ready(function(){
 				$('#suatbl tbody').empty();
 				$.each(data, function (index, features) {
 					row += "<tr><td>" + features.airsp_id + "</td><td>" 
-					+ features.airsp_name + "</td><<td>" + features.airsp_type + "</td></tr>";
+					+ features.airsp_name + "</td><<td>" 
+					+ features.airsp_type + "</td></tr>";
 				});
 				$("#suatbl tbody").append(row);
 			},
@@ -57,8 +59,39 @@ $(document).ready(function(){
 	getsua();
 });
 
-// ** NOTAM TFR 
 
+// ** NOTAM TFR 
+$(document).ready(function(){
+	setInterval(gettfr,57000);
+
+	var sqltexttfr = "http://localhost:8000/sqlx?q=SELECT s.rep_num, text_data, notam_name FROM sigairmet s \
+			LEFT JOIN graphics g ON g.rep_num = s.rep_num \
+			WHERE s.prod_id = 8 AND (SUBSTRING(s.stn_call,1,1) = ' ' OR s.stn_call ='') \
+			AND g.rep_num IS NULL";
+
+	function gettfr(){
+		var row = "";
+
+		$.ajax({
+			type: "Get",
+			url: sqltexttfr,
+			success: function (data){
+				$('#tfrtbl tbody').empty();
+				$.each(data, function (index, features) {
+					row += "<tr><td>" + features.rep_num + "</td><td>" 
+					+ features.notam_name + "</td><<td>" 
+					+ features.text_data + "</td></tr>";
+				});
+				$("#tfrtbl tbody").append(row);
+			},
+		});		
+	};
+	gettfr();
+});
+
+
+// ** NOTAM TFR 
+/*
 var url_tfr = url.concat("SELECT '0101000020E6100000A01A2FDD24F263C09A99999999594F40' AS GEOM, \
 					s.rep_num, text_data, notam_name FROM sigairmet s \
 					LEFT JOIN graphics g ON g.rep_num = s.rep_num \
@@ -69,10 +102,10 @@ var	tfr = L.realtime({
 	url: url_tfr,
 	crossOrigin: true, type: 'json'
 	}, {interval: 60000,
-	getFeatureId: function(featureData) {
+	getFeatureId: function(featureData){
 		return featureData.properties.rep_num;
 	},
-	onEachFeature: function(feature, layer) {
+	onEachFeature: function(feature, layer){
 		table = document.getElementById("tbody");
 		var row = table.insertRow(0);
 		var cell1 = row.insertCell(0);
@@ -83,3 +116,4 @@ var	tfr = L.realtime({
 		cell3.innerHTML = feature.properties.text_data;
 	},
 });
+*/

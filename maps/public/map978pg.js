@@ -8,7 +8,14 @@ var icelegend;
 var cloudlegend;
 var nexlegend;
 var rprod = 0;
+var asp_name=[];
 
+var customOptions =
+	{
+		'className' : 'custompopup',
+		'closeButton' : false
+	}
+	
 window.onload = onPageLoad();
 
 function onPageLoad() {
@@ -20,24 +27,37 @@ function onPageLoad() {
 var formValues = JSON.parse(localStorage.getItem('formValues')) || {};
 var $checkboxez = $("#ckboxes :checkbox");
 
-function updateStorage(){
-  $checkboxez.each(function(){
-    formValues[this.id] = this.checked;
-  });
+function disp(_asp_name, i){
+	$('#f1').html('SUA - ' + this.asp_name[i].airsp_name);
+			$('#f2').html(this.asp_name[i].sua_airsp_desc + ' <br>' 
+				+ this.asp_name[i].sua_status_desc);
+			$('#f3').html(this.asp_name[i].start_time + ' <br>' 
+				+ this.asp_name[i].end_time);
+			$('#f4').html(this.asp_name[i].low_alt + ' <br>' 
+				+ this.asp_name[i].high_alt);
+			$('#f5').html(this.asp_name[i].sep_rule + '  ' 
+				+ this.asp_name[i].shape_ind);
+			$('#f6').html(this.asp_name[i].dafif_name);
+};
 
-  localStorage.setItem("formValues", JSON.stringify(formValues));
+function updateStorage(){
+	$checkboxez.each(function(){
+    	formValues[this.id] = this.checked;
+  	});
+
+	localStorage.setItem("formValues", JSON.stringify(formValues));
 }
 
 $checkboxez.on("change", function(){
-  updateStorage();
+	updateStorage();
 });
 
 // On page load
-$.each(formValues, function(key, value) {
-  $("#" + key).prop('checked', value);
+$.each(formValues, function(key, value){
+	$("#" + key).prop('checked', value);
 });
 
-function right(str, chr) {
+function right(str, chr){
 	return str.slice(str.length - chr, str.length);
 }
 
@@ -58,7 +78,7 @@ var OpenStreetMap_BlackAndWhite = L.tileLayer('http://{s}.tiles.wmflabs.org/bw-m
 });
 
 //** Altitude colours
-function getColor(colf) {
+function getColor(colf){
 	return 	colf >=	60000	? '#67BDE9':
 			colf >=	50000	? '#6EBAE0':
 			colf >=	43000	? '#75B7D6':
@@ -139,7 +159,7 @@ function getNexrad() {
 }	
 
 // ** NEXRAD intensity colours.
-function getColorInt(colf) {
+function getColorInt(colf){
 	switch (colf) {
 	case 1:
 		golor = '#8C8C74';
@@ -199,17 +219,17 @@ var gairmet = L.realtime({
 	url: url_gairmet,
 	crossOrigin: true, type: 'json'
 	}, {interval: 33000,
-	style: function(feature) {
+	style: function(feature){
 		kolor = getColor(feature.properties.alt);
 		return {color: '#5D8C8C', weight: 2, fillColor: kolor, opacity: 1.0, fillOpacity: 0.2};
 	},
-	getFeatureId: function(featureData) {
+	getFeatureId: function(featureData){
 		return featureData.properties.rep_num;
 	},
-	onEachFeature: function(feature, layer) {
-		layer.bindTooltip('G-AIRMET: Alt '+ feature.properties.alt + 
-			'<br>' + feature.properties.ob_ele);
-		layer.on('click', function(e) {
+	onEachFeature: function(feature, layer){
+		layer.bindTooltip('G-AIRMET: Alt ' + feature.properties.alt + '<br>' 
+			+ feature.properties.ob_ele);
+		layer.on('click', function(e){
 			layer.setStyle({color: 'yellow', opacity: 0.8, fillColor: 'yellow', fillOpacity: 0.5});
 			$("#m1").html("Report");
 			$("#m2").html("Altitude");					
@@ -226,11 +246,11 @@ var gairmet = L.realtime({
 
 			gairmet.stop();
 		});
-		layer.on('mouseout', function(e) {
+		layer.on('mouseout', function(e){
 			gairmet.start();
 		})		
 	},
-	filter: function(feature, layer) {
+	filter: function(feature, layer){
 		var rangeslider = document.getElementById("gmsliderRange");
 		var output = document.getElementById("slidealt");
 		if (rangeslider.value == -1000) 
@@ -251,7 +271,7 @@ var gairmet = L.realtime({
 	}
 }).addTo(map);
 
-if (!gk.checked){
+if (!gk.checked) {
 	map.removeLayer(gairmet), 
 	gairmet.stop()
 }
@@ -260,21 +280,22 @@ if (!gk.checked){
 var url_airmet = url.concat("SELECT coords AS GEOM, g.rep_num, alt, ob_ele, text_data, start_date, stop_date \
 					FROM graphics g LEFT JOIN sigairmet s ON (g.prod_id = s.prod_id) \
 					AND (g.rep_num = s.rep_num) WHERE g.prod_id = 11");
+					
 var ak = document.getElementById("amet")
 var	airmet = L.realtime({
 	url: url_airmet,
 	crossOrigin: true, type: 'json'
 	}, {interval: 35000,
-	style: function(feature) {
+	style: function(feature){
 		kolor = getColor(feature.properties.alt);
 		return {color: '#00cccc', weight: 2, fillColor: kolor, opacity: 1.0, fillOpacity: 0.2};
 	},
-	getFeatureId: function(featureData) {
+	getFeatureId: function(featureData){
 		return featureData.properties.rep_num;
 	},
-	onEachFeature: function(feature, layer) {
+	onEachFeature: function(feature, layer){
 		layer.bindTooltip('AIRMET: Alt ' + feature.properties.alt);
-		layer.on('click', function(e) {
+		layer.on('click', function(e){
 			layer.setStyle({fillColor: 'yellow', fillOpacity: 0.5});
 			$("#m1").html("Report");
 			$("#m2").html("Altitude");					
@@ -291,11 +312,12 @@ var	airmet = L.realtime({
 
 			airmet.stop();
 		});
-	layer.on('mouseout', function(e) {
-		airmet.start();
-	})		
+		
+		layer.on('mouseout', function(e){
+			airmet.start();
+		})		
 	},
-	filter: function(feature, layer) {
+	filter: function(feature, layer){
 		var rangeslider = document.getElementById("gmsliderRange");
 		var output = document.getElementById("slidealt");
 		if (rangeslider.value == -1000) 
@@ -312,7 +334,7 @@ var	airmet = L.realtime({
 	}
 }).addTo(map);
 
-if (!ak.checked){
+if (!ak.checked) {
 	map.removeLayer(airmet), 
 	airmet.stop()
 }
@@ -331,12 +353,12 @@ var	sigmet = L.realtime({
 		kolor = getColor(feature.properties.alt);
 		return {color: '#00cccc', weight: 2, fillColor: kolor, opacity: 1.0, fillOpacity: 0.2};
 	},
-	getFeatureId: function(featureData) {
+	getFeatureId: function(featureData){
 		return featureData.properties.rep_num;
 	},
-	onEachFeature: function(feature, layer) {
+	onEachFeature: function(feature, layer){
 		layer.bindTooltip('SIGMET: Alt ' + feature.properties.alt);
-		layer.on('click', function(e) {
+		layer.on('click', function(e){
 			layer.setStyle({fillColor: 'yellow', fillOpacity: 0.5});
 			$("#m1").html("Report");
 			$("#m2").html("Altitude");					
@@ -353,10 +375,11 @@ var	sigmet = L.realtime({
 				
 			sigmet.stop();
 		});
-		layer.on('mouseout', function(e) {
-			sigmet.start();})		
+		layer.on('mouseout', function(e){
+			sigmet.start();
+		})		
 	},
-	filter: function(feature, layer) {
+	filter: function(feature, layer){
 		var rangeslider = document.getElementById("gmsliderRange");
 		var output = document.getElementById("slidealt");
 		if (rangeslider.value == -1000)
@@ -373,7 +396,7 @@ var	sigmet = L.realtime({
 	}
 }).addTo(map);
 
-if (!sk.checked){
+if (!sk.checked) {
 	map.removeLayer(sigmet), 
 	sigmet.stop()
 }
@@ -389,16 +412,17 @@ var	nrad = L.realtime({
  	crossOrigin: true, type: 'json'
 	}, {interval: 55000,
 
-	getFeatureId: function(featureData) {
+	getFeatureId: function(featureData){
 		return featureData.properties.seq;
 	},
-	style: function(feature) {
-		if (feature.properties.prod_id == 84 || feature.properties.prod_id == 90 || feature.properties.prod_id == 91 ) {
+	style: function(feature){
+		if (feature.properties.prod_id == 84 || feature.properties.prod_id == 90 
+				|| feature.properties.prod_id == 91 ) {
 			golor = getColorInt(feature.properties.intensity);
 			return {color: golor, weight: 4, fillColor: golor, opacity: 0.5, fillOpacity: 0.5}
 		}
 	},
-	pointToLayer: function(feature, latlng) {
+	pointToLayer: function(feature, latlng){
 		if (feature.properties.prod_id != 84 ) {		
 			var currentPoint = map.latLngToContainerPoint(latlng);
 			var width = 5;		//5
@@ -431,16 +455,16 @@ var	cwa = L.realtime({
 	url: url3_cwa,
 	crossOrigin: true, type: 'json'
 	}, {interval: 77000,
-	style: function(feature) {
+	style: function(feature){
 		kolor = getColor(feature.properties.alt);
 		return {color: '#00cccc', weight: 2, fillColor: kolor, opacity: 1.0, fillOpacity: 0.2};
 	},
-	getFeatureId: function(featureData) {
+	getFeatureId: function(featureData){
 		return featureData.properties.rep_num;
 	},
-	onEachFeature: function(feature, layer) {
+	onEachFeature: function(feature, layer){
 		layer.bindTooltip('CWA: Alt ' + feature.properties.alt);
-		layer.on('click', function(e) {
+		layer.on('click', function(e){
 			layer.setStyle({fillColor: 'yellow', fillOpacity: 0.5});
 			$("#m1").html("Report");
 			$("#m2").html("Altitude");					
@@ -457,10 +481,11 @@ var	cwa = L.realtime({
 
 			cwa.stop();
 		});
-		layer.on('mouseout', function(e) {
-			cwa.start();})		
+		layer.on('mouseout', function(e){
+			cwa.start();
+		})		
 	},
-	filter: function(feature,layer) {
+	filter: function(feature,layer){
 		var rangeslider = document.getElementById("gmsliderRange");
 		var output = document.getElementById("slidealt");
 		if (rangeslider.value == -1000)
@@ -477,7 +502,7 @@ var	cwa = L.realtime({
 	}
 }).addTo(map);
 
-if (!ck.checked){
+if (!ck.checked) {
 	map.removeLayer(cwa), 
 	cwa.stop()
 }
@@ -495,15 +520,16 @@ var	sua = L.realtime({
 	url: url3_sua,
 	crossOrigin: true, type: 'json'
 	}, {interval: 50000,
-	style: function(feature) {
+	style: function(feature){
 		return {color: '#2e052a', weight: 3, fillColor: '#2e052a', opacity: 0.5, fillOpacity: 0.5};
 	},
-	getFeatureId: function(featureData) {
+	getFeatureId: function(featureData){
 		return featureData.properties.airsp_name;
 	},
-	onEachFeature: function(feature, layer) {
-		layer.bindTooltip('SUA: ' + feature.properties.airsp_name);
-		layer.on('mouseover', function(e) {
+	onEachFeature: function(feature, layer){
+//		layer.bindTooltip('SUA: ' + feature.properties.airsp_name);
+		layer.on('mousedown', function(e){
+			map.closePopup();
 			layer.setStyle({color: 'yellow', fillColor: 'orange', fillOpacity: 0.5});
 			$("#m1").html("Report");
 			$("#m2").html("Status");					
@@ -512,28 +538,48 @@ var	sua = L.realtime({
 			$("#m5").html("Sep/shape");
 			$("#m6").html("DAFIF");
 			$('#f1').html('SUA - ' + e.target.feature.properties.airsp_name);
-			$('#f2').html(e.target.feature.properties.sua_airsp_desc + ' <br>' +
-				e.target.feature.properties.sua_status_desc);
-			$('#f3').html(e.target.feature.properties.start_time + ' <br>' +
-				e.target.feature.properties.end_time);
-			$('#f4').html(e.target.feature.properties.low_alt +
-				' <br>' + e.target.feature.properties.high_alt);
-			$('#f5').html(e.target.feature.properties.sep_rule + '  ' +
-				e.target.feature.properties.shape_ind);
+			$('#f2').html(e.target.feature.properties.sua_airsp_desc + ' <br>' 
+				+ e.target.feature.properties.sua_status_desc);
+			$('#f3').html(e.target.feature.properties.start_time + ' <br>' 
+				+ e.target.feature.properties.end_time);
+			$('#f4').html(e.target.feature.properties.low_alt + ' <br>' 
+				+ e.target.feature.properties.high_alt);
+			$('#f5').html(e.target.feature.properties.sep_rule + '  ' 
+				+ e.target.feature.properties.shape_ind);
 			$('#f6').html(e.target.feature.properties.dafif_name);
-				sua.stop();
+			
+			var html = '';
+	        var pixelPosition = e.layerPoint;
+	        var latLng = map.layerPointToLatLng(pixelPosition);
+			var match = leafletPip.pointInLayer(latLng, map, false);
+
+			if (match.length) {
+    			for (var i = 0; i < match.length; i++) { 
+	            	asp_name[i] = match[i].feature.properties; 
+        			html +=  "<a onclick= 'disp(\"" + asp_name[i] + "\",\"" + i +"\");'>" + 
+ 					match[i].feature.properties.airsp_name	+ "	</a><br>" ;
+				}
+				if (html) {
+					layer.bindPopup(html,customOptions);
+				}
+			}
+
+			sua.stop();
 		})
-		layer.on('mouseout', function(e) {
+		
+		layer.on('mouseout', function(e){
+			html='';
 			sua.start();
 		});
-		if (!sk.checked){
+			
+		if (!sk.checked) {
 			map.removeLayer(sua), 
 			sua.stop();
 		}		
 	},
 }).addTo(map);
 
-if (!sk.checked){
+if (!sk.checked) {
 	map.removeLayer(sua), 
 	sua.stop()
 }
@@ -544,9 +590,9 @@ var url_circle = url.concat("SELECT bot AS GEOM, c.start_date, c.stop_date, c.re
 					LEFT JOIN sigairmet s ON s.rep_num = c.rep_num");
 
 var cmarkers = L.markerClusterGroup({
-	iconCreateFunction: function(cluster) {
+	iconCreateFunction: function(cluster){
 		var n = cluster.getChildCount();
-		return  L.divIcon({ html: n, className: 'mycluster2' , iconSize: L.point[1,1]});
+		return  L.divIcon({ html: n, className: 'mycluster2', iconSize: L.point[1,1]});
 	},
 	spiderfyOnMaxZoom: true,
 	showCoverageOnHover: false,
@@ -559,10 +605,10 @@ var	cir = L.realtime({
 	url: url_circle,
 	crossOrigin: true, type: 'json'
 	}, {interval: 70000,
-	getFeatureId: function(featureData) {
+	getFeatureId: function(featureData){
 	return featureData.properties.rep_num;
 	},
-	pointToLayer: function(feature, latlng) {
+	pointToLayer: function(feature, latlng){
 		marker = L.circleMarker(latlng, {color: 'red', fillcolor: 'yellow'});
  		marker.bindTooltip('NOTAM-TFR<br>' + feature.properties.rep_num );
  		marker.on('click', function (e) {
@@ -572,10 +618,11 @@ var	cir = L.realtime({
  	 		$("#m4").html("Start");
  			$("#m5").html("Stop");
  			$("#m6").html("Text ");
-			$('#f1').html('Bottom ' + e.target.feature.properties.alt_bot + 'ft<br> Top ' +
-				e.target.feature.properties.alt_top + 'ft');
-			$('#f2').html('Lat: ' + e.target.feature.properties.r_lat + ' Lng: ' +
-				e.target.feature.properties.r_lat + ' Alpha: ' + e.target.feature.properties.alpha);
+			$('#f1').html('Bottom ' + e.target.feature.properties.alt_bot + 'ft<br> Top ' 
+				+ e.target.feature.properties.alt_top + 'ft');
+			$('#f2').html('Lat: ' + e.target.feature.properties.r_lat + ' Lng: ' 
+				+ e.target.feature.properties.r_lat + ' Alpha: ' 
+				+ e.target.feature.properties.alpha);
 			$('#f3').html(e.target.feature.properties.rep_num);
 			$('#f4').html(e.target.feature.properties.start_date);
 			$('#f5').html(e.target.feature.properties.stop_date);
@@ -584,7 +631,7 @@ var	cir = L.realtime({
 			cir.stop();
 		});
 
-		if (!nk.checked){
+		if (!nk.checked) {
 			map.removeLayer(cmarkers), 
 			cmarkers.removeLayer(cmarkers),
 			map.removeLayer(marker), 
@@ -611,16 +658,16 @@ var	seg = L.realtime({
 	url: url_seg_notam,
 	crossOrigin: true, type: 'json'
 	}, {interval: 70000,
-	style: function(feature) {
+	style: function(feature){
 		kolor = getColor(feature.properties.alt);
 		return {color: '#00cccc', weight: 2, fillColor: kolor, opacity: 1.0, fillOpacity: 0.2};
 	},
 	getFeatureId: function(featureData) {
 		return featureData.properties.rep_num;
 	},
-	onEachFeature: function(feature, layer) {
+	onEachFeature: function(feature, layer){
 		layer.bindTooltip('NOTAM-TFR<br>Alt ' + feature.properties.alt);
-		layer.on('click', function(e) {
+		layer.on('click', function(e){
 			layer.setStyle({fillColor: 'yellow', fillOpacity: 0.5});
 			$("#m1").html("Report");
 			$("#m2").html("Altitude");					
@@ -638,7 +685,7 @@ var	seg = L.realtime({
 			seg.stop();
 		});
 		
-		if (!nk.checked){
+		if (!nk.checked) {
 			map.removeLayer(seg), 
 			seg.stop()
 		}
@@ -647,7 +694,7 @@ var	seg = L.realtime({
 			seg.start();
 		}
 		
-		layer.on('mouseout', function(e) {
+		layer.on('mouseout', function(e){
 			seg.start();
 		})		
 	},
@@ -667,39 +714,38 @@ metar = L.realtime({
 	url: url_metar,
 	crossOrigin: true, type: 'json'
 	}, {interval: 36000,
-	getFeatureId: function(featureData) {
+	getFeatureId: function(featureData){
 		return featureData.properties.stn_call;
 	},
-	pointToLayer: function(feature, latlng) {
+	pointToLayer: function(feature, latlng){
 		marker = L.marker(latlng, {icon: wxIcon});
 		marker.bindTooltip('METAR' + '<br>' + feature.properties.stn_call
 			+ '<br>' + feature.properties.temp + '&#x2109');
-		marker.on('click', function(e) {
+		marker.on('click', function(e){
 			$("#m1").html("Station" );
 			$("#m2").html("Location");
 			$("#m3").html("Temp");
 			$("#m4").html("Winds");
 			$("#m5").html("Visibility");
 			$("#m6").html("Pressure");
-			$('#f1').html(e.target.feature.properties.stn_call + " - " +
-					e.target.feature.properties.ob_date + 'z');
-			$('#f2').html(e.target.feature.properties.stn_loc + ", " +
-					e.target.feature.properties.state);
-			$('#f3').html(e.target.feature.properties.temp + "\xB0F" +
-					"  dp:" + e.target.feature.properties.dewp +
-					"\xB0F<br> Hrly Precip:" +
-					e.target.feature.properties.hrly_precip);
-			$('#f4').html(e.target.feature.properties.windsp + "kts " +
-					e.target.feature.properties.winddir + "° " +
-					e.target.feature.properties.windvar + "  gusts:" +
-					e.target.feature.properties.windgust + "kts");
+			$('#f1').html(e.target.feature.properties.stn_call + " - " 
+				+ e.target.feature.properties.ob_date + 'z');
+			$('#f2').html(e.target.feature.properties.stn_loc + ", " 
+				+ e.target.feature.properties.state);
+			$('#f3').html(e.target.feature.properties.temp + "\xB0F" + "  dp:" 
+				+ e.target.feature.properties.dewp + "\xB0F<br> Hrly Precip:" 
+				+ e.target.feature.properties.hrly_precip);
+			$('#f4').html(e.target.feature.properties.windsp + "kts " 
+				+ e.target.feature.properties.winddir + "° " 
+				+ e.target.feature.properties.windvar + "  gusts:" 
+				+ e.target.feature.properties.windgust + "kts");
 			$('#f5').html(e.target.feature.properties.visby);
-			$('#f6').html("SLP:" + e.target.feature.properties.slp +
-					"<br>Altimeter:" + e.target.feature.properties.altimeter );
+			$('#f6').html("SLP:" + e.target.feature.properties.slp + "<br>Altimeter:" 
+				+ e.target.feature.properties.altimeter);
 		});
 		marker.addTo(map);
 			
-		if (!mk.checked){
+		if (!mk.checked) {
 			map.removeLayer(marker), 
 			metar.stop()
 		}
@@ -708,22 +754,22 @@ metar = L.realtime({
 	}
 }).addTo(map);
 	
-if (!mk.checked){
+if (!mk.checked) {
 	map.removeLayer(metar), 
 	metar.stop()
 }
 
 // ** METAR Max/Min
-var url_maxmin = url.concat("SELECT s.coords AS GEOM, s.stn_call, s.stn_loc, m.temp, ob_date, 'Max' AS maxmin \
-		FROM metar m \
-		INNER JOIN stations2 s ON s.stn_call = m.stn_call \
-		WHERE m.temp IN (SELECT MAX(temp) AS temp FROM metar) \
-       	UNION \
-		SELECT s.coords AS GEOM, s.stn_call, s.stn_loc, m.temp, ob_date, 'Min' AS maxmin \
-		FROM metar m \
-		INNER JOIN stations2 s ON s.stn_call = m.stn_call \
-		WHERE m.temp IN (SELECT MIN(temp) AS temp FROM metar WHERE temp <>'- ') \
-		ORDER BY temp,ob_date ASC ");
+var url_maxmin = url.concat("SELECT s.coords AS GEOM, s.stn_call, s.stn_loc, state, m.temp, ob_date, 'Max' AS maxmin \
+					FROM metar m \
+					INNER JOIN stations2 s ON s.stn_call = m.stn_call \
+					WHERE m.temp IN (SELECT MAX(temp) AS temp FROM metar) \
+			       	UNION \
+					SELECT s.coords AS GEOM, s.stn_call, s.stn_loc, state, m.temp, ob_date, 'Min' AS maxmin \
+					FROM metar m \
+					INNER JOIN stations2 s ON s.stn_call = m.stn_call \
+					WHERE m.temp IN (SELECT MIN(temp) AS temp FROM metar WHERE temp <>'- ') \
+					ORDER BY temp,ob_date ASC ");
 
 var wxIcon6;
 var mmk = document.getElementById("mxmn")
@@ -732,32 +778,33 @@ maxmin = L.realtime({
 	url: url_maxmin,
 	crossOrigin: true, type: 'json'
 	}, {interval: 3600,
-	getFeatureId: function(featureData) {
+	getFeatureId: function(featureData){
 		return featureData.properties.stn_call+featureData.properties.temp;
 
 	},
-	pointToLayer: function(feature, latlng) {
+	pointToLayer: function(feature, latlng){
 		if (feature.properties.maxmin == "Max")
 			wxIcon6 = L.icon({iconUrl: 'red.ico', iconSize: [15,15]})
 		else
 			wxIcon6 = L.icon({iconUrl: 'blue.ico', iconSize: [15,15]});
 		
 		mmarker = L.marker(latlng, {icon: wxIcon6});
-		mmarker.bindTooltip( feature.properties.maxmin + '<br>' + feature.properties.stn_call
-			+ '<br>' + feature.properties.temp + '&#x2109');
-		mmarker.on('click', function(e) {
+		mmarker.bindTooltip(feature.properties.maxmin + ': ' 
+			+ feature.properties.temp + '&#x2109' + '<br>' 
+			+ feature.properties.stn_call );
+		mmarker.on('click', function(e){
 			$("#m1").html("Station" );
 			$("#m2").html("Location");
 			$("#m3").html("Temp");
 			$("#m4").html(" ");
 			$("#m5").html(" ");
 			$("#m6").html(" ");
-			$('#f1').html(e.target.feature.properties.stn_call + " - " +
-					e.target.feature.properties.ob_date + 'z');
-			$('#f2').html(e.target.feature.properties.stn_loc);
-			$('#f3').html(e.target.feature.properties.temp + "\xB0F" +
-					"  <B>" + e.target.feature.properties.maxmin);
-	
+			$('#f1').html(e.target.feature.properties.stn_call + " - " 
+				+ e.target.feature.properties.ob_date + 'z');
+			$('#f2').html(e.target.feature.properties.stn_loc + ", " 
+				+ e.target.feature.properties.state);
+			$('#f3').html(e.target.feature.properties.temp + "\xB0F" + "<b>" 
+			+ e.target.feature.properties.maxmin);
 			$('#f4').html(" ");
 			$('#f5').html(" ");
 			$('#f6').html(" ");
@@ -772,7 +819,7 @@ maxmin = L.realtime({
 		});
 		mmarker.addTo(map);
 
-		if (!mmk.checked){
+		if (!mmk.checked) {
 			map.removeLayer(mmarker), 
 			maxmin.stop()
 		}
@@ -781,13 +828,13 @@ maxmin = L.realtime({
 	}
 }).addTo(map);
 
-if (!mmk.checked){
+if (!mmk.checked) {
 	map.removeLayer(maxmin), 
 	maxmin.stop()
 }
 
 // ** NOTAM
-var url_notam = url.concat("SELECT t.coords AS GEOM, s.stn_call, stn_loc, s.rep_num, text_data, \
+var url_notam = url.concat("SELECT t.coords AS GEOM, s.stn_call, stn_loc, state, s.rep_num, text_data, \
 					start_date, stop_date, notam_name FROM sigairmet s \
 					LEFT JOIN graphics g ON (g.stn_call = s.stn_call) AND (g.rep_num = s.rep_num) \
 					JOIN stations2 t ON t.stn_call = s.stn_call \
@@ -799,7 +846,7 @@ var nk = document.getElementById("notam")
 
 var narkers = L.markerClusterGroup({
 
-	iconCreateFunction: function(cluster) {
+	iconCreateFunction: function(cluster){
 	   var n = cluster.getChildCount();
 		return  L.divIcon({ html: n, className: 'mycluster' , iconSize: L.point[1,1]});
 	},
@@ -813,28 +860,31 @@ notam = L.realtime({
 	url: url_notam,
 	crossOrigin: true, type: 'json'
 	}, {interval: 38000,
-	getFeatureId: function(featureData) {
+	getFeatureId: function(featureData){
 		return featureData.properties.stn_call+featureData.properties.rep_num;
 	},
-	pointToLayer: function(feature, latlng) {
+	pointToLayer: function(feature, latlng){
 		marker = L.marker(latlng, {icon: wxIcon2});
- 		marker.bindTooltip(feature.properties.notam_name + '<br>' + feature.properties.stn_call);
-		marker.on('click', function(e) {
+ 		marker.bindTooltip(feature.properties.notam_name 
+			+ '<br>' + feature.properties.stn_call);
+		marker.on('click', function(e){
 			$("#m1").html("Station");
 			$("#m2").html("Location");
 			$("#m3").html("Report Num");
 			$("#m4").html("Text");
 			$("#m5").html("Start");
 			$("#m6").html("Stop");
-			$('#f1').html(e.target.feature.properties.stn_call + ' - ' + feature.properties.notam_name);
-			$('#f2').html(e.target.feature.properties.stn_loc);
+			$('#f1').html(e.target.feature.properties.stn_call + ' - ' 
+				+ feature.properties.notam_name);
+			$('#f2').html(e.target.feature.properties.stn_loc + ", " 
+				+ e.target.feature.properties.state);
 			$('#f3').html(e.target.feature.properties.rep_num);
 			$('#f4').html(e.target.feature.properties.text_data);
 			$('#f5').html(e.target.feature.properties.start_date);
 			$('#f6').html(e.target.feature.properties.stop_date);
 		});
 
-		if (!nk.checked){
+		if (!nk.checked) {
 			map.removeLayer(narkers),
 			narkers.removeLayer(narkers),
 			map.removeLayer(marker), 
@@ -851,7 +901,7 @@ notam = L.realtime({
 }).addTo(map);
 
 // ** TAF
-var url_taf = url.concat("SELECT coords AS GEOM, t.stn_call, stn_loc, issued, current, \
+var url_taf = url.concat("SELECT coords AS GEOM, t.stn_call, stn_loc, state, issued, current, \
 					wind, visby, condx, rep_time \
 					FROM taf t INNER JOIN (SELECT stn_call, MAX(issued) AS mob FROM taf \
 					GROUP BY stn_call) g ON t.stn_call = g.stn_call AND t.issued = g.mob \
@@ -864,13 +914,13 @@ taf = L.realtime({
 	url: url_taf,
 	crossOrigin: true, type: 'json'
 	}, {interval: 30000,
-	getFeatureId: function(featureData) {
+	getFeatureId: function(featureData){
 		return featureData.properties.stn_call;
 	},
-	pointToLayer: function(feature, latlng) {
+	pointToLayer: function(feature, latlng){
 		marker = L.marker(latlng, {icon: wxIcon3});
 		marker.bindTooltip('TAF' + '<br>' + feature.properties.stn_call);
-		marker.on('click', function(e) {
+		marker.on('click', function(e){
 			$("#m1").html("Station");
 			$("#m2").html("Location");
 			$("#m3").html("Issued");
@@ -878,16 +928,17 @@ taf = L.realtime({
 			$("#m5").html("Visibility");
 			$("#m6").html("Conditions");
 			$('#f1').html(e.target.feature.properties.stn_call + " (TAF)");
-			$('#f2').html(e.target.feature.properties.stn_loc);
-			$('#f3').html(e.target.feature.properties.issued + '<br>' +
-				e.target.feature.properties.current);
+			$('#f2').html(e.target.feature.properties.stn_loc + ", " 
+				+ e.target.feature.properties.state);
+			$('#f3').html(e.target.feature.properties.issued + '<br>' 
+				+ e.target.feature.properties.current);
 			$('#f4').html(e.target.feature.properties.wind);
 			$('#f5').html(e.target.feature.properties.visby);
 			$('#f6').html(e.target.feature.properties.condx);
 		});
 		marker.addTo(map);
 
-		if (!tk.checked){
+		if (!tk.checked) {
 			map.removeLayer(marker), 
 			taf.stop()
 		}
@@ -896,13 +947,13 @@ taf = L.realtime({
 	}
 }).addTo(map);
 	
-if (!tk.checked){
+if (!tk.checked) {
 	map.removeLayer(taf), 
 	taf.stop()
 }
 
 // ** Winds Aloft
-var url_winds = url.concat("SELECT coords AS GEOM, w.stn_call, stn_loc, issue_date, alt1, \
+var url_winds = url.concat("SELECT coords AS GEOM, w.stn_call, stn_loc, state, issue_date, alt1, \
 					dir1, spd1, temp1, alt2, dir2, spd2, temp2, alt3, dir3, spd3, temp3, alt4, \
 					dir4, spd4, temp4, alt5, dir5, spd5, temp5, alt6, dir6, spd6, temp6, alt7, \
 					dir7, spd7, temp7, alt8, dir8, spd8, temp8, alt9, dir9, spd9, temp9 \
@@ -917,56 +968,57 @@ winds = L.realtime({
 	url: url_winds,
 	crossOrigin: true, type: 'json'
 	}, {interval: 67000,
-	getFeatureId: function(featureData) {
+	getFeatureId: function(featureData){
 		return featureData.properties.stn_call;
 	},
-	pointToLayer: function(feature, latlng) {
+	pointToLayer: function(feature, latlng){
 		marker = L.marker(latlng, {icon: wxIcon5});
 		marker.bindTooltip('Winds' + '<br>' + feature.properties.stn_call);
-		marker.on('click', function(e) {
+		marker.on('click', function(e){
 			$("#m1").html("Station" + '<br>' + e.target.feature.properties.issue_date );
-			$("#m2").html(e.target.feature.properties.alt1 + "ft" + '<br>' +
-				e.target.feature.properties.alt2 + "ft");
-			$("#m3").html(e.target.feature.properties.alt3 + "ft" + '<br>' +
-				e.target.feature.properties.alt4 + "ft");
-			$("#m4").html(e.target.feature.properties.alt5 + "ft" + '<br>' +
-				e.target.feature.properties.alt6 + "ft");
-			$("#m5").html(e.target.feature.properties.alt7 + "ft" + '<br>' +
-				e.target.feature.properties.alt8 + "ft");
+			$("#m2").html(e.target.feature.properties.alt1 + "ft" + '<br>' 
+				+ e.target.feature.properties.alt2 + "ft");
+			$("#m3").html(e.target.feature.properties.alt3 + "ft" + '<br>' 
+				+ e.target.feature.properties.alt4 + "ft");
+			$("#m4").html(e.target.feature.properties.alt5 + "ft" + '<br>' 
+				+ e.target.feature.properties.alt6 + "ft");
+			$("#m5").html(e.target.feature.properties.alt7 + "ft" + '<br>' 
+				+ e.target.feature.properties.alt8 + "ft");
 			$("#m6").html(e.target.feature.properties.alt9 + "ft");
-			$('#f1').html(e.target.feature.properties.stn_call + " (Winds)" +
-				'<br>' + e.target.feature.properties.stn_loc);
-			$('#f2').html(e.target.feature.properties.dir1 + "\xB0 " +
-				e.target.feature.properties.spd1 + "kt " +
-				e.target.feature.properties.temp1 + "\xB0C" +
-				'<br>' + e.target.feature.properties.dir2 + "\xB0 " +
-				e.target.feature.properties.spd2 + "kt " +
-				e.target.feature.properties.temp2 + "\xB0C");
-			$('#f3').html(e.target.feature.properties.dir3 + "\xB0 " +
-				e.target.feature.properties.spd3 + "kt " +
-				e.target.feature.properties.temp3 + "\xB0C" +
-				'<br>' + e.target.feature.properties.dir4 + "\xB0 " +
-				e.target.feature.properties.spd4 + "kt " +
-				e.target.feature.properties.temp4 + "\xB0C");	
-			$('#f4').html(e.target.feature.properties.dir5 + "\xB0 " +
-				e.target.feature.properties.spd5 + "kt " +
-				e.target.feature.properties.temp5 + "\xB0C"	+ '<br>' +
-				e.target.feature.properties.dir6 + "\xB0 " +
-				e.target.feature.properties.spd6 + "kt " +
-				e.target.feature.properties.temp6 + "\xB0C");
-			$('#f5').html(e.target.feature.properties.dir7 + "\xB0 " +
-				e.target.feature.properties.spd7 + "kt " +
-				e.target.feature.properties.temp7 + "\xB0C"	+ '<br>' +
-				e.target.feature.properties.dir8 + "\xB0 " +
-				e.target.feature.properties.spd8 + "kt " +
-				e.target.feature.properties.temp8 + "\xB0C");
-				$('#f6').html(e.target.feature.properties.dir9 + "\xB0 " +
-				e.target.feature.properties.spd9 + "kt " +
-				e.target.feature.properties.temp9 + "\xB0C");
+			$('#f1').html(e.target.feature.properties.stn_call + " (Winds)" + '<br>' 
+				+ e.target.feature.properties.stn_loc + ", " 
+				+ e.target.feature.properties.state);
+			$('#f2').html(e.target.feature.properties.dir1 + "\xB0 " 
+				+ e.target.feature.properties.spd1 + "kt " 
+				+ e.target.feature.properties.temp1 + "\xB0C" + '<br>' 
+				+ e.target.feature.properties.dir2 + "\xB0 " 
+				+ e.target.feature.properties.spd2 + "kt " 
+				+ e.target.feature.properties.temp2 + "\xB0C");
+			$('#f3').html(e.target.feature.properties.dir3 + "\xB0 " 
+				+ e.target.feature.properties.spd3 + "kt " 
+				+ e.target.feature.properties.temp3 + "\xB0C" + '<br>' 
+				+ e.target.feature.properties.dir4 + "\xB0 " 
+				+ e.target.feature.properties.spd4 + "kt " 
+				+ e.target.feature.properties.temp4 + "\xB0C");	
+			$('#f4').html(e.target.feature.properties.dir5 + "\xB0 " 
+				+ e.target.feature.properties.spd5 + "kt " 
+				+ e.target.feature.properties.temp5 + "\xB0C" + '<br>' 
+				+ e.target.feature.properties.dir6 + "\xB0 " 
+				+ e.target.feature.properties.spd6 + "kt " 
+				+ e.target.feature.properties.temp6 + "\xB0C");
+			$('#f5').html(e.target.feature.properties.dir7 + "\xB0 " 
+				+ e.target.feature.properties.spd7 + "kt " 
+				+ e.target.feature.properties.temp7 + "\xB0C" + '<br>' 
+				+ e.target.feature.properties.dir8 + "\xB0 " 
+				+ e.target.feature.properties.spd8 + "kt " 
+				+ e.target.feature.properties.temp8 + "\xB0C");
+			$('#f6').html(e.target.feature.properties.dir9 + "\xB0 " 
+				+ e.target.feature.properties.spd9 + "kt " 
+				+ e.target.feature.properties.temp9 + "\xB0C");
 		});
 		marker.addTo(map);
 
-		if (!wk.checked){
+		if (!wk.checked) {
 			map.removeLayer(marker), 
 			winds.stop()
 		}
@@ -975,13 +1027,13 @@ winds = L.realtime({
 	}
 }).addTo(map);
 	
-if (!wk.checked){
+if (!wk.checked) {
 	map.removeLayer(winds), 
 	winds.stop()
 }
 
 // ** PIREP
-var url_pirep = url.concat("SELECT coords AS GEOM, p.stn_call, stn_loc, rep_type, fl_lev, \
+var url_pirep = url.concat("SELECT coords AS GEOM, p.stn_call, stn_loc, state, rep_type, fl_lev, \
 					ac_type, turbulence, remarks, location, cloud, weather, temperature, \
 					wind_spd_dir, icing, rep_time \
 					FROM pirep p INNER JOIN (SELECT stn_call, MAX(rep_time) AS mx FROM pirep \
@@ -995,10 +1047,10 @@ pirep = L.realtime({
 	url: url_pirep,
 	crossOrigin: true, type: 'json'
 	}, {interval: 50000,
-	getFeatureId: function(featureData) {
+	getFeatureId: function(featureData){
 		return featureData.properties.stn_call;
 	},
-	pointToLayer: function(feature, latlng) {
+	pointToLayer: function(feature, latlng){
 		if (feature.properties.rep_type == "Urgent Report")
 			wxIcon4 = L.icon({iconUrl: 'pilot2.ico', iconSize: [17,17]})
 		else
@@ -1007,14 +1059,16 @@ pirep = L.realtime({
 		marker = L.marker(latlng, {icon: wxIcon4});
 
 		if (feature.properties.rep_type == "Urgent Report")
-			marker.bindTooltip('Urgent PIREP' + '<br>' + feature.properties.stn_call);
+			marker.bindTooltip('Urgent PIREP' + '<br>' 
+				+ feature.properties.stn_call);
 		else
-			marker.bindTooltip('PIREP' + '<br>' + feature.properties.stn_call);
+			marker.bindTooltip('PIREP' + '<br>' 
+				+ feature.properties.stn_call);
 
-		marker.on('click', function(e) {
+		marker.on('click', function(e){
 			$("#m1").html("Station");
-			$("#m2").html("Location" + '<br>' + "Time: " + 
-				e.target.feature.properties.rep_time + "z");
+			$("#m2").html("Location" + '<br>' + "Time: " 
+				+ e.target.feature.properties.rep_time + "z");
 			$("#m3").html("Flt Lev:" + '<br>' + "AC Type:");
 			$("#m4").html("Turbulence:" + '<br>' + "Icing:");
 			$("#m5").html("WX");
@@ -1024,21 +1078,22 @@ pirep = L.realtime({
 			else
 				$('#f1').html(e.target.feature.properties.stn_call + " (PIREP)");
 
-			$('#f2').html(e.target.feature.properties.stn_loc + "<br><i>Loc: "
+			$('#f2').html(e.target.feature.properties.stn_loc + ", " 
+				+ e.target.feature.properties.state + "<br><i>Loc: "
 				+ e.target.feature.properties.location);
-			$('#f3').html("<i>Flt lev: " + e.target.feature.properties.fl_lev +
-				"<br><i>a/c: " + e.target.feature.properties.ac_type);
-			$('#f4').html("<i>Turb: " + e.target.feature.properties.turbulence +
-				"<br><i>Ice: " + e.target.feature.properties.icing);
-			$('#f5').html("<i>Cloud: " +e.target.feature.properties.cloud +
-				"<br><i>Temp: " + e.target.feature.properties.temperature +
-				"<br><i>Wind: " + e.target.feature.properties.wind_spd_dir +
-				"<br><i>WX: " + e.target.feature.properties.weather);
+			$('#f3').html("<i>Flt lev: " + e.target.feature.properties.fl_lev + "<br><i>a/c: " 
+				+ e.target.feature.properties.ac_type);
+			$('#f4').html("<i>Turb: " + e.target.feature.properties.turbulence + "<br><i>Ice: " 
+				+ e.target.feature.properties.icing);
+			$('#f5').html("<i>Cloud: " +e.target.feature.properties.cloud + "<br><i>Temp: " 
+				+ e.target.feature.properties.temperature + "<br><i>Wind: " 
+				+ e.target.feature.properties.wind_spd_dir + "<br><i>WX: "
+				+ e.target.feature.properties.weather);
 			$('#f6').html(e.target.feature.properties.remarks);
 		});
 		marker.addTo(map);
 			
-		if (!pk.checked){
+		if (!pk.checked) {
 			map.removeLayer(marker), 
 			pirep.stop()
 		}
@@ -1047,13 +1102,13 @@ pirep = L.realtime({
 	}
 }).addTo(map);
 
-if (!pk.checked){
+if (!pk.checked) {
 	map.removeLayer(pirep), 
 	pirep.stop()
 }
 
 // ** Checkbox controls
-document.querySelector("input[name = gmet]").addEventListener('change', function() {
+document.querySelector("input[name = gmet]").addEventListener('change', function(){
 	if(this.checked) { 
 		map.addLayer(gairmet), 
 		gairmet.start()
@@ -1064,7 +1119,7 @@ document.querySelector("input[name = gmet]").addEventListener('change', function
 	}
 })
 
-document.querySelector("input[name = amet]").addEventListener('change', function() {
+document.querySelector("input[name = amet]").addEventListener('change', function(){
 	if(this.checked) {
 		map.addLayer(airmet), 
 		airmet.start()
@@ -1076,7 +1131,7 @@ document.querySelector("input[name = amet]").addEventListener('change', function
 })
 
 // ** Toggle METAR and Max/Min
-document.querySelector("input[name = meta]").addEventListener('change', function() {
+document.querySelector("input[name = meta]").addEventListener('change', function(){
 	if(this.checked) { 
 		map.addLayer(metar), 
 		metar.start()		
@@ -1089,7 +1144,7 @@ document.querySelector("input[name = meta]").addEventListener('change', function
 })
 
 // Toggle Max/Min and METAR
-document.querySelector("input[name = mxmn]").addEventListener('change', function() {
+document.querySelector("input[name = mxmn]").addEventListener('change', function(){
 	if(this.checked) { 
 		map.addLayer(maxmin), 
 		maxmin.start()
@@ -1101,7 +1156,7 @@ document.querySelector("input[name = mxmn]").addEventListener('change', function
 })
 
 // ** Includes graphic NOTAMs
-document.querySelector("input[name = notam]").addEventListener('change', function() {
+document.querySelector("input[name = notam]").addEventListener('change', function(){
 	if(this.checked) {
 		map.addLayer(notam), 
 		notam.start(),
@@ -1123,7 +1178,7 @@ document.querySelector("input[name = notam]").addEventListener('change', functio
 	}
 })
 
-document.querySelector("input[name = sua]").addEventListener('change', function() {
+document.querySelector("input[name = sua]").addEventListener('change', function(){
 	if(this.checked) {
 		map.addLayer(sua), 
 		sua.start()
@@ -1134,7 +1189,7 @@ document.querySelector("input[name = sua]").addEventListener('change', function(
 	}
 })
 
-document.querySelector("input[name = taf]").addEventListener('change', function() {
+document.querySelector("input[name = taf]").addEventListener('change', function(){
 	if(this.checked) {
 		map.addLayer(taf), 
 		taf.start()
@@ -1145,7 +1200,7 @@ document.querySelector("input[name = taf]").addEventListener('change', function(
 	}
 })
 
-document.querySelector("input[name = pirep]").addEventListener('change', function() {
+document.querySelector("input[name = pirep]").addEventListener('change', function(){
 	if(this.checked) {
 		map.addLayer(pirep), 
 		pirep.start()
@@ -1156,7 +1211,7 @@ document.querySelector("input[name = pirep]").addEventListener('change', functio
 	}
 })
 
-document.querySelector("input[name = winds]").addEventListener('change', function() {
+document.querySelector("input[name = winds]").addEventListener('change', function(){
 	if(this.checked) {
 		map.addLayer(winds), 
 		winds.start()
@@ -1167,7 +1222,7 @@ document.querySelector("input[name = winds]").addEventListener('change', functio
 	}
 })
 
-document.querySelector("input[name = smet]").addEventListener('change', function() {
+document.querySelector("input[name = smet]").addEventListener('change', function(){
 	if(this.checked) {
 		map.addLayer(sigmet), 
 		sigmet.start()
@@ -1178,7 +1233,7 @@ document.querySelector("input[name = smet]").addEventListener('change', function
 	}
 })
 
-document.querySelector("input[name = cwa]").addEventListener('change', function() {
+document.querySelector("input[name = cwa]").addEventListener('change', function(){
 	if(this.checked) {
 		map.addLayer(cwa), 
 		cwa.start()
@@ -1189,11 +1244,11 @@ document.querySelector("input[name = cwa]").addEventListener('change', function(
 	}
 })
 
-document.getElementById("stim").onchange = function() {
+document.getElementById("stim").onchange = function(){
 	gairmet.update()
 }		
 		
-document.getElementById("altrad").onchange = function() {
+document.getElementById("altrad").onchange = function(){
 	lays.clearLayers();
 	url_nx = getNexrad();
 	url3_rad = url.concat(url_nx);
@@ -1205,7 +1260,7 @@ document.getElementById("altrad").onchange = function() {
 document.getElementById("gmsliderRange").onchange = function()
 	{gairmet.update(), airmet.update(), sigmet.update(), cwa.update()}
 
-document.getElementById("prodid").onchange = function() {
+document.getElementById("prodid").onchange = function(){
 	var rprod_str = document.getElementById('prodid').value;
 	rprod = parseInt(rprod_str);
 	map.removeControl(nexlegend);
@@ -1247,7 +1302,7 @@ document.getElementById("prodid").onchange = function() {
 
 // Map legends
 turblegend = L.control({ position: "topright" });
-turblegend.onAdd = function(mop) {
+turblegend.onAdd = function(){
 	var div = L.DomUtil.create("div", "legend");
 	div.innerHTML += "<h4>Turbulence</h4>";
 	div.innerHTML += '<i style="background: #8C8C74"></i><span>EDR  7-13</span><br>';
@@ -1269,7 +1324,7 @@ turblegend.onAdd = function(mop) {
 };
 
 cloudlegend = L.control({ position: "topright" });
-cloudlegend.onAdd = function(mop) {
+cloudlegend.onAdd = function(){
 	var div = L.DomUtil.create("div", "legend");
 	div.innerHTML += "<h4>Cloud Tops</h4>";
 	div.innerHTML += '<i style="background: #8C8C74"></i><span><= 1,500ft</span><br>';
@@ -1291,7 +1346,7 @@ cloudlegend.onAdd = function(mop) {
 };
 
 icelegend = L.control({ position: "topright" });
-icelegend.onAdd = function(mop) {
+icelegend.onAdd = function(){
 	var div = L.DomUtil.create("div", "legend");
 	div.innerHTML += "<h4>Icing</h4>";
 	div.innerHTML += '<i style="background: #8C8C74"></i><span>Trace</span><br>';
@@ -1305,7 +1360,7 @@ icelegend.onAdd = function(mop) {
 };
 
 lightlegend = L.control({ position: "topright" });
-lightlegend.onAdd = function(mop) {
+lightlegend.onAdd = function(){
 	var div = L.DomUtil.create("div", "legend");
 	div.innerHTML += "<h4>Lightning</h4>";
 	div.innerHTML += '<i style="background: #8C8C74"></i><span>1 Strike</span><br>';
@@ -1319,7 +1374,7 @@ lightlegend.onAdd = function(mop) {
 };
 
 nexlegend = L.control({ position: "topright" });
-nexlegend.onAdd = function(mop) {
+nexlegend.onAdd = function(){
 	var div = L.DomUtil.create("div", "legend");
 	div.innerHTML += "<h4>NEXRAD</h4>";
 	div.innerHTML += '<i style="background: #8C8C74"></i><span>None</span><br>';
