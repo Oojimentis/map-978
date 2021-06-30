@@ -9,7 +9,7 @@ var cloudlegend;
 var nexlegend;
 var rprod = 0;
 var asp_name=[];
-
+var am_name=[];
 var customOptions =
 	{
 		'className' : 'custompopup',
@@ -38,6 +38,24 @@ function disp(_asp_name, i){
 			$('#f5').html(this.asp_name[i].sep_rule + '  ' 
 				+ this.asp_name[i].shape_ind);
 			$('#f6').html(this.asp_name[i].dafif_name);
+};
+
+function dispam(_am_name, i){
+	map.removeLayer(airmet);
+   	map.addLayer(airmet);	
+	map.eachLayer(function (layer) {
+		if (layer._leaflet_id == this.am_name[i]._leaflet_id) {
+
+			layer.setStyle({fillColor: 'yellow', fillOpacity: 0.5});
+
+			$('#f1').html('AIRMET');
+			$('#f2').html(this.am_name[i].feature.properties.alt);
+			$('#f3').html(this.am_name[i].feature.properties.rep_num);
+			$('#f4').html(this.am_name[i].feature.properties.text_data);
+			$('#f5').html(this.am_name[i].feature.properties.start_date);
+			$('#f6').html(this.am_name[i].feature.properties.stop_date);
+		}
+	});
 };
 
 function updateStorage(){
@@ -294,8 +312,8 @@ var	airmet = L.realtime({
 		return featureData.properties.rep_num;
 	},
 	onEachFeature: function(feature, layer){
-		layer.bindTooltip('AIRMET: Alt ' + feature.properties.alt);
-		layer.on('click', function(e){
+//		layer.bindTooltip('AIRMET: Alt ' + feature.properties.alt);
+		layer.on('mousedown', function(e){
 			layer.setStyle({fillColor: 'yellow', fillOpacity: 0.5});
 			$("#m1").html("Report");
 			$("#m2").html("Altitude");					
@@ -309,6 +327,22 @@ var	airmet = L.realtime({
 			$('#f4').html(e.target.feature.properties.text_data);
 			$('#f5').html(e.target.feature.properties.start_date);
 			$('#f6').html(e.target.feature.properties.stop_date);
+
+			var htmlam = '';
+	        var pixelPosition = e.layerPoint;
+	        var latLng = map.layerPointToLatLng(pixelPosition);
+			var matcham = leafletPip.pointInLayer(latLng, map, false);
+			if (matcham.length) {
+    			for (var i = 0; i < matcham.length; i++) { 
+	            	am_name[i] = matcham[i];       //.feature.properties; 
+        			htmlam +=  "<a onclick= 'dispam(\"" + am_name[i] + "\",\"" + i + "\");'>" + 
+ 					matcham[i].feature.properties.alt + " : " + 
+					matcham[i].feature.properties.rep_num + "</a><br>" ;
+				}
+				if (htmlam) {
+					layer.bindPopup(htmlam,customOptions);
+				}
+			}
 
 			airmet.stop();
 		});
@@ -556,8 +590,12 @@ var	sua = L.realtime({
 			if (match.length) {
     			for (var i = 0; i < match.length; i++) { 
 	            	asp_name[i] = match[i].feature.properties; 
+					
+					if (match[i].feature.properties.airsp_name) {
+					
         			html +=  "<a onclick= 'disp(\"" + asp_name[i] + "\",\"" + i +"\");'>" + 
  					match[i].feature.properties.airsp_name	+ "	</a><br>" ;
+				}
 				}
 				if (html) {
 					layer.bindPopup(html,customOptions);
