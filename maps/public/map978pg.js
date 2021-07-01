@@ -18,7 +18,7 @@ var customOptions =
 	
 window.onload = onPageLoad();
 
-function onPageLoad() {
+function onPageLoad(){
 	document.getElementById("gmsliderRange").step = "1000";
 	document.getElementById("gmsliderRange").value = "-1000";
 	document.getElementById("altrad").disabled = true;
@@ -86,10 +86,10 @@ var osm=new L.tileLayer('http://{s}.tile.osm.org/{z}/{x}/{y}.png', {
 	attribution: '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'});
 var Esri_WorldImagery = L.tileLayer('http://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
 	attribution: 'Tiles &copy; Esri &mdash; Source: Esri, i-cubed, USDA, USGS, AEX, GeoEye, Getmapping, Aerogrid, IGN, IGP, UPR-EGP, and the GIS User Community'
-}).addTo(map);
+});
 var Esri_WorldGrayCanvas = L.tileLayer('http://server.arcgisonline.com/ArcGIS/rest/services/Canvas/World_Light_Gray_Base/MapServer/tile/{z}/{y}/{x}', {
 	attribution: 'Tiles &copy; Esri &mdash; Esri, DeLorme, NAVTEQ',	maxZoom: 16
-});
+}).addTo(map);
 var OpenStreetMap_BlackAndWhite = L.tileLayer('http://{s}.tiles.wmflabs.org/bw-mapnik/{z}/{x}/{y}.png', {
 	maxZoom: 18,
 	attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
@@ -343,10 +343,8 @@ var	airmet = L.realtime({
 					layer.bindPopup(htmlam,customOptions);
 				}
 			}
-
 			airmet.stop();
 		});
-		
 		layer.on('mouseout', function(e){
 			airmet.start();
 		})		
@@ -798,27 +796,16 @@ if (!mk.checked) {
 }
 
 // ** METAR Max/Min
-//var url_maxmin = url.concat("SELECT s.coords AS GEOM, s.stn_call, s.stn_loc, state, m.temp, ob_date, 'Max' AS maxmin \
-//					FROM metar m \
-//					INNER JOIN stations s ON s.stn_call = m.stn_call \
-//					WHERE m.temp IN (SELECT MAX(temp) AS temp FROM metar) \
-//			       	UNION \
-//					SELECT s.coords AS GEOM, s.stn_call, s.stn_loc, state, m.temp, ob_date, 'Min' AS maxmin \
-//					FROM metar m \
-//					INNER JOIN stations s ON s.stn_call = m.stn_call \
-//					WHERE m.temp IN (SELECT MIN(temp) AS temp FROM metar WHERE temp <>'- ') \
-//					ORDER BY temp,ob_date ASC ");
 					
-					
-var url_maxmin = url.concat("drop table if exists max_a; drop table if exists max_b; \
-select stn_call, max(ob_date) into temp max_a from metar group by stn_call; \
-select  m.stn_call,ob_date,temp into temp max_b from max_a t inner join metar m on  (t.stn_call = m.stn_call) and (t.max = m.ob_date); \
-select coords as GEOM,s.stn_call,s.stn_loc,s.state,t.temp,ob_date,'Max' as maxmin from max_b t \
-inner join stations s on s.stn_call = t.stn_call where t.temp in(select max(temp) from max_b) \
-union \
-select coords as GEOM,s.stn_call,s.stn_loc,s.state,t.temp,ob_date,'Min' as maxmin from max_b t \
-inner join stations s on s.stn_call = t.stn_call where t.temp in(select min(temp) \
-from max_b  where temp <> '- ' )");
+var url_maxmin = url.concat("DROP TABLE IF EXISTS max_a; DROP TABLE IF EXISTS max_b; \
+SELECT stn_call, MAX(ob_date) INTO temp max_a FROM metar GROUP BY stn_call; \
+SELECT m.stn_call, ob_date, temp INTO temp max_b FROM max_a t INNER JOIN metar m ON (t.stn_call = m.stn_call) AND (t.max = m.ob_date); \
+SELECT coords AS GEOM, s.stn_call, s.stn_loc, s.state, t.temp, ob_date, 'Max' AS maxmin FROM max_b t \
+INNER JOIN stations s ON s.stn_call = t.stn_call WHERE t.temp IN (SELECT MAX(temp) FROM max_b) \
+UNION \
+SELECT coords AS GEOM, s.stn_call, s.stn_loc, s.state, t.temp, ob_date, 'Min' AS maxmin FROM max_b t \
+INNER JOIN stations s ON s.stn_call = t.stn_call WHERE t.temp IN (SELECT MIN(temp) \
+FROM max_b WHERE temp <> '- ' )");
 
 var wxIcon6;
 var mmk = document.getElementById("mxmn")
@@ -828,7 +815,7 @@ maxmin = L.realtime({
 	crossOrigin: true, type: 'json'
 	}, {interval: 3600,
 	getFeatureId: function(featureData){
-		return featureData.properties.stn_call+featureData.properties.temp;
+		return featureData.properties.stn_call + featureData.properties.temp;
 
 	},
 	pointToLayer: function(feature, latlng){
@@ -1438,9 +1425,10 @@ nexlegend.onAdd = function(){
 
 // Add layer control
 var baseMaps = {
+	"Gray":Esri_WorldGrayCanvas,	
 	"Imagery":Esri_WorldImagery,
 	"Open Street Map": osm,
-	"Gray":Esri_WorldGrayCanvas,
+
 	"OSM B&W":OpenStreetMap_BlackAndWhite
 };
 
