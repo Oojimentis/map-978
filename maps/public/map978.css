@@ -1,12 +1,16 @@
 #map {
+		margin-top: 40px;
 	float: left;
 	width: 80%;
 	height:800px;
 }
 .page2 {
-	background-color: #81d3ab;	
+
+	margin-top: 49px;
+	background-color: #81d3ab;
 }
 .sidebar {
+	margin-top: 40px;
 	float: left;
 	width: 20%;
 	height:800px;
@@ -190,7 +194,12 @@ label {
 	font-size: 10px;
 }
 .topnav {
-	overflow: hidden;
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 9999;
+  width: 100%;
+
 	background-color: #333;
 }
 .topnav a {
@@ -216,7 +225,9 @@ label {
 }
 .tableFixHead {
 	overflow-y: auto;
-	height: 291px;
+	 min-height: 20px  !important;
+	height: auto !important;
+	max-height: 291px;
 	width: 80%;
 }
 .tableFixHead thead th {

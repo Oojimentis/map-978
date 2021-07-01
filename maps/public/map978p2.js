@@ -1,21 +1,20 @@
-var serv_port = document.getElementById('port').value;
-var url1 = "http://localhost:";
-var url = url1.concat(serv_port, "/sql?q=");
+var server_port = document.getElementById('port').value;
+var host_url = "http://localhost:";
+var url = host_url.concat(server_port, "/sqlx?q=");
 
 // NEXRAD Count
 $(document).ready(function(){
-	setInterval(gettext,30000);
+	setInterval(get_nexrad_count, 30000);
 
-	var sqltext = 'http://localhost:8000/sqlx?q=SELECT prod_id, fisb_product_desc, \
-					altitude, COUNT(*) AS count FROM nexrad, fisb_products WHERE prod_id = fisb_product_id \
-					GROUP BY prod_id, fisb_product_desc, altitude ORDER BY prod_id, altitude';
+var nexrad_count = url.concat("SELECT prod_id, fisb_product_desc, altitude, COUNT(*) AS count \
+					FROM nexrad, fisb_products WHERE prod_id = fisb_product_id \
+					GROUP BY prod_id, fisb_product_desc, altitude ORDER BY prod_id, altitude");
 
-	function gettext(){
+	function get_nexrad_count(){
 		var row = "";
-
 		$.ajax({
 			type: "Get",
-			url: sqltext,
+			url: nexrad_count,
 			success: function (data){
 				$('#stntbl tbody').empty();
 				$.each(data, function (index, features){
@@ -27,23 +26,22 @@ $(document).ready(function(){
 			},
 		});		
 	};
-	gettext();
+	get_nexrad_count();
 });
 
 // SUA no coords
 $(document).ready(function(){
-	setInterval(getsua,57000);
+	setInterval(get_sua_nofeat, 60000);
 
-	var sqltextsua = 'http://localhost:8000/sqlx?q=SELECT DISTINCT s.airsp_id, s.airsp_name, s.airsp_type \
+	var sua_nofeat = url.concat("SELECT DISTINCT s.airsp_id, s.airsp_name, s.airsp_type \
 					FROM sua s LEFT JOIN sua_airspace a ON a.airsp_id = s.airsp_id \
-					WHERE a.airsp_name IS NULL ORDER BY s.airsp_name';
+					WHERE a.airsp_name IS NULL ORDER BY s.airsp_name");
 
-	function getsua(){
+	function get_sua_nofeat(){
 		var row = "";
-
 		$.ajax({
 			type: "Get",
-			url: sqltextsua,
+			url: sua_nofeat,
 			success: function (data){
 				$('#suatbl tbody').empty();
 				$.each(data, function (index, features) {
@@ -55,25 +53,23 @@ $(document).ready(function(){
 			},
 		});		
 	};
-	getsua();
+	get_sua_nofeat();
 });
 
-
-// ** NOTAM TFR 
+// ** NOTAM TFR no graphic report.
 $(document).ready(function(){
-	setInterval(gettfr,57000);
+	setInterval(get_tfr_nograph,50000);
+			
+	var tfr_nograph = url.concat("SELECT s.rep_num, text_data, notam_name FROM sigairmet s \
+					LEFT JOIN graphics g ON g.rep_num = s.rep_num \
+					WHERE s.prod_id = 8 AND (SUBSTRING(s.stn_call,1,1) = ' ' OR s.stn_call ='') \
+					AND g.rep_num IS NULL");
 
-	var sqltexttfr = "http://localhost:8000/sqlx?q=SELECT s.rep_num, text_data, notam_name FROM sigairmet s \
-			LEFT JOIN graphics g ON g.rep_num = s.rep_num \
-			WHERE s.prod_id = 8 AND (SUBSTRING(s.stn_call,1,1) = ' ' OR s.stn_call ='') \
-			AND g.rep_num IS NULL";
-
-	function gettfr(){
+	function get_tfr_nograph(){
 		var row = "";
-
 		$.ajax({
 			type: "Get",
-			url: sqltexttfr,
+			url: tfr_nograph,
 			success: function (data){
 				$('#tfrtbl tbody').empty();
 				$.each(data, function (index, features) {
@@ -85,5 +81,5 @@ $(document).ready(function(){
 			},
 		});		
 	};
-	gettfr();
+	get_tfr_nograph();
 });

@@ -13,7 +13,7 @@
 </head>
 <body>
 
-<div class="topnav">
+<nav class="topnav">
 	<a href="https://time.is/UTC" id="time_is_link" rel="nofollow"></a>
 	<a href="#news">News</a>
 	<a href="#contact">Contact</a>
@@ -25,13 +25,15 @@
 		<span id="UTC_za00"></span>z
 		<script  src="//widget.time.is/t.js"></script>
 		<script>time_is_widget.init({UTC_za00:{}});	</script></a>
-</div>
+</nav>
   
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>  
 
 <div class = "page2">
 	<div class="row">
 		<div class="column">
+			<p style="text-align:left; font-size: 12px; padding-left: 8px; color:#175B81; 
+			font-weight:bold; "><span id="metar">NEXRAD Count</span></p>
 			<div class="tableFixHead">
 				<table id="stntbl"> <tbody>
 					<thead>
@@ -44,8 +46,9 @@
 				</tbody></table>
 			</div>
 		</div>
-
 		<div class="column">
+			<p style="text-align:left; font-size: 12px; padding-left: 8px; color:#175B81; 
+			font-weight:bold; "><span id="metar">SUA Airspace - No Geometry</span></p>	
 			<div class="tableFixHead">
 				<table id="suatbl"> <tbody>
 					<thead>
@@ -60,9 +63,8 @@
 	  	</div>
 	</div>
 
-	<p style="text-align:left; font-size: 12px; color:#175B81; 
-		font-weight:bold; "><span id="metar">Spoddle</span></p>	
-
+	<p style="text-align:left; font-size: 12px; padding-left: 8px; color:#175B81; 
+		font-weight:bold; "><span id="metar">NOTAM TFR - No Graphic Record</span></p>
 	<div class="tableFixHead">
 		<table id="tfrtbl"><tbody id="tbody">
 			<thead>
