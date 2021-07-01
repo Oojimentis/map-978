@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en"> 
+<html lang="en">
 <head>
 <meta charset="utf-8" />
 
@@ -8,7 +8,7 @@
 	<link rel="stylesheet" href="map978.css">
 	<link rel="stylesheet" href="/leaflet/leaflet.css"/>
 	<script src="/leaflet/leaflet.js"></script>
-	<script src="/leaflet/jquery.js"></script> 
+	<script src="/leaflet/jquery.js"></script>
 	<script src="/leaflet/leaflet-realtime.js"></script>
 </head>
 <body>
@@ -20,19 +20,19 @@
 	<a href="#about">About</a>
 	<a class="active" href="page2">NOTAM TFR</a>	
 	<a href="/">Home</a>	
-	<a class="disabled">DUMP978 - TFR Display:</a>  
+	<a class="disabled">DUMP978 - TFR Display:</a>
 	<a class="disabled">
 		<span id="UTC_za00"></span>z
-		<script  src="//widget.time.is/t.js"></script>
+		<script src="//widget.time.is/t.js"></script>
 		<script>time_is_widget.init({UTC_za00:{}});	</script></a>
 </nav>
-  
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>  
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 
 <div class = "page2">
 	<div class="row">
 		<div class="column">
-			<p style="text-align:left; font-size: 12px; padding-left: 8px; color:#175B81; 
+			<p style="text-align:left; font-size: 12px; padding-left: 8px; color:#175B81;
 			font-weight:bold; "><span id="metar">NEXRAD Count</span></p>
 			<div class="tableFixHead">
 				<table id="stntbl"> <tbody>
@@ -47,7 +47,7 @@
 			</div>
 		</div>
 		<div class="column">
-			<p style="text-align:left; font-size: 12px; padding-left: 8px; color:#175B81; 
+			<p style="text-align:left; font-size: 12px; padding-left: 8px; color:#175B81;
 			font-weight:bold; "><span id="metar">SUA Airspace - No Geometry</span></p>	
 			<div class="tableFixHead">
 				<table id="suatbl"> <tbody>
@@ -60,10 +60,10 @@
 					</thead>
 				</tbody></table>
 			</div>
-	  	</div>
+		</div>
 	</div>
 
-	<p style="text-align:left; font-size: 12px; padding-left: 8px; color:#175B81; 
+	<p style="text-align:left; font-size: 12px; padding-left: 8px; color:#175B81;
 		font-weight:bold; "><span id="metar">NOTAM TFR - No Graphic Record</span></p>
 	<div class="tableFixHead">
 		<table id="tfrtbl"><tbody id="tbody">
@@ -81,7 +81,7 @@
 
 <div id="footer"></div>
 
-<script src="map978p2.js"></script> 
+<script src="map978p2.js"></script>
 
 </body>
 </html>

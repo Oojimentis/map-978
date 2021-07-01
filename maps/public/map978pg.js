@@ -28,20 +28,20 @@ var $checkboxez = $("#ckboxes :checkbox");
 
 function sua_overlap(_sua_object, i){
 	$('#f1').html('SUA - ' + this.sua_object[i].airsp_name);
-			$('#f2').html(this.sua_object[i].sua_airsp_desc + ' <br>' 
+			$('#f2').html(this.sua_object[i].sua_airsp_desc + ' <br>'
 				+ this.sua_object[i].sua_status_desc);
-			$('#f3').html(this.sua_object[i].start_time + ' <br>' 
+			$('#f3').html(this.sua_object[i].start_time + ' <br>'
 				+ this.sua_object[i].end_time);
-			$('#f4').html(this.sua_object[i].low_alt + ' <br>' 
+			$('#f4').html(this.sua_object[i].low_alt + ' <br>'
 				+ this.sua_object[i].high_alt);
-			$('#f5').html(this.sua_object[i].sep_rule + '  ' 
+			$('#f5').html(this.sua_object[i].sep_rule + '  '
 				+ this.sua_object[i].shape_ind);
 			$('#f6').html(this.sua_object[i].dafif_name);
 };
 
 function airmet_overlap(_airmet_object, i){
 	map.removeLayer(airmet);
-   	map.addLayer(airmet);	
+	map.addLayer(airmet);	
 	map.eachLayer(function (layer) {
 		if (layer._leaflet_id == this.airmet_object[i]._leaflet_id) {
 
@@ -59,8 +59,8 @@ function airmet_overlap(_airmet_object, i){
 
 function updateStorage(){
 	$checkboxez.each(function(){
-    	formValues[this.id] = this.checked;
-  	});
+	formValues[this.id] = this.checked;
+	});
 
 	localStorage.setItem("formValues", JSON.stringify(formValues));
 }
@@ -78,7 +78,7 @@ function right(str, chr){
 	return str.slice(str.length - chr, str.length);
 }
 
-var map = L.map('map', {preferCanvas: true}).setView([36.0, -75.26], 5); 
+var map = L.map('map', {preferCanvas: true}).setView([36.0, -75.26], 5);
 
 // ** Map Layers
 var osm=new L.tileLayer('http://{s}.tile.osm.org/{z}/{x}/{y}.png', { 
@@ -128,7 +128,7 @@ function getNexrad() {
 
 	switch(nexrad_prod) {
 	case 0:
-	 	nexrad_prodid = 0;
+		nexrad_prodid = 0;
 		nexrad_alt = 0;
 		break;
 	case 1:
@@ -244,7 +244,7 @@ var gairmet = L.realtime({
 		return featureData.properties.rep_num;
 	},
 	onEachFeature: function(feature, layer){
-		layer.bindTooltip('G-AIRMET: Alt ' + feature.properties.alt + '<br>' 
+		layer.bindTooltip('G-AIRMET: Alt ' + feature.properties.alt + '<br>'
 			+ feature.properties.ob_ele);
 		layer.on('click', function(e){
 			layer.setStyle({color: 'yellow', opacity: 0.8, fillColor: 'yellow', fillOpacity: 0.5});
@@ -282,8 +282,8 @@ var gairmet = L.realtime({
 			return (feature.properties.alt >= 0 && 
 				right(feature.properties.start_date, 5) == stim)
 		else 
-			return (feature.properties.alt >= (alt_level - 500) && 
-				feature.properties.alt <= (alt_level + 500) && 
+			return (feature.properties.alt >= (alt_level - 500) &&
+				feature.properties.alt <= (alt_level + 500) &&
 				right(feature.properties.start_date, 5) == stim);
 	}
 }).addTo(map);
@@ -328,14 +328,14 @@ var	airmet = L.realtime({
 			$('#f6').html(e.target.feature.properties.stop_date);
 
 			var html_airmet = '';
-	        var pixelPosition = e.layerPoint;
-	        var latLng = map.layerPointToLatLng(pixelPosition);
+			var pixelPosition = e.layerPoint;
+			var latLng = map.layerPointToLatLng(pixelPosition);
 			var pip_airmet = leafletPip.pointInLayer(latLng, map, false);
 			if (pip_airmet.length) {
-    			for (var i = 0; i < pip_airmet.length; i++) { 
-	            	airmet_object[i] = pip_airmet[i];       //.feature.properties; 
-        			html_airmet +=  "<a onclick= 'airmet_overlap(\"" + airmet_object[i] + "\",\"" + i + "\");'>" + 
- 					pip_airmet[i].feature.properties.alt + " : " + 
+				for (var i = 0; i < pip_airmet.length; i++) {
+					airmet_object[i] = pip_airmet[i];	//.feature.properties;
+					html_airmet += "<a onclick= 'airmet_overlap(\"" + airmet_object[i] + "\",\"" + i + "\");'>" + 
+					pip_airmet[i].feature.properties.alt + " : " + 
 					pip_airmet[i].feature.properties.rep_num + "</a><br>" ;
 				}
 				if (html_airmet) {
@@ -359,14 +359,14 @@ var	airmet = L.realtime({
 		var alt_level = parseInt(rangeslider.value, 10);
 		if (alt_level == -1000) 
 			return (feature.properties.alt >= 0)
-		else 
+		else
 			return (feature.properties.alt >= (alt_level - 500) &&
 				feature.properties.alt <= (alt_level + 500));
 	}
 }).addTo(map);
 
 if (!airmet_ckbox.checked) {
-	map.removeLayer(airmet), 
+	map.removeLayer(airmet),
 	airmet.stop()
 }
 
@@ -415,20 +415,20 @@ var	sigmet = L.realtime({
 		var output = document.getElementById("slidealt");
 		if (rangeslider.value == -1000)
 			output.innerHTML = "All"
-		else 
+		else
 			output.innerHTML = rangeslider.value;
 
 		var alt_level = parseInt(rangeslider.value, 10);
 		if (alt_level == -1000) 
 			return (feature.properties.alt >= 0)
-		else 
+		else
 			return (feature.properties.alt >= (alt_level - 500) &&
 				feature.properties.alt <= (alt_level + 500));
 	}
 }).addTo(map);
 
 if (!sigmet_ckbox.checked) {
-	map.removeLayer(sigmet), 
+	map.removeLayer(sigmet),
 	sigmet.stop()
 }
 
@@ -439,7 +439,7 @@ url_nexrad = url.concat(nexrad_sql);
 var nexrad_layer_group = new L.FeatureGroup();
 var	nexrad = L.realtime({
 	url: url_nexrad,
- 	crossOrigin: true, type: 'json'
+	crossOrigin: true, type: 'json'
 	}, {interval: 55000,
 
 	getFeatureId: function(featureData){
@@ -568,30 +568,28 @@ var	sua = L.realtime({
 			$("#m5").html("Sep/shape");
 			$("#m6").html("DAFIF");
 			$('#f1').html('SUA - ' + e.target.feature.properties.airsp_name);
-			$('#f2').html(e.target.feature.properties.sua_airsp_desc + ' <br>' 
+			$('#f2').html(e.target.feature.properties.sua_airsp_desc + ' <br>'
 				+ e.target.feature.properties.sua_status_desc);
-			$('#f3').html(e.target.feature.properties.start_time + ' <br>' 
+			$('#f3').html(e.target.feature.properties.start_time + ' <br>'
 				+ e.target.feature.properties.end_time);
-			$('#f4').html(e.target.feature.properties.low_alt + ' <br>' 
+			$('#f4').html(e.target.feature.properties.low_alt + ' <br>'
 				+ e.target.feature.properties.high_alt);
-			$('#f5').html(e.target.feature.properties.sep_rule + '  ' 
+			$('#f5').html(e.target.feature.properties.sep_rule + '  '
 				+ e.target.feature.properties.shape_ind);
 			$('#f6').html(e.target.feature.properties.dafif_name);
 			
 			var html = '';
-	        var pixelPosition = e.layerPoint;
-	        var latLng = map.layerPointToLatLng(pixelPosition);
+			var pixelPosition = e.layerPoint;
+			var latLng = map.layerPointToLatLng(pixelPosition);
 			var match = leafletPip.pointInLayer(latLng, map, false);
 
 			if (match.length) {
-    			for (var i = 0; i < match.length; i++) { 
-	            	sua_object[i] = match[i].feature.properties; 
-					
+				for (var i = 0; i < match.length; i++) {
+					sua_object[i] = match[i].feature.properties;
 					if (match[i].feature.properties.airsp_name) {
-					
-        			html +=  "<a onclick= 'sua_overlap(\"" + sua_object[i] + "\",\"" + i +"\");'>" + 
- 					match[i].feature.properties.airsp_name	+ "	</a><br>" ;
-				}
+						html += "<a onclick= 'sua_overlap(\"" + sua_object[i] + "\",\"" + i +"\");'>" +
+						match[i].feature.properties.airsp_name	+ "	</a><br>" ;
+					}
 				}
 				if (html) {
 					layer.bindPopup(html, popupOptions);
@@ -607,18 +605,18 @@ var	sua = L.realtime({
 		});
 			
 		if (!sua_ckbox.checked) {
-			map.removeLayer(sua), 
+			map.removeLayer(sua),
 			sua.stop();
 		}		
 	},
 }).addTo(map);
 
 if (!sua_ckbox.checked) {
-	map.removeLayer(sua), 
+	map.removeLayer(sua),
 	sua.stop()
 }
 
-// ** NOTAM TFR  - Circle
+// ** NOTAM TFR - Circle
 var url_circle = url.concat("SELECT bot AS GEOM, c.start_date, c.stop_date, c.rep_num, c.r_lng, \
 					c.r_lat, c.alt_top, c.alt_bot, c.alpha, s.text_data FROM circles c \
 					LEFT JOIN sigairmet s ON s.rep_num = c.rep_num");
@@ -626,7 +624,7 @@ var url_circle = url.concat("SELECT bot AS GEOM, c.start_date, c.stop_date, c.re
 var cmarkers = L.markerClusterGroup({
 	iconCreateFunction: function(cluster){
 		var n = cluster.getChildCount();
-		return  L.divIcon({ html: n, className: 'mycluster2', iconSize: L.point[1,1]});
+		return L.divIcon({ html: n, className: 'mycluster2', iconSize: L.point[1,1]});
 	},
 	spiderfyOnMaxZoom: true,
 	showCoverageOnHover: false,
@@ -644,18 +642,18 @@ var	cir = L.realtime({
 	},
 	pointToLayer: function(feature, latlng){
 		marker = L.circleMarker(latlng, {color: 'red', fillcolor: 'yellow'});
- 		marker.bindTooltip('NOTAM-TFR<br>' + feature.properties.rep_num );
- 		marker.on('click', function (e) {
- 			$("#m1").html("Altitude");
- 			$("#m2").html("Radius");
- 			$("#m3").html("Rep Number");
- 	 		$("#m4").html("Start");
- 			$("#m5").html("Stop");
- 			$("#m6").html("Text ");
-			$('#f1').html('Bottom ' + e.target.feature.properties.alt_bot + 'ft<br> Top ' 
+		marker.bindTooltip('NOTAM-TFR<br>' + feature.properties.rep_num );
+		marker.on('click', function (e) {
+			$("#m1").html("Altitude");
+			$("#m2").html("Radius");
+			$("#m3").html("Rep Number");
+			$("#m4").html("Start");
+			$("#m5").html("Stop");
+			$("#m6").html("Text ");
+			$('#f1').html('Bottom ' + e.target.feature.properties.alt_bot + 'ft<br> Top '
 				+ e.target.feature.properties.alt_top + 'ft');
-			$('#f2').html('Lat: ' + e.target.feature.properties.r_lat + ' Lng: ' 
-				+ e.target.feature.properties.r_lat + ' Alpha: ' 
+			$('#f2').html('Lat: ' + e.target.feature.properties.r_lat + ' Lng: '
+				+ e.target.feature.properties.r_lat + ' Alpha: '
 				+ e.target.feature.properties.alpha);
 			$('#f3').html(e.target.feature.properties.rep_num);
 			$('#f4').html(e.target.feature.properties.start_date);
@@ -720,7 +718,7 @@ var	seg = L.realtime({
 		});
 		
 		if (!notam_ckbox.checked) {
-			map.removeLayer(seg), 
+			map.removeLayer(seg),
 			seg.stop()
 		}
 		else {
@@ -762,25 +760,25 @@ metar = L.realtime({
 			$("#m4").html("Winds");
 			$("#m5").html("Visibility");
 			$("#m6").html("Pressure");
-			$('#f1').html(e.target.feature.properties.stn_call + " - " 
+			$('#f1').html(e.target.feature.properties.stn_call + " - "
 				+ e.target.feature.properties.ob_date + 'z');
-			$('#f2').html(e.target.feature.properties.stn_loc + ", " 
+			$('#f2').html(e.target.feature.properties.stn_loc + ", "
 				+ e.target.feature.properties.state);
-			$('#f3').html(e.target.feature.properties.temp + "\xB0F" + "  dp:" 
-				+ e.target.feature.properties.dewp + "\xB0F<br> Hrly Precip:" 
+			$('#f3').html(e.target.feature.properties.temp + "\xB0F" + "  dp:"
+				+ e.target.feature.properties.dewp + "\xB0F<br> Hrly Precip:"
 				+ e.target.feature.properties.hrly_precip);
-			$('#f4').html(e.target.feature.properties.windsp + "kts " 
-				+ e.target.feature.properties.winddir + "° " 
-				+ e.target.feature.properties.windvar + "  gusts:" 
+			$('#f4').html(e.target.feature.properties.windsp + "kts "
+				+ e.target.feature.properties.winddir + "° "
+				+ e.target.feature.properties.windvar + "  gusts:"
 				+ e.target.feature.properties.windgust + "kts");
 			$('#f5').html(e.target.feature.properties.visby);
-			$('#f6').html("SLP:" + e.target.feature.properties.slp + "<br>Altimeter:" 
+			$('#f6').html("SLP:" + e.target.feature.properties.slp + "<br>Altimeter:"
 				+ e.target.feature.properties.altimeter);
 		});
 		marker.addTo(map);
 			
 		if (!metar_ckbox.checked) {
-			map.removeLayer(marker), 
+			map.removeLayer(marker),
 			metar.stop()
 		}
 		
@@ -789,7 +787,7 @@ metar = L.realtime({
 }).addTo(map);
 	
 if (!metar_ckbox.checked) {
-	map.removeLayer(metar), 
+	map.removeLayer(metar),
 	metar.stop()
 }
 
@@ -833,11 +831,11 @@ maxmin = L.realtime({
 			$("#m4").html(" ");
 			$("#m5").html(" ");
 			$("#m6").html(" ");
-			$('#f1').html(e.target.feature.properties.stn_call + " - " 
+			$('#f1').html(e.target.feature.properties.stn_call + " - "
 				+ e.target.feature.properties.ob_date + 'z');
-			$('#f2').html(e.target.feature.properties.stn_loc + ", " 
+			$('#f2').html(e.target.feature.properties.stn_loc + ", "
 				+ e.target.feature.properties.state);
-			$('#f3').html(e.target.feature.properties.temp + "\xB0F" + "<b>" 
+			$('#f3').html(e.target.feature.properties.temp + "\xB0F" + "<b>"
 			+ e.target.feature.properties.maxmin);
 			$('#f4').html(" ");
 			$('#f5').html(" ");
@@ -854,7 +852,7 @@ maxmin = L.realtime({
 		mmarker.addTo(map);
 
 		if (!maxmin_ckbox.checked) {
-			map.removeLayer(mmarker), 
+			map.removeLayer(mmarker),
 			maxmin.stop()
 		}
 			
@@ -863,7 +861,7 @@ maxmin = L.realtime({
 }).addTo(map);
 
 if (!maxmin_ckbox.checked) {
-	map.removeLayer(maxmin), 
+	map.removeLayer(maxmin),
 	maxmin.stop()
 }
 
@@ -881,8 +879,8 @@ var notam_ckbox = document.getElementById("notam")
 var narkers = L.markerClusterGroup({
 
 	iconCreateFunction: function(cluster){
-	   var n = cluster.getChildCount();
-		return  L.divIcon({ html: n, className: 'mycluster' , iconSize: L.point[1,1]});
+		var n = cluster.getChildCount();
+		return L.divIcon({ html: n, className: 'mycluster' , iconSize: L.point[1,1]});
 	},
 	spiderfyOnMaxZoom: true,
 	showCoverageOnHover: false,
@@ -899,7 +897,7 @@ notam = L.realtime({
 	},
 	pointToLayer: function(feature, latlng){
 		marker = L.marker(latlng, {icon: wxIcon2});
- 		marker.bindTooltip(feature.properties.notam_name 
+		marker.bindTooltip(feature.properties.notam_name
 			+ '<br>' + feature.properties.stn_call);
 		marker.on('click', function(e){
 			$("#m1").html("Station");
@@ -908,9 +906,9 @@ notam = L.realtime({
 			$("#m4").html("Text");
 			$("#m5").html("Start");
 			$("#m6").html("Stop");
-			$('#f1').html(e.target.feature.properties.stn_call + ' - ' 
+			$('#f1').html(e.target.feature.properties.stn_call + ' - '
 				+ feature.properties.notam_name);
-			$('#f2').html(e.target.feature.properties.stn_loc + ", " 
+			$('#f2').html(e.target.feature.properties.stn_loc + ", "
 				+ e.target.feature.properties.state);
 			$('#f3').html(e.target.feature.properties.rep_num);
 			$('#f4').html(e.target.feature.properties.text_data);
@@ -921,7 +919,7 @@ notam = L.realtime({
 		if (!notam_ckbox.checked) {
 			map.removeLayer(narkers),
 			narkers.removeLayer(narkers),
-			map.removeLayer(marker), 
+			map.removeLayer(marker),
 			notam.stop()
 		}
 		else {
@@ -962,9 +960,9 @@ taf = L.realtime({
 			$("#m5").html("Visibility");
 			$("#m6").html("Conditions");
 			$('#f1').html(e.target.feature.properties.stn_call + " (TAF)");
-			$('#f2').html(e.target.feature.properties.stn_loc + ", " 
+			$('#f2').html(e.target.feature.properties.stn_loc + ", "
 				+ e.target.feature.properties.state);
-			$('#f3').html(e.target.feature.properties.issued + '<br>' 
+			$('#f3').html(e.target.feature.properties.issued + '<br>'
 				+ e.target.feature.properties.current);
 			$('#f4').html(e.target.feature.properties.wind);
 			$('#f5').html(e.target.feature.properties.visby);
@@ -973,7 +971,7 @@ taf = L.realtime({
 		marker.addTo(map);
 
 		if (!taf_ckbox.checked) {
-			map.removeLayer(marker), 
+			map.removeLayer(marker),
 			taf.stop()
 		}
 
@@ -982,7 +980,7 @@ taf = L.realtime({
 }).addTo(map);
 	
 if (!taf_ckbox.checked) {
-	map.removeLayer(taf), 
+	map.removeLayer(taf),
 	taf.stop()
 }
 
@@ -1010,50 +1008,50 @@ winds = L.realtime({
 		marker.bindTooltip('Winds' + '<br>' + feature.properties.stn_call);
 		marker.on('click', function(e){
 			$("#m1").html("Station" + '<br>' + e.target.feature.properties.issue_date );
-			$("#m2").html(e.target.feature.properties.alt1 + "ft" + '<br>' 
+			$("#m2").html(e.target.feature.properties.alt1 + "ft" + '<br>'
 				+ e.target.feature.properties.alt2 + "ft");
-			$("#m3").html(e.target.feature.properties.alt3 + "ft" + '<br>' 
+			$("#m3").html(e.target.feature.properties.alt3 + "ft" + '<br>'
 				+ e.target.feature.properties.alt4 + "ft");
-			$("#m4").html(e.target.feature.properties.alt5 + "ft" + '<br>' 
+			$("#m4").html(e.target.feature.properties.alt5 + "ft" + '<br>'
 				+ e.target.feature.properties.alt6 + "ft");
-			$("#m5").html(e.target.feature.properties.alt7 + "ft" + '<br>' 
+			$("#m5").html(e.target.feature.properties.alt7 + "ft" + '<br>'
 				+ e.target.feature.properties.alt8 + "ft");
 			$("#m6").html(e.target.feature.properties.alt9 + "ft");
-			$('#f1').html(e.target.feature.properties.stn_call + " (Winds)" + '<br>' 
-				+ e.target.feature.properties.stn_loc + ", " 
+			$('#f1').html(e.target.feature.properties.stn_call + " (Winds)" + '<br>'
+				+ e.target.feature.properties.stn_loc + ", "
 				+ e.target.feature.properties.state);
-			$('#f2').html(e.target.feature.properties.dir1 + "\xB0 " 
-				+ e.target.feature.properties.spd1 + "kt " 
-				+ e.target.feature.properties.temp1 + "\xB0C" + '<br>' 
-				+ e.target.feature.properties.dir2 + "\xB0 " 
-				+ e.target.feature.properties.spd2 + "kt " 
+			$('#f2').html(e.target.feature.properties.dir1 + "\xB0 "
+				+ e.target.feature.properties.spd1 + "kt "
+				+ e.target.feature.properties.temp1 + "\xB0C" + '<br>'
+				+ e.target.feature.properties.dir2 + "\xB0 "
+				+ e.target.feature.properties.spd2 + "kt "
 				+ e.target.feature.properties.temp2 + "\xB0C");
-			$('#f3').html(e.target.feature.properties.dir3 + "\xB0 " 
+			$('#f3').html(e.target.feature.properties.dir3 + "\xB0 "
 				+ e.target.feature.properties.spd3 + "kt " 
-				+ e.target.feature.properties.temp3 + "\xB0C" + '<br>' 
-				+ e.target.feature.properties.dir4 + "\xB0 " 
-				+ e.target.feature.properties.spd4 + "kt " 
+				+ e.target.feature.properties.temp3 + "\xB0C" + '<br>'
+				+ e.target.feature.properties.dir4 + "\xB0 "
+				+ e.target.feature.properties.spd4 + "kt "
 				+ e.target.feature.properties.temp4 + "\xB0C");	
-			$('#f4').html(e.target.feature.properties.dir5 + "\xB0 " 
-				+ e.target.feature.properties.spd5 + "kt " 
-				+ e.target.feature.properties.temp5 + "\xB0C" + '<br>' 
-				+ e.target.feature.properties.dir6 + "\xB0 " 
-				+ e.target.feature.properties.spd6 + "kt " 
+			$('#f4').html(e.target.feature.properties.dir5 + "\xB0 "
+				+ e.target.feature.properties.spd5 + "kt "
+				+ e.target.feature.properties.temp5 + "\xB0C" + '<br>'
+				+ e.target.feature.properties.dir6 + "\xB0 "
+				+ e.target.feature.properties.spd6 + "kt "
 				+ e.target.feature.properties.temp6 + "\xB0C");
-			$('#f5').html(e.target.feature.properties.dir7 + "\xB0 " 
-				+ e.target.feature.properties.spd7 + "kt " 
-				+ e.target.feature.properties.temp7 + "\xB0C" + '<br>' 
-				+ e.target.feature.properties.dir8 + "\xB0 " 
-				+ e.target.feature.properties.spd8 + "kt " 
+			$('#f5').html(e.target.feature.properties.dir7 + "\xB0 "
+				+ e.target.feature.properties.spd7 + "kt "
+				+ e.target.feature.properties.temp7 + "\xB0C" + '<br>'
+				+ e.target.feature.properties.dir8 + "\xB0 "
+				+ e.target.feature.properties.spd8 + "kt "
 				+ e.target.feature.properties.temp8 + "\xB0C");
-			$('#f6').html(e.target.feature.properties.dir9 + "\xB0 " 
-				+ e.target.feature.properties.spd9 + "kt " 
+			$('#f6').html(e.target.feature.properties.dir9 + "\xB0 "
+				+ e.target.feature.properties.spd9 + "kt "
 				+ e.target.feature.properties.temp9 + "\xB0C");
 		});
 		marker.addTo(map);
 
 		if (!winds_ckbox.checked) {
-			map.removeLayer(marker), 
+			map.removeLayer(marker),
 			winds.stop()
 		}
 
@@ -1062,7 +1060,7 @@ winds = L.realtime({
 }).addTo(map);
 	
 if (!winds_ckbox.checked) {
-	map.removeLayer(winds), 
+	map.removeLayer(winds),
 	winds.stop()
 }
 
@@ -1074,7 +1072,7 @@ var url_pirep = url.concat("SELECT coords AS GEOM, p.stn_call, stn_loc, state, r
 					GROUP BY stn_call) g ON p.stn_call = g.stn_call AND p.rep_time = g.mx \
 					INNER JOIN stations s ON p.stn_call = s.stn_call");
 
-var wxIcon4 
+var wxIcon4
 var pirep_ckbox = document.getElementById("pirep")
 
 pirep = L.realtime({
@@ -1093,15 +1091,15 @@ pirep = L.realtime({
 		marker = L.marker(latlng, {icon: wxIcon4});
 
 		if (feature.properties.rep_type == "Urgent Report")
-			marker.bindTooltip('Urgent PIREP' + '<br>' 
+			marker.bindTooltip('Urgent PIREP' + '<br>'
 				+ feature.properties.stn_call);
 		else
-			marker.bindTooltip('PIREP' + '<br>' 
+			marker.bindTooltip('PIREP' + '<br>'
 				+ feature.properties.stn_call);
 
 		marker.on('click', function(e){
 			$("#m1").html("Station");
-			$("#m2").html("Location" + '<br>' + "Time: " 
+			$("#m2").html("Location" + '<br>' + "Time: "
 				+ e.target.feature.properties.rep_time + "z");
 			$("#m3").html("Flt Lev:" + '<br>' + "AC Type:");
 			$("#m4").html("Turbulence:" + '<br>' + "Icing:");
@@ -1112,15 +1110,15 @@ pirep = L.realtime({
 			else
 				$('#f1').html(e.target.feature.properties.stn_call + " (PIREP)");
 
-			$('#f2').html(e.target.feature.properties.stn_loc + ", " 
+			$('#f2').html(e.target.feature.properties.stn_loc + ", "
 				+ e.target.feature.properties.state + "<br><i>Loc: "
 				+ e.target.feature.properties.location);
-			$('#f3').html("<i>Flt lev: " + e.target.feature.properties.fl_lev + "<br><i>a/c: " 
+			$('#f3').html("<i>Flt lev: " + e.target.feature.properties.fl_lev + "<br><i>a/c: "
 				+ e.target.feature.properties.ac_type);
-			$('#f4').html("<i>Turb: " + e.target.feature.properties.turbulence + "<br><i>Ice: " 
+			$('#f4').html("<i>Turb: " + e.target.feature.properties.turbulence + "<br><i>Ice: "
 				+ e.target.feature.properties.icing);
-			$('#f5').html("<i>Cloud: " +e.target.feature.properties.cloud + "<br><i>Temp: " 
-				+ e.target.feature.properties.temperature + "<br><i>Wind: " 
+			$('#f5').html("<i>Cloud: " +e.target.feature.properties.cloud + "<br><i>Temp: "
+				+ e.target.feature.properties.temperature + "<br><i>Wind: "
 				+ e.target.feature.properties.wind_spd_dir + "<br><i>WX: "
 				+ e.target.feature.properties.weather);
 			$('#f6').html(e.target.feature.properties.remarks);
@@ -1128,7 +1126,7 @@ pirep = L.realtime({
 		marker.addTo(map);
 			
 		if (!pirep_ckbox.checked) {
-			map.removeLayer(marker), 
+			map.removeLayer(marker),
 			pirep.stop()
 		}
 
@@ -1137,143 +1135,143 @@ pirep = L.realtime({
 }).addTo(map);
 
 if (!pirep_ckbox.checked) {
-	map.removeLayer(pirep), 
+	map.removeLayer(pirep),
 	pirep.stop()
 }
 
 // ** Checkbox controls
 document.querySelector("input[name = gmet]").addEventListener('change', function(){
-	if(this.checked) { 
-		map.addLayer(gairmet), 
+	if(this.checked) {
+		map.addLayer(gairmet),
 		gairmet.start()
 	}
-	else { 
-		map.removeLayer(gairmet), 
+	else {
+		map.removeLayer(gairmet),
 		gairmet.stop()
 	}
 })
 
 document.querySelector("input[name = amet]").addEventListener('change', function(){
 	if(this.checked) {
-		map.addLayer(airmet), 
+		map.addLayer(airmet),
 		airmet.start()
 	}
 	else {
-		map.removeLayer(airmet), 
+		map.removeLayer(airmet),
 		airmet.stop()
 	}
 })
 
 // ** Toggle METAR and Max/Min
 document.querySelector("input[name = meta]").addEventListener('change', function(){
-	if(this.checked) { 
-		map.addLayer(metar), 
+	if(this.checked) {
+		map.addLayer(metar),
 		metar.start()		
 	}
 	else {
 		map.removeLayer(metar),
-		metar.stop() 
+		metar.stop()
 	}
 	
 })
 
 // Toggle Max/Min and METAR
 document.querySelector("input[name = mxmn]").addEventListener('change', function(){
-	if(this.checked) { 
-		map.addLayer(maxmin), 
+	if(this.checked) {
+		map.addLayer(maxmin),
 		maxmin.start()
 	}
 	else {
 	 map.removeLayer(maxmin),
-	 maxmin.stop() 
+	 maxmin.stop()
 	}
 })
 
 // ** Includes graphic NOTAMs
 document.querySelector("input[name = notam]").addEventListener('change', function(){
 	if(this.checked) {
-		map.addLayer(notam), 
+		map.addLayer(notam),
 		notam.start(),
 		cmarkers.addLayer(cmarkers),
 		map.addLayer(cir);
 		cir.start();
-		map.addLayer(seg), 
+		map.addLayer(seg),
 		seg.start()		
 	}
 	else {
 		narkers.removeLayer(narkers),
-		map.removeLayer(notam), 
+		map.removeLayer(notam),
 		notam.stop(),
 		cmarkers.removeLayer(cmarkers),
 		map.removeLayer(cir);
 		cir.stop(),
-		map.removeLayer(seg), 
+		map.removeLayer(seg),
 		seg.stop()
 	}
 })
 
 document.querySelector("input[name = sua]").addEventListener('change', function(){
 	if(this.checked) {
-		map.addLayer(sua), 
+		map.addLayer(sua),
 		sua.start()
 	}
 	else {
-		map.removeLayer(sua), 
+		map.removeLayer(sua),
 		sua.stop()
 	}
 })
 
 document.querySelector("input[name = taf]").addEventListener('change', function(){
 	if(this.checked) {
-		map.addLayer(taf), 
+		map.addLayer(taf),
 		taf.start()
 	}
 	else {
-		map.removeLayer(taf), 
+		map.removeLayer(taf),
 		taf.stop()
 	}
 })
 
 document.querySelector("input[name = pirep]").addEventListener('change', function(){
 	if(this.checked) {
-		map.addLayer(pirep), 
+		map.addLayer(pirep),
 		pirep.start()
 	}
 	else {
-		map.removeLayer(pirep), 
+		map.removeLayer(pirep),
 		pirep.stop()
 	}
 })
 
 document.querySelector("input[name = winds]").addEventListener('change', function(){
 	if(this.checked) {
-		map.addLayer(winds), 
+		map.addLayer(winds),
 		winds.start()
 	}
 	else {
-		map.removeLayer(winds), 
+		map.removeLayer(winds),
 		winds.stop()
 	}
 })
 
 document.querySelector("input[name = smet]").addEventListener('change', function(){
 	if(this.checked) {
-		map.addLayer(sigmet), 
+		map.addLayer(sigmet),
 		sigmet.start()
 	}
 	else {
-		map.removeLayer(sigmet), 
+		map.removeLayer(sigmet),
 		sigmet.stop()
 	}
 })
 
 document.querySelector("input[name = cwa]").addEventListener('change', function(){
 	if(this.checked) {
-		map.addLayer(cwa), 
+		map.addLayer(cwa),
 		cwa.start()
 	}
 	else {
-		map.removeLayer(cwa), 
+		map.removeLayer(cwa),
 		cwa.stop()
 	}
 })
@@ -1327,11 +1325,11 @@ document.getElementById("prodid").onchange = function(){
 		break;
 	}
 	nexrad_layer_group.clearLayers();
-		nexrad_sql = getNexrad();
-		url_nexrad = url.concat(nexrad_sql);
-		nexrad.setUrl(url_nexrad);
-		nexrad_layer_group.addLayer(radar_point);
-		map.addLayer(nexrad_layer_group)
+	nexrad_sql = getNexrad();
+	url_nexrad = url.concat(nexrad_sql);
+	nexrad.setUrl(url_nexrad);
+	nexrad_layer_group.addLayer(radar_point);
+	map.addLayer(nexrad_layer_group)
 }
 
 // Map legends
@@ -1426,7 +1424,6 @@ var baseMaps = {
 	"Gray":Esri_WorldGrayCanvas,	
 	"Imagery":Esri_WorldImagery,
 	"Open Street Map": osm,
-
 	"OSM B&W":OpenStreetMap_BlackAndWhite
 };
 

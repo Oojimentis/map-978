@@ -1,11 +1,10 @@
 #map {
-		margin-top: 40px;
+	margin-top: 40px;
 	float: left;
 	width: 80%;
 	height:800px;
 }
 .page2 {
-
 	margin-top: 49px;
 	background-color: #81d3ab;
 }
@@ -26,7 +25,7 @@
 }
 table, th, td {
 	margin:0px 5px;
-	border:solid 1px #333; 
+	border:solid 1px #333;
 	padding:1px 2px;
 	font:20px arial;
 	text-align: left;
@@ -39,7 +38,7 @@ th {
 td {
 	font-size:11px;
 	font-weight:normal;
-		text-align: left;
+	text-align: left;
 }
 tr:nth-child(even) {
 	background: #E6BECF;
@@ -70,21 +69,21 @@ table {
 	left: 20px;
 	color: yellow
 }
-select { 
-	appearance: none; 
-	outline: 0; 
-	background: yellow; 
-	background-image: none; 
-	border:1px solid black; 
+select {
+	appearance: none;
+	outline: 0;
+	background: yellow;
+	background-image: none;
+	border:1px solid black;
 	font:14px arial;
-} 
-.select { 
-	width: 10%; 
-	height: 3em; 
-	line-height: 3; 
-	background: #d3eaf8; 
-	overflow: hidden; 
-	border-radius: .25em; 
+}
+.select {
+	width: 10%;
+	height: 3em;
+	line-height: 3;
+	background: #d3eaf8;
+	overflow: hidden;
+	border-radius: .25em;
 }	
 label {
 	font:9px arial;
@@ -194,12 +193,11 @@ label {
 	font-size: 10px;
 }
 .topnav {
-  position: fixed;
-  top: 0;
-  left: 0;
-  z-index: 9999;
-  width: 100%;
-
+	position: fixed;
+	top: 0;
+	left: 0;
+	z-index: 9999;
+	width: 100%;
 	background-color: #333;
 }
 .topnav a {
@@ -225,7 +223,7 @@ label {
 }
 .tableFixHead {
 	overflow-y: auto;
-	 min-height: 20px  !important;
+	min-height: 20px !important;
 	height: auto !important;
 	max-height: 291px;
 	width: 80%;
@@ -240,69 +238,69 @@ label {
 .tableFixHead th {
 	box-shadow: inset 1px 1px #000, 0 1px #000;
 }
-#stntbl   {
+#stntbl {
 	border-collapse: collapse;
 	width: 95%;
 }
-#stntbl   th, td {
+#stntbl th, td {
 	padding: 8px 16px;
-}  
-#stntbl   th {
+}
+#stntbl th {
 	background: #ad7fa8;
 }
-#suatbl   {
+#suatbl {
 	border-collapse: collapse;
 	width: 95%;
 }
-#suatbl   th, td {
+#suatbl th, td {
 	padding: 6px 5px;
-}  
-#suatbl   th {
+}
+#suatbl th {
 	background: #ad7fa8;
 }
-#tfrtbl   {
+#tfrtbl {
 	border-collapse: collapse;
 	width: 99%;
 }
-#tfrtbl th   {
+#tfrtbl th {
 	padding: 8px 15px;
-}  
-#tfrtbl   th {
+}
+#tfrtbl th {
 	background: #ad7fa8;
 }
 * {
-  box-sizing: border-box;
+	box-sizing: border-box;
 }
 .row {
-  margin-left:-5px;
-  margin-right:-5px;
+	margin-left:-5px;
+	margin-right:-5px;
 }
 .column {
-  float: left;
-  width: 45%;
-  padding: 5px;
+	float: left;
+	width: 45%;
+	padding: 5px;
 }
 .row::after {
-  content: "";
-  clear: both;
-  display: table;
+	content: "";
+	clear: both;
+	display: table;
 }
-.custompopup .leaflet-popup-content-wrapper  {
-    background: #333;
-    color: #fce94f;
+.custompopup .leaflet-popup-content-wrapper {
+	background: #333;
+	color: #fce94f;
 }
 .custompopup .leaflet-popup-content-wrapper a {
-    background: #333;
-    color: #ffffff;
+	background: #333;
+	color: #ffffff;
 }
 .custompopup .leaflet-popup-tip-container {
-         color: #ffffff;
-} 
-.custompopup .leaflet-popup-content  {
+	color: #ffffff;
+}
+.custompopup .leaflet-popup-content {
 	margin-top: 4px;
 	margin-bottom: 4px;
-    margin-right: 2px;
-    padding-right: 2px;
-    margin-left: 2px;
-    padding-left: 2px;
+	margin-right: 2px;
+	padding-right: 2px;
+	margin-left: 2px;
+	padding-left: 2px;
 }

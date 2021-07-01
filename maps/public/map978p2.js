@@ -18,8 +18,8 @@ var nexrad_count = url.concat("SELECT prod_id, fisb_product_desc, altitude, COUN
 			success: function (data){
 				$('#stntbl tbody').empty();
 				$.each(data, function (index, features){
-					row += "<tr><td>" + features.fisb_product_desc + "</td><td>" 
-					+ features.altitude + "</td><<td>" 
+					row += "<tr><td>" + features.fisb_product_desc + "</td><td>"
+					+ features.altitude + "</td><<td>"
 					+ features.count + "</td></tr>";
 				});
 				$("#stntbl tbody").append(row);
@@ -45,7 +45,7 @@ $(document).ready(function(){
 			success: function (data){
 				$('#suatbl tbody').empty();
 				$.each(data, function (index, features) {
-					row += "<tr><td>" + features.airsp_id + "</td><td>" 
+					row += "<tr><td>" + features.airsp_id + "</td><td>"
 					+ features.airsp_name + "</td><<td>" 
 					+ features.airsp_type + "</td></tr>";
 				});
@@ -73,8 +73,8 @@ $(document).ready(function(){
 			success: function (data){
 				$('#tfrtbl tbody').empty();
 				$.each(data, function (index, features) {
-					row += "<tr><td>" + features.rep_num + "</td><td>" 
-					+ features.notam_name + "</td><<td>" 
+					row += "<tr><td>" + features.rep_num + "</td><td>"
+					+ features.notam_name + "</td><<td>"
 					+ features.text_data + "</td></tr>";
 				});
 				$("#tfrtbl tbody").append(row);
