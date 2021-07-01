@@ -798,16 +798,27 @@ if (!mk.checked) {
 }
 
 // ** METAR Max/Min
-var url_maxmin = url.concat("SELECT s.coords AS GEOM, s.stn_call, s.stn_loc, state, m.temp, ob_date, 'Max' AS maxmin \
-					FROM metar m \
-					INNER JOIN stations s ON s.stn_call = m.stn_call \
-					WHERE m.temp IN (SELECT MAX(temp) AS temp FROM metar) \
-			       	UNION \
-					SELECT s.coords AS GEOM, s.stn_call, s.stn_loc, state, m.temp, ob_date, 'Min' AS maxmin \
-					FROM metar m \
-					INNER JOIN stations s ON s.stn_call = m.stn_call \
-					WHERE m.temp IN (SELECT MIN(temp) AS temp FROM metar WHERE temp <>'- ') \
-					ORDER BY temp,ob_date ASC ");
+//var url_maxmin = url.concat("SELECT s.coords AS GEOM, s.stn_call, s.stn_loc, state, m.temp, ob_date, 'Max' AS maxmin \
+//					FROM metar m \
+//					INNER JOIN stations s ON s.stn_call = m.stn_call \
+//					WHERE m.temp IN (SELECT MAX(temp) AS temp FROM metar) \
+//			       	UNION \
+//					SELECT s.coords AS GEOM, s.stn_call, s.stn_loc, state, m.temp, ob_date, 'Min' AS maxmin \
+//					FROM metar m \
+//					INNER JOIN stations s ON s.stn_call = m.stn_call \
+//					WHERE m.temp IN (SELECT MIN(temp) AS temp FROM metar WHERE temp <>'- ') \
+//					ORDER BY temp,ob_date ASC ");
+					
+					
+var url_maxmin = url.concat("drop table if exists max_a; drop table if exists max_b; \
+select stn_call, max(ob_date) into temp max_a from metar group by stn_call; \
+select  m.stn_call,ob_date,temp into temp max_b from max_a t inner join metar m on  (t.stn_call = m.stn_call) and (t.max = m.ob_date); \
+select coords as GEOM,s.stn_call,s.stn_loc,s.state,t.temp,ob_date,'Max' as maxmin from max_b t \
+inner join stations s on s.stn_call = t.stn_call where t.temp in(select max(temp) from max_b) \
+union \
+select coords as GEOM,s.stn_call,s.stn_loc,s.state,t.temp,ob_date,'Min' as maxmin from max_b t \
+inner join stations s on s.stn_call = t.stn_call where t.temp in(select min(temp) \
+from max_b  where temp <> '- ' )");
 
 var wxIcon6;
 var mmk = document.getElementById("mxmn")
