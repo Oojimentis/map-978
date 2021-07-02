@@ -1,3 +1,9 @@
+p {
+	padding-left: 8px;
+	font-weight:bold;
+	font-size: 14px;
+	color:#333;
+}
 #map {
 	margin-top: 40px;
 	float: left;
@@ -51,6 +57,7 @@ tbody tr:hover {
 }
 table {
 	border-collapse: collapse;
+		box-shadow: 4px 4px #868984;
 }
 #table-scroll {
 	height:350px;
@@ -201,7 +208,7 @@ label {
 	background-color: #333;
 }
 .topnav a {
-	float: right;
+	float: left;
 	color: #f2f2f2;
 	text-align: center;
 	padding: 12px 14px;
@@ -218,7 +225,7 @@ label {
 }
 .disabled {
 	pointer-events: none;
-	float: left !important;
+	float: right !important;
 	color:#fce94f !important;
 }
 .tableFixHead {

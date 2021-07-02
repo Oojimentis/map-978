@@ -9,6 +9,7 @@ var cloudlegend;
 var nexlegend;
 var sua_object=[];
 var airmet_object=[];
+var sigmet_object=[];
 var popupOptions =
 	{
 		'className' : 'custompopup',
@@ -53,6 +54,24 @@ function airmet_overlap(_airmet_object, i){
 			$('#f4').html(this.airmet_object[i].feature.properties.text_data);
 			$('#f5').html(this.airmet_object[i].feature.properties.start_date);
 			$('#f6').html(this.airmet_object[i].feature.properties.stop_date);
+		}
+	});
+};
+
+function sigmet_overlap(_sigmet_object, i){
+	map.removeLayer(sigmet);
+	map.addLayer(sigmet);	
+	map.eachLayer(function (layer) {
+		if (layer._leaflet_id == this.sigmet_object[i]._leaflet_id) {
+
+			layer.setStyle({fillColor: 'yellow', fillOpacity: 0.5});
+
+			$('#f1').html('SIGMET');
+			$('#f2').html(this.sigmet_object[i].feature.properties.alt);
+			$('#f3').html(this.sigmet_object[i].feature.properties.rep_num);
+			$('#f4').html(this.sigmet_object[i].feature.properties.text_data);
+			$('#f5').html(this.sigmet_object[i].feature.properties.start_date);
+			$('#f6').html(this.sigmet_object[i].feature.properties.stop_date);
 		}
 	});
 };
@@ -335,16 +354,17 @@ var	airmet = L.realtime({
 				for (var i = 0; i < pip_airmet.length; i++) {
 					airmet_object[i] = pip_airmet[i];	//.feature.properties;
 					html_airmet += "<a onclick= 'airmet_overlap(\"" + airmet_object[i] + "\",\"" + i + "\");'>" + 
-					pip_airmet[i].feature.properties.alt + " : " + 
+					"AIRMET - Alt: " +
+					pip_airmet[i].feature.properties.alt + " : " + " Rep num: " +
 					pip_airmet[i].feature.properties.rep_num + "</a><br>" ;
 				}
 				if (html_airmet) {
-					layer.bindPopup(htmlam, popupOptions);
+					layer.bindPopup(html_airmet, popupOptions);
 				}
 			}
 			airmet.stop();
 		});
-		layer.on('mouseout', function(e){
+		layer.on('mousedown', function(e){
 			airmet.start();
 		})		
 	},
@@ -388,8 +408,8 @@ var	sigmet = L.realtime({
 		return featureData.properties.rep_num;
 	},
 	onEachFeature: function(feature, layer){
-		layer.bindTooltip('SIGMET: Alt ' + feature.properties.alt);
-		layer.on('click', function(e){
+//		layer.bindTooltip('SIGMET: Alt ' + feature.properties.alt);
+		layer.on('mousedown', function(e){
 			layer.setStyle({fillColor: 'yellow', fillOpacity: 0.5});
 			$("#m1").html("Report");
 			$("#m2").html("Altitude");					
@@ -403,10 +423,26 @@ var	sigmet = L.realtime({
 			$('#f4').html(e.target.feature.properties.text_data);
 			$('#f5').html(e.target.feature.properties.start_date);
 			$('#f6').html(e.target.feature.properties.stop_date);
-				
+
+			var html_sigmet = '';
+			var pixelPosition = e.layerPoint;
+			var latLng = map.layerPointToLatLng(pixelPosition);
+			var pip_sigmet = leafletPip.pointInLayer(latLng, map, false);
+			if (pip_sigmet.length) {
+				for (var i = 0; i < pip_sigmet.length; i++) {
+					sigmet_object[i] = pip_sigmet[i];	//.feature.properties;
+					html_sigmet += "<a onclick= 'sigmet_overlap(\"" + sigmet_object[i] + "\",\"" + i + "\");'>" + 
+					"SIGMET - Alt: " +
+					pip_sigmet[i].feature.properties.alt + " : " + " Rep num: " +
+					pip_sigmet[i].feature.properties.rep_num + "</a><br>" ;
+				}
+				if (html_sigmet) {
+					layer.bindPopup(html_sigmet, popupOptions);
+				}
+			}
 			sigmet.stop();
 		});
-		layer.on('mouseout', function(e){
+		layer.on('mousedown', function(e){
 			sigmet.start();
 		})		
 	},
