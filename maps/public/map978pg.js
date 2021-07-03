@@ -189,7 +189,8 @@ function getNexrad() {
 	var nexrad_sql_holder = `SELECT coords AS GEOM, m.prod_id, m.intensity, m.maptime, m.block_num,seq \
 					FROM nexrad m INNER JOIN (SELECT MAX(maptime) AS mob FROM nexrad \
 					WHERE prod_id = ${nexrad_prodid}) g \
-					ON m.maptime = g.mob AND m.prod_id = ${nexrad_prodid} AND altitude = ${nexrad_alt}`;
+					ON m.maptime = g.mob AND m.prod_id = ${nexrad_prodid} AND altitude = ${nexrad_alt} \
+                    &m=NEXRAD+${nexrad_prodid}+Alt:+${nexrad_alt}`;
 
 	return nexrad_sql_holder;
 }	
@@ -248,7 +249,7 @@ return nexrad_color;
 
 // ** G-AIRMET
 var url_gairmet = url.concat("SELECT coords AS GEOM, rep_num, alt, ob_ele, start_date, stop_date \
-					FROM graphics WHERE prod_id = 14");
+					FROM graphics WHERE prod_id = 14 &m=G\-AIRMET");
 
 var gairmet_ckbox = document.getElementById("gmet")
 var gairmet = L.realtime({
@@ -315,7 +316,7 @@ if (!gairmet_ckbox.checked) {
 // ** AIRMET
 var url_airmet = url.concat("SELECT coords AS GEOM, g.rep_num, alt, ob_ele, text_data, start_date, stop_date \
 					FROM graphics g LEFT JOIN sigairmet s ON (g.prod_id = s.prod_id) \
-					AND (g.rep_num = s.rep_num) WHERE g.prod_id = 11");
+					AND (g.rep_num = s.rep_num) WHERE g.prod_id = 11 &m=AIRMET");
 					
 var airmet_ckbox = document.getElementById("amet")
 var	airmet = L.realtime({
@@ -393,7 +394,7 @@ if (!airmet_ckbox.checked) {
 // ** SIGMET
 var url_sigmet = url.concat("SELECT coords AS GEOM, g.rep_num, alt, ob_ele, text_data, start_date, stop_date \
 					FROM graphics g LEFT JOIN sigairmet s ON (g.prod_id = s.prod_id) AND \
-					(g.rep_num = s.rep_num)	WHERE g.prod_id = 12");
+					(g.rep_num = s.rep_num)	WHERE g.prod_id = 12 &m=SIGMET");
 
 var sigmet_ckbox = document.getElementById("smet")
 var	sigmet = L.realtime({
@@ -514,7 +515,7 @@ var	nexrad = L.realtime({
 // ** CWA
 var url_cwa = url.concat("SELECT coords AS GEOM, g.rep_num, alt, ob_ele, text_data, start_date, stop_date \
 					FROM graphics g LEFT JOIN sigairmet s ON (g.prod_id = s.prod_id) AND \
-					(g.rep_num = s.rep_num) WHERE g.prod_id = 15");
+					(g.rep_num = s.rep_num) WHERE g.prod_id = 15 &m=CWA");
 
 var cwa_ckbox = document.getElementById("cwa")
 var	cwa = L.realtime({
@@ -579,7 +580,7 @@ var url_sua = url.concat("SELECT s.airsp_id, rep_time, s.airsp_name, sua_airsp_d
 					FROM sua s INNER JOIN sua_airspace a ON a.airsp_id = s.airsp_id \
 					INNER JOIN sua_airspace_type t ON t.sua_airsp_type = s.airsp_type \
 					INNER JOIN sua_sched_status c ON c.sua_status = s.sched_status \
-					ORDER BY s.airsp_name, rep_num");
+					ORDER BY s.airsp_name, rep_num &m=SUA");
 
 var sua_ckbox = document.getElementById("sua")
 var	sua = L.realtime({
@@ -655,7 +656,7 @@ if (!sua_ckbox.checked) {
 // ** NOTAM TFR - Circle
 var url_circle = url.concat("SELECT bot AS GEOM, c.start_date, c.stop_date, c.rep_num, c.r_lng, \
 					c.r_lat, c.alt_top, c.alt_bot, c.alpha, s.text_data FROM circles c \
-					LEFT JOIN sigairmet s ON s.rep_num = c.rep_num");
+					LEFT JOIN sigairmet s ON s.rep_num = c.rep_num &m=NOTAM circle");
 
 var cmarkers = L.markerClusterGroup({
 	iconCreateFunction: function(cluster){
@@ -718,7 +719,7 @@ var	cir = L.realtime({
 // ** Segmented graphical NOTAMS
 var url_seg_notam = url.concat("SELECT coords AS GEOM, alt, g.rep_num, start_date, stop_date, text_data \
 					FROM graphics g LEFT JOIN sigairmet s ON s.rep_num = g.rep_num \
-					WHERE g.segmented = 1 AND g.prod_id = 8");
+					WHERE g.segmented = 1 AND g.prod_id = 8 &m=NOTAM segmented");
 
 var notam_ckbox = document.getElementById("notam")			
 
@@ -773,7 +774,7 @@ var url_metar = url.concat("SELECT s.coords AS GEOM, m.stn_call, s.stn_loc, stat
 					winddir, altimeter, visby, dewp, hrly_precip, slp, windvar, windgust \
 					FROM metar m INNER JOIN (SELECT stn_call, MAX(ob_date) AS mob FROM metar \
 					GROUP BY stn_call) g ON m.stn_call = g.stn_call AND m.ob_date = g.mob \
-					INNER JOIN stations s ON m.stn_call = s.stn_call");
+					INNER JOIN stations s ON m.stn_call = s.stn_call &m=METAR");
 
 var wxIcon = L.icon({iconUrl: 'therm.ico', iconSize: [20,20]});
 var metar_ckbox = document.getElementById("meta")
@@ -837,7 +838,7 @@ var url_maxmin = url.concat("DROP TABLE IF EXISTS max_a; DROP TABLE IF EXISTS ma
 					UNION \
 					SELECT coords AS GEOM, s.stn_call, s.stn_loc, s.state, t.temp, ob_date, 'Min' AS maxmin FROM max_b t \
 					INNER JOIN stations s ON s.stn_call = t.stn_call WHERE t.temp IN (SELECT MIN(temp) \
-					FROM max_b WHERE temp <> '- ' )");
+					FROM max_b WHERE temp <> '- ' ) &m=METAR maxmin");
 
 var wxIcon6;
 var maxmin_ckbox = document.getElementById("mxmn")
@@ -907,7 +908,7 @@ var url_notam = url.concat("SELECT t.coords AS GEOM, s.stn_call, stn_loc, state,
 					LEFT JOIN graphics g ON (g.stn_call = s.stn_call) AND (g.rep_num = s.rep_num) \
 					JOIN stations t ON t.stn_call = s.stn_call \
 					WHERE s.stn_call != '   ' AND s.prod_id = 8 \
-					ORDER BY s.rep_num");
+					ORDER BY s.rep_num &m=NOTAM");
 
 var wxIcon2 = L.icon({iconUrl: 'wx2.ico', iconSize: [15,15]});
 var notam_ckbox = document.getElementById("notam")
@@ -973,7 +974,7 @@ var url_taf = url.concat("SELECT coords AS GEOM, t.stn_call, stn_loc, state, iss
 					wind, visby, condx, rep_time \
 					FROM taf t INNER JOIN (SELECT stn_call, MAX(issued) AS mob FROM taf \
 					GROUP BY stn_call) g ON t.stn_call = g.stn_call AND t.issued = g.mob \
-					INNER JOIN stations s ON t.stn_call = s.stn_call");
+					INNER JOIN stations s ON t.stn_call = s.stn_call &m=TAF");
 					
 var wxIcon3 = L.icon({iconUrl: 'wx1.ico', iconSize: [15,15]});
 var taf_ckbox = document.getElementById("taf")
@@ -1027,7 +1028,7 @@ var url_winds = url.concat("SELECT coords AS GEOM, w.stn_call, stn_loc, state, i
 					dir7, spd7, temp7, alt8, dir8, spd8, temp8, alt9, dir9, spd9, temp9 \
 					FROM winds w INNER JOIN (SELECT stn_call, MAX(proc_time) AS mx FROM winds \
 					GROUP BY stn_call) g ON w.stn_call = g.stn_call AND w.proc_time = g.mx \
-					INNER JOIN stations s ON w.stn_call = s.stn_call");
+					INNER JOIN stations s ON w.stn_call = s.stn_call &m=Winds");
 
 var wxIcon5 = L.icon({iconUrl: 'wind.ico', iconSize: [15,15]});
 var winds_ckbox = document.getElementById("winds")
@@ -1106,7 +1107,7 @@ var url_pirep = url.concat("SELECT coords AS GEOM, p.stn_call, stn_loc, state, r
 					wind_spd_dir, icing, rep_time \
 					FROM pirep p INNER JOIN (SELECT stn_call, MAX(rep_time) AS mx FROM pirep \
 					GROUP BY stn_call) g ON p.stn_call = g.stn_call AND p.rep_time = g.mx \
-					INNER JOIN stations s ON p.stn_call = s.stn_call");
+					INNER JOIN stations s ON p.stn_call = s.stn_call &m=PIREP");
 
 var wxIcon4
 var pirep_ckbox = document.getElementById("pirep")

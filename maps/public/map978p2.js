@@ -8,7 +8,7 @@ $(document).ready(function(){
 
 var nexrad_count = url.concat("SELECT prod_id, fisb_product_desc, altitude, COUNT(*) AS count \
 					FROM nexrad, fisb_products WHERE prod_id = fisb_product_id \
-					GROUP BY prod_id, fisb_product_desc, altitude ORDER BY prod_id, altitude");
+					GROUP BY prod_id, fisb_product_desc, altitude ORDER BY prod_id, altitude &m=NEXRAD count");
 
 	function get_nexrad_count(){
 		var row = "";
@@ -35,7 +35,7 @@ $(document).ready(function(){
 
 	var sua_nofeat = url.concat("SELECT DISTINCT s.airsp_id, s.airsp_name, s.airsp_type \
 					FROM sua s LEFT JOIN sua_airspace a ON a.airsp_id = s.airsp_id \
-					WHERE a.airsp_name IS NULL ORDER BY s.airsp_name");
+					WHERE a.airsp_name IS NULL ORDER BY s.airsp_name &m=SUA no coords");
 
 	function get_sua_nofeat(){
 		var row = "";
@@ -63,7 +63,7 @@ $(document).ready(function(){
 	var tfr_nograph = url.concat("SELECT s.rep_num, text_data, notam_name FROM sigairmet s \
 					LEFT JOIN graphics g ON g.rep_num = s.rep_num \
 					WHERE s.prod_id = 8 AND (SUBSTRING(s.stn_call,1,1) = ' ' OR s.stn_call ='') \
-					AND g.rep_num IS NULL");
+					AND g.rep_num IS NULL &m=TFR no graphic");
 
 	function get_tfr_nograph(){
 		var row = "";
