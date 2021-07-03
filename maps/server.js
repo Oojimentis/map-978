@@ -26,7 +26,9 @@ app.get('/page2', function(req, res) {
 // Expose sqlx endpoint for jsquery GET
 app.get( "/sqlx", function(req, res) {
 	var sqlx = req.query.q;
-	console.log("Executing SQLx:" + sqlx) ;
+	var page_query = req.query.m;
+//	console.log("Executing SQLx:" + sqlx) ;
+	console.log("Query for : "+ page_query);
 	db.any(sqlx)
 	.then(function (data) {
 		res.send(data);
@@ -36,7 +38,9 @@ app.get( "/sqlx", function(req, res) {
 // Expose sql endpoint, grab query as URL parameter and send it to the database
 app.get( "/sql", function(req, res) {
 	var sql = req.query.q;
-	console.log("Executing SQL:" + sql) ;
+		var page_query_home = req.query.m;
+//	console.log("Executing SQL:" + sql) ;
+	console.log("Query for : "+ page_query_home);
 
 //query using pg- promise
 	db.any(sql)
