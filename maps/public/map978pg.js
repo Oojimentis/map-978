@@ -846,7 +846,7 @@ var maxmin_ckbox = document.getElementById("mxmn")
 maxmin = L.realtime({
 	url: url_maxmin,
 	crossOrigin: true, type: 'json'
-	}, {interval: 3600,
+	}, {interval: 20000,
 	getFeatureId: function(featureData){
 		return featureData.properties.stn_call + featureData.properties.temp;
 
