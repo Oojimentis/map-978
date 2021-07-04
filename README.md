@@ -80,9 +80,5 @@ Icing:
 PIREP:
 ![pirep](https://user-images.githubusercontent.com/60933475/124371124-c8d59d80-dc4c-11eb-8ddd-09183ad70c9f.png)
 
-SIGMET:
-![sigmet](https://user-images.githubusercontent.com/60933475/124371127-cd01bb00-dc4c-11eb-95e0-5ae89c0311e3.png)
-
 CWA:
 ![cwa](https://user-images.githubusercontent.com/60933475/124371130-d25f0580-dc4c-11eb-9f53-cfe172ecf894.png)
-
