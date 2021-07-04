@@ -6,4 +6,5 @@ truncate pirep;
 truncate sigairmet;
 truncate sua;
 truncate taf;
+truncate taf_forecast;
 truncate winds;

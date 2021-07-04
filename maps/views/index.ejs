@@ -1,412 +1,145 @@
-<!DOCTYPE html>
-<html> 
+﻿<!DOCTYPE html>
+<html lang="en">
 <head>
-<meta charset="UTF-8" />
+<meta charset="utf-8"/>
 
 <title>DUMP978-WX Data</title>
 	<input type="hidden" id="port" value="<%=ptnum %>"/>
+	<link rel="stylesheet" href="map978.css">
 	<link rel="stylesheet" href="/leaflet/leaflet.css"/>
 	<script src="/leaflet/leaflet.js"></script>
-	<script src="/leaflet/jquery.js"></script> 
+	<script src="/leaflet/jquery.js"></script>
 	<script src="/leaflet/leaflet-realtime.js"></script>
-  <link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster@1.4.1/dist/MarkerCluster.css"/>
-  <link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster@1.4.1/dist/MarkerCluster.Default.css"/>
-	
-  <script src="https://unpkg.com/leaflet.markercluster@1.4.1/dist/leaflet.markercluster.js"></script>
-
-
-<style>
-
-#wrapper {
-	margin: 0 auto;
-	width: 100%;
-}
-#panel{
-	float: left;
-	width: 100%;
-	height:40px;
-	background-color: #175B81;
-	color: yellow;
-}
-#map {
-	float: left;
-	width: 80%;
-	height:800px;
-}
-.sidebar {
-	float: left;
-	width: 20%;
-	height:800px;
-	background-color: #dadee0;
-	color: #073273;
-}
-#footer {
-	float: left;
-	background-color: #175B81;
-	color: white;
-	width: 100%;
-	height:10px
-}
-.container {
-	display: block;
-	position: relative;
-	padding-left: 1px;
-	margin-bottom: 8px;
-	cursor: pointer;
-	font-size: 10px;
-	-webkit-user-select: none;
-	-moz-user-select: none;
-	-ms-user-select: none;
-	user-select: none;
-}
-.text-labels {
-	font-weight: bold;
-	color:#006400;
-	font-family: "Arial Black";
-	font-size: 10px ;
-	line-height:10px;
-	text-align:center;
-}
-
-table, th, td 
-	{
-		margin:0px 5px;
-		border:solid 1px #333; 
-		padding:2px 4px;
-		font:10px arial;
-	}
-th {
-		font-size:11px;
-		font-weight:bold;
-	}
-td {
-		font-size:11px;
-		font-weight:normal
-	}
-tr:nth-child(even) {
-		background: #E6BECF;
-	}
-tr:nth-child(odd) {
-		background: #BEE6D5;
-	}
-tbody tr:hover {
-		background: #97C7F7;
-	}
-table {
-		border-collapse: collapse;
-	}
-.table a
-{
-	display:block;
-	text-decoration:none;
-}
-
-#table-wrapper {
-	position:relative;
-}
-#table-scroll {
-	height:350px;
-	overflow:auto;
-	margin-top:10px;
-}
-#table-wrapper table {
-	width:100%;
-}
-#table-wrapper table thead th .text {
-	position:absolute;
-	top:-20px;
-	z-index:2;
-	height:20px;
-	width:35%;
-	border:1px solid red;
-}
-#f1{
-	font-weight:bold
-}
-.p2 {
-	font-size: 20px;
-	font-weight:bold;
-	position: relative;
-	top: 11px;
-	left: 20px;
-	color: yellow
-}
-
-select { 
-	appearance: none; 
-	outline: 0; 
-	background: yellow; 
-	background-image: none; 
-	border:1px solid black; 
-	font:14px arial;
-} 
-.select { 
-	width: 10%; 
-	height: 3em; 
-	line-height: 3; 
-	background: #d3eaf8; 
-	overflow: hidden; 
-	border-radius: .25em; 
-}	
-label {
-	font:9px arial;
-}
-#first {
-	width: 50%;
-	float: left;
-}
-#second {
-	width: 50%;
-	float: left;
-}
-
-.selBox{
-	width: 80px !important;
-	height: 10px !important;
-}
-
-#ckboxes {	/* pushes checkbox a little from sidebar left edge */
-	padding-left: 5px;
-}
-.checkboxes label {
-	display: inline-block;
-	width: 35px;
-	padding-right: 0px;
-	white-space: nowrap;
-
-}
-.checkboxes input {
-	vertical-align: middle;
-	box-shadow: 2px 2px #ccc;
-}
-.checkboxes label span {
-	vertical-align: middle;
-
-}
-
-.slidecontainer {
-	width: 100%; /* Width of the outside container */
-	font-size: 10px;
-}
-/* The slider itself */
-.slider {
-	appearance: none;
-	width: 90%; /* Full-width */
-	height: 5px; /* Specified height */
-	background: #d3d3d3; /* Grey background */
-	opacity: 1.7; /* Set transparency (for mouse-over effects on hover) */
-}
-.tbox {
-	width: 40px;
-	height: 20px;
-	border: 1px solid #999;
-	font-size: 10px;
-	color: #175B81;
-	background-color: #eee;
-	border-radius: 1px;
-	box-shadow: 4px 4px #ccc;
-	display: inline-block;
-	-webkit-appearance: none;
-	-moz-appearance: none;
-	appearance: none;
-	cursor: pointer;
-}
-.box {
-	width: 90px;
-	height: 20px;
-	border: 1px solid #999;
-	font-size: 9px;
-	color: #175B81;
-	background-color: #eee;
-	border-radius: 1px;
-	box-shadow: 4px 4px #ccc;
-	display: inline-block;
-	-webkit-appearance: none;
-	-moz-appearance: none;
-	appearance: none;
-	cursor: pointer;
-}
-
-.legend {
-  padding: 3px 3px;
-  font: 10px Arial Black;
-  background: white;
-  background: rgba(255, 255, 255, 0.8);
-  box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);
- border-radius: 5px;
-  line-height: 20px;
-  color: #555;
-}
-.legend h4 {
-  text-align: center;
-  font-size: 12px;
-  margin: 2px 12px 8px;
-  color: #777;
-}
-
-.legend span {
-  position: relative;
-  bottom: 3px;
-}
-
-.legend i {
-  width: 12px;
-  height: 12px;
-  float: left;
-  margin: 0 8px 0 0;
-  opacity: 0.7;
-}
-
-.legend i.icon {
-  background-size: 12px;
-  background-color: rgba(255, 255, 255, 1);
-}
-
-.mycluster {
-			width: 13px;
-			height: 13px;
-			background-color: #E1E68E;
-			text-align: center;
-			font-size: 10px;
-
-}
-
-.mycluster2 {
-			width: 13px;
-			height: 13x;
-			background-color: #F7F51E;
-			text-align: center;
-			font-size: 10px;
-
-}
-
-</style>
-
+	<link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster@1.4.1/dist/MarkerCluster.css"/>
+	<link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster@1.4.1/dist/MarkerCluster.Default.css"/>
+	<script src="https://unpkg.com/leaflet.markercluster@1.4.1/dist/leaflet.markercluster.js"></script>
+	<script src="https://unpkg.com/leaflet-pip@1.1.0/leaflet-pip.js"></script>
 </head>
 <body>
 
-<div id="wrapper">
-	<div id="panel"><span class="p2">DUMP978 - WX Display:
-		<span id="UTC_za00" style="font-size:20px;color:yellow"></span> &nbspUTC
-			<script src="//widget.time.is/t.js">UTC</script>
-			<script>time_is_widget.init({UTC_za00:{}});	</script>
-	</div>
-	<a href="https://time.is/UTC" id="time_is_link" rel="nofollow" style="font-size:20px;color:yellow;background:blue"></a>
-
-	<div id="map"></div>
-		<div class="sidebar">
-			<p style="text-align:center; font-size: 12px; color:#175B81; 
-			font-weight:bold; "><span id="metar">Details</span></p>	
-			<div id="ckboxes">
-				<div class="checkboxes">
-					<label>Max/Min:</label>
-						<input type="checkbox" id="mxmn" name="mxmn" >
+<nav class="topnav">
+	<a class="active" href="/">Home</a>	
+	<a href="page2">Reports</a>				
+	<a class="disabled">DUMP978 - WX Display</a>
+	<a class="disabled">
+		<span id="UTC_za00"></span>z
+		<script src="//widget.time.is/t.js"></script>
+		<script>time_is_widget.init({UTC_za00:{}});	</script></a>
+</nav>
+<a href="https://time.is/UTC" id="time_is_link"; style="float: right; color: blue"; rel="nofollow"></a>		
+<div id="map"></div>
+	<div class="sidebar">
+		<p style="text-align:center; font-size: 12px; color:#175B81;
+		font-weight:bold;">Details</p>	
+		<div id="ckboxes">
+			<div class="checkboxes">
+				<label>Max/Min:</label>
+					<input type="checkbox" id="mxmn" name="mxmn">
 					<br>				
-					<label>METAR:</label>
-						<input type="checkbox" id="meta" name="meta" >
-					<label>NOTAM:</label>
-						<input type="checkbox" id="notam" name="notam" >
-					<label>SUA:</label>
-						<input type="checkbox" id="sua" name="sua" >
+				<label>METAR:</label>
+					<input type="checkbox" id="meta" name="meta">
+				<label>NOTAM:</label>
+					<input type="checkbox" id="notam" name="notam">
+				<label>SUA:</label>
+					<input type="checkbox" id="sua" name="sua">
 					<br>
-					<label>TAF:</label>
-						<input type="checkbox" id="taf" name="taf" >
-					<label>PIREP:</label>
-						<input type="checkbox" id="pirep" name="pirep" >
-					<label>WINDS:</label>
-						<input type="checkbox" id="winds" name="winds" >
- 					<br>
- 					<label>G-AIRMET</label> 
-						<input type="checkbox" id="gmet" name="gmet" checked>
-					<label>Start time:</label>
-	 				<select class="tbox" id="stim">
-						 <option value="00:00">00:00</option>
-						 <option value="03:00">03:00</option>
-						 <option value="06:00">06:00</option>
-						 <option value="09:00">09:00</option>
-						 <option value="15:00">15:00</option>
-						 <option value="18:00">18:00</option>
-						 <option value="21:00">21:00</option>
-					</select> 
+				<label>TAF:</label>
+					<input type="checkbox" id="taf" name="taf">
+				<label>PIREP:</label>
+					<input type="checkbox" id="pirep" name="pirep">
+				<label>WINDS:</label>
+					<input type="checkbox" id="winds" name="winds">
 					<br>
- 					<label>AIRMET</label> 
-						<input type="checkbox" id="amet" name="amet" checked>
-					<label>SIGMET</label> 
-						<input type="checkbox" id="smet" name="smet" checked>
-					<label>CWA</label> 
-						<input type="checkbox" id="cwa" name="cwa" checked>
-			
-					<div class="slidecontainer">
-						<input type="range" min="-1000" max="65000" value="-1000" 
- 							class="slider" id="gmsliderRange">
- 							Altitude: <span id="slidealt"></span> 
-						<br>
-					</div>
-					<div>
-						<select class="box" id="prodid">
-							<option value="0" selected>NEXRAD Off</option>
-							<option value="1">CONUS NEXRAD</option>
-							<option value="2">Regional NEXRAD</option>
-							<option value="3">Icing</option>
-							<option value="4">Turbulence</option>
-							<option value="5">Cloud Tops</option>
-							<option value="6">Lightning</option>
-						</select>
-			
-						<select class="box" id="altrad">
-							<option hidden value="0" selected>0 ft</option>
-							<option value="2000" > 2,000 ft</option>
-							<option value="4000" > 4,000 ft</option>
-							<option value="6000" > 6,000 ft</option>
-							<option value="8000" > 8,000 ft</option>
- 							<option value="10000">10,000 ft</option>
- 							<option value="12000">12,000 ft</option>
-							<option value="14000">14,000 ft</option>
-							<option value="16000">16,000 ft</option>
-							<option value="18000">18,000 ft</option>
-							<option value="20000">20,000 ft</option>
-							<option value="22000">22,000 ft</option>
-							<option value="24000">24,000 ft</option>
-						</select>
-					</div>
+				<label>G-AIRMET</label> 
+					<input type="checkbox" id="gmet" name="gmet">
+				<label>Start time:</label>
+				<select class="tbox" id="stim">
+					<option value="00:00">00:00</option>
+					<option value="03:00">03:00</option>
+					<option value="06:00">06:00</option>
+					<option value="09:00">09:00</option>
+					<option value="15:00">15:00</option>
+					<option value="18:00">18:00</option>
+					<option value="21:00">21:00</option>
+				</select>
+				<br>
+				<label>AIRMET</label>
+					<input type="checkbox" id="amet" name="amet" >
+				<label>SIGMET</label>
+					<input type="checkbox" id="smet" name="smet" >
+				<label>CWA</label>
+					<input type="checkbox" id="cwa" name="cwa" >
+
+				<div class="slidecontainer">
+					<input type="range" min="-1000" max="65000" value="-1000"
+						class="slider" id="gmsliderRange">
+						Altitude: <span id="slidealt"></span>
+					<br>
 				</div>
-			</div>
-			
-			<div id="table-wrapper">
-				<div id="table-scroll">		
-					<table style="width:90%">
-						<tr>
-							<th id="m1" align="left">Station</th>
- 		 					<td id='f1'></td>
-						</tr>
-						<tr>
-							<th id="m2" align="left">Location</th>
- 							<td id='f2'></td>
- 						</tr>
-						<tr>
-							<th id="m3" align="left">Time</th>
- 							<td id='f3'></td>
-		 				</tr>
-		 				<tr>
-		 					<th id="m4" align="left">Temp</th>
- 							<td id='f4'></td>
- 				 		</tr>
- 				 		<tr>
- 				 			<th id="m5" align="left">Wind Speed</th>
- 		 					<td id='f5'></td>
- 		 				</tr>
- 		 				<tr>
- 		 					<th id="m6" align="left">Visibility</th>
- 							<td id='f6'><a href="#"></a></td>
-					</table>
+				<div>
+					<select class="box" id="prodid">
+						<option value="0" selected>NEXRAD Off</option>
+						<option value="1">CONUS NEXRAD</option>
+						<option value="2">Regional NEXRAD</option>
+						<option value="3">Icing</option>
+						<option value="4">Turbulence</option>
+						<option value="5">Cloud Tops</option>
+						<option value="6">Lightning</option>
+					</select>
+
+					<select class="box" id="altrad">
+						<option value="0" disabled selected> 0 ft</option>
+						<option value="2000" > 2,000 ft</option>
+						<option value="4000" > 4,000 ft</option>
+						<option value="6000" > 6,000 ft</option>
+						<option value="8000" > 8,000 ft</option>
+						<option value="10000">10,000 ft</option>
+						<option value="12000">12,000 ft</option>
+						<option value="14000">14,000 ft</option>
+						<option value="16000">16,000 ft</option>
+						<option value="18000">18,000 ft</option>
+						<option value="20000">20,000 ft</option>
+						<option value="22000">22,000 ft</option>
+						<option value="24000">24,000 ft</option>
+					</select>
 				</div>
 			</div>
 		</div>
-	<div id="footer"></div>
-</div>
 
-<script src="map978pg.js" type="text/javascript"></script>
-<script id="port" src="map978pg.js"></script> 
+		<div id="table-wrapper">
+			<div id="table-scroll">		
+				<table style="width:90%">
+					<tr>
+						<th id="m1">Station</th>
+						<td id="f1"></td>
+					</tr>
+					<tr>
+						<th id="m2">Location</th>
+						<td id="f2"></td>
+					</tr>
+					<tr>
+						<th id="m3">Time</th>
+						<td id="f3"></td>
+					</tr>
+					<tr>
+						<th id="m4">Temp</th>
+						<td id="f4"></td>
+					</tr>
+					<tr>
+						<th id="m5">Wind Speed</th>
+						<td id="f5"></td>
+					</tr>
+					<tr>
+						<th id="m6">Visibility</th>
+						<td id="f6"></td>
+				</table>
+			</div>
+		</div>
+	</div>
+	
+<div id="footer"></div>
+
+<script src="map978pg.js"></script>
 
 </body>
 </html>

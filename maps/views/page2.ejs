@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+
+<title>DUMP978-WX Data</title>
+	<input type="hidden" id="port" value="<%=ptnum %>"/>
+	<link rel="stylesheet" href="map978.css">
+	<link rel="stylesheet" href="/leaflet/leaflet.css"/>
+	<script src="/leaflet/leaflet.js"></script>
+	<script src="/leaflet/jquery.js"></script>
+	<script src="/leaflet/leaflet-realtime.js"></script>
+</head>
+<body>
+
+<nav class="topnav">
+
+	<a href="/">Home</a>	
+	<a class="active" href="page2">Reports</a>
+	<a class="disabled">DUMP978 - Reports</a>
+	<a class="disabled">
+		<span id="UTC_za00"></span>z
+		<script src="//widget.time.is/t.js"></script>
+		<script>time_is_widget.init({UTC_za00:{}});	</script></a>
+</nav>
+<a href="https://time.is/UTC" id="time_is_link"; style="float: right; color: blue"; rel="nofollow"></a>		
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
+<div class = "page2">
+	<div class="row">
+		<div class="column">
+			<p>NEXRAD Count</p>
+			<div class="tableFixHead">
+				<table id="stntbl"> <tbody>
+					<thead>
+						<tr>
+							<th>Product</th>
+							<th>Altitude</th>
+							<th>Count</th>
+						</tr>
+					</thead>
+				</tbody></table>
+			</div>
+		</div>
+		<div class="column">
+			<p>SUA Airspace - No Geometry</p>	
+			<div class="tableFixHead">
+				<table id="suatbl"> <tbody>
+					<thead>
+						<tr>
+							<th>Airspace ID</th>
+							<th>Airspace Name</th>
+							<th>Airspace Type</th>
+						</tr>
+					</thead>
+				</tbody></table>
+			</div>
+		</div>
+	</div>
+
+	<p>NOTAM TFR - No Graphic Record</p>
+	<div class="tableFixHead">
+		<table id="tfrtbl"><tbody id="tbody">
+			<thead>
+				<tr>
+					<th>Rep Num</th>
+					<th>Type</th>
+					<th>Report</th>
+				</tr>
+			</thead>
+		</tbody></table>
+	</div> 
+	<br>
+</div>
+
+<div id="footer"></div>
+
+<script src="map978p2.js"></script>
+
+</body>
+</html>
