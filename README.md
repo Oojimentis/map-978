@@ -32,7 +32,7 @@ Miscellaneous Reports:
 ![reports](https://user-images.githubusercontent.com/60933475/124370992-5dd79700-dc4b-11eb-88cd-ce31fb7ebb82.png)
 
 METAR Max/Min:
-![metar](https://user-images.githubusercontent.com/60933475/124371013-a1ca9c00-dc4b-11eb-80c2-a40c902a71ac.png)
+![maxmin](https://user-images.githubusercontent.com/60933475/124371175-371a6000-dc4d-11eb-99c1-a4cdf648f812.png)
 
 NOTAM - Cluster:
 ![notam](https://user-images.githubusercontent.com/60933475/124371015-a8f1aa00-dc4b-11eb-9999-5a20d684797f.png)
