@@ -10,73 +10,79 @@ Uses Leaflet (© 2010–2019 Vladimir Agafonkin. https://leafletjs.com)
 and Leaflet Realtime (https://github.com/perliedman/leaflet-realtime)
 
 ## Recent Changes
-* 6/19/21 Include graphical NOTAMS with text NOTAM checkbox.
-* 6/18/21 Add display of METAR stations with max/min temperature.
-* 6/12/21 Use 'clustering' for NOTAM reports.
-* 6/10/21 Segmented G-AIRMET reports displayed.
-* 6/5/21 Segmented NOTAM-TFR reports displayed.
-* 5/24/21 Additional METAR data displayed.
-* 5/23/21 Improvements to Cloud Tops performance.
-* 5/14/21 SUA reports added.
-* 5/11/21 Winds Aloft reports added.
-* 5/7/21 Reduced Cloud Tops resolution for less browser stress.
-* 5/1/21 Map legends added for NEXRAD.
-* 4/12/21 Added NEXRAD radar data.
+* 07/03/21 Selection of overlapping AIRMET/SIGMET/SUA features added.
+* 07/01/21 Miscellaneous realtime reports page added. Style changes.
+* 06/19/21 Include graphical NOTAMS with text NOTAM checkbox.
+* 06/18/21 Add display of METAR stations with max/min temperature.
+* 06/12/21 Use 'clustering' for NOTAM reports.
+* 06/10/21 Segmented G-AIRMET reports displayed.
+* 06/05/21 Segmented NOTAM-TFR reports displayed.
+* 05/24/21 Additional METAR data displayed.
+* 05/23/21 Improvements to Cloud Tops performance.
+* 05/14/21 SUA reports added.
+* 05/11/21 Winds Aloft reports added.
+* 05/07/21 Reduced Cloud Tops resolution for less browser stress.
+* 05/01/21 Map legends added for NEXRAD.
+* 04/12/21 Added NEXRAD radar data.
 
 
 ## Screenshots
 
+Miscellaneous Reports:
+![reports](https://user-images.githubusercontent.com/60933475/124370992-5dd79700-dc4b-11eb-88cd-ce31fb7ebb82.png)
+
 METAR Max/Min:
-![maxmin](https://user-images.githubusercontent.com/60933475/122658296-6a32fe80-d139-11eb-95a0-594f1a632c42.png)
+![metar](https://user-images.githubusercontent.com/60933475/124371013-a1ca9c00-dc4b-11eb-80c2-a40c902a71ac.png)
 
 NOTAM - Cluster:
-![notam-cluster](https://user-images.githubusercontent.com/60933475/121897487-6db92680-ccf0-11eb-9a4b-9804e79ee520.png)
+![notam](https://user-images.githubusercontent.com/60933475/124371015-a8f1aa00-dc4b-11eb-9999-5a20d684797f.png)
 
 NOTAM-TFR:
-![notam-tfr](https://user-images.githubusercontent.com/60933475/120909427-f249dc00-c642-11eb-9ad8-a611994967be.png)
-![NOTAM-TFR](https://user-images.githubusercontent.com/60933475/121898267-38610880-ccf1-11eb-8d84-0b350db269af.png)
+![graphnotam](https://user-images.githubusercontent.com/60933475/124371022-c9b9ff80-dc4b-11eb-9f82-16a1d10df683.png)
+![circle](https://user-images.githubusercontent.com/60933475/124371023-ce7eb380-dc4b-11eb-931e-e9833b7e4b91.png)
 
 SUA:
-![sua1](https://user-images.githubusercontent.com/60933475/120909528-e874a880-c643-11eb-8fb2-f8fc5bb2935e.png)
+![sua](https://user-images.githubusercontent.com/60933475/124371033-e6eece00-dc4b-11eb-9a82-352a7e69d421.png)
 
 Winds Aloft:
-![winds](https://user-images.githubusercontent.com/60933475/117853332-489b4900-b256-11eb-82a0-abb861f67805.png)
+![winds](https://user-images.githubusercontent.com/60933475/124371038-ebb38200-dc4b-11eb-95de-26a4f3cdfd4e.png)
 
 CONUS:
-![conus](https://user-images.githubusercontent.com/60933475/117853355-5224b100-b256-11eb-8a25-6d4504cb741d.png)
+![conus](https://user-images.githubusercontent.com/60933475/124371041-f0783600-dc4b-11eb-96f1-cf26149819e1.png)
 
 METAR:
-![metar](https://user-images.githubusercontent.com/60933475/119374554-b482a600-bc87-11eb-9aad-39743a4ae095.png)
+![metar](https://user-images.githubusercontent.com/60933475/124371053-0ede3180-dc4c-11eb-867a-1ea49794d096.png)
 
 Regional NEXRAD:
-![regional](https://user-images.githubusercontent.com/60933475/117853527-87310380-b256-11eb-8ae3-e72233f1cb29.png)
+![region2](https://user-images.githubusercontent.com/60933475/124371055-19003000-dc4c-11eb-9b85-0df254e07380.png)
 
 Turbulence:
-![turb](https://user-images.githubusercontent.com/60933475/117853554-91eb9880-b256-11eb-8983-b9952d9d69c9.png)
+![turb](https://user-images.githubusercontent.com/60933475/124371057-1e5d7a80-dc4c-11eb-81bc-0fd6808531e9.png)
 
 TAF with report details:
-![taf](https://user-images.githubusercontent.com/60933475/115439629-c8487180-a1dc-11eb-8ccd-2ea1c2ff62d6.png)
+![taf](https://user-images.githubusercontent.com/60933475/124371065-2ddcc380-dc4c-11eb-9614-f900272ed7aa.png)
 
 G-AIRMET:
-![gairmet](https://user-images.githubusercontent.com/60933475/115439650-cda5bc00-a1dc-11eb-9da4-0fcb88617b52.png)
+![gairmet](https://user-images.githubusercontent.com/60933475/124371067-32a17780-dc4c-11eb-9b9f-e9f5e32ad28c.png)
 
 Cloud Tops:
-![cloud](https://user-images.githubusercontent.com/60933475/117853390-5ea90980-b256-11eb-8628-d1f7e47e3336.png)
+![cloud](https://user-images.githubusercontent.com/60933475/124371071-392fef00-dc4c-11eb-9b62-7c6791bb7bb2.png)
 
 AIRMET with text report details:
-![airmet](https://user-images.githubusercontent.com/60933475/115440209-7bb16600-a1dd-11eb-85b4-1a356883701d.png)
+![airmet](https://user-images.githubusercontent.com/60933475/124371074-3fbe6680-dc4c-11eb-9ad4-c0257d63e81e.png)
 
 SIGMET:
-![sigmet](https://user-images.githubusercontent.com/60933475/115440220-7fdd8380-a1dd-11eb-9c94-98f379eae496.png)
+![sigmet](https://user-images.githubusercontent.com/60933475/124371078-464cde00-dc4c-11eb-8999-f04deb2b0e31.png)
 
 Icing:
-![ice](https://user-images.githubusercontent.com/60933475/117853440-69fc3500-b256-11eb-8e63-1370fbbf93e6.png)
+![icing](https://user-images.githubusercontent.com/60933475/124371082-4d73ec00-dc4c-11eb-8e9a-d9408fa33aea.png)
 
 PIREP:
-![pirep](https://user-images.githubusercontent.com/60933475/117853479-78e2e780-b256-11eb-91c5-6a4c0dc8fdde.png)
+![pirep](https://user-images.githubusercontent.com/60933475/124371124-c8d59d80-dc4c-11eb-8ddd-09183ad70c9f.png)
 
 SIGMET:
-![sigmet](https://user-images.githubusercontent.com/60933475/115440368-a8fe1400-a1dd-11eb-92b3-5c342503bf6a.png)
+![sigmet](https://user-images.githubusercontent.com/60933475/124371127-cd01bb00-dc4c-11eb-95e0-5ae89c0311e3.png)
 
 CWA:
-![cwa](https://user-images.githubusercontent.com/60933475/115440382-ac919b00-a1dd-11eb-858e-ade59579797f.png)
+![cwa](https://user-images.githubusercontent.com/60933475/124371130-d25f0580-dc4c-11eb-9f53-cfe172ecf894.png)
+
