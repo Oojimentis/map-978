@@ -829,16 +829,32 @@ if (!metar_ckbox.checked) {
 }
 
 // ** METAR Max/Min
-var url_maxmin = url.concat("DROP TABLE IF EXISTS max_a; DROP TABLE IF EXISTS max_b; \
-					SELECT stn_call, MAX(ob_date) INTO temp max_a FROM metar GROUP BY stn_call; \
-					SELECT m.stn_call, ob_date, temp INTO temp max_b FROM max_a t \
-					INNER JOIN metar m ON (t.stn_call = m.stn_call) AND (t.max = m.ob_date); \
-					SELECT coords AS GEOM, s.stn_call, s.stn_loc, s.state, t.temp, ob_date, 'Max' AS maxmin FROM max_b t \
-					INNER JOIN stations s ON s.stn_call = t.stn_call WHERE t.temp IN (SELECT MAX(temp) FROM max_b) \
-					UNION \
-					SELECT coords AS GEOM, s.stn_call, s.stn_loc, s.state, t.temp, ob_date, 'Min' AS maxmin FROM max_b t \
-					INNER JOIN stations s ON s.stn_call = t.stn_call WHERE t.temp IN (SELECT MIN(temp) \
-					FROM max_b WHERE temp <> '- ' ) &m=METAR maxmin");
+
+var url_maxmin = url.concat("DROP TABLE IF EXISTS max_a; DROP TABLE IF EXISTS max_b;\
+		DROP TABLE IF EXISTS max_c; DROP TABLE IF EXISTS max_d; \
+		SELECT stn_call, MAX(ob_date) INTO temp max_a FROM metar GROUP BY stn_call; \
+		SELECT m.stn_call, ob_date, temp, windsp, winddir, altimeter, visby, dewp, hrly_precip, slp, windvar, windgust \
+		INTO temp max_b FROM max_a t \
+		INNER JOIN metar m ON (t.stn_call = m.stn_call) AND (t.max = m.ob_date) \
+		WHERE (m.temp <> '- '); \
+		SELECT  b.* INTO max_c FROM max_b b \
+		INNER JOIN max_b c on c.temp = (SELECT MIN(temp) FROM max_b) AND c.ob_date = b.ob_date \
+		AND b.stn_call = c.stn_call; \
+		SELECT b.* INTO max_d FROM max_b b \
+		INNER JOIN max_b e ON e.temp = (SELECT MAX(temp) FROM max_b) AND e.ob_date = b.ob_date \
+		AND b.stn_call = e.stn_call; \
+		SELECT coords AS GEOM, s.stn_call, s.stn_loc, s.state, c.ob_date, c.temp ,c.windsp, c.winddir, c.altimeter,\
+		c.visby, c.dewp, c.hrly_precip, c.slp, c.windvar, c.windgust, 'Min' AS maxmin FROM max_c c \
+		INNER JOIN stations s ON s.stn_call = c.stn_call \
+		INNER JOIN max_c d ON d.ob_date = c.ob_date \
+		WHERE c.ob_date IN (SELECT MAX(ob_date) FROM max_c) \
+		UNION \
+		SELECT coords AS GEOM, s.stn_call, s.stn_loc, s.state, c.ob_date, c.temp ,c.windsp, c.winddir, c.altimeter,\
+		c.visby, c.dewp, c.hrly_precip, c.slp, c.windvar, c.windgust, 'Max' AS maxmin FROM max_d c \
+		INNER JOIN stations s ON s.stn_call = c.stn_call \
+		INNER JOIN max_d d ON d.ob_date = c.ob_date \
+		WHERE c.ob_date IN (SELECT MAX(ob_date) FROM max_d) \
+		&m=METAR maxmin");
 
 var wxIcon6;
 var maxmin_ckbox = document.getElementById("mxmn")
@@ -865,26 +881,26 @@ maxmin = L.realtime({
 			$("#m1").html("Station" );
 			$("#m2").html("Location");
 			$("#m3").html("Temp");
-			$("#m4").html(" ");
-			$("#m5").html(" ");
-			$("#m6").html(" ");
-			$('#f1').html(e.target.feature.properties.stn_call + " - "
+			$("#m4").html("Winds");
+			$("#m5").html("Visibility");
+			$("#m6").html("Pressure");
+			$('#f1').html(e.target.feature.properties.maxmin + " - " 
+				+ e.target.feature.properties.stn_call + " - "
 				+ e.target.feature.properties.ob_date + 'z');
 			$('#f2').html(e.target.feature.properties.stn_loc + ", "
 				+ e.target.feature.properties.state);
-			$('#f3').html(e.target.feature.properties.temp + "\xB0F" + "<b>"
-			+ e.target.feature.properties.maxmin);
+			$('#f3').html(e.target.feature.properties.temp + "\xB0F" + "<b>");
 			$('#f4').html(" ");
 			$('#f5').html(" ");
 			$('#f6').html(" ");
-					
-//			$('#f4').html(e.target.feature.properties.windsp + "kts " +
-//					e.target.feature.properties.winddir + "° " +
-//					e.target.feature.properties.windvar + "  gusts:" +
-//					e.target.feature.properties.windgust + "kts");
-//			$('#f5').html(e.target.feature.properties.visby);
-//			$('#f6').html("SLP:" + e.target.feature.properties.slp +
-//					"<br>Altimeter:" + e.target.feature.properties.altimeter );
+		
+			$('#f4').html(e.target.feature.properties.windsp + "kts " +
+					e.target.feature.properties.winddir + "° " +
+					e.target.feature.properties.windvar + "  gusts:" +
+					e.target.feature.properties.windgust + "kts");
+			$('#f5').html(e.target.feature.properties.visby);
+			$('#f6').html("SLP:" + e.target.feature.properties.slp +
+					"<br>Altimeter:" + e.target.feature.properties.altimeter );
 		});
 		mmarker.addTo(map);
 
