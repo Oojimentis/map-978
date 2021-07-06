@@ -596,7 +596,7 @@ var	sua = L.realtime({
 	onEachFeature: function(feature, layer){
 //		layer.bindTooltip('SUA: ' + feature.properties.airsp_name);
 		layer.on('mousedown', function(e){
-			map.closePopup();
+//			map.closePopup();
 			layer.setStyle({color: 'yellow', fillColor: 'orange', fillOpacity: 0.5});
 			$("#m1").html("Report");
 			$("#m2").html("Status");					
