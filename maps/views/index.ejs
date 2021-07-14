@@ -1,32 +1,38 @@
 ﻿<!DOCTYPE html>
 <html lang="en">
-<head>
-<meta charset="utf-8"/>
 
-<title>DUMP978-WX Data</title>
+<head>
+	<meta charset="utf-8"/>
+
+	<title>DUMP978-WX Data</title>
+
 	<input type="hidden" id="port" value="<%=ptnum %>"/>
+	<script src="https://code.jquery.com/jquery-3.6.0.js"
+		integrity="sha256-H+K7U5CnXl1h5ywQfKtSj8PCmoN9aaq30gDh27Xc0jk="
+		crossorigin="anonymous"></script>
 	<link rel="stylesheet" href="map978.css">
 	<link rel="stylesheet" href="/leaflet/leaflet.css"/>
 	<script src="/leaflet/leaflet.js"></script>
-	<script src="/leaflet/jquery.js"></script>
 	<script src="/leaflet/leaflet-realtime.js"></script>
 	<link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster@1.4.1/dist/MarkerCluster.css"/>
-	<link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster@1.4.1/dist/MarkerCluster.Default.css"/>
 	<script src="https://unpkg.com/leaflet.markercluster@1.4.1/dist/leaflet.markercluster.js"></script>
 	<script src="https://unpkg.com/leaflet-pip@1.1.0/leaflet-pip.js"></script>
 </head>
-<body>
 
+<body>
 <nav class="topnav">
 	<a class="active" href="/">Home</a>	
-	<a href="page2">Reports</a>				
+	<a href="page2">Reports</a>
+	<a href="page3">TAF Details</a>					
 	<a class="disabled">DUMP978 - WX Display</a>
 	<a class="disabled">
 		<span id="UTC_za00"></span>z
 		<script src="//widget.time.is/t.js"></script>
 		<script>time_is_widget.init({UTC_za00:{}});	</script></a>
 </nav>
-<a href="https://time.is/UTC" id="time_is_link"; style="float: right; color: blue"; rel="nofollow"></a>		
+
+<a href="https://time.is/UTC" id="time_is_link" style="float: right; color: blue" rel="nofollow"></a>		
+
 <div id="map"></div>
 	<div class="sidebar">
 		<p style="text-align:center; font-size: 12px; color:#175B81;
