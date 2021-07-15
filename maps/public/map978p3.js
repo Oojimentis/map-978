@@ -3,16 +3,16 @@ var host_url = "http://localhost:";
 var url = host_url.concat(server_port, "/sqlx?q=");
 
 var stn_sql = url.concat("select stn_call,current,wind,visby,condx,rep_time,issued from taf &m=page3");
-
+		var thead = '',  tbody = '';
 /* Function for child row details*/
 
-function getChildRow(callback) {
+function getChildRow(data) {
 
 	var sub ='select stn_call,rep_time,forecast from taf_forecast \
-				where stn_call = \'' + callback.stn_call + '\' and \
-				rep_time =\''+ callback.rep_time+ '\' &m=subsql';
+				where stn_call = \'' + data.stn_call + '\' and \
+				rep_time =\''+ data.rep_time+ '\' &m=subsql';
 	var sub_sql = url.concat(sub);
-		var thead = '',  tbody = '';
+
 
 $.ajax({  
 	type: "Get",
@@ -29,28 +29,26 @@ $.ajax({
 				+ '</td></tr>';
 		});
 		console.log('<table>' + thead + tbody + '</table>');
+//				return '<table>' + thead + tbody + '</table>';	
 //		callback($('<table>' + thead + tbody + '</table>')).show();
 	}
 
 });
-		return($('<table>' + thead + tbody + '</table>')).show();	
+		return '<table>' + thead + tbody + '</table>';	
 /*
-	return '<table cellpadding="5" cellspacing="0"'
+*/
+/*	return '<table cellpadding="5" cellspacing="0"'
 		+ ' style="padding-left:50px;">' +
+		'<th>stn_call</th>' +
+		'<th>rep_time</th>' +
+		'<th>issued</th>' +
 		'<tr>' +
-		'<td>Station:</td>' +
 		'<td>' + data.stn_call + '</td>' +
-		'</tr>' +
-		'<tr>' +
-		'<td>Report Time:</td>' +
 		'<td>' + data.rep_time + '</td>' +
-		'</tr>' +
-		'<tr>' +
-		'<td>Issued At:</td>' +
 		'<td>' + data.issued + '</td>' +
 		'</tr>' +
 		'</table>'
-*/		
+*/
 }
 
 $(document).ready(function () {
