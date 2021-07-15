@@ -6,9 +6,35 @@ var stn_sql = url.concat("select stn_call,current,wind,visby,condx,rep_time,issu
 
 /* Function for child row details*/
 
-function getChildRow(data) {
-           
-// `data` is the data object for the row
+function getChildRow(callback) {
+
+	var sub ='select stn_call,rep_time,forecast from taf_forecast \
+				where stn_call = \'' + callback.stn_call + '\' and \
+				rep_time =\''+ callback.rep_time+ '\' &m=subsql';
+	var sub_sql = url.concat(sub);
+		var thead = '',  tbody = '';
+
+$.ajax({  
+	type: "Get",
+	url: sub_sql,
+	success: function(sdata) {
+
+		for (var key in sdata[0]) {
+			thead += '<th>' + key + '</th>';
+		}
+		$.each(sdata, function (i, d) {
+			tbody += '<tr><td>' + d.stn_call
+				+ '</td><td>' + d.rep_time
+				+ '</td><td>' + d.forecast
+				+ '</td></tr>';
+		});
+		console.log('<table>' + thead + tbody + '</table>');
+//		callback($('<table>' + thead + tbody + '</table>')).show();
+	}
+
+});
+		return($('<table>' + thead + tbody + '</table>')).show();	
+/*
 	return '<table cellpadding="5" cellspacing="0"'
 		+ ' style="padding-left:50px;">' +
 		'<tr>' +
@@ -23,7 +49,8 @@ function getChildRow(data) {
 		'<td>Issued At:</td>' +
 		'<td>' + data.issued + '</td>' +
 		'</tr>' +
-		'</table>';
+		'</table>'
+*/		
 }
 
 $(document).ready(function () {
