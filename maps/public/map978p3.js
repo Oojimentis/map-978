@@ -2,53 +2,36 @@ var server_port = document.getElementById('port').value;
 var host_url = "http://localhost:";
 var url = host_url.concat(server_port, "/sqlx?q=");
 
-var stn_sql = url.concat("select stn_call,current,wind,visby,condx,rep_time,issued from taf &m=page3");
-		var thead = '',  tbody = '';
-/* Function for child row details*/
+var stn_sql = url.concat("select stn_call, current, wind, visby, condx, rep_time, issued from taf &m=page3");
+var thead = '';
+var tbody = '';
 
-function getChildRow(data) {
+function getChildRow(callback,data) {
 
-	var sub ='select stn_call,rep_time,forecast from taf_forecast \
-				where stn_call = \'' + data.stn_call + '\' and \
-				rep_time =\''+ data.rep_time+ '\' &m=subsql';
+	var sub ='select stn_call as "Station",rep_time as "Time",forecast as "Forecast" from taf_forecast \
+		where stn_call = \'' + data.stn_call + '\' and \
+		rep_time =\''+ data.rep_time+ '\' &m=subsql';
 	var sub_sql = url.concat(sub);
+		$.ajax({  
+			type: "Get",
+			url: sub_sql,
+			success: function(sdata) {
+				var thead = ''; 
+		 		var tbody = '';
+				for (var key in sdata[0]) {
+					thead += '<th>' + key + '</th>';
+				}
+				$.each(sdata, function (i, d) {
+					tbody += '<tr><td>' + d.Station
+						+ '</td><td>' + d.Time
+						+ '</td><td>' + d.Forecast
+						+ '</td></tr>';
+				});
 
-
-$.ajax({  
-	type: "Get",
-	url: sub_sql,
-	success: function(sdata) {
-
-		for (var key in sdata[0]) {
-			thead += '<th>' + key + '</th>';
-		}
-		$.each(sdata, function (i, d) {
-			tbody += '<tr><td>' + d.stn_call
-				+ '</td><td>' + d.rep_time
-				+ '</td><td>' + d.forecast
-				+ '</td></tr>';
+				callback($('<table cellpadding="5" cellspacing="0"'
+					+ ' style="padding-left:50px;">' + thead + tbody + '</table>')).show();
+			}
 		});
-		console.log('<table>' + thead + tbody + '</table>');
-//				return '<table>' + thead + tbody + '</table>';	
-//		callback($('<table>' + thead + tbody + '</table>')).show();
-	}
-
-});
-		return '<table>' + thead + tbody + '</table>';	
-/*
-*/
-/*	return '<table cellpadding="5" cellspacing="0"'
-		+ ' style="padding-left:50px;">' +
-		'<th>stn_call</th>' +
-		'<th>rep_time</th>' +
-		'<th>issued</th>' +
-		'<tr>' +
-		'<td>' + data.stn_call + '</td>' +
-		'<td>' + data.rep_time + '</td>' +
-		'<td>' + data.issued + '</td>' +
-		'</tr>' +
-		'</table>'
-*/
 }
 
 $(document).ready(function () {
@@ -82,8 +65,8 @@ $(document).ready(function () {
 				}
 				else {
 					// Show the child row for detailinformation
-					row.child(getChildRow(row.data())).show();
-
+//					row.child(getChildRow(row.data())).show();
+				getChildRow(row.child,row.data());
 					// To show details,add the below class
 					tr.addClass('shown');
 				}

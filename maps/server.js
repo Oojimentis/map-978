@@ -31,7 +31,7 @@ app.get('/page3', function(req, res) {
 app.get( "/sqlx", function(req, res) {
 	var sqlx = req.query.q;
 	var page_query = req.query.m;
-//	console.log("Executing SQLx:" + sqlx) ;
+	console.log("Executing SQLx:" + sqlx) ;
 	console.log("Query for : "+ page_query);
 	db.any(sqlx)
 	.then(function (data) {
