@@ -317,16 +317,23 @@ label {
 	margin-left: 2px;
 	padding-left: 2px;
 }
-        td.details-control {
-            /* Image in the first column to
-                indicate expand*/
-            background: url('details_open.png')
-                no-repeat center;
-                  
-            cursor: pointer;
-        }
-  
-        tr.shown td.details-control {
-            background: url('details_close.png') 
-                no-repeat center;
-        }
+td.details-control {
+	/* Image in the first column to indicate expand*/
+	background: url('details_open.png')
+	no-repeat center;
+	cursor: pointer;
+}
+tr.shown td.details-control {
+	background: url('details_close.png') 
+	no-repeat center;
+}
+.taf_child th {
+	background-color: grey;
+	font-size: 12px;
+}
+.taf_child tr:nth-child(even) {
+	background: blanchedalmond;
+}
+.taf_child tr:nth-child(odd) {
+	background: darkkhaki;
+}
