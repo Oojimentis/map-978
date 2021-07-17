@@ -23,6 +23,10 @@ app.get('/page2', function(req, res) {
    res.render('page2',{ ptnum: port});
 }); 
 
+app.get('/page3', function(req, res) {
+   res.render('page3',{ ptnum: port});
+}); 
+
 // Expose sqlx endpoint for jsquery GET
 app.get( "/sqlx", function(req, res) {
 	var sqlx = req.query.q;

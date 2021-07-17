@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta content="initial-scale=1, maximum-scale=1, user-scalable=0" name="viewport" />
+	<meta name="viewport" content="width=device-width" />
+
+	<title>DUMP978-WX Data</title>
+	<input type="hidden" id="port" value="<%=ptnum %>"/>
+	<link rel="stylesheet" href="map978.css">
+	<script src="https://code.jquery.com/jquery-3.6.0.js"
+		integrity="sha256-H+K7U5CnXl1h5ywQfKtSj8PCmoN9aaq30gDh27Xc0jk="
+		crossorigin="anonymous"></script>
+	<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.25/css/jquery.dataTables.css">
+	<script  src="https://cdn.datatables.net/1.10.25/js/jquery.dataTables.js"></script>
+</head>
+
+<body>
+
+<nav class="topnav">
+	<a href="/">Home</a>	
+	<a href="page2">Reports</a>
+	<a class="active" href="page3">TAF Details</a>	
+	<a class="disabled">DUMP978 - TAF Details</a>
+	<a class="disabled">
+		<span id="UTC_za00"></span>z
+		<script src="//widget.time.is/t.js"></script>
+		<script>time_is_widget.init({UTC_za00:{}});	</script></a> 
+</nav>
+
+<a href="https://time.is/UTC" id="time_is_link" style="float: right; color: blue" rel="nofollow"></a>
+
+<div class = "page3">
+	<table id="tableID" class="display" style="width:100%">
+		<thead>
+			<tr>
+				<th></th>
+				<th>Station</th>
+				<th>Location</th>
+				<th>State</th>				
+				<th>Period</th>
+				<th>Winds</th>
+				<th>visibility</th>
+				<th>Conditions</th>
+			</tr>
+		</thead>
+	</table>
+
+</div>
+
+<div id="footer"></div>
+<script src="map978p3.js"></script>
+
+</body>
+</html>

@@ -1,31 +1,32 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-<meta charset="utf-8" />
 
-<title>DUMP978-WX Data</title>
+<head>
+	<meta charset="utf-8" />
+
+	<title>DUMP978-WX Data</title>
+
 	<input type="hidden" id="port" value="<%=ptnum %>"/>
 	<link rel="stylesheet" href="map978.css">
-	<link rel="stylesheet" href="/leaflet/leaflet.css"/>
-	<script src="/leaflet/leaflet.js"></script>
-	<script src="/leaflet/jquery.js"></script>
-	<script src="/leaflet/leaflet-realtime.js"></script>
+	<script src="https://code.jquery.com/jquery-3.6.0.js"
+		integrity="sha256-H+K7U5CnXl1h5ywQfKtSj8PCmoN9aaq30gDh27Xc0jk="
+		crossorigin="anonymous"></script>
 </head>
+
 <body>
 
 <nav class="topnav">
-
 	<a href="/">Home</a>	
 	<a class="active" href="page2">Reports</a>
+	<a href="page3">TAF Details</a>	
 	<a class="disabled">DUMP978 - Reports</a>
 	<a class="disabled">
 		<span id="UTC_za00"></span>z
 		<script src="//widget.time.is/t.js"></script>
 		<script>time_is_widget.init({UTC_za00:{}});	</script></a>
 </nav>
-<a href="https://time.is/UTC" id="time_is_link"; style="float: right; color: blue"; rel="nofollow"></a>		
 
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<a href="https://time.is/UTC" id="time_is_link" style="float: right; color: blue" rel="nofollow"></a>		
 
 <div class = "page2">
 	<div class="row">
