@@ -2,8 +2,9 @@ var server_port = document.getElementById('port').value;
 var host_url = "http://localhost:";
 var url = host_url.concat(server_port, "/sqlx?q=");
 
-var stn_sql = url.concat("SELECT stn_call, current, wind, visby, condx, rep_time, issued \
-					from taf &m=page3");
+var stn_sql = url.concat("SELECT t.stn_call, s.stn_loc, s.state, t.current, t.wind,\
+		t.visby, t.condx, t.rep_time, t.issued from taf t \
+		inner join stations s on s.stn_call = t.stn_call &m=TAF Details");
 var thead = '';
 var tbody = '';
 
@@ -51,6 +52,8 @@ $(document).ready(function () {
 					"defaultContent": ''
 				},					
 					{ data: 'stn_call' },
+					{ data: 'stn_loc' },
+					{ data: 'state' },					
 					{ data: 'current' },
 					{ data: 'wind' },
 					{ data: 'visby' },
