@@ -332,8 +332,14 @@ tr.shown td.details-control {
 	font-size: 12px;
 }
 .taf_child tr:nth-child(even) {
-	background: blanchedalmond;
+	background: #f7eefd;
 }
 .taf_child tr:nth-child(odd) {
-	background: darkkhaki;
+	background: #ceeee5;
+}
+#tableID tr:hover {
+	background-color: #98e1dd;
+}
+.taf_child tr:hover {
+	background-color: #4eecc9!important;
 }
