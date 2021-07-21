@@ -18,8 +18,6 @@ p {
 	margin-top: 48px;
 	background-color: #81d3ab;
 }
-
-
 .sidebar {
 	margin-top: 40px;
 	float: left;
@@ -53,13 +51,13 @@ td {
 	text-align: left;
 }
 tr:nth-child(even) {
-	background: #E6BECF;
+	background: #fcffee;
 }
 tr:nth-child(odd) {
-	background: #BEE6D5;
+	background: #e2f4eb;
 }
 tbody tr:hover {
-	background: #97C7F7;
+	background: #fcef8a;
 }
 table {
 	border-collapse: collapse;
@@ -251,35 +249,29 @@ label {
 .tableFixHead th {
 	box-shadow: inset 1px 1px #000, 0 1px #000;
 }
-#stntbl {
+.page2tbl {
 	border-collapse: collapse;
 	width: 95%;
 }
-#stntbl th, td {
-	padding: 8px 16px;
+.page2tbl th {
+	padding: 8px 6px;
+	font-size: 14px;	
 }
-#stntbl th {
-	background: #ad7fa8;
+.page2tbl th {
+	background: #baadfd;
 }
-#suatbl {
-	border-collapse: collapse;
-	width: 95%;
+.page2tbl td {
+	padding: 8px 6px;
+	font-size: 10px;	
 }
-#suatbl th, td {
-	padding: 6px 5px;
+.page2tbl tr:nth-child(even) {
+	background: #fcffee !important;
 }
-#suatbl th {
-	background: #ad7fa8;
+.page2tbl tr:nth-child(odd) {
+	background: #e2f4eb !important;
 }
-#tfrtbl {
-	border-collapse: collapse;
-	width: 99%;
-}
-#tfrtbl th {
-	padding: 8px 15px;
-}
-#tfrtbl th {
-	background: #ad7fa8;
+.page2tbl tr:hover {
+	background: #fcef8a !important;
 }
 * {
 	box-sizing: border-box;
@@ -328,17 +320,30 @@ tr.shown td.details-control {
 	no-repeat center;
 }
 .taf_child th {
-	background-color: grey;
+	background-color: grey !important;
+	font-size: 12px;
+}
+#tableID th {
+	background-color: #baadfd;
+	font-size: 14px;
+}
+#tableID tr:nth-child(even) {
+	background: #fcffee ;
+}
+#tableID tr:nth-child(odd) {
+	background: #e2f4eb;
+}
+#tableID TD {
 	font-size: 12px;
 }
 .taf_child tr:nth-child(even) {
-	background: #f7eefd;
+	background: #fbfdee!important;
 }
 .taf_child tr:nth-child(odd) {
-	background: #ceeee5;
+	background: #faf1a8!important;
 }
 #tableID tr:hover {
-	background-color: #98e1dd;
+	background-color: #fcef8a;
 }
 .taf_child tr:hover {
 	background-color: #4eecc9!important;

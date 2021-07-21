@@ -18,13 +18,13 @@ var nexrad_count = url.concat("SELECT prod_id, fisb_product_desc, altitude, COUN
 			type: "Get",
 			url: nexrad_count,
 			success: function(data) {
-				$('#stntbl tbody').empty();
+				$('#nexrtbl tbody').empty();
 				$.each(data, function(index, features) {
 					row += "<tr><td>" + features.fisb_product_desc + "</td><td>"
 					+ features.altitude + "</td><<td>"
 					+ features.count + "</td></tr>";
 				});
-				$("#stntbl tbody").append(row);
+				$("#nexrtbl tbody").append(row);
 			},
 		});		
 	};

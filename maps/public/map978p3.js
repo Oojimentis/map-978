@@ -46,6 +46,8 @@ $(document).ready(function() {
 		success: function(result) {
 			var table=	$('#tableID').DataTable({
 				data: result,
+				pageLength: 5,
+				 lengthMenu: [5, 10, 15, 50, 100, 500],
 				columns: [{
 					"className": 'details-control',
 					"orderable": true,
