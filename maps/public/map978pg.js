@@ -1,3 +1,5 @@
+// ** Map978 Home Sceen.
+
 var server_port = document.getElementById('port').value;
 var host_url = "http://localhost:";
 var url = host_url.concat(server_port, "/sql?q=");
@@ -7,9 +9,10 @@ var turblegend;
 var icelegend;
 var cloudlegend;
 var nexlegend;
-var sua_object=[];
-var airmet_object=[];
-var sigmet_object=[];
+var sua_object = [];
+var airmet_object = [];
+var sigmet_object = [];
+
 var popupOptions =
 	{
 		'className' : 'custompopup',
@@ -27,7 +30,7 @@ function onPageLoad(){
 var formValues = JSON.parse(localStorage.getItem('formValues')) || {};
 var $checkboxez = $("#ckboxes :checkbox");
 
-function sua_overlap(_sua_object, i){
+function sua_overlap(_sua_object, i) {
 	$('#f1').html('SUA - ' + this.sua_object[i].airsp_name);
 			$('#f2').html(this.sua_object[i].sua_airsp_desc + ' <br>'
 				+ this.sua_object[i].sua_status_desc);
@@ -40,10 +43,10 @@ function sua_overlap(_sua_object, i){
 			$('#f6').html(this.sua_object[i].dafif_name);
 };
 
-function airmet_overlap(_airmet_object, i){
+function airmet_overlap(_airmet_object, i) {
 	map.removeLayer(airmet);
 	map.addLayer(airmet);	
-	map.eachLayer(function (layer) {
+	map.eachLayer(function(layer) {
 		if (layer._leaflet_id == this.airmet_object[i]._leaflet_id) {
 
 			layer.setStyle({fillColor: 'yellow', fillOpacity: 0.5});
@@ -58,10 +61,10 @@ function airmet_overlap(_airmet_object, i){
 	});
 };
 
-function sigmet_overlap(_sigmet_object, i){
+function sigmet_overlap(_sigmet_object, i) {
 	map.removeLayer(sigmet);
 	map.addLayer(sigmet);	
-	map.eachLayer(function (layer) {
+	map.eachLayer(function(layer) {
 		if (layer._leaflet_id == this.sigmet_object[i]._leaflet_id) {
 
 			layer.setStyle({fillColor: 'yellow', fillOpacity: 0.5});
@@ -76,24 +79,24 @@ function sigmet_overlap(_sigmet_object, i){
 	});
 };
 
-function updateStorage(){
-	$checkboxez.each(function(){
+function updateStorage() {
+	$checkboxez.each(function() {
 	formValues[this.id] = this.checked;
 	});
 
 	localStorage.setItem("formValues", JSON.stringify(formValues));
 }
 
-$checkboxez.on("change", function(){
+$checkboxez.on("change", function() {
 	updateStorage();
 });
 
 // On page load
-$.each(formValues, function(key, value){
+$.each(formValues, function(key, value) {
 	$("#" + key).prop('checked', value);
 });
 
-function right(str, chr){
+function right(str, chr) {
 	return str.slice(str.length - chr, str.length);
 }
 
@@ -114,7 +117,7 @@ var OpenStreetMap_BlackAndWhite = L.tileLayer('http://{s}.tiles.wmflabs.org/bw-m
 });
 
 //** Altitude colours
-function getColor(alt_color){
+function getColor(alt_color) {
 	return 	alt_color >=	60000	? '#67BDE9':
 			alt_color >=	50000	? '#6EBAE0':
 			alt_color >=	43000	? '#75B7D6':
@@ -196,7 +199,7 @@ function getNexrad() {
 }	
 
 // ** NEXRAD intensity colours.
-function getColorInt(alt_color){
+function getColorInt(alt_color) {
 	switch (alt_color) {
 	case 1:
 		nexrad_color = '#8C8C74';
@@ -260,13 +263,13 @@ var gairmet = L.realtime({
 		altitude_color = getColor(feature.properties.alt);
 		return {color: '#5D8C8C', weight: 2, fillColor: altitude_color, opacity: 1.0, fillOpacity: 0.2};
 	},
-	getFeatureId: function(featureData){
+	getFeatureId: function(featureData) {
 		return featureData.properties.rep_num;
 	},
-	onEachFeature: function(feature, layer){
+	onEachFeature: function(feature, layer) {
 		layer.bindTooltip('G-AIRMET: Alt ' + feature.properties.alt + '<br>'
 			+ feature.properties.ob_ele);
-		layer.on('click', function(e){
+		layer.on('click', function(e) {
 			layer.setStyle({color: 'yellow', opacity: 0.8, fillColor: 'yellow', fillOpacity: 0.5});
 			$("#m1").html("Report");
 			$("#m2").html("Altitude");					
@@ -283,11 +286,11 @@ var gairmet = L.realtime({
 
 			gairmet.stop();
 		});
-		layer.on('mouseout', function(e){
+		layer.on('mouseout', function(e) {
 			gairmet.start();
 		})		
 	},
-	filter: function(feature, layer){
+	filter: function(feature, layer) {
 		var rangeslider = document.getElementById("gmsliderRange");
 		var output = document.getElementById("slidealt");
 		if (rangeslider.value == -1000) 
@@ -323,16 +326,16 @@ var	airmet = L.realtime({
 	url: url_airmet,
 	crossOrigin: true, type: 'json'
 	}, {interval: 35000,
-	style: function(feature){
+	style: function(feature) {
 		altitude_color = getColor(feature.properties.alt);
 		return {color: '#00cccc', weight: 2, fillColor: altitude_color, opacity: 1.0, fillOpacity: 0.2};
 	},
-	getFeatureId: function(featureData){
+	getFeatureId: function(featureData) {
 		return featureData.properties.rep_num;
 	},
-	onEachFeature: function(feature, layer){
+	onEachFeature: function(feature, layer) {
 //		layer.bindTooltip('AIRMET: Alt ' + feature.properties.alt);
-		layer.on('mousedown', function(e){
+		layer.on('mousedown', function(e) {
 			layer.setStyle({fillColor: 'yellow', fillOpacity: 0.5});
 			$("#m1").html("Report");
 			$("#m2").html("Altitude");					
@@ -365,11 +368,11 @@ var	airmet = L.realtime({
 			}
 			airmet.stop();
 		});
-		layer.on('mousedown', function(e){
+		layer.on('mousedown', function(e) {
 			airmet.start();
 		})		
 	},
-	filter: function(feature, layer){
+	filter: function(feature, layer) {
 		var rangeslider = document.getElementById("gmsliderRange");
 		var output = document.getElementById("slidealt");
 		if (rangeslider.value == -1000) 
@@ -405,12 +408,12 @@ var	sigmet = L.realtime({
 		altitude_color = getColor(feature.properties.alt);
 		return {color: '#00cccc', weight: 2, fillColor: altitude_color, opacity: 1.0, fillOpacity: 0.2};
 	},
-	getFeatureId: function(featureData){
+	getFeatureId: function(featureData) {
 		return featureData.properties.rep_num;
 	},
-	onEachFeature: function(feature, layer){
+	onEachFeature: function(feature, layer) {
 //		layer.bindTooltip('SIGMET: Alt ' + feature.properties.alt);
-		layer.on('mousedown', function(e){
+		layer.on('mousedown', function(e) {
 			layer.setStyle({fillColor: 'yellow', fillOpacity: 0.5});
 			$("#m1").html("Report");
 			$("#m2").html("Altitude");					
@@ -443,11 +446,11 @@ var	sigmet = L.realtime({
 			}
 			sigmet.stop();
 		});
-		layer.on('mousedown', function(e){
+		layer.on('mousedown', function(e) {
 			sigmet.start();
 		})		
 	},
-	filter: function(feature, layer){
+	filter: function(feature, layer) {
 		var rangeslider = document.getElementById("gmsliderRange");
 		var output = document.getElementById("slidealt");
 		if (rangeslider.value == -1000)
@@ -479,17 +482,17 @@ var	nexrad = L.realtime({
 	crossOrigin: true, type: 'json'
 	}, {interval: 55000,
 
-	getFeatureId: function(featureData){
+	getFeatureId: function(featureData) {
 		return featureData.properties.seq;
 	},
-	style: function(feature){
+	style: function(feature) {
 		if (feature.properties.prod_id == 84 || feature.properties.prod_id == 90 
 				|| feature.properties.prod_id == 91 ) {
 			nexrad_color = getColorInt(feature.properties.intensity);
 			return {color: nexrad_color, weight: 4, fillColor: nexrad_color, opacity: 0.5, fillOpacity: 0.5}
 		}
 	},
-	pointToLayer: function(feature, latlng){
+	pointToLayer: function(feature, latlng) {
 		if (feature.properties.prod_id != 84 ) {		
 			var currentPoint = map.latLngToContainerPoint(latlng);
 			var width = 5;		//5
@@ -522,16 +525,16 @@ var	cwa = L.realtime({
 	url: url_cwa,
 	crossOrigin: true, type: 'json'
 	}, {interval: 77000,
-	style: function(feature){
+	style: function(feature) {
 		altitude_color = getColor(feature.properties.alt);
 		return {color: '#00cccc', weight: 2, fillColor: altitude_color, opacity: 1.0, fillOpacity: 0.2};
 	},
-	getFeatureId: function(featureData){
+	getFeatureId: function(featureData) {
 		return featureData.properties.rep_num;
 	},
-	onEachFeature: function(feature, layer){
+	onEachFeature: function(feature, layer) {
 		layer.bindTooltip('CWA: Alt ' + feature.properties.alt);
-		layer.on('click', function(e){
+		layer.on('click', function(e) {
 			layer.setStyle({fillColor: 'yellow', fillOpacity: 0.5});
 			$("#m1").html("Report");
 			$("#m2").html("Altitude");					
@@ -548,11 +551,11 @@ var	cwa = L.realtime({
 
 			cwa.stop();
 		});
-		layer.on('mouseout', function(e){
+		layer.on('mouseout', function(e) {
 			cwa.start();
 		})		
 	},
-	filter: function(feature,layer){
+	filter: function(feature,layer) {
 		var rangeslider = document.getElementById("gmsliderRange");
 		var output = document.getElementById("slidealt");
 		if (rangeslider.value == -1000)
@@ -587,15 +590,15 @@ var	sua = L.realtime({
 	url: url_sua,
 	crossOrigin: true, type: 'json'
 	}, {interval: 50000,
-	style: function(feature){
+	style: function(feature) {
 		return {color: '#2e052a', weight: 3, fillColor: '#2e052a', opacity: 0.5, fillOpacity: 0.5};
 	},
-	getFeatureId: function(featureData){
+	getFeatureId: function(featureData) {
 		return featureData.properties.airsp_name;
 	},
-	onEachFeature: function(feature, layer){
+	onEachFeature: function(feature, layer) {
 //		layer.bindTooltip('SUA: ' + feature.properties.airsp_name);
-		layer.on('mousedown', function(e){
+		layer.on('mousedown', function(e) {
 //			map.closePopup();
 			layer.setStyle({color: 'yellow', fillColor: 'orange', fillOpacity: 0.5});
 			$("#m1").html("Report");
@@ -636,7 +639,7 @@ var	sua = L.realtime({
 			sua.stop();
 		})
 		
-		layer.on('mouseout', function(e){
+		layer.on('mouseout', function(e) {
 			html='';
 			sua.start();
 		});
@@ -659,7 +662,7 @@ var url_circle = url.concat("SELECT bot AS GEOM, c.start_date, c.stop_date, c.re
 					LEFT JOIN sigairmet s ON s.rep_num = c.rep_num &m=NOTAM circle");
 
 var cmarkers = L.markerClusterGroup({
-	iconCreateFunction: function(cluster){
+	iconCreateFunction: function(cluster) {
 		var n = cluster.getChildCount();
 		return L.divIcon({ html: n, className: 'mycluster2', iconSize: L.point[1,1]});
 	},
@@ -674,13 +677,13 @@ var	cir = L.realtime({
 	url: url_circle,
 	crossOrigin: true, type: 'json'
 	}, {interval: 70000,
-	getFeatureId: function(featureData){
+	getFeatureId: function(featureData) {
 	return featureData.properties.rep_num;
 	},
-	pointToLayer: function(feature, latlng){
+	pointToLayer: function(feature, latlng) {
 		marker = L.circleMarker(latlng, {color: 'red', fillcolor: 'yellow'});
-		marker.bindTooltip('NOTAM-TFR<br>' + feature.properties.rep_num );
-		marker.on('click', function (e) {
+		marker.bindTooltip('NOTAM-TFR<br>' + feature.properties.rep_num);
+		marker.on('click', function(e) {
 			$("#m1").html("Altitude");
 			$("#m2").html("Radius");
 			$("#m3").html("Rep Number");
@@ -734,7 +737,7 @@ var	seg = L.realtime({
 	getFeatureId: function(featureData) {
 		return featureData.properties.rep_num;
 	},
-	onEachFeature: function(feature, layer){
+	onEachFeature: function(feature, layer) {
 		layer.bindTooltip('NOTAM-TFR<br>Alt ' + feature.properties.alt);
 		layer.on('click', function(e){
 			layer.setStyle({fillColor: 'yellow', fillOpacity: 0.5});
@@ -763,7 +766,7 @@ var	seg = L.realtime({
 			seg.start();
 		}
 		
-		layer.on('mouseout', function(e){
+		layer.on('mouseout', function(e) {
 			seg.start();
 		})		
 	},
@@ -783,14 +786,14 @@ metar = L.realtime({
 	url: url_metar,
 	crossOrigin: true, type: 'json'
 	}, {interval: 36000,
-	getFeatureId: function(featureData){
+	getFeatureId: function(featureData) {
 		return featureData.properties.stn_call;
 	},
-	pointToLayer: function(feature, latlng){
+	pointToLayer: function(feature, latlng) {
 		marker = L.marker(latlng, {icon: wxIcon});
 		marker.bindTooltip('METAR' + '<br>' + feature.properties.stn_call
 			+ '<br>' + feature.properties.temp + '&#x2109');
-		marker.on('click', function(e){
+		marker.on('click', function(e) {
 			$("#m1").html("Station" );
 			$("#m2").html("Location");
 			$("#m3").html("Temp");
@@ -863,11 +866,10 @@ maxmin = L.realtime({
 	url: url_maxmin,
 	crossOrigin: true, type: 'json'
 	}, {interval: 20000,
-	getFeatureId: function(featureData){
+	getFeatureId: function(featureData) {
 		return featureData.properties.stn_call + featureData.properties.temp;
-
 	},
-	pointToLayer: function(feature, latlng){
+	pointToLayer: function(feature, latlng) {
 		if (feature.properties.maxmin == "Max")
 			wxIcon6 = L.icon({iconUrl: 'red.ico', iconSize: [15,15]})
 		else
@@ -877,7 +879,7 @@ maxmin = L.realtime({
 		mmarker.bindTooltip(feature.properties.maxmin + ': ' 
 			+ feature.properties.temp + '&#x2109' + '<br>' 
 			+ feature.properties.stn_call );
-		mmarker.on('click', function(e){
+		mmarker.on('click', function(e) {
 			$("#m1").html("Station" );
 			$("#m2").html("Location");
 			$("#m3").html("Temp");
@@ -900,7 +902,7 @@ maxmin = L.realtime({
 					e.target.feature.properties.windgust + "kts");
 			$('#f5').html(e.target.feature.properties.visby);
 			$('#f6').html("SLP:" + e.target.feature.properties.slp +
-					"<br>Altimeter:" + e.target.feature.properties.altimeter );
+					"<br>Altimeter:" + e.target.feature.properties.altimeter);
 		});
 		mmarker.addTo(map);
 
@@ -931,7 +933,7 @@ var notam_ckbox = document.getElementById("notam")
 
 var narkers = L.markerClusterGroup({
 
-	iconCreateFunction: function(cluster){
+	iconCreateFunction: function(cluster) {
 		var n = cluster.getChildCount();
 		return L.divIcon({ html: n, className: 'mycluster' , iconSize: L.point[1,1]});
 	},
@@ -945,14 +947,14 @@ notam = L.realtime({
 	url: url_notam,
 	crossOrigin: true, type: 'json'
 	}, {interval: 38000,
-	getFeatureId: function(featureData){
+	getFeatureId: function(featureData) {
 		return featureData.properties.stn_call+featureData.properties.rep_num;
 	},
-	pointToLayer: function(feature, latlng){
+	pointToLayer: function(feature, latlng) {
 		marker = L.marker(latlng, {icon: wxIcon2});
 		marker.bindTooltip(feature.properties.notam_name
 			+ '<br>' + feature.properties.stn_call);
-		marker.on('click', function(e){
+		marker.on('click', function(e) {
 			$("#m1").html("Station");
 			$("#m2").html("Location");
 			$("#m3").html("Report Num");
@@ -999,13 +1001,13 @@ taf = L.realtime({
 	url: url_taf,
 	crossOrigin: true, type: 'json'
 	}, {interval: 30000,
-	getFeatureId: function(featureData){
+	getFeatureId: function(featureData) {
 		return featureData.properties.stn_call;
 	},
-	pointToLayer: function(feature, latlng){
+	pointToLayer: function(feature, latlng) {
 		marker = L.marker(latlng, {icon: wxIcon3});
 		marker.bindTooltip('TAF' + '<br>' + feature.properties.stn_call);
-		marker.on('click', function(e){
+		marker.on('click', function(e) {
 			$("#m1").html("Station");
 			$("#m2").html("Location");
 			$("#m3").html("Issued");
@@ -1053,14 +1055,14 @@ winds = L.realtime({
 	url: url_winds,
 	crossOrigin: true, type: 'json'
 	}, {interval: 67000,
-	getFeatureId: function(featureData){
+	getFeatureId: function(featureData) {
 		return featureData.properties.stn_call;
 	},
-	pointToLayer: function(feature, latlng){
+	pointToLayer: function(feature, latlng) {
 		marker = L.marker(latlng, {icon: wxIcon5});
 		marker.bindTooltip('Winds' + '<br>' + feature.properties.stn_call);
-		marker.on('click', function(e){
-			$("#m1").html("Station" + '<br>' + e.target.feature.properties.issue_date );
+		marker.on('click', function(e) {
+			$("#m1").html("Station" + '<br>' + e.target.feature.properties.issue_date);
 			$("#m2").html(e.target.feature.properties.alt1 + "ft" + '<br>'
 				+ e.target.feature.properties.alt2 + "ft");
 			$("#m3").html(e.target.feature.properties.alt3 + "ft" + '<br>'
@@ -1132,10 +1134,10 @@ pirep = L.realtime({
 	url: url_pirep,
 	crossOrigin: true, type: 'json'
 	}, {interval: 50000,
-	getFeatureId: function(featureData){
+	getFeatureId: function(featureData) {
 		return featureData.properties.stn_call;
 	},
-	pointToLayer: function(feature, latlng){
+	pointToLayer: function(feature, latlng) {
 		if (feature.properties.rep_type == "Urgent Report")
 			wxIcon4 = L.icon({iconUrl: 'pilot2.ico', iconSize: [17,17]})
 		else
@@ -1150,7 +1152,7 @@ pirep = L.realtime({
 			marker.bindTooltip('PIREP' + '<br>'
 				+ feature.properties.stn_call);
 
-		marker.on('click', function(e){
+		marker.on('click', function(e) {
 			$("#m1").html("Station");
 			$("#m2").html("Location" + '<br>' + "Time: "
 				+ e.target.feature.properties.rep_time + "z");
@@ -1193,7 +1195,7 @@ if (!pirep_ckbox.checked) {
 }
 
 // ** Checkbox controls
-document.querySelector("input[name = gmet]").addEventListener('change', function(){
+document.querySelector("input[name = gmet]").addEventListener('change', function() {
 	if(this.checked) {
 		map.addLayer(gairmet),
 		gairmet.start()
@@ -1204,7 +1206,7 @@ document.querySelector("input[name = gmet]").addEventListener('change', function
 	}
 })
 
-document.querySelector("input[name = amet]").addEventListener('change', function(){
+document.querySelector("input[name = amet]").addEventListener('change', function() {
 	if(this.checked) {
 		map.addLayer(airmet),
 		airmet.start()
@@ -1216,7 +1218,7 @@ document.querySelector("input[name = amet]").addEventListener('change', function
 })
 
 // ** Toggle METAR and Max/Min
-document.querySelector("input[name = meta]").addEventListener('change', function(){
+document.querySelector("input[name = meta]").addEventListener('change', function() {
 	if(this.checked) {
 		map.addLayer(metar),
 		metar.start()		
@@ -1225,11 +1227,10 @@ document.querySelector("input[name = meta]").addEventListener('change', function
 		map.removeLayer(metar),
 		metar.stop()
 	}
-	
 })
 
 // Toggle Max/Min and METAR
-document.querySelector("input[name = mxmn]").addEventListener('change', function(){
+document.querySelector("input[name = mxmn]").addEventListener('change', function() {
 	if(this.checked) {
 		map.addLayer(maxmin),
 		maxmin.start()
@@ -1241,7 +1242,7 @@ document.querySelector("input[name = mxmn]").addEventListener('change', function
 })
 
 // ** Includes graphic NOTAMs
-document.querySelector("input[name = notam]").addEventListener('change', function(){
+document.querySelector("input[name = notam]").addEventListener('change', function() {
 	if(this.checked) {
 		map.addLayer(notam),
 		notam.start(),
@@ -1263,7 +1264,7 @@ document.querySelector("input[name = notam]").addEventListener('change', functio
 	}
 })
 
-document.querySelector("input[name = sua]").addEventListener('change', function(){
+document.querySelector("input[name = sua]").addEventListener('change', function() {
 	if(this.checked) {
 		map.addLayer(sua),
 		sua.start()
@@ -1274,7 +1275,7 @@ document.querySelector("input[name = sua]").addEventListener('change', function(
 	}
 })
 
-document.querySelector("input[name = taf]").addEventListener('change', function(){
+document.querySelector("input[name = taf]").addEventListener('change', function() {
 	if(this.checked) {
 		map.addLayer(taf),
 		taf.start()
@@ -1285,7 +1286,7 @@ document.querySelector("input[name = taf]").addEventListener('change', function(
 	}
 })
 
-document.querySelector("input[name = pirep]").addEventListener('change', function(){
+document.querySelector("input[name = pirep]").addEventListener('change', function() {
 	if(this.checked) {
 		map.addLayer(pirep),
 		pirep.start()
@@ -1296,7 +1297,7 @@ document.querySelector("input[name = pirep]").addEventListener('change', functio
 	}
 })
 
-document.querySelector("input[name = winds]").addEventListener('change', function(){
+document.querySelector("input[name = winds]").addEventListener('change', function() {
 	if(this.checked) {
 		map.addLayer(winds),
 		winds.start()
@@ -1307,7 +1308,7 @@ document.querySelector("input[name = winds]").addEventListener('change', functio
 	}
 })
 
-document.querySelector("input[name = smet]").addEventListener('change', function(){
+document.querySelector("input[name = smet]").addEventListener('change', function() {
 	if(this.checked) {
 		map.addLayer(sigmet),
 		sigmet.start()
@@ -1318,7 +1319,7 @@ document.querySelector("input[name = smet]").addEventListener('change', function
 	}
 })
 
-document.querySelector("input[name = cwa]").addEventListener('change', function(){
+document.querySelector("input[name = cwa]").addEventListener('change', function() {
 	if(this.checked) {
 		map.addLayer(cwa),
 		cwa.start()
@@ -1329,11 +1330,11 @@ document.querySelector("input[name = cwa]").addEventListener('change', function(
 	}
 })
 
-document.getElementById("stim").onchange = function(){
+document.getElementById("stim").onchange = function() {
 	gairmet.update()
 }		
 		
-document.getElementById("altrad").onchange = function(){
+document.getElementById("altrad").onchange = function() {
 	nexrad_layer_group.clearLayers();
 	nexrad_sql = getNexrad();
 	url_nexrad = url.concat(nexrad_sql);
@@ -1345,7 +1346,7 @@ document.getElementById("altrad").onchange = function(){
 document.getElementById("gmsliderRange").onchange = function()
 	{gairmet.update(), airmet.update(), sigmet.update(), cwa.update()}
 
-document.getElementById("prodid").onchange = function(){
+document.getElementById("prodid").onchange = function() {
 	var nexrad_select_str = document.getElementById('prodid').value;
 	nexrad_sel_prodid = parseInt(nexrad_select_str);
 	map.removeControl(nexlegend);
@@ -1387,7 +1388,7 @@ document.getElementById("prodid").onchange = function(){
 
 // Map legends
 turblegend = L.control({ position: "topright" });
-turblegend.onAdd = function(){
+turblegend.onAdd = function() {
 	var div = L.DomUtil.create("div", "legend");
 	div.innerHTML += "<h4>Turbulence</h4>";
 	div.innerHTML += '<i style="background: #8C8C74"></i><span>EDR  7-13</span><br>';
@@ -1409,7 +1410,7 @@ turblegend.onAdd = function(){
 };
 
 cloudlegend = L.control({ position: "topright" });
-cloudlegend.onAdd = function(){
+cloudlegend.onAdd = function() {
 	var div = L.DomUtil.create("div", "legend");
 	div.innerHTML += "<h4>Cloud Tops</h4>";
 	div.innerHTML += '<i style="background: #8C8C74"></i><span><= 1,500ft</span><br>';
@@ -1431,7 +1432,7 @@ cloudlegend.onAdd = function(){
 };
 
 icelegend = L.control({ position: "topright" });
-icelegend.onAdd = function(){
+icelegend.onAdd = function() {
 	var div = L.DomUtil.create("div", "legend");
 	div.innerHTML += "<h4>Icing</h4>";
 	div.innerHTML += '<i style="background: #8C8C74"></i><span>Trace</span><br>';
@@ -1445,7 +1446,7 @@ icelegend.onAdd = function(){
 };
 
 lightlegend = L.control({ position: "topright" });
-lightlegend.onAdd = function(){
+lightlegend.onAdd = function() {
 	var div = L.DomUtil.create("div", "legend");
 	div.innerHTML += "<h4>Lightning</h4>";
 	div.innerHTML += '<i style="background: #8C8C74"></i><span>1 Strike</span><br>';
@@ -1459,7 +1460,7 @@ lightlegend.onAdd = function(){
 };
 
 nexlegend = L.control({ position: "topright" });
-nexlegend.onAdd = function(){
+nexlegend.onAdd = function() {
 	var div = L.DomUtil.create("div", "legend");
 	div.innerHTML += "<h4>NEXRAD</h4>";
 	div.innerHTML += '<i style="background: #8C8C74"></i><span>None</span><br>';

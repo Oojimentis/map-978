@@ -1,10 +1,12 @@
+// ** Map978 TAF Details Sceen.
+
 var server_port = document.getElementById('port').value;
 var host_url = "http://localhost:";
 var url = host_url.concat(server_port, "/sqlx?q=");
 
-var stn_sql = url.concat("SELECT t.stn_call, CONCAT(s.stn_loc,', ', s.state) as stn_loc, t.current, t.wind,\
-		t.visby, t.condx, t.rep_time, t.issued from taf t \
-		inner join stations s on s.stn_call = t.stn_call ORDER BY t.stn_call &m=TAF Details");
+var stn_sql = url.concat("SELECT t.stn_call, CONCAT(s.stn_loc,', ', s.state) AS stn_loc, t.current, t.wind,\
+		t.visby, t.condx, t.rep_time, t.issued FROM taf t \
+		INNER JOIN stations s ON s.stn_call = t.stn_call ORDER BY t.stn_call &m=TAF Details");
 var thead = '';
 var tbody = '';
 
@@ -25,7 +27,7 @@ function getChildRow(callback,data) {
 			for (var key in sdata[0]) {
 				thead += '<th>' + key + '</th>';
 			}
-			$.each(sdata, function (i, d) {
+			$.each(sdata, function(i, d) {
 				tbody += '<tr><td>' + d.Station
 					+ '</td><td>' + d.Forecast
 					+ '</td></tr>';
@@ -37,7 +39,7 @@ function getChildRow(callback,data) {
 	});
 }
 
-$(document).ready(function () {
+$(document).ready(function() {
 	$.ajax({
 		type: "get",
 		url: stn_sql,
@@ -59,7 +61,7 @@ $(document).ready(function () {
 					{ data: 'condx' }
 				]
 			});
-			$('#tableID tbody').on('click','td.details-control', function () {
+			$('#tableID tbody').on('click','td.details-control', function() {
 				var tr = $(this).closest('tr');
 				var row = table.row(tr);
 				if (row.child.isShown()) {
