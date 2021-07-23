@@ -14,22 +14,22 @@ var db = pgp(connectionString) ;
 app.set('view engine', 'ejs')
 app.use(express.static('public'));
 
-//route to the root 
+// Home page 
 app.get('/',function (req, res) { 
 	res.render('index' ,{ ptnum: port});
 });
 
+// Reports
 app.get('/page2', function(req, res) {
    res.render('page2',{ ptnum: port});
 }); 
 
+// TAF Details
 app.get('/page3', function(req, res) {
    res.render('page3',{ ptnum: port});
 }); 
 
-app.get('/page4', function(req, res) {
-   res.render('page4',{ ptnum: port});
-}); 
+// METAR graph 
 app.get('/page5', function(req, res) {
    res.render('page5',{ ptnum: port});
 }); 

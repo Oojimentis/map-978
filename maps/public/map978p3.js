@@ -3,22 +3,23 @@
 var server_port = document.getElementById('port').value;
 var host_url = "http://localhost:";
 var url = host_url.concat(server_port, "/sqlx?q=");
-
-var stn_sql = url.concat("SELECT t.stn_call, CONCAT(s.stn_loc,', ', s.state) AS stn_loc, t.current, t.wind,\
-		t.visby, t.condx, t.rep_time, t.issued FROM taf t \
-		INNER JOIN stations s ON s.stn_call = t.stn_call ORDER BY t.stn_call &m=TAF Details");
 var thead = '';
 var tbody = '';
 
-
-
+var stn_sql = url.concat("SELECT t.stn_call, CONCAT(s.stn_loc,', ', s.state) AS stn_loc,\
+			t.current, t.wind, t.visby, t.condx, t.rep_time, t.issued \
+			FROM taf t INNER JOIN stations s ON s.stn_call = t.stn_call \
+			ORDER BY t.stn_call \
+			&m=TAF Details");
 
 function getChildRow(callback,data) {
 
 	var sub ='SELECT stn_call AS "Station", forecast AS "Forecast" \
 				FROM taf_forecast \
 				WHERE stn_call = \'' + data.stn_call + '\' AND \
-				rep_time =\''+ data.rep_time+ '\' &m=TAF child rows';
+				rep_time =\''+ data.rep_time+ '\' \
+				&m=TAF child rows';
+				
 	var sub_sql = url.concat(sub);
 
 	$.ajax({  
@@ -51,7 +52,7 @@ $(document).ready(function() {
 				destroy: true,
 				data: result,
 				pageLength: 5,
-				 lengthMenu: [5, 10, 15, 50, 100, 500],
+				lengthMenu: [5, 10, 15, 50, 100, 500],
 				columns: [{
 					"className": 'details-control',
 					"orderable": true,

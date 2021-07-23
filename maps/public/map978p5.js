@@ -1,11 +1,8 @@
-// ** Map978 Graph Test
+// ** Map978 METAR Graph
 
 var server_port = document.getElementById('port').value;
-
 var host_url = "http://localhost:";
 var url = host_url.concat(server_port, "/sqlx?q=");
-
-
 
 const queryString = window.location.search;
 const urlParams = new URLSearchParams(queryString);
@@ -14,11 +11,9 @@ var stnid1 = stnid.replace(/"/g, "'");
 
 stnid = stnid.replace(/['"]+/g, '');
 
-var stn_sql = url.concat(`select stn_call, temp, ob_date \
-					from metar \
-					where stn_call = ${stnid1} &m=METAR Graph`);
-
-
+var stn_sql = url.concat(`SELECT stn_call, temp, ob_date FROM metar \
+			WHERE stn_call = ${stnid1} \
+			&m=METAR METAR Graph`);
 
 $(document).ready(function() {
 	$.ajax({

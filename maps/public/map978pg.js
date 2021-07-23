@@ -13,15 +13,14 @@ var sua_object = [];
 var airmet_object = [];
 var sigmet_object = [];
 
-var popupOptions =
-	{
-		'className' : 'custompopup',
-		'closeButton' : false
-	}
+var popupOptions = {
+	'className' : 'custompopup',
+	'closeButton' : false
+}
 	
 window.onload = onPageLoad();
 
-function onPageLoad(){
+function onPageLoad() {
 	document.getElementById("gmsliderRange").step = "1000";
 	document.getElementById("gmsliderRange").value = "-1000";
 	document.getElementById("altrad").disabled = true;
@@ -30,16 +29,14 @@ function onPageLoad(){
 var formValues = JSON.parse(localStorage.getItem('formValues')) || {};
 var $checkboxez = $("#ckboxes :checkbox");
 
-function popup(mylink, windowname) { 
-    if (! window.focus)return true;
-    var href;
-    if (typeof(mylink) == 'string') href=mylink;
-    else href=mylink.href; 
-    window.open(href, windowname, 'width=400,height=200,scrollbars=yes'); 
-    return false; 
+function popup(mylink, windowname) {
+	if (! window.focus)return true;
+		var href;
+	if (typeof(mylink) == 'string') href=mylink;
+	else href=mylink.href;
+	window.open(href, windowname, 'width=750,height=400,scrollbars=yes');
+	return false;
   }
-
-
 
 function sua_overlap(_sua_object, i) {
 	$('#f1').html('SUA - ' + this.sua_object[i].airsp_name);
@@ -200,11 +197,13 @@ function getNexrad() {
 		break;
 	}
 
-	var nexrad_sql_holder = `SELECT coords AS GEOM, m.prod_id, m.intensity, m.maptime, m.block_num,seq \
-					FROM nexrad m INNER JOIN (SELECT MAX(maptime) AS mob FROM nexrad \
-					WHERE prod_id = ${nexrad_prodid}) g \
-					ON m.maptime = g.mob AND m.prod_id = ${nexrad_prodid} AND altitude = ${nexrad_alt} \
-                    &m=NEXRAD+${nexrad_prodid}+Alt:+${nexrad_alt}`;
+	var nexrad_sql_holder = `SELECT coords AS GEOM, m.prod_id, m.intensity,\
+			m.maptime, m.block_num,seq \
+			FROM nexrad m INNER JOIN (SELECT MAX(maptime) AS mob FROM nexrad \
+			WHERE prod_id = ${nexrad_prodid}) g \
+			ON m.maptime = g.mob AND m.prod_id = ${nexrad_prodid}\ 
+			AND altitude = ${nexrad_alt} \
+			&m=NEXRAD+${nexrad_prodid}+Alt:+${nexrad_alt}`;
 
 	return nexrad_sql_holder;
 }	
@@ -262,8 +261,10 @@ return nexrad_color;
 }
 
 // ** G-AIRMET
-var url_gairmet = url.concat("SELECT coords AS GEOM, rep_num, alt, ob_ele, start_date, stop_date \
-					FROM graphics WHERE prod_id = 14 &m=G\-AIRMET");
+var url_gairmet = url.concat("SELECT coords AS GEOM, rep_num, alt,\
+			ob_ele, start_date, stop_date \
+			FROM graphics WHERE prod_id = 14\
+			&m=G\-AIRMET");
 
 var gairmet_ckbox = document.getElementById("gmet")
 var gairmet = L.realtime({
@@ -272,7 +273,8 @@ var gairmet = L.realtime({
 	}, {interval: 33000,
 	style: function(feature){
 		altitude_color = getColor(feature.properties.alt);
-		return {color: '#5D8C8C', weight: 2, fillColor: altitude_color, opacity: 1.0, fillOpacity: 0.2};
+		return {color: '#5D8C8C', weight: 2, fillColor: altitude_color, 
+			opacity: 1.0, fillOpacity: 0.2};
 	},
 	getFeatureId: function(featureData) {
 		return featureData.properties.rep_num;
@@ -281,7 +283,8 @@ var gairmet = L.realtime({
 		layer.bindTooltip('G-AIRMET: Alt ' + feature.properties.alt + '<br>'
 			+ feature.properties.ob_ele);
 		layer.on('click', function(e) {
-			layer.setStyle({color: 'yellow', opacity: 0.8, fillColor: 'yellow', fillOpacity: 0.5});
+			layer.setStyle({color: 'yellow', opacity: 0.8, fillColor: 'yellow',
+				fillOpacity: 0.5});
 			$("#m1").html("Report");
 			$("#m2").html("Altitude");					
 			$("#m3").html("Report Num");
@@ -328,9 +331,11 @@ if (!gairmet_ckbox.checked) {
 }
 
 // ** AIRMET
-var url_airmet = url.concat("SELECT coords AS GEOM, g.rep_num, alt, ob_ele, text_data, start_date, stop_date \
-					FROM graphics g LEFT JOIN sigairmet s ON (g.prod_id = s.prod_id) \
-					AND (g.rep_num = s.rep_num) WHERE g.prod_id = 11 &m=AIRMET");
+var url_airmet = url.concat("SELECT coords AS GEOM, g.rep_num, alt, ob_ele,\
+			text_data, start_date, stop_date \
+			FROM graphics g LEFT JOIN sigairmet s ON (g.prod_id = s.prod_id) \
+			AND (g.rep_num = s.rep_num) WHERE g.prod_id = 11\
+			&m=AIRMET");
 					
 var airmet_ckbox = document.getElementById("amet")
 var	airmet = L.realtime({
@@ -339,7 +344,8 @@ var	airmet = L.realtime({
 	}, {interval: 35000,
 	style: function(feature) {
 		altitude_color = getColor(feature.properties.alt);
-		return {color: '#00cccc', weight: 2, fillColor: altitude_color, opacity: 1.0, fillOpacity: 0.2};
+		return {color: '#00cccc', weight: 2, fillColor: altitude_color,
+			opacity: 1.0, fillOpacity: 0.2};
 	},
 	getFeatureId: function(featureData) {
 		return featureData.properties.rep_num;
@@ -368,10 +374,11 @@ var	airmet = L.realtime({
 			if (pip_airmet.length) {
 				for (var i = 0; i < pip_airmet.length; i++) {
 					airmet_object[i] = pip_airmet[i];	//.feature.properties;
-					html_airmet += "<a onclick= 'airmet_overlap(\"" + airmet_object[i] + "\",\"" + i + "\");'>" + 
-					"AIRMET - Alt: " +
-					pip_airmet[i].feature.properties.alt + " : " + " Rep num: " +
-					pip_airmet[i].feature.properties.rep_num + "</a><br>" ;
+					html_airmet += "<a onclick= 'airmet_overlap(\"" 
+						+ airmet_object[i] + "\",\"" + i + "\");'>" + 
+						"AIRMET - Alt: " +
+						pip_airmet[i].feature.properties.alt + " : " + " Rep num: " +
+						pip_airmet[i].feature.properties.rep_num + "</a><br>" ;
 				}
 				if (html_airmet) {
 					layer.bindPopup(html_airmet, popupOptions);
@@ -406,9 +413,11 @@ if (!airmet_ckbox.checked) {
 }
 
 // ** SIGMET
-var url_sigmet = url.concat("SELECT coords AS GEOM, g.rep_num, alt, ob_ele, text_data, start_date, stop_date \
-					FROM graphics g LEFT JOIN sigairmet s ON (g.prod_id = s.prod_id) AND \
-					(g.rep_num = s.rep_num)	WHERE g.prod_id = 12 &m=SIGMET");
+var url_sigmet = url.concat("SELECT coords AS GEOM, g.rep_num, alt,\
+			ob_ele, text_data, start_date, stop_date \
+			FROM graphics g LEFT JOIN sigairmet s ON (g.prod_id = s.prod_id) AND \
+			(g.rep_num = s.rep_num)	WHERE g.prod_id = 12\
+			&m=SIGMET");
 
 var sigmet_ckbox = document.getElementById("smet")
 var	sigmet = L.realtime({
@@ -417,7 +426,8 @@ var	sigmet = L.realtime({
 	}, {interval: 60000,
 	style: function(feature) {
 		altitude_color = getColor(feature.properties.alt);
-		return {color: '#00cccc', weight: 2, fillColor: altitude_color, opacity: 1.0, fillOpacity: 0.2};
+		return {color: '#00cccc', weight: 2, fillColor: altitude_color,
+			opacity: 1.0, fillOpacity: 0.2};
 	},
 	getFeatureId: function(featureData) {
 		return featureData.properties.rep_num;
@@ -446,10 +456,11 @@ var	sigmet = L.realtime({
 			if (pip_sigmet.length) {
 				for (var i = 0; i < pip_sigmet.length; i++) {
 					sigmet_object[i] = pip_sigmet[i];	//.feature.properties;
-					html_sigmet += "<a onclick= 'sigmet_overlap(\"" + sigmet_object[i] + "\",\"" + i + "\");'>" + 
-					"SIGMET - Alt: " +
-					pip_sigmet[i].feature.properties.alt + " : " + " Rep num: " +
-					pip_sigmet[i].feature.properties.rep_num + "</a><br>" ;
+					html_sigmet += "<a onclick= 'sigmet_overlap(\"" 
+						+ sigmet_object[i] + "\",\"" + i + "\");'>" + 
+						"SIGMET - Alt: " +
+						pip_sigmet[i].feature.properties.alt + " : " + " Rep num: " +
+						pip_sigmet[i].feature.properties.rep_num + "</a><br>" ;
 				}
 				if (html_sigmet) {
 					layer.bindPopup(html_sigmet, popupOptions);
@@ -500,7 +511,8 @@ var	nexrad = L.realtime({
 		if (feature.properties.prod_id == 84 || feature.properties.prod_id == 90 
 				|| feature.properties.prod_id == 91 ) {
 			nexrad_color = getColorInt(feature.properties.intensity);
-			return {color: nexrad_color, weight: 4, fillColor: nexrad_color, opacity: 0.5, fillOpacity: 0.5}
+			return {color: nexrad_color, weight: 4, fillColor: nexrad_color,
+				opacity: 0.5, fillOpacity: 0.5}
 		}
 	},
 	pointToLayer: function(feature, latlng) {
@@ -510,8 +522,10 @@ var	nexrad = L.realtime({
 			var height = 5;		//5
 			var xDifference = width / 2;
 			var yDifference = height / 2;
-			var southWest = L.point((currentPoint.x - xDifference), (currentPoint.y - yDifference));
-			var northEast = L.point((currentPoint.x + xDifference), (currentPoint.y + yDifference));
+			var southWest = L.point((currentPoint.x - xDifference),
+				(currentPoint.y - yDifference));
+			var northEast = L.point((currentPoint.x + xDifference),
+				(currentPoint.y + yDifference));
 			var bounds = L.latLngBounds(map.containerPointToLatLng(southWest),
 				map.containerPointToLatLng(northEast));
 
@@ -527,9 +541,11 @@ var	nexrad = L.realtime({
 }).addTo(map)
 
 // ** CWA
-var url_cwa = url.concat("SELECT coords AS GEOM, g.rep_num, alt, ob_ele, text_data, start_date, stop_date \
-					FROM graphics g LEFT JOIN sigairmet s ON (g.prod_id = s.prod_id) AND \
-					(g.rep_num = s.rep_num) WHERE g.prod_id = 15 &m=CWA");
+var url_cwa = url.concat("SELECT coords AS GEOM, g.rep_num, alt, ob_ele,\
+			text_data, start_date, stop_date \
+			FROM graphics g LEFT JOIN sigairmet s ON (g.prod_id = s.prod_id)\
+			AND (g.rep_num = s.rep_num) WHERE g.prod_id = 15\
+			&m=CWA");
 
 var cwa_ckbox = document.getElementById("cwa")
 var	cwa = L.realtime({
@@ -538,7 +554,8 @@ var	cwa = L.realtime({
 	}, {interval: 77000,
 	style: function(feature) {
 		altitude_color = getColor(feature.properties.alt);
-		return {color: '#00cccc', weight: 2, fillColor: altitude_color, opacity: 1.0, fillOpacity: 0.2};
+		return {color: '#00cccc', weight: 2, fillColor: altitude_color,
+			opacity: 1.0, fillOpacity: 0.2};
 	},
 	getFeatureId: function(featureData) {
 		return featureData.properties.rep_num;
@@ -589,12 +606,13 @@ if (!cwa_ckbox.checked) {
 }
 
 // ** SUA 
-var url_sua = url.concat("SELECT s.airsp_id, rep_time, s.airsp_name, sua_airsp_desc, sua_status_desc, start_time, \
-					end_time, high_alt, low_alt, coords AS GEOM, dafif_name, sep_rule, shape_ind \
-					FROM sua s INNER JOIN sua_airspace a ON a.airsp_id = s.airsp_id \
-					INNER JOIN sua_airspace_type t ON t.sua_airsp_type = s.airsp_type \
-					INNER JOIN sua_sched_status c ON c.sua_status = s.sched_status \
-					ORDER BY s.airsp_name, rep_num &m=SUA");
+var url_sua = url.concat("SELECT s.airsp_id, rep_time, s.airsp_name,\
+			sua_airsp_desc, sua_status_desc, start_time, end_time,\
+			high_alt, low_alt, coords AS GEOM, dafif_name, sep_rule, shape_ind \
+			FROM sua s INNER JOIN sua_airspace a ON a.airsp_id = s.airsp_id \
+			INNER JOIN sua_airspace_type t ON t.sua_airsp_type = s.airsp_type \
+			INNER JOIN sua_sched_status c ON c.sua_status = s.sched_status \
+			ORDER BY s.airsp_name, rep_num &m=SUA");
 
 var sua_ckbox = document.getElementById("sua")
 var	sua = L.realtime({
@@ -602,7 +620,8 @@ var	sua = L.realtime({
 	crossOrigin: true, type: 'json'
 	}, {interval: 50000,
 	style: function(feature) {
-		return {color: '#2e052a', weight: 3, fillColor: '#2e052a', opacity: 0.5, fillOpacity: 0.5};
+		return {color: '#2e052a', weight: 3, fillColor: '#2e052a', 
+			opacity: 0.5, fillOpacity: 0.5};
 	},
 	getFeatureId: function(featureData) {
 		return featureData.properties.airsp_name;
@@ -638,8 +657,9 @@ var	sua = L.realtime({
 				for (var i = 0; i < match.length; i++) {
 					sua_object[i] = match[i].feature.properties;
 					if (match[i].feature.properties.airsp_name) {
-						html += "<a onclick= 'sua_overlap(\"" + sua_object[i] + "\",\"" + i +"\");'>" +
-						match[i].feature.properties.airsp_name	+ "	</a><br>" ;
+						html += "<a onclick= 'sua_overlap(\"" 
+							+ sua_object[i] + "\",\"" + i +"\");'>" 
+							+ match[i].feature.properties.airsp_name + "</a><br>" ;
 					}
 				}
 				if (html) {
@@ -668,9 +688,10 @@ if (!sua_ckbox.checked) {
 }
 
 // ** NOTAM TFR - Circle
-var url_circle = url.concat("SELECT bot AS GEOM, c.start_date, c.stop_date, c.rep_num, c.r_lng, \
-					c.r_lat, c.alt_top, c.alt_bot, c.alpha, s.text_data FROM circles c \
-					LEFT JOIN sigairmet s ON s.rep_num = c.rep_num &m=NOTAM circle");
+var url_circle = url.concat("SELECT bot AS GEOM, c.start_date, c.stop_date,\
+			c.rep_num, c.r_lng,	c.r_lat, c.alt_top, c.alt_bot, c.alpha, s.text_data \
+			FROM circles c \
+			LEFT JOIN sigairmet s ON s.rep_num = c.rep_num &m=NOTAM circle");
 
 var cmarkers = L.markerClusterGroup({
 	iconCreateFunction: function(cluster) {
@@ -731,9 +752,10 @@ var	cir = L.realtime({
 }).addTo(map);
 
 // ** Segmented graphical NOTAMS
-var url_seg_notam = url.concat("SELECT coords AS GEOM, alt, g.rep_num, start_date, stop_date, text_data \
-					FROM graphics g LEFT JOIN sigairmet s ON s.rep_num = g.rep_num \
-					WHERE g.segmented = 1 AND g.prod_id = 8 &m=NOTAM segmented");
+var url_seg_notam = url.concat("SELECT coords AS GEOM, alt, g.rep_num,\
+			start_date, stop_date, text_data \
+			FROM graphics g LEFT JOIN sigairmet s ON s.rep_num = g.rep_num \
+			WHERE g.segmented = 1 AND g.prod_id = 8 &m=NOTAM segmented");
 
 var notam_ckbox = document.getElementById("notam")			
 
@@ -784,11 +806,13 @@ var	seg = L.realtime({
 }).addTo(map);
 
 // ** METAR 
-var url_metar = url.concat("SELECT s.coords AS GEOM, m.stn_call, s.stn_loc, state, ob_date, temp, windsp, \
-					winddir, altimeter, visby, dewp, hrly_precip, slp, windvar, windgust \
-					FROM metar m INNER JOIN (SELECT stn_call, MAX(ob_date) AS mob FROM metar \
-					GROUP BY stn_call) g ON m.stn_call = g.stn_call AND m.ob_date = g.mob \
-					INNER JOIN stations s ON m.stn_call = s.stn_call &m=METAR");
+var url_metar = url.concat("SELECT s.coords AS GEOM, m.stn_call, s.stn_loc,\
+			state, ob_date, temp, windsp, winddir, altimeter, visby, dewp,\
+			hrly_precip, slp, windvar, windgust \
+			FROM metar m INNER JOIN (SELECT stn_call, MAX(ob_date) AS mob FROM metar \
+			GROUP BY stn_call) g ON m.stn_call = g.stn_call AND m.ob_date = g.mob \
+			INNER JOIN stations s ON m.stn_call = s.stn_call\
+			&m=METAR");
 
 var wxIcon = L.icon({iconUrl: 'therm.ico', iconSize: [20,20]});
 var metar_ckbox = document.getElementById("meta")
@@ -812,11 +836,9 @@ metar = L.realtime({
 			$("#m5").html("Visibility");
 			$("#m6").html("Pressure");
 			$('#f1').html('<a href=page5?StnID="'+ e.target.feature.properties.stn_call 
-			+'"	onClick="return popup(this,\'notes\')">' 
-			+ e.target.feature.properties.stn_call  +' </a> - @' 
-			+ e.target.feature.properties.ob_date + 'z');
-//			$('#f1').html(e.target.feature.properties.stn_call + " - "
-//				+ e.target.feature.properties.ob_date + 'z');
+				+ '" onClick="return popup(this,\'notes\')">'
+				+ e.target.feature.properties.stn_call  +' </a> - @'
+				+ e.target.feature.properties.ob_date + 'z');
 			$('#f2').html(e.target.feature.properties.stn_loc + ", "
 				+ e.target.feature.properties.state);
 			$('#f3').html(e.target.feature.properties.temp + "\xB0F" + "  dp:"
@@ -851,7 +873,8 @@ if (!metar_ckbox.checked) {
 var url_maxmin = url.concat("DROP TABLE IF EXISTS max_a; DROP TABLE IF EXISTS max_b;\
 		DROP TABLE IF EXISTS max_c; DROP TABLE IF EXISTS max_d; \
 		SELECT stn_call, MAX(ob_date) INTO temp max_a FROM metar GROUP BY stn_call; \
-		SELECT m.stn_call, ob_date, temp, windsp, winddir, altimeter, visby, dewp, hrly_precip, slp, windvar, windgust \
+		SELECT m.stn_call, ob_date, temp, windsp, winddir, altimeter,\
+		visby, dewp, hrly_precip, slp, windvar, windgust \
 		INTO temp max_b FROM max_a t \
 		INNER JOIN metar m ON (t.stn_call = m.stn_call) AND (t.max = m.ob_date) \
 		WHERE (m.temp <> '- '); \
@@ -861,14 +884,16 @@ var url_maxmin = url.concat("DROP TABLE IF EXISTS max_a; DROP TABLE IF EXISTS ma
 		SELECT b.* INTO max_d FROM max_b b \
 		INNER JOIN max_b e ON e.temp = (SELECT MAX(temp) FROM max_b) AND e.ob_date = b.ob_date \
 		AND b.stn_call = e.stn_call; \
-		SELECT coords AS GEOM, s.stn_call, s.stn_loc, s.state, c.ob_date, c.temp ,c.windsp, c.winddir, c.altimeter,\
-		c.visby, c.dewp, c.hrly_precip, c.slp, c.windvar, c.windgust, 'Min' AS maxmin FROM max_c c \
+		SELECT coords AS GEOM, s.stn_call, s.stn_loc, s.state, c.ob_date, c.temp,\
+		c.windsp, c.winddir, c.altimeter, c.visby, c.dewp, c.hrly_precip, c.slp,\
+		c.windvar, c.windgust, 'Min' AS maxmin FROM max_c c \
 		INNER JOIN stations s ON s.stn_call = c.stn_call \
 		INNER JOIN max_c d ON d.ob_date = c.ob_date \
 		WHERE c.ob_date IN (SELECT MAX(ob_date) FROM max_c) \
 		UNION \
-		SELECT coords AS GEOM, s.stn_call, s.stn_loc, s.state, c.ob_date, c.temp ,c.windsp, c.winddir, c.altimeter,\
-		c.visby, c.dewp, c.hrly_precip, c.slp, c.windvar, c.windgust, 'Max' AS maxmin FROM max_d c \
+		SELECT coords AS GEOM, s.stn_call, s.stn_loc, s.state, c.ob_date, c.temp,\
+		c.windsp, c.winddir, c.altimeter, c.visby, c.dewp, c.hrly_precip, c.slp,\
+		c.windvar, c.windgust, 'Max' AS maxmin FROM max_d c \
 		INNER JOIN stations s ON s.stn_call = c.stn_call \
 		INNER JOIN max_d d ON d.ob_date = c.ob_date \
 		WHERE c.ob_date IN (SELECT MAX(ob_date) FROM max_d) \
@@ -907,17 +932,13 @@ maxmin = L.realtime({
 			$('#f2').html(e.target.feature.properties.stn_loc + ", "
 				+ e.target.feature.properties.state);
 			$('#f3').html(e.target.feature.properties.temp + "\xB0F" + "<b>");
-			$('#f4').html(" ");
-			$('#f5').html(" ");
-			$('#f6').html(" ");
-		
-			$('#f4').html(e.target.feature.properties.windsp + "kts " +
-					e.target.feature.properties.winddir + "° " +
-					e.target.feature.properties.windvar + "  gusts:" +
-					e.target.feature.properties.windgust + "kts");
+			$('#f4').html(e.target.feature.properties.windsp + "kts "
+				+ e.target.feature.properties.winddir + "° "
+				+ e.target.feature.properties.windvar + "  gusts:"
+				+ e.target.feature.properties.windgust + "kts");
 			$('#f5').html(e.target.feature.properties.visby);
-			$('#f6').html("SLP:" + e.target.feature.properties.slp +
-					"<br>Altimeter:" + e.target.feature.properties.altimeter);
+			$('#f6').html("SLP:" + e.target.feature.properties.slp
+				+ "<br>Altimeter:" + e.target.feature.properties.altimeter);
 		});
 		mmarker.addTo(map);
 
@@ -936,12 +957,12 @@ if (!maxmin_ckbox.checked) {
 }
 
 // ** NOTAM
-var url_notam = url.concat("SELECT t.coords AS GEOM, s.stn_call, stn_loc, state, s.rep_num, text_data, \
-					start_date, stop_date, notam_name FROM sigairmet s \
-					LEFT JOIN graphics g ON (g.stn_call = s.stn_call) AND (g.rep_num = s.rep_num) \
-					JOIN stations t ON t.stn_call = s.stn_call \
-					WHERE s.stn_call != '   ' AND s.prod_id = 8 \
-					ORDER BY s.rep_num &m=NOTAM");
+var url_notam = url.concat("SELECT t.coords AS GEOM, s.stn_call, stn_loc,\
+			state, s.rep_num, text_data, start_date, stop_date, notam_name \
+			FROM sigairmet s LEFT JOIN graphics g ON (g.stn_call = s.stn_call) \
+			AND (g.rep_num = s.rep_num) JOIN stations t ON t.stn_call = s.stn_call \
+			WHERE s.stn_call != '   ' AND s.prod_id = 8 ORDER BY s.rep_num \
+			&m=NOTAM");
 
 var wxIcon2 = L.icon({iconUrl: 'wx2.ico', iconSize: [15,15]});
 var notam_ckbox = document.getElementById("notam")
@@ -950,7 +971,7 @@ var narkers = L.markerClusterGroup({
 
 	iconCreateFunction: function(cluster) {
 		var n = cluster.getChildCount();
-		return L.divIcon({ html: n, className: 'mycluster' , iconSize: L.point[1,1]});
+		return L.divIcon({ html: n, className: 'mycluster', iconSize: L.point[1,1]});
 	},
 	spiderfyOnMaxZoom: true,
 	showCoverageOnHover: false,
@@ -963,7 +984,7 @@ notam = L.realtime({
 	crossOrigin: true, type: 'json'
 	}, {interval: 38000,
 	getFeatureId: function(featureData) {
-		return featureData.properties.stn_call+featureData.properties.rep_num;
+		return featureData.properties.stn_call + featureData.properties.rep_num;
 	},
 	pointToLayer: function(feature, latlng) {
 		marker = L.marker(latlng, {icon: wxIcon2});
@@ -1003,11 +1024,12 @@ notam = L.realtime({
 }).addTo(map);
 
 // ** TAF
-var url_taf = url.concat("SELECT coords AS GEOM, t.stn_call, stn_loc, state, issued, current, \
-					wind, visby, condx, rep_time \
-					FROM taf t INNER JOIN (SELECT stn_call, MAX(issued) AS mob FROM taf \
-					GROUP BY stn_call) g ON t.stn_call = g.stn_call AND t.issued = g.mob \
-					INNER JOIN stations s ON t.stn_call = s.stn_call &m=TAF");
+var url_taf = url.concat("SELECT coords AS GEOM, t.stn_call, stn_loc, state,\
+			issued, current, wind, visby, condx, rep_time \
+			FROM taf t INNER JOIN (SELECT stn_call, MAX(issued) AS mob FROM taf \
+			GROUP BY stn_call) g ON t.stn_call = g.stn_call AND t.issued = g.mob \
+			INNER JOIN stations s ON t.stn_call = s.stn_call \
+			&m=TAF");
 					
 var wxIcon3 = L.icon({iconUrl: 'wx1.ico', iconSize: [15,15]});
 var taf_ckbox = document.getElementById("taf")
@@ -1055,13 +1077,14 @@ if (!taf_ckbox.checked) {
 }
 
 // ** Winds Aloft
-var url_winds = url.concat("SELECT coords AS GEOM, w.stn_call, stn_loc, state, issue_date, alt1, \
-					dir1, spd1, temp1, alt2, dir2, spd2, temp2, alt3, dir3, spd3, temp3, alt4, \
-					dir4, spd4, temp4, alt5, dir5, spd5, temp5, alt6, dir6, spd6, temp6, alt7, \
-					dir7, spd7, temp7, alt8, dir8, spd8, temp8, alt9, dir9, spd9, temp9 \
-					FROM winds w INNER JOIN (SELECT stn_call, MAX(proc_time) AS mx FROM winds \
-					GROUP BY stn_call) g ON w.stn_call = g.stn_call AND w.proc_time = g.mx \
-					INNER JOIN stations s ON w.stn_call = s.stn_call &m=Winds");
+var url_winds = url.concat("SELECT coords AS GEOM, w.stn_call, stn_loc, state, issue_date,\
+			alt1, dir1, spd1, temp1, alt2, dir2, spd2, temp2, alt3, dir3, spd3, temp3,\
+			alt4, dir4, spd4, temp4, alt5, dir5, spd5, temp5, alt6, dir6, spd6, temp6,\
+			alt7, dir7, spd7, temp7, alt8, dir8, spd8, temp8, alt9, dir9, spd9, temp9 \
+			FROM winds w INNER JOIN (SELECT stn_call, MAX(proc_time) AS mx FROM winds \
+			GROUP BY stn_call) g ON w.stn_call = g.stn_call AND w.proc_time = g.mx \
+			INNER JOIN stations s ON w.stn_call = s.stn_call \
+			&m=Winds");
 
 var wxIcon5 = L.icon({iconUrl: 'wind.ico', iconSize: [15,15]});
 var winds_ckbox = document.getElementById("winds")
@@ -1135,12 +1158,13 @@ if (!winds_ckbox.checked) {
 }
 
 // ** PIREP
-var url_pirep = url.concat("SELECT coords AS GEOM, p.stn_call, stn_loc, state, rep_type, fl_lev, \
-					ac_type, turbulence, remarks, location, cloud, weather, temperature, \
-					wind_spd_dir, icing, rep_time \
-					FROM pirep p INNER JOIN (SELECT stn_call, MAX(rep_time) AS mx FROM pirep \
-					GROUP BY stn_call) g ON p.stn_call = g.stn_call AND p.rep_time = g.mx \
-					INNER JOIN stations s ON p.stn_call = s.stn_call &m=PIREP");
+var url_pirep = url.concat("SELECT coords AS GEOM, p.stn_call, stn_loc, state,\
+			rep_type, fl_lev, ac_type, turbulence, remarks, location, cloud, weather,\
+			temperature, wind_spd_dir, icing, rep_time \
+			FROM pirep p INNER JOIN (SELECT stn_call, MAX(rep_time) AS mx FROM pirep \
+			GROUP BY stn_call) g ON p.stn_call = g.stn_call AND p.rep_time = g.mx \
+			INNER JOIN stations s ON p.stn_call = s.stn_call \
+			&m=PIREP");
 
 var wxIcon4
 var pirep_ckbox = document.getElementById("pirep")
@@ -1183,11 +1207,14 @@ pirep = L.realtime({
 			$('#f2').html(e.target.feature.properties.stn_loc + ", "
 				+ e.target.feature.properties.state + "<br><i>Loc: "
 				+ e.target.feature.properties.location);
-			$('#f3').html("<i>Flt lev: " + e.target.feature.properties.fl_lev + "<br><i>a/c: "
+			$('#f3').html("<i>Flt lev: " + e.target.feature.properties.fl_lev 
+				+ "<br><i>a/c: "
 				+ e.target.feature.properties.ac_type);
-			$('#f4').html("<i>Turb: " + e.target.feature.properties.turbulence + "<br><i>Ice: "
+			$('#f4').html("<i>Turb: " + e.target.feature.properties.turbulence 
+				+ "<br><i>Ice: "
 				+ e.target.feature.properties.icing);
-			$('#f5').html("<i>Cloud: " +e.target.feature.properties.cloud + "<br><i>Temp: "
+			$('#f5').html("<i>Cloud: " +e.target.feature.properties.cloud 
+				+ "<br><i>Temp: "
 				+ e.target.feature.properties.temperature + "<br><i>Wind: "
 				+ e.target.feature.properties.wind_spd_dir + "<br><i>WX: "
 				+ e.target.feature.properties.weather);
