@@ -10,6 +10,9 @@ var stn_sql = url.concat("SELECT t.stn_call, CONCAT(s.stn_loc,', ', s.state) AS 
 var thead = '';
 var tbody = '';
 
+
+
+
 function getChildRow(callback,data) {
 
 	var sub ='SELECT stn_call AS "Station", forecast AS "Forecast" \
@@ -45,6 +48,7 @@ $(document).ready(function() {
 		url: stn_sql,
 		success: function(result) {
 			var table=	$('#tableID').DataTable({
+				destroy: true,
 				data: result,
 				pageLength: 5,
 				 lengthMenu: [5, 10, 15, 50, 100, 500],
@@ -53,8 +57,14 @@ $(document).ready(function() {
 					"orderable": true,
 					"data": null,
 					"defaultContent": ''
-				},					
-					{ data: 'stn_call' },
+				},	
+					{ data: 'stn_call'},
+//					{ data: 'stn_call',
+//					render: function (data, type, row) {
+//  return '<a href=page4?StnID="' + data + '">'+data+'</a>' 
+//	return '<a href=page5?StnID="' + data + '" onClick="return popup(this,\'notes\')">'+data+' </a>'
+//   } 
+//					},
 					{ data: 'stn_loc' },
 					{ data: 'issued' },									
 					{ data: 'current' },

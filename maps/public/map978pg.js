@@ -30,6 +30,17 @@ function onPageLoad(){
 var formValues = JSON.parse(localStorage.getItem('formValues')) || {};
 var $checkboxez = $("#ckboxes :checkbox");
 
+function popup(mylink, windowname) { 
+    if (! window.focus)return true;
+    var href;
+    if (typeof(mylink) == 'string') href=mylink;
+    else href=mylink.href; 
+    window.open(href, windowname, 'width=400,height=200,scrollbars=yes'); 
+    return false; 
+  }
+
+
+
 function sua_overlap(_sua_object, i) {
 	$('#f1').html('SUA - ' + this.sua_object[i].airsp_name);
 			$('#f2').html(this.sua_object[i].sua_airsp_desc + ' <br>'
@@ -800,8 +811,12 @@ metar = L.realtime({
 			$("#m4").html("Winds");
 			$("#m5").html("Visibility");
 			$("#m6").html("Pressure");
-			$('#f1').html(e.target.feature.properties.stn_call + " - "
-				+ e.target.feature.properties.ob_date + 'z');
+			$('#f1').html('<a href=page5?StnID="'+ e.target.feature.properties.stn_call 
+			+'"	onClick="return popup(this,\'notes\')">' 
+			+ e.target.feature.properties.stn_call  +' </a> - @' 
+			+ e.target.feature.properties.ob_date + 'z');
+//			$('#f1').html(e.target.feature.properties.stn_call + " - "
+//				+ e.target.feature.properties.ob_date + 'z');
 			$('#f2').html(e.target.feature.properties.stn_loc + ", "
 				+ e.target.feature.properties.state);
 			$('#f3').html(e.target.feature.properties.temp + "\xB0F" + "  dp:"

@@ -232,6 +232,11 @@ label {
 	float: right !important;
 	color:#fce94f !important;
 }
+.disabled_left {
+	pointer-events: none;
+	float: left !important;
+	color:#fce94f !important;
+}
 .tableFixHead {
 	overflow-y: auto;
 	min-height: 20px !important;
@@ -347,4 +352,10 @@ tr.shown td.details-control {
 }
 .taf_child tr:hover {
 	background-color: #4eecc9!important;
+}
+#chart-container {
+	margin-top: 48px;
+	background-color: #81d3ab;
+	width: 640px;
+	height: auto;
 }

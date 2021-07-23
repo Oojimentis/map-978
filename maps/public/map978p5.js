@@ -5,18 +5,18 @@ var server_port = document.getElementById('port').value;
 var host_url = "http://localhost:";
 var url = host_url.concat(server_port, "/sqlx?q=");
 
-var stn_sql = url.concat("select stn_call, temp, ob_date \
-					from metar \
-					where stn_call = 'K1P1' &m=Station graph");
 
-function popup(mylink, windowname) { 
-    if (! window.focus)return true;
-    var href;
-    if (typeof(mylink) == 'string') href=mylink;
-    else href=mylink.href; 
-    window.open(href, windowname, 'width=400,height=800,scrollbars=yes'); 
-    return false; 
-  }
+
+const queryString = window.location.search;
+const urlParams = new URLSearchParams(queryString);
+var stnid = urlParams.get('StnID');
+var stnid1 = stnid.replace(/"/g, "'");
+
+stnid = stnid.replace(/['"]+/g, '');
+
+var stn_sql = url.concat(`select stn_call, temp, ob_date \
+					from metar \
+					where stn_call = ${stnid1} &m=METAR Graph`);
 
 
 
@@ -61,7 +61,7 @@ $(document).ready(function() {
 		                    font: {
 								size: 18
                     		},
-							text: 'Temperature at Station'
+							text: 'Temperature at Station '+stnid
 							
 						}
 					}
