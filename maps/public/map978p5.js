@@ -12,7 +12,7 @@ var stnid1 = stnid.replace(/"/g, "'");
 stnid = stnid.replace(/['"]+/g, '');
 
 var stn_sql = url.concat(`SELECT stn_call, temp, ob_date FROM metar \
-			WHERE stn_call = ${stnid1} \
+			WHERE stn_call = ${stnid1} ORDER BY ob_date \
 			&m=METAR METAR Graph`);
 
 $(document).ready(function() {
