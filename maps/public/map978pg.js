@@ -873,7 +873,7 @@ if (!metar_ckbox.checked) {
 var url_maxmin = url.concat("DROP TABLE IF EXISTS max_a; DROP TABLE IF EXISTS max_b;\
 		DROP TABLE IF EXISTS max_c; DROP TABLE IF EXISTS max_d; \
 		SELECT stn_call, MAX(ob_date) INTO temp max_a FROM metar GROUP BY stn_call; \
-		SELECT m.stn_call, ob_date, temp, windsp, winddir, altimeter,\
+		SELECT m.stn_call, ob_date, cast(temp AS INTEGER), windsp, winddir, altimeter,\
 		visby, dewp, hrly_precip, slp, windvar, windgust \
 		INTO temp max_b FROM max_a t \
 		INNER JOIN metar m ON (t.stn_call = m.stn_call) AND (t.max = m.ob_date) \
@@ -931,7 +931,9 @@ maxmin = L.realtime({
 				+ e.target.feature.properties.ob_date + 'z');
 			$('#f2').html(e.target.feature.properties.stn_loc + ", "
 				+ e.target.feature.properties.state);
-			$('#f3').html(e.target.feature.properties.temp + "\xB0F" + "<b>");
+			$('#f3').html(e.target.feature.properties.temp + "\xB0F" + "  dp:"
+				+ e.target.feature.properties.dewp + "\xB0F<br> Hrly Precip:"
+				+ e.target.feature.properties.hrly_precip);
 			$('#f4').html(e.target.feature.properties.windsp + "kts "
 				+ e.target.feature.properties.winddir + "° "
 				+ e.target.feature.properties.windvar + "  gusts:"
