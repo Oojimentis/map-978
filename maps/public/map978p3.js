@@ -22,12 +22,12 @@ function getChildRow(callback,data) {
 				
 	var sub_sql = url.concat(sub);
 
-	$.ajax({  
+	$.ajax({
 		type: "Get",
 		url: sub_sql,
 		success: function(sdata) {
 			var thead = ''; 
-	 		var tbody = '';
+			var tbody = '';
 			for (var key in sdata[0]) {
 				thead += '<th>' + key + '</th>';
 			}
@@ -51,8 +51,8 @@ $(document).ready(function() {
 			var table=	$('#tableID').DataTable({
 				destroy: true,
 				data: result,
-				pageLength: 5,
-				lengthMenu: [5, 10, 15, 50, 100, 500],
+				pageLength: 10,
+				lengthMenu: [5, 10, 25, 100, 500],
 				columns: [{
 					"className": 'details-control',
 					"orderable": true,
@@ -78,7 +78,7 @@ $(document).ready(function() {
 				var tr = $(this).closest('tr');
 				var row = table.row(tr);
 				if (row.child.isShown()) {
-					// Closing the already opened row           
+					// Closing the already opened row
 					row.child.hide();
 					// Removing class to hide
 					tr.removeClass('shown');

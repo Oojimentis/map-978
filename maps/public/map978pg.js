@@ -36,7 +36,7 @@ function popup(mylink, windowname) {
 	else href=mylink.href;
 	window.open(href, windowname, 'width=750,height=400,scrollbars=yes');
 	return false;
-  }
+}
 
 function sua_overlap(_sua_object, i) {
 	$('#f1').html('SUA - ' + this.sua_object[i].airsp_name);
@@ -273,7 +273,7 @@ var gairmet = L.realtime({
 	}, {interval: 33000,
 	style: function(feature){
 		altitude_color = getColor(feature.properties.alt);
-		return {color: '#5D8C8C', weight: 2, fillColor: altitude_color, 
+		return {color: '#5D8C8C', weight: 2, fillColor: altitude_color,
 			opacity: 1.0, fillOpacity: 0.2};
 	},
 	getFeatureId: function(featureData) {
@@ -326,7 +326,7 @@ var gairmet = L.realtime({
 }).addTo(map);
 
 if (!gairmet_ckbox.checked) {
-	map.removeLayer(gairmet), 
+	map.removeLayer(gairmet),
 	gairmet.stop()
 }
 
@@ -508,7 +508,7 @@ var	nexrad = L.realtime({
 		return featureData.properties.seq;
 	},
 	style: function(feature) {
-		if (feature.properties.prod_id == 84 || feature.properties.prod_id == 90 
+		if (feature.properties.prod_id == 84 || feature.properties.prod_id == 90
 				|| feature.properties.prod_id == 91 ) {
 			nexrad_color = getColorInt(feature.properties.intensity);
 			return {color: nexrad_color, weight: 4, fillColor: nexrad_color,
@@ -620,7 +620,7 @@ var	sua = L.realtime({
 	crossOrigin: true, type: 'json'
 	}, {interval: 50000,
 	style: function(feature) {
-		return {color: '#2e052a', weight: 3, fillColor: '#2e052a', 
+		return {color: '#2e052a', weight: 3, fillColor: '#2e052a',
 			opacity: 0.5, fillOpacity: 0.5};
 	},
 	getFeatureId: function(featureData) {
@@ -689,7 +689,7 @@ if (!sua_ckbox.checked) {
 
 // ** NOTAM TFR - Circle
 var url_circle = url.concat("SELECT bot AS GEOM, c.start_date, c.stop_date,\
-			c.rep_num, c.r_lng,	c.r_lat, c.alt_top, c.alt_bot, c.alpha, s.text_data \
+			c.rep_num, c.r_lng, c.r_lat, c.alt_top, c.alt_bot, c.alpha, s.text_data \
 			FROM circles c \
 			LEFT JOIN sigairmet s ON s.rep_num = c.rep_num &m=NOTAM circle");
 
@@ -835,7 +835,7 @@ metar = L.realtime({
 			$("#m4").html("Winds");
 			$("#m5").html("Visibility");
 			$("#m6").html("Pressure");
-			$('#f1').html('<a href=page5?StnID="'+ e.target.feature.properties.stn_call 
+			$('#f1').html('<a href=page5?StnID="'+ e.target.feature.properties.stn_call
 				+ '" onClick="return popup(this,\'notes\')">'
 				+ e.target.feature.properties.stn_call  +' </a> - @'
 				+ e.target.feature.properties.ob_date + 'z');
@@ -917,7 +917,7 @@ maxmin = L.realtime({
 		
 		mmarker = L.marker(latlng, {icon: wxIcon6});
 		mmarker.bindTooltip(feature.properties.maxmin + ': ' 
-			+ feature.properties.temp + '&#x2109' + '<br>' 
+			+ feature.properties.temp + '&#x2109' + '<br>'
 			+ feature.properties.stn_call );
 		mmarker.on('click', function(e) {
 			$("#m1").html("Station" );
@@ -926,7 +926,7 @@ maxmin = L.realtime({
 			$("#m4").html("Winds");
 			$("#m5").html("Visibility");
 			$("#m6").html("Pressure");
-			$('#f1').html(e.target.feature.properties.maxmin + " - " 
+			$('#f1').html(e.target.feature.properties.maxmin + " - "
 				+ e.target.feature.properties.stn_call + " - "
 				+ e.target.feature.properties.ob_date + 'z');
 			$('#f2').html(e.target.feature.properties.stn_loc + ", "
@@ -1195,27 +1195,30 @@ pirep = L.realtime({
 
 		marker.on('click', function(e) {
 			$("#m1").html("Station");
-			$("#m2").html("Location" + '<br>' + "Time: "
-				+ e.target.feature.properties.rep_time + "z");
+			$("#m2").html("Location");
 			$("#m3").html("Flt Lev:" + '<br>' + "AC Type:");
 			$("#m4").html("Turbulence:" + '<br>' + "Icing:");
 			$("#m5").html("WX");
 			$("#m6").html("Remarks");
 			if (feature.properties.rep_type == "Urgent Report")
-				$('#f1').html(e.target.feature.properties.stn_call + " (*Urgent PIREP*)");
+				$('#f1').html(e.target.feature.properties.stn_call 
+					+ " (Urgent PIREP) @"
+					+ e.target.feature.properties.rep_time + "z");
 			else
-				$('#f1').html(e.target.feature.properties.stn_call + " (PIREP)");
-
+				$('#f1').html(e.target.feature.properties.stn_call
+					+ " (PIREP) @"
+					+ e.target.feature.properties.rep_time + "z");
+				
 			$('#f2').html(e.target.feature.properties.stn_loc + ", "
 				+ e.target.feature.properties.state + "<br><i>Loc: "
 				+ e.target.feature.properties.location);
-			$('#f3').html("<i>Flt lev: " + e.target.feature.properties.fl_lev 
+			$('#f3').html("<i>Flt lev: " + e.target.feature.properties.fl_lev
 				+ "<br><i>a/c: "
 				+ e.target.feature.properties.ac_type);
-			$('#f4').html("<i>Turb: " + e.target.feature.properties.turbulence 
+			$('#f4').html("<i>Turb: " + e.target.feature.properties.turbulence
 				+ "<br><i>Ice: "
 				+ e.target.feature.properties.icing);
-			$('#f5').html("<i>Cloud: " +e.target.feature.properties.cloud 
+			$('#f5').html("<i>Cloud: " +e.target.feature.properties.cloud
 				+ "<br><i>Temp: "
 				+ e.target.feature.properties.temperature + "<br><i>Wind: "
 				+ e.target.feature.properties.wind_spd_dir + "<br><i>WX: "

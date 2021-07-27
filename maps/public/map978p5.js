@@ -53,9 +53,9 @@ $(document).ready(function() {
 						title: {
 							position: 'top',
 							display: true,
-		                    font: {
+							font: {
 								size: 18
-                    		},
+							},
 							text: 'Temperature at Station '+stnid
 							
 						}
