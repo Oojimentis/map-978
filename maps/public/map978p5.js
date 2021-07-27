@@ -1,4 +1,4 @@
-// ** Map978 METAR Graph
+// ** Map978 METAR line Graph
 
 var server_port = document.getElementById('port').value;
 var host_url = "http://localhost:";
