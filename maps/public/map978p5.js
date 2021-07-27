@@ -32,8 +32,8 @@ $(document).ready(function() {
 				datasets : [{
 					label: 'Temperature',
 					backgroundColor: 'yellow',
-					borderColor: 'blue',
-					hoverBackgroundColor: 'rgba(200, 200, 200, 1)',
+					borderColor: 'yellow',
+					hoverBackgroundColor: 'green',
 					hoverBorderColor: 'rgba(200, 200, 200, 1)',
 					data: tmp
 				}]
@@ -41,7 +41,7 @@ $(document).ready(function() {
 			var ctx = $("#mycanvas");
 
 			var barGraph = new Chart(ctx, {
-				type: 'bar',
+				type: 'line',
 				data: chartdata,
 				options: {
 					responsive: true,
