@@ -66,8 +66,10 @@ $(document).ready(function() {
 			
 	var tfr_nograph = url.concat("SELECT s.rep_num, text_data, notam_name FROM sigairmet s \
 					LEFT JOIN graphics g ON g.rep_num = s.rep_num \
+					LEFT JOIN circles c ON c.rep_num = s.rep_num \
 					WHERE s.prod_id = 8 AND (SUBSTRING(s.stn_call, 1, 1) = ' ' \
-					OR s.stn_call ='') 	AND g.rep_num IS NULL \
+					OR s.stn_call ='') 	AND g.rep_num IS NULL AND c.rep_num IS NULL \
+					order by s.rep_num \
 					&m=TFR no graphic");
 
 	function get_tfr_nograph() {
