@@ -829,28 +829,74 @@ metar = L.realtime({
 		marker.bindTooltip('METAR' + '<br>' + feature.properties.stn_call
 			+ '<br>' + feature.properties.temp + '&#x2109');
 		marker.on('click', function(e) {
+			var hold1;
+			var hold2;
+			var hold3;
+
 			$("#m1").html("Station" );
 			$("#m2").html("Location");
-			$("#m3").html("Temp");
+			$("#m3").html("Temp:<br>Precip:");
 			$("#m4").html("Winds");
 			$("#m5").html("Visibility");
-			$("#m6").html("Pressure");
+			$("#m6").html("SLP<br>Altimeter");
 			$('#f1').html('<a href=page5?StnID="'+ e.target.feature.properties.stn_call
 				+ '" onClick="return popup(this,\'notes\')">'
 				+ e.target.feature.properties.stn_call  +' </a> - @'
 				+ e.target.feature.properties.ob_date + 'z');
 			$('#f2').html(e.target.feature.properties.stn_loc + ", "
 				+ e.target.feature.properties.state);
-			$('#f3').html(e.target.feature.properties.temp + "\xB0F" + "  dp:"
-				+ e.target.feature.properties.dewp + "\xB0F<br> Hrly Precip:"
-				+ e.target.feature.properties.hrly_precip);
-			$('#f4').html(e.target.feature.properties.windsp + "kts "
-				+ e.target.feature.properties.winddir + "° "
-				+ e.target.feature.properties.windvar + "  gusts:"
-				+ e.target.feature.properties.windgust + "kts");
-			$('#f5').html(e.target.feature.properties.visby);
-			$('#f6').html("SLP:" + e.target.feature.properties.slp + "<br>Altimeter:"
-				+ e.target.feature.properties.altimeter);
+
+			if (feature.properties.temp == "- ")
+				hold1 = " n/a";
+			else
+				hold1 = feature.properties.temp + "\xB0F  - dp:"  
+					+ e.target.feature.properties.dewp + "\xB0F"; 
+
+			if (feature.properties.hrly_precip == "- ")
+				hold2 = " -";
+			else	
+				hold2 = feature.properties.hrly_precip + " in/hour"
+
+			$('#f3').html(hold1 + "<br>" + hold2);
+
+			if (feature.properties.windvar == "Variable")
+				hold2 = feature.properties.windvar;
+			else
+				hold2 = feature.properties.winddir + "\xB0";
+
+			if (feature.properties.windgust == "-")
+				hold3 = " ";
+			else
+				hold3 = " Gusts: " + feature.properties.windgust + "kts";	
+
+			if (feature.properties.windsp == "-") {
+				hold1 = " n/a";
+				hold2 = " ";
+				hold3 = " ";
+				}
+			else	
+				hold1 = feature.properties.windsp + " kts ";			
+
+			$('#f4').html(hold1 + hold2 + hold3);
+
+			if (feature.properties.visby == "-")	
+				hold1 = "n/a";
+			else
+				hold1 = feature.properties.visby + " (sm)";
+
+			$('#f5').html(hold1);
+
+			if (feature.properties.altimeter == "-")	
+				hold1 = "n/a";
+			else
+				hold1 = feature.properties.altimeter + " (Ins)";
+
+			if (feature.properties.slp == "-")	
+				hold2 = "n/a";
+			else
+				hold2 = feature.properties.slp + " (hPa)";
+
+			$('#f6').html(hold1 + "<br>" + hold2);
 		});
 		marker.addTo(map);
 			
@@ -920,27 +966,74 @@ maxmin = L.realtime({
 			+ feature.properties.temp + '&#x2109' + '<br>'
 			+ feature.properties.stn_call );
 		mmarker.on('click', function(e) {
+			var hold1;
+			var hold2;
+			var hold3;
+
 			$("#m1").html("Station" );
 			$("#m2").html("Location");
-			$("#m3").html("Temp");
+			$("#m3").html("Temp:<br>Precip:");
 			$("#m4").html("Winds");
 			$("#m5").html("Visibility");
-			$("#m6").html("Pressure");
-			$('#f1').html(e.target.feature.properties.maxmin + " - "
-				+ e.target.feature.properties.stn_call + " - "
+			$("#m6").html("SLP<br>Altimeter");
+			$('#f1').html('<a href=page5?StnID="'+ e.target.feature.properties.stn_call
+				+ '" onClick="return popup(this,\'notes\')">'
+				+ e.target.feature.properties.stn_call  +' </a> - @'
 				+ e.target.feature.properties.ob_date + 'z');
 			$('#f2').html(e.target.feature.properties.stn_loc + ", "
 				+ e.target.feature.properties.state);
-			$('#f3').html(e.target.feature.properties.temp + "\xB0F" + "  dp:"
-				+ e.target.feature.properties.dewp + "\xB0F<br> Hrly Precip:"
-				+ e.target.feature.properties.hrly_precip);
-			$('#f4').html(e.target.feature.properties.windsp + "kts "
-				+ e.target.feature.properties.winddir + "° "
-				+ e.target.feature.properties.windvar + "  gusts:"
-				+ e.target.feature.properties.windgust + "kts");
-			$('#f5').html(e.target.feature.properties.visby);
-			$('#f6').html("SLP:" + e.target.feature.properties.slp
-				+ "<br>Altimeter:" + e.target.feature.properties.altimeter);
+
+			if (feature.properties.temp == "- ")
+				hold1 = " n/a";
+			else
+				hold1 = feature.properties.temp + "\xB0F  - dp:"  
+					+ e.target.feature.properties.dewp + "\xB0F"; 
+
+			if (feature.properties.hrly_precip == "- ")
+				hold2 = " -";
+			else	
+				hold2 = feature.properties.hrly_precip + " in/hour"
+
+			$('#f3').html(hold1 + "<br>" + hold2);
+
+			if (feature.properties.windvar == "Variable")
+				hold2 = feature.properties.windvar;
+			else
+				hold2 = feature.properties.winddir + "\xB0";
+
+			if (feature.properties.windgust == "-")
+				hold3 = " ";
+			else
+				hold3 = " Gusts: " + feature.properties.windgust + "kts";	
+
+			if (feature.properties.windsp == "-") {
+				hold1 = " n/a";
+				hold2 = " ";
+				hold3 = " ";
+				}
+			else	
+				hold1 = feature.properties.windsp + " kts ";			
+
+			$('#f4').html(hold1 + hold2 + hold3);
+
+			if (feature.properties.visby == "-")	
+				hold1 = "n/a";
+			else
+				hold1 = feature.properties.visby + " (sm)";
+
+			$('#f5').html(hold1);
+
+			if (feature.properties.altimeter == "-")	
+				hold1 = "n/a";
+			else
+				hold1 = feature.properties.altimeter + " (Ins)";
+
+			if (feature.properties.slp == "-")	
+				hold2 = "n/a";
+			else
+				hold2 = feature.properties.slp + " (hPa)";
+
+			$('#f6').html(hold1 + "<br>" + hold2);
 		});
 		mmarker.addTo(map);
 
@@ -1194,11 +1287,16 @@ pirep = L.realtime({
 				+ feature.properties.stn_call);
 
 		marker.on('click', function(e) {
+			var hold1;
+			var hold2;
+			var hold3;
+			var hold4;
+			
 			$("#m1").html("Station");
 			$("#m2").html("Location");
-			$("#m3").html("Flt Lev:" + '<br>' + "AC Type:");
-			$("#m4").html("Turbulence:" + '<br>' + "Icing:");
-			$("#m5").html("WX");
+			$("#m3").html("Flt Lev" + '<br>' + "AC Type");
+			$("#m4").html("Turbulence" + '<br>' + "Icing");
+			$("#m5").html("Cloud<br>Temp<br>Wind<br>WX");
 			$("#m6").html("Remarks");
 			if (feature.properties.rep_type == "Urgent Report")
 				$('#f1').html(e.target.feature.properties.stn_call 
@@ -1212,18 +1310,50 @@ pirep = L.realtime({
 			$('#f2').html(e.target.feature.properties.stn_loc + ", "
 				+ e.target.feature.properties.state + "<br><i>Loc: "
 				+ e.target.feature.properties.location);
-			$('#f3').html("<i>Flt lev: " + e.target.feature.properties.fl_lev
-				+ "<br><i>a/c: "
+				
+			$('#f3').html(e.target.feature.properties.fl_lev + "<br>"
 				+ e.target.feature.properties.ac_type);
-			$('#f4').html("<i>Turb: " + e.target.feature.properties.turbulence
-				+ "<br><i>Ice: "
-				+ e.target.feature.properties.icing);
-			$('#f5').html("<i>Cloud: " +e.target.feature.properties.cloud
-				+ "<br><i>Temp: "
-				+ e.target.feature.properties.temperature + "<br><i>Wind: "
-				+ e.target.feature.properties.wind_spd_dir + "<br><i>WX: "
-				+ e.target.feature.properties.weather);
-			$('#f6').html(e.target.feature.properties.remarks);
+				
+			if (feature.properties.turbulence == "")
+				hold1 = "- ";
+			else
+				hold1 = feature.properties.turbulence;
+
+			if (feature.properties.icing == "")
+				hold2 = "- ";
+			else
+				hold2 = feature.properties.icing;
+
+			$('#f4').html(hold1	+ "<br>" + hold2);
+
+			if (feature.properties.cloud == "")
+				hold1 = " - ";
+			else
+				hold1 = feature.properties.cloud;				
+
+			if (feature.properties.temperature == "")
+				hold2 = " - ";
+			else
+				hold2 = feature.properties.temperature;	
+
+			if (feature.properties.wind_spd_dir == "")
+				hold3 = " - ";
+			else
+				hold3 = feature.properties.wind_spd_dir;	
+
+			if (feature.properties.weather == "")
+				hold4 = " - ";
+			else
+				hold4 = feature.properties.weather;					
+				
+			$('#f5').html(hold1	+ "<br>" + hold2 + "<br>" + hold3 + "<br>" + hold4); 
+			
+			if (feature.properties.remarks == "")
+				hold1 = " - ";
+			else
+				hold1 = feature.properties.remarks;					
+				
+			$('#f6').html(hold1);
 		});
 		marker.addTo(map);
 			
