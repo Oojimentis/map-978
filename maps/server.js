@@ -29,10 +29,20 @@ app.get('/page3', function(req, res) {
    res.render('page3',{ ptnum: port});
 }); 
 
+// Station Lookup 
+app.get('/page4', function(req, res) {
+   res.render('page4',{ ptnum: port});
+});
+
 // METAR graph 
 app.get('/page5', function(req, res) {
    res.render('page5',{ ptnum: port});
 }); 
+
+// Station Display 
+app.get('/page6', function(req, res) {
+   res.render('page6',{ ptnum: port});
+});
 
 // Expose sqlx endpoint for jsquery GET
 app.get( "/sqlx", function(req, res) {
@@ -49,7 +59,7 @@ app.get( "/sqlx", function(req, res) {
 // Expose sql endpoint, grab query as URL parameter and send it to the database
 app.get( "/sql", function(req, res) {
 	var sql = req.query.q;
-		var page_query_home = req.query.m;
+	var page_query_home = req.query.m;
 //	console.log("Executing SQL:" + sql) ;
 	console.log("Query for : "+ page_query_home);
 

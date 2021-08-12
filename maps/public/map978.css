@@ -10,6 +10,12 @@ p {
 	width: 80%;
 	height:800px;
 }
+#mapstn {
+	margin-top: 40px;
+	float: left;
+	width: 60%;
+	height:400px;
+}
 .page2 {
 	margin-top: 48px;
 	background-color: #81d3ab;
@@ -23,6 +29,14 @@ p {
 	float: left;
 	width: 20%;
 	height:800px;
+	background-color: #81d3ab;
+	color: #2e3436;
+}
+.sidebar2 {
+	margin-top: 40px;
+	float: right;
+	width: 40%;
+	height:400px;
 	background-color: #81d3ab;
 	color: #2e3436;
 }
