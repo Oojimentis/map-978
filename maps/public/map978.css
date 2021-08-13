@@ -268,6 +268,7 @@ label {
 .tableFixHead th {
 	box-shadow: inset 1px 1px #000, 0 1px #000;
 }
+
 .page2tbl {
 	border-collapse: collapse;
 	width: 95%;
@@ -292,6 +293,34 @@ label {
 .page2tbl tr:hover {
 	background: #fcef8a !important;
 }
+
+.page6tbl {
+	border-collapse: collapse;
+	width: 95%;
+}
+.page6tbl th {
+	padding: 8px 6px;
+	font-size: 12px;	
+}
+.page6tbl th {
+	background: #baadfd;
+}
+.page6tbl td {
+	padding: 8px 6px;
+	font-size: 10px;	
+}
+.page6tbl tr:nth-child(even) {
+	background: #fcffee !important;
+}
+.page6tbl tr:nth-child(odd) {
+	background: #e2f4eb !important;
+}
+.page6tbl tr:hover {
+	background: #fcef8a !important;
+}
+
+
+
 * {
 	box-sizing: border-box;
 }

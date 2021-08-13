@@ -3,6 +3,7 @@
 var server_port = document.getElementById('port').value;
 var host_url = "http://localhost:";
 var url = host_url.concat(server_port, "/sql?q=");
+var urlx = host_url.concat(server_port, "/sqlx?q=");
 
 const queryString = window.location.search;
 const urlParams = new URLSearchParams(queryString);
@@ -41,3 +42,82 @@ stn = L.realtime({
 }).addTo(map);
 	
 stn.stop();
+
+$(document).ready(function() {
+	var metar_stn = urlx.concat(`SELECT stn_call, ob_date, winddir, temp, dewp, visby, \
+		windsp, altimeter, hrly_precip, slp FROM metar \
+		WHERE ob_date = (SELECT MAX(ob_date) FROM metar WHERE stn_call = ${stnid}) \
+		AND stn_call = ${stnid} \
+		&m=METAR Stn`);
+
+	function get_metar_stn() {
+		var row = "";
+		$.ajax({
+			type: "Get",
+			url: metar_stn,
+			success: function(data) {
+				$('#metarstn tbody').empty();
+				$.each(data, function(index, features) {
+					row += "<tr><td>" + features.ob_date + "</td><td>"
+						+ features.temp + "</td><<td>"
+						+ features.winddir + "</td></tr>";
+				});
+				$("#metarstn tbody").append(row);
+			},
+		});		
+	};
+	get_metar_stn();
+});
+
+$(document).ready(function() {
+
+	var taf_stn = urlx.concat(`SELECT issued, current, wind, visby, condx, rep_time, stn_call \
+		FROM taf WHERE rep_time = (SELECTt MAX(rep_time) FROM taf WHERE stn_call = ${stnid}) \
+		AND stn_call = ${stnid} \
+		&m=TAF Stn`);
+
+	function get_taf_stn() {
+		var row = "";
+		$.ajax({
+			type: "Get",
+			url: taf_stn,
+			success: function(data) {
+				$('#tafstn tbody').empty();
+				$.each(data, function(index, features) {
+					row += "<tr><td>" + features.airsp_id + "</td><td>"
+						+ features.airsp_name + "</td><<td>" 
+						+ features.airsp_type + "</td></tr>";
+				});
+				$("#tafstn tbody").append(row);
+			},
+		});		
+	};
+	get_taf_stn();
+});
+
+$(document).ready(function() {
+			
+	var pirep_stn = urlx.concat(`SELECT rep_type,fl_lev,ac_type,cloud,weather,temperature, \
+		wind_spd_dir,turbulence,icing,remarks,location,rep_time,stn_call \
+		from pirep where rep_time = (select max(rep_time) from \
+		pirep where stn_call = ${stnid}) and stn_call = ${stnid} \
+		&m=PIREP stn`);
+
+	function get_pirep_stn() {
+		var row = "";
+		$.ajax({
+			type: "Get",
+			url: pirep_stn,
+			success: function(data) {
+				$('#pirepstn tbody').empty();
+				$.each(data, function(index, features) {
+					row += "<tr><td>" + features.rep_num + "</td><td>"
+						+ features.notam_name + "</td><<td>"
+						+ features.text_data + "</td></tr>";
+				});
+				$("#pirepstn tbody").append(row);
+			},
+		});		
+	};
+	get_pirep_stn();
+});
