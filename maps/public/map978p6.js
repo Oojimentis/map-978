@@ -10,7 +10,7 @@ const urlParams = new URLSearchParams(queryString);
 var stnid = urlParams.get('StnID');
 
 stnid = stnid.replace(/"/g, "'");
-stnid = stnid.concat("'");
+//stnid = stnid.concat("'");
 
 var map = L.map('mapstn').setView([36.0, -75.26], 7);
 
@@ -21,7 +21,7 @@ var stn_sql = url.concat(`SELECT coords AS GEOM, stn_call, stn_loc, state FROM s
 			WHERE stn_call = ${stnid} \
 			&m=Display Station`);
 
-var wxIcon = L.icon({iconUrl: 'radiotower2.ico', iconSize: [20,20]});
+var wxIcon = L.icon({iconUrl: 'radiotower2.ico', iconSize: [25,25]});
 
 stn = L.realtime({
 	url: stn_sql,
@@ -59,8 +59,11 @@ $(document).ready(function() {
 				$('#metarstn tbody').empty();
 				$.each(data, function(index, features) {
 					row += "<tr><td>" + features.ob_date + "</td><td>"
-						+ features.temp + "</td><<td>"
-						+ features.winddir + "</td></tr>";
+						+ features.temp + "\xB0F<br>" + features.dewp + "\xB0F</td><td>"
+						+ features.hrly_precip + "</td><td>"
+						+ features.windsp + "kts - " + features.winddir + "\xB0</td><td>"
+						+ features.visby + " (sm)</td><td>"
+						+ features.slp + " (hPa)<br>" + features.altimeter + " (Ins)</td></tr>";
 				});
 				$("#metarstn tbody").append(row);
 			},
@@ -72,7 +75,7 @@ $(document).ready(function() {
 $(document).ready(function() {
 
 	var taf_stn = urlx.concat(`SELECT issued, current, wind, visby, condx, rep_time, stn_call \
-		FROM taf WHERE rep_time = (SELECTt MAX(rep_time) FROM taf WHERE stn_call = ${stnid}) \
+		FROM taf WHERE rep_time = (SELECT MAX(rep_time) FROM taf WHERE stn_call = ${stnid}) \
 		AND stn_call = ${stnid} \
 		&m=TAF Stn`);
 
@@ -84,9 +87,10 @@ $(document).ready(function() {
 			success: function(data) {
 				$('#tafstn tbody').empty();
 				$.each(data, function(index, features) {
-					row += "<tr><td>" + features.airsp_id + "</td><td>"
-						+ features.airsp_name + "</td><<td>" 
-						+ features.airsp_type + "</td></tr>";
+					row += "<tr><td>" + features.issued + "</td><td>"
+						+ features.wind + "</td><td>" 
+						+ features.visby + "</td><td>"
+						+ features.condx + "</td></tr>"
 				});
 				$("#tafstn tbody").append(row);
 			},
@@ -111,9 +115,13 @@ $(document).ready(function() {
 			success: function(data) {
 				$('#pirepstn tbody').empty();
 				$.each(data, function(index, features) {
-					row += "<tr><td>" + features.rep_num + "</td><td>"
-						+ features.notam_name + "</td><<td>"
-						+ features.text_data + "</td></tr>";
+					row += "<tr><td>" + features.rep_time + "</td><td>"
+						+ features.rep_type + "<br>" + features.location+ "</td><<td>"
+						+ features.fl_lev + "<br>" + features.ac_type + "</td><td>"
+						+ features.turbulence + "<br>" + features.icing + "</td><td>"
+						+ features.cloud + "<br>" + features.temperature + "</td><td>"
+						+ features.wind_spd_dir + "<br>" + features.weather +"<td><td>"
+						+ features.remarks + "</td></tr>";
 				});
 				$("#pirepstn tbody").append(row);
 			},

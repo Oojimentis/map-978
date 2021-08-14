@@ -13,7 +13,7 @@ p {
 #mapstn {
 	margin-top: 40px;
 	float: left;
-	width: 60%;
+	width: 50%;
 	height:400px;
 }
 .page2 {
@@ -35,7 +35,7 @@ p {
 .sidebar2 {
 	margin-top: 40px;
 	float: right;
-	width: 40%;
+	width: 50%;
 	height:400px;
 	background-color: #81d3ab;
 	color: #2e3436;
@@ -296,17 +296,17 @@ label {
 
 .page6tbl {
 	border-collapse: collapse;
-	width: 95%;
+	width: 90%;
 }
 .page6tbl th {
-	padding: 8px 6px;
-	font-size: 12px;	
+	padding: 2px 4px;
+	font-size: 11px;	
 }
 .page6tbl th {
 	background: #baadfd;
 }
 .page6tbl td {
-	padding: 8px 6px;
+	padding: 2px 2px;
 	font-size: 10px;	
 }
 .page6tbl tr:nth-child(even) {
