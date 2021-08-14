@@ -57,7 +57,6 @@ $(document).ready(function() {
 								size: 18
 							},
 							text: 'Temperature at Station '+stnid
-							
 						}
 					}
 				},

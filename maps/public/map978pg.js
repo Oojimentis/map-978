@@ -33,22 +33,23 @@ function popup(mylink, windowname) {
 	if (! window.focus)return true;
 		var href;
 	if (typeof(mylink) == 'string') href=mylink;
-	else href=mylink.href;
+		else href=mylink.href;
+		
 	window.open(href, windowname, 'width=750,height=400,scrollbars=yes');
 	return false;
 }
 
 function sua_overlap(_sua_object, i) {
 	$('#f1').html('SUA - ' + this.sua_object[i].airsp_name);
-			$('#f2').html(this.sua_object[i].sua_airsp_desc + ' <br>'
-				+ this.sua_object[i].sua_status_desc);
-			$('#f3').html(this.sua_object[i].start_time + ' <br>'
-				+ this.sua_object[i].end_time);
-			$('#f4').html(this.sua_object[i].low_alt + ' <br>'
-				+ this.sua_object[i].high_alt);
-			$('#f5').html(this.sua_object[i].sep_rule + '  '
-				+ this.sua_object[i].shape_ind);
-			$('#f6').html(this.sua_object[i].dafif_name);
+	$('#f2').html(this.sua_object[i].sua_airsp_desc + ' <br>'
+		+ this.sua_object[i].sua_status_desc);
+	$('#f3').html(this.sua_object[i].start_time + ' <br>'
+		+ this.sua_object[i].end_time);
+	$('#f4').html(this.sua_object[i].low_alt + ' <br>'
+		+ this.sua_object[i].high_alt);
+	$('#f5').html(this.sua_object[i].sep_rule + '  '
+		+ this.sua_object[i].shape_ind);
+	$('#f6').html(this.sua_object[i].dafif_name);
 };
 
 function airmet_overlap(_airmet_object, i) {
@@ -89,7 +90,7 @@ function sigmet_overlap(_sigmet_object, i) {
 
 function updateStorage() {
 	$checkboxez.each(function() {
-	formValues[this.id] = this.checked;
+		formValues[this.id] = this.checked;
 	});
 
 	localStorage.setItem("formValues", JSON.stringify(formValues));

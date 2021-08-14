@@ -58,7 +58,8 @@ $(document).ready(function() {
 			success: function(data) {
 				$('#metarstn tbody').empty();
 				$.each(data, function(index, features) {
-					row += "<tr><td>" + features.ob_date + "</td><td>"
+					row += "<tr><td>" 
+						+ features.ob_date + "</td><td>"
 						+ features.temp + "\xB0F<br>" + features.dewp + "\xB0F</td><td>"
 						+ features.hrly_precip + "</td><td>"
 						+ features.windsp + "kts - " + features.winddir + "\xB0</td><td>"
@@ -87,7 +88,8 @@ $(document).ready(function() {
 			success: function(data) {
 				$('#tafstn tbody').empty();
 				$.each(data, function(index, features) {
-					row += "<tr><td>" + features.issued + "</td><td>"
+					row += "<tr><td>" 
+						+ features.issued + "</td><td>"
 						+ features.wind + "</td><td>" 
 						+ features.visby + "</td><td>"
 						+ features.condx + "</td></tr>"
@@ -115,7 +117,8 @@ $(document).ready(function() {
 			success: function(data) {
 				$('#pirepstn tbody').empty();
 				$.each(data, function(index, features) {
-					row += "<tr><td>" + features.rep_time + "</td><td>"
+					row += "<tr><td>" 
+						+ features.rep_time + "</td><td>"
 						+ features.rep_type + "<br>" + features.location+ "</td><<td>"
 						+ features.fl_lev + "<br>" + features.ac_type + "</td><td>"
 						+ features.turbulence + "<br>" + features.icing + "</td><td>"
