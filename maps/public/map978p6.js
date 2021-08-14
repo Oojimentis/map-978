@@ -10,7 +10,7 @@ const urlParams = new URLSearchParams(queryString);
 var stnid = urlParams.get('StnID');
 
 stnid = stnid.replace(/"/g, "'");
-//stnid = stnid.concat("'");
+stnid = stnid.concat("'");
 
 var map = L.map('mapstn').setView([36.0, -75.26], 7);
 
@@ -120,7 +120,7 @@ $(document).ready(function() {
 						+ features.fl_lev + "<br>" + features.ac_type + "</td><td>"
 						+ features.turbulence + "<br>" + features.icing + "</td><td>"
 						+ features.cloud + "<br>" + features.temperature + "</td><td>"
-						+ features.wind_spd_dir + "<br>" + features.weather +"<td><td>"
+						+ features.wind_spd_dir + "<br>" + features.weather +"</td><td>"
 						+ features.remarks + "</td></tr>";
 				});
 				$("#pirepstn tbody").append(row);
