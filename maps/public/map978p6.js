@@ -10,7 +10,7 @@ const urlParams = new URLSearchParams(queryString);
 var stnid = urlParams.get('StnID');
 
 stnid = stnid.replace(/"/g, "'");
-stnid = stnid.concat("'");
+//stnid = stnid.concat("'");
 
 var map = L.map('mapstn').setView([36.0, -75.26], 7);
 

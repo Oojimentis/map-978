@@ -7,12 +7,15 @@ var url = host_url.concat(server_port, "/sqlx?q=");
 const queryString = window.location.search;
 const urlParams = new URLSearchParams(queryString);
 var stnid = urlParams.get('StnID');
-var stnid1 = stnid.replace(/"/g, "'");
 
-stnid = stnid.replace(/['"]+/g, '');
+stnid = stnid.replace(/"/g, "'");
+//stnid = stnid.concat("'");
+
+//var stnid1 = stnid.replace(/"/g, "'");
+//stnid = stnid.replace(/['"]+/g, '');
 
 var stn_sql = url.concat(`SELECT stn_call, temp, ob_date FROM metar \
-			WHERE stn_call = ${stnid1} ORDER BY ob_date \
+			WHERE stn_call = ${stnid} ORDER BY ob_date \
 			&m=METAR METAR Graph`);
 
 $(document).ready(function() {

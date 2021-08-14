@@ -807,7 +807,7 @@ var	seg = L.realtime({
 }).addTo(map);
 
 // ** METAR 
-var url_metar = url.concat("SELECT s.coords AS GEOM, m.stn_call, s.stn_loc,\
+var url_metar = url.concat("SELECT s.coords AS GEOM, s.stn_call, s.stn_loc,\
 			state, ob_date, temp, windsp, winddir, altimeter, visby, dewp,\
 			hrly_precip, slp, windvar, windgust \
 			FROM metar m INNER JOIN (SELECT stn_call, MAX(ob_date) AS mob FROM metar \
@@ -977,10 +977,10 @@ maxmin = L.realtime({
 			$("#m4").html("Winds");
 			$("#m5").html("Visibility");
 			$("#m6").html("SLP<br>Altimeter");
-			$('#f1').html('<a href=page5?StnID="'+ e.target.feature.properties.stn_call
-				+ '" onClick="return popup(this,\'notes\')">'
-				+ e.target.feature.properties.stn_call  +' </a> - @'
-				+ e.target.feature.properties.ob_date + 'z');
+	$('#f1').html('<a href=page5?StnID="'+ e.target.feature.properties.stn_call
+		+ '" onClick="return popup(this,\'notes\')">'
+		+ e.target.feature.properties.stn_call  +' </a> - @'
+		+ e.target.feature.properties.ob_date + 'z');
 			$('#f2').html(e.target.feature.properties.stn_loc + ", "
 				+ e.target.feature.properties.state);
 
