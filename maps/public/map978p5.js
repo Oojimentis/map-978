@@ -11,9 +11,6 @@ var stnid = urlParams.get('StnID');
 stnid = stnid.replace(/"/g, "'");
 //stnid = stnid.concat("'");
 
-//var stnid1 = stnid.replace(/"/g, "'");
-//stnid = stnid.replace(/['"]+/g, '');
-
 var stn_sql = url.concat(`SELECT stn_call, temp, ob_date FROM metar \
 			WHERE stn_call = ${stnid} ORDER BY ob_date \
 			&m=METAR METAR Graph`);
