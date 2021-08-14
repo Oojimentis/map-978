@@ -5,7 +5,7 @@
 -- Dumped from database version 11.13 (Ubuntu 11.13-1.pgdg18.04+1)
 -- Dumped by pg_dump version 11.13 (Ubuntu 11.13-1.pgdg18.04+1)
 
--- Started on 2021-08-14 14:56:33 EDT
+-- Started on 2021-08-14 16:02:02 EDT
 
 SET statement_timeout = 0;
 SET lock_timeout = 0;
@@ -3213,6 +3213,16 @@ INSERT INTO postgis.stations VALUES ('0101000020E61000005BCEA5B8AA4A52C08369183E
 INSERT INTO postgis.stations VALUES ('0101000020E610000000000000005052C0B0C91AF510714540', 'K5B5', 'Bennington', 'VT');
 INSERT INTO postgis.stations VALUES ('0101000020E61000003C4ED1915CAE5EC08FC2F5285C1F4840', 'KCVV', 'Coupeville-Penn Cove', 'WA');
 INSERT INTO postgis.stations VALUES ('0101000020E610000024287E8CB93754C0AEB6627FD91D4340', 'KSXL', 'Summersville Airport', 'WV');
+INSERT INTO postgis.stations VALUES ('0101000020E6100000F70489EDEE3E55C09A99999999394440', 'KPLD', 'Portland Municipal Airport', 'IN');
+INSERT INTO postgis.stations VALUES ('0101000020E61000004F9C8212F45055C0C73EED9D7DBC4440', 'KC62', 'Kendallville Municipal Airport', 'IN');
+INSERT INTO postgis.stations VALUES ('0101000020E610000097E7E7A4DCA855C00106442FBC404340', 'KFRH', 'French Lick Municipal Airport', 'IN');
+INSERT INTO postgis.stations VALUES ('0101000020E61000001081A64B36B956C0B5E2F542DCC94540', 'KY51', 'Viroqua Municipal Airport', 'WI');
+INSERT INTO postgis.stations VALUES ('0101000020E61000000669D0142D9A55C099DA0C5792304240', 'KXNX', 'Music City Executive Airport, Gallatin', 'TN');
+INSERT INTO postgis.stations VALUES ('0101000020E610000079731EF005D854C03D0C7E3A1D174240', 'KMOR', 'Morristown Regional Airport', 'TN');
+INSERT INTO postgis.stations VALUES ('0101000020E6100000376D05177BFE56C00EBFCBA7AF574540', 'KOLZ', 'Oelwein Municipal Airport', 'IA');
+INSERT INTO postgis.stations VALUES ('0101000020E610000092A16D3099AB55C02C1ED8DE20564140', 'KHUA', 'Redstone Army Airfield, Huntsville', 'AL');
+INSERT INTO postgis.stations VALUES ('0101000020E61000002EA43976544555C070C8AE87E2D14440', 'KANQ', 'Tri-State Steuben County Airport, Angola', 'IN');
+INSERT INTO postgis.stations VALUES ('0101000020E61000001A2EA665E16C56C0F91B78AB8A124340', 'KSAR', 'Sparta Community Airport', 'IL');
 
 
 --
@@ -3679,7 +3689,7 @@ ALTER TABLE ONLY postgis.winds
     ADD CONSTRAINT winds_pkey PRIMARY KEY (stn_call, issue_date);
 
 
--- Completed on 2021-08-14 14:56:33 EDT
+-- Completed on 2021-08-14 16:02:02 EDT
 
 --
 -- PostgreSQL database dump complete
