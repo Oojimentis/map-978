@@ -45,26 +45,79 @@ stn.stop();
 
 $(document).ready(function() {
 	var metar_stn = urlx.concat(`SELECT stn_call, ob_date, winddir, temp, dewp, visby, \
-		windsp, altimeter, hrly_precip, slp FROM metar \
+		windsp, altimeter, hrly_precip, slp, windvar, windgust FROM metar \
 		WHERE ob_date = (SELECT MAX(ob_date) FROM metar WHERE stn_call = ${stnid}) \
 		AND stn_call = ${stnid} \
 		&m=METAR Stn`);
 
 	function get_metar_stn() {
 		var row = "";
+		var hold1;
+		var hold2;
+		var hold3;
+		var hold4;
+		var hold5;
+		var hold6;
+		var hold7;
+		var hold8;
+
 		$.ajax({
 			type: "Get",
 			url: metar_stn,
 			success: function(data) {
 				$('#metarstn tbody').empty();
 				$.each(data, function(index, features) {
+					if (features.temp == "- ")
+						hold1 = " n/a";
+					else
+						hold1 = features.temp + "\xB0F<br>"  
+							+ features.dewp + "\xB0F";
+
+					if (features.hrly_precip == "- ")
+						hold2 = " -";
+					else	
+						hold2 = features.hrly_precip + " in/hour"
+
+					if (features.windvar == "Variable")
+						hold3 = features.windvar;
+					else
+						hold3 = features.winddir + "\xB0";
+
+					if (features.windgust == "-")
+						hold4 = " ";
+					else
+						hold4 = " Gusts: " + features.windgust + "kts";	
+
+					if (features.windsp == "-") {
+						hold5 = " n/a";
+						hold3 = " ";
+						hold4= " ";
+					}
+					else	
+						hold5 = features.windsp + " kts ";
+
+					if (features.visby == "-")	
+						hold6 = "n/a";
+					else
+						hold6 = features.visby + " (sm)";
+
+					if (features.altimeter == "-")	
+						hold7 = "n/a";
+					else
+						hold7 = features.altimeter + " (Ins)";
+
+					if (features.slp == "-")	
+						hold8 = "n/a";
+					else
+						hold8 = features.slp + " (hPa)";	
+
 					row += "<tr><td>" 
 						+ features.ob_date + "</td><td>"
-						+ features.temp + "\xB0F<br>" + features.dewp + "\xB0F</td><td>"
-						+ features.hrly_precip + "</td><td>"
-						+ features.windsp + "kts - " + features.winddir + "\xB0</td><td>"
-						+ features.visby + " (sm)</td><td>"
-						+ features.slp + " (hPa)<br>" + features.altimeter + " (Ins)</td></tr>";
+						+ hold1 + "</td><td>"
+						+ hold2 + "</td><td>"
+						+ hold5 + "<br>" + hold3 + "<br>" + hold4 + "</td><td>"
+						+ hold6 + "</td><td>"
+						+ hold7 + "<br>" + hold8 + "</td></tr>";
 				});
 				$("#metarstn tbody").append(row);
 			},
