@@ -44,7 +44,7 @@ stn = L.realtime({
 stn.stop();
 
 $(document).ready(function() {
-	var metar_stn = urlx.concat(`SELECT stn_call, ob_date, winddir, temp, dewp, visby, \
+	var metar_stn = urlx.concat(`SELECT stn_call, ob_date, winddir, temperature, dewp, visby, \
 		windsp, altimeter, hrly_precip, slp, windvar, windgust FROM metar \
 		WHERE ob_date = (SELECT MAX(ob_date) FROM metar WHERE stn_call = ${stnid}) \
 		AND stn_call = ${stnid} \
@@ -70,7 +70,7 @@ $(document).ready(function() {
 					if (features.temp == "- ")
 						hold1 = " n/a";
 					else
-						hold1 = features.temp + "\xB0F<br>"  
+						hold1 = features.temperature + "\xB0F<br>"  
 							+ features.dewp + "\xB0F";
 
 					if (features.hrly_precip == "- ")
@@ -157,7 +157,7 @@ $(document).ready(function() {
 $(document).ready(function() {
 			
 	var pirep_stn = urlx.concat(`SELECT rep_type,fl_lev,ac_type,cloud,weather,temperature, \
-		wind_spd_dir,turbulence,icing,remarks,location,rep_time,stn_call \
+		windsp,turbulence,icing,remarks,location,rep_time,stn_call \
 		from pirep where rep_time = (select max(rep_time) from \
 		pirep where stn_call = ${stnid}) and stn_call = ${stnid} \
 		&m=PIREP stn`);
@@ -176,7 +176,7 @@ $(document).ready(function() {
 						+ features.fl_lev + "<br>" + features.ac_type + "</td><td>"
 						+ features.turbulence + "<br>" + features.icing + "</td><td>"
 						+ features.cloud + "<br>" + features.temperature + "</td><td>"
-						+ features.wind_spd_dir + "<br>" + features.weather +"</td><td>"
+						+ features.windsp + "<br>" + features.weather +"</td><td>"
 						+ features.remarks + "</td></tr>";
 				});
 				$("#pirepstn tbody").append(row);

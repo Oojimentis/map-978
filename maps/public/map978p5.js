@@ -11,7 +11,7 @@ var stnid = urlParams.get('StnID');
 stnid = stnid.replace(/"/g, "'");
 //stnid = stnid.concat("'");
 
-var stn_sql = url.concat(`SELECT stn_call, temp, ob_date FROM metar \
+var stn_sql = url.concat(`SELECT stn_call, temperature, ob_date FROM metar \
 			WHERE stn_call = ${stnid} ORDER BY ob_date \
 			&m=METAR METAR Graph`);
 
@@ -25,7 +25,7 @@ $(document).ready(function() {
 		
 			for(var i in data) {
 				obs.push(data[i].ob_date);
-				tmp.push(data[i].temp);
+				tmp.push(data[i].temperature);
 			}
 			var chartdata = {
 				labels: obs,

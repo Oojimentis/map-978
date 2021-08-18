@@ -42,7 +42,7 @@ function popup(mylink, windowname) {
 function sua_overlap(_sua_object, i) {
 	$('#f1').html('SUA - ' + this.sua_object[i].airsp_name);
 	$('#f2').html(this.sua_object[i].sua_airsp_desc + ' <br>'
-		+ this.sua_object[i].sua_status_desc);
+		+ this.sua_object[i].sched_status_desc);
 	$('#f3').html(this.sua_object[i].start_time + ' <br>'
 		+ this.sua_object[i].end_time);
 	$('#f4').html(this.sua_object[i].low_alt + ' <br>'
@@ -607,12 +607,12 @@ if (!cwa_ckbox.checked) {
 }
 
 // ** SUA 
-var url_sua = url.concat("SELECT s.airsp_id, rep_time, s.airsp_name,\
-			sua_airsp_desc, sua_status_desc, start_time, end_time,\
+var url_sua = url.concat("SELECT s.airsp_id, rep_time, t.airsp_type_desc,\
+			s.airsp_name, sched_status_desc, start_date, stop_date,\
 			high_alt, low_alt, coords AS GEOM, dafif_name, sep_rule, shape_ind \
 			FROM sua s INNER JOIN sua_airspace a ON a.airsp_id = s.airsp_id \
-			INNER JOIN sua_airspace_type t ON t.sua_airsp_type = s.airsp_type \
-			INNER JOIN sua_sched_status c ON c.sua_status = s.sched_status \
+			INNER JOIN sua_airspace_type t ON t.airsp_type = s.airsp_type \
+			INNER JOIN sua_sched_status c ON c.sched_status = s.sched_status \
 			ORDER BY s.airsp_name, rep_num &m=SUA");
 
 var sua_ckbox = document.getElementById("sua")
@@ -639,10 +639,10 @@ var	sua = L.realtime({
 			$("#m5").html("Sep/shape");
 			$("#m6").html("DAFIF");
 			$('#f1').html('SUA - ' + e.target.feature.properties.airsp_name);
-			$('#f2').html(e.target.feature.properties.sua_airsp_desc + ' <br>'
-				+ e.target.feature.properties.sua_status_desc);
-			$('#f3').html(e.target.feature.properties.start_time + ' <br>'
-				+ e.target.feature.properties.end_time);
+			$('#f2').html(e.target.feature.properties.airsp_type_desc + ' <br>'
+				+ e.target.feature.properties.sched_status_desc);
+			$('#f3').html(e.target.feature.properties.start_date + ' <br>'
+				+ e.target.feature.properties.stop_date);
 			$('#f4').html(e.target.feature.properties.low_alt + ' <br>'
 				+ e.target.feature.properties.high_alt);
 			$('#f5').html(e.target.feature.properties.sep_rule + '  '
@@ -808,7 +808,7 @@ var	seg = L.realtime({
 
 // ** METAR 
 var url_metar = url.concat("SELECT s.coords AS GEOM, s.stn_call, s.stn_loc,\
-			state, ob_date, temp, windsp, winddir, altimeter, visby, dewp,\
+			state, ob_date, temperature, windsp, winddir, altimeter, visby, dewp,\
 			hrly_precip, slp, windvar, windgust \
 			FROM metar m INNER JOIN (SELECT stn_call, MAX(ob_date) AS mob FROM metar \
 			GROUP BY stn_call) g ON m.stn_call = g.stn_call AND m.ob_date = g.mob \
@@ -828,7 +828,7 @@ metar = L.realtime({
 	pointToLayer: function(feature, latlng) {
 		marker = L.marker(latlng, {icon: wxIcon});
 		marker.bindTooltip('METAR' + '<br>' + feature.properties.stn_call
-			+ '<br>' + feature.properties.temp + '&#x2109');
+			+ '<br>' + feature.properties.temperature + '&#x2109');
 		marker.on('click', function(e) {
 			var hold1;
 			var hold2;
@@ -847,10 +847,10 @@ metar = L.realtime({
 			$('#f2').html(e.target.feature.properties.stn_loc + ", "
 				+ e.target.feature.properties.state);
 
-			if (feature.properties.temp == "- ")
+			if (feature.properties.temperature == "- ")
 				hold1 = " n/a";
 			else
-				hold1 = feature.properties.temp + "\xB0F  - dp:"  
+				hold1 = feature.properties.temperature + "\xB0F  - dp:"  
 					+ e.target.feature.properties.dewp + "\xB0F"; 
 
 			if (feature.properties.hrly_precip == "- ")
@@ -920,25 +920,25 @@ if (!metar_ckbox.checked) {
 var url_maxmin = url.concat("DROP TABLE IF EXISTS max_a; DROP TABLE IF EXISTS max_b;\
 		DROP TABLE IF EXISTS max_c; DROP TABLE IF EXISTS max_d; \
 		SELECT stn_call, MAX(ob_date) INTO temp max_a FROM metar GROUP BY stn_call; \
-		SELECT m.stn_call, ob_date, cast(temp AS INTEGER), windsp, winddir, altimeter,\
+		SELECT m.stn_call, ob_date, cast(temperature AS INTEGER), windsp, winddir, altimeter,\
 		visby, dewp, hrly_precip, slp, windvar, windgust \
 		INTO temp max_b FROM max_a t \
 		INNER JOIN metar m ON (t.stn_call = m.stn_call) AND (t.max = m.ob_date) \
-		WHERE (m.temp <> '- '); \
+		WHERE (m.temperature <> '- '); \
 		SELECT  b.* INTO max_c FROM max_b b \
-		INNER JOIN max_b c on c.temp = (SELECT MIN(temp) FROM max_b) AND c.ob_date = b.ob_date \
+		INNER JOIN max_b c on c.temperature = (SELECT MIN(temperature) FROM max_b) AND c.ob_date = b.ob_date \
 		AND b.stn_call = c.stn_call; \
 		SELECT b.* INTO max_d FROM max_b b \
-		INNER JOIN max_b e ON e.temp = (SELECT MAX(temp) FROM max_b) AND e.ob_date = b.ob_date \
+		INNER JOIN max_b e ON e.temperature = (SELECT MAX(temperature) FROM max_b) AND e.ob_date = b.ob_date \
 		AND b.stn_call = e.stn_call; \
-		SELECT coords AS GEOM, s.stn_call, s.stn_loc, s.state, c.ob_date, c.temp,\
+		SELECT coords AS GEOM, s.stn_call, s.stn_loc, s.state, c.ob_date, c.temperature,\
 		c.windsp, c.winddir, c.altimeter, c.visby, c.dewp, c.hrly_precip, c.slp,\
 		c.windvar, c.windgust, 'Min' AS maxmin FROM max_c c \
 		INNER JOIN stations s ON s.stn_call = c.stn_call \
 		INNER JOIN max_c d ON d.ob_date = c.ob_date \
 		WHERE c.ob_date IN (SELECT MAX(ob_date) FROM max_c) \
 		UNION \
-		SELECT coords AS GEOM, s.stn_call, s.stn_loc, s.state, c.ob_date, c.temp,\
+		SELECT coords AS GEOM, s.stn_call, s.stn_loc, s.state, c.ob_date, c.temperature,\
 		c.windsp, c.winddir, c.altimeter, c.visby, c.dewp, c.hrly_precip, c.slp,\
 		c.windvar, c.windgust, 'Max' AS maxmin FROM max_d c \
 		INNER JOIN stations s ON s.stn_call = c.stn_call \
@@ -954,7 +954,7 @@ maxmin = L.realtime({
 	crossOrigin: true, type: 'json'
 	}, {interval: 20000,
 	getFeatureId: function(featureData) {
-		return featureData.properties.stn_call + featureData.properties.temp;
+		return featureData.properties.stn_call + featureData.properties.temperature;
 	},
 	pointToLayer: function(feature, latlng) {
 		if (feature.properties.maxmin == "Max")
@@ -964,7 +964,7 @@ maxmin = L.realtime({
 		
 		mmarker = L.marker(latlng, {icon: wxIcon6});
 		mmarker.bindTooltip(feature.properties.maxmin + ': ' 
-			+ feature.properties.temp + '&#x2109' + '<br>'
+			+ feature.properties.temperature + '&#x2109' + '<br>'
 			+ feature.properties.stn_call );
 		mmarker.on('click', function(e) {
 			var hold1;
@@ -984,10 +984,10 @@ maxmin = L.realtime({
 			$('#f2').html(e.target.feature.properties.stn_loc + ", "
 				+ e.target.feature.properties.state);
 
-			if (feature.properties.temp == "- ")
+			if (feature.properties.temperature == "- ")
 				hold1 = " n/a";
 			else
-				hold1 = feature.properties.temp + "\xB0F  - dp:"  
+				hold1 = feature.properties.temperature + "\xB0F  - dp:"  
 					+ e.target.feature.properties.dewp + "\xB0F"; 
 
 			if (feature.properties.hrly_precip == "- ")
@@ -1256,7 +1256,7 @@ if (!winds_ckbox.checked) {
 // ** PIREP
 var url_pirep = url.concat("SELECT coords AS GEOM, p.stn_call, stn_loc, state,\
 			rep_type, fl_lev, ac_type, turbulence, remarks, location, cloud, weather,\
-			temperature, wind_spd_dir, icing, rep_time \
+			temperature, windsp, icing, rep_time \
 			FROM pirep p INNER JOIN (SELECT stn_call, MAX(rep_time) AS mx FROM pirep \
 			GROUP BY stn_call) g ON p.stn_call = g.stn_call AND p.rep_time = g.mx \
 			INNER JOIN stations s ON p.stn_call = s.stn_call \
@@ -1337,10 +1337,10 @@ pirep = L.realtime({
 			else
 				hold2 = feature.properties.temperature;	
 
-			if (feature.properties.wind_spd_dir == "")
+			if (feature.properties.windsp == "")
 				hold3 = " - ";
 			else
-				hold3 = feature.properties.wind_spd_dir;	
+				hold3 = feature.properties.windsp;	
 
 			if (feature.properties.weather == "")
 				hold4 = " - ";
