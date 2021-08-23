@@ -8,6 +8,8 @@
 	<title>DUMP978-WX Data</title>
 	<input type="hidden" id="port" value="<%=ptnum %>"/>
 	<link rel="stylesheet" href="map978.css">
+	<link rel="stylesheet" href="/leaflet/leaflet.css"/>
+	<script src="/leaflet/leaflet.js"></script>
 	<script src="https://code.jquery.com/jquery-3.6.0.js"
 		integrity="sha256-H+K7U5CnXl1h5ywQfKtSj8PCmoN9aaq30gDh27Xc0jk="
 		crossorigin="anonymous"></script>
@@ -20,9 +22,9 @@
 <nav class="topnav">
 	<a href="/">Home</a>	
 	<a href="page2">Reports</a>
-	<a class="active" href="page3">TAF Details</a>
-	<a href="page4">Station Lookup</a>	
-	<a class="disabled">DUMP978 - TAF Details</a>
+	<a href="page3">TAF Details</a>
+	<a class="active" href="page4">Station Lookup</a>	
+	<a class="disabled">DUMP978 - Station Lookup</a>
 	<a class="disabled">
 		<span id="UTC_za00"></span>z
 		<script src="//widget.time.is/t.js"></script>
@@ -35,14 +37,9 @@
 	<table id="tableID" class="display" style="width:100%">
 		<thead>
 			<tr>
-				<th></th>
 				<th>Station</th>
 				<th>Location</th>
-				<th>Issued At</th>	
-				<th>Period</th>
-				<th>Winds</th>
-				<th>Visibility</th>
-				<th>Conditions</th>
+				<th>State</th>	
 			</tr>
 		</thead>
 	</table>
@@ -50,7 +47,7 @@
 </div>
 
 <div id="footer"></div>
-<script src="map978p3.js"></script>
+<script src="map978p4.js"></script>
 
 </body>
 </html>

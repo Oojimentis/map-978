@@ -2,7 +2,7 @@
 <html lang="en">
 
 <head>
-	<meta charset="utf-8" />
+	<meta charset="utf-8"/>
 
 	<title>DUMP978-WX Data</title>
 
@@ -19,6 +19,7 @@
 	<a href="/">Home</a>	
 	<a class="active" href="page2">Reports</a>
 	<a href="page3">TAF Details</a>	
+	<a href="page4">Station Lookup</a>	
 	<a class="disabled">DUMP978 - Reports</a>
 	<a class="disabled">
 		<span id="UTC_za00"></span>z
@@ -33,7 +34,7 @@
 		<div class="column">
 			<p>NEXRAD Count</p>
 			<div class="tableFixHead">
-				<table id="stntbl"> <tbody>
+				<table id= "nexrtbl" class="page2tbl"> <tbody>
 					<thead>
 						<tr>
 							<th>Product</th>
@@ -46,8 +47,8 @@
 		</div>
 		<div class="column">
 			<p>SUA Airspace - No Geometry</p>	
-			<div class="tableFixHead">
-				<table id="suatbl"> <tbody>
+			<div class="tableFixHead" >
+				<table id ="suatbl" class="page2tbl"> <tbody>
 					<thead>
 						<tr>
 							<th>Airspace ID</th>
@@ -62,10 +63,10 @@
 
 	<p>NOTAM TFR - No Graphic Record</p>
 	<div class="tableFixHead">
-		<table id="tfrtbl"><tbody id="tbody">
+		<table id="tfrtbl" class="page2tbl"><tbody id="tbody">
 			<thead>
 				<tr>
-					<th>Rep Num</th>
+					<th>Report Number</th>
 					<th>Type</th>
 					<th>Report</th>
 				</tr>

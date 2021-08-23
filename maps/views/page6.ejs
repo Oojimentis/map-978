@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta content="initial-scale=1, maximum-scale=1, user-scalable=0" name="viewport" />
+	<meta name="viewport" content="width=device-width" />
+
+	<title>DUMP978-WX Data</title>
+
+	<input type="hidden" id="port" value="<%=ptnum %>"/>
+
+	<script src="https://code.jquery.com/jquery-3.6.0.js"
+		integrity="sha256-H+K7U5CnXl1h5ywQfKtSj8PCmoN9aaq30gDh27Xc0jk="
+		crossorigin="anonymous"></script>
+	<link rel="stylesheet" href="map978.css">
+	<link rel="stylesheet" href="/leaflet/leaflet.css"/>
+	<script src="/leaflet/leaflet.js"></script>
+	<script src="/leaflet/leaflet-realtime.js"></script>
+</head>
+
+<body>
+<nav class="topnav">
+	<a class="disabled_left">DUMP978 - Station Display</a>
+	<a class="disabled_left">
+	<span id="UTC_za00"></span>z
+	<script src="//widget.time.is/t.js"></script>
+	<script>time_is_widget.init({UTC_za00:{}});</script></a>
+</nav>
+
+<a href="https://time.is/UTC" id="time_is_link" style="float: right; color: blue" rel="nofollow"></a>	
+
+<div id="mapstn"></div>
+	<div class="sidebar2">
+		<table style="width:90%">
+		<caption><br><p>Most Recent<br></caption>
+			<tr>
+				<th id="m1">Station</th>
+				<td id="f1"></td>
+			</tr>
+			<tr>
+				<th id="m2">Location</th>
+				<td id="f2"></td>
+			</tr>
+		</table>
+<br>
+		<table id= "metarstn" class="page6tbl"> <tbody>
+		<caption>METAR</caption>
+			<thead>
+				<tr>
+					<th>Date</th>
+					<th>Temp<br>dp</th>
+					<th>Hrly<br>Precip</th>
+					<th>Wind</th>
+					<th>Vis</th>
+					<th>Pressure</th>
+				</tr>
+			</thead>
+			</tbody></table>
+<br>
+		<table id ="tafstn" class="page6tbl"> <tbody>
+		<caption>TAF</caption>
+			<thead>
+				<tr>
+					<th>Date</th>
+					<th>Wind</th>
+					<th>Vis</th>
+					<th>Condx</th>
+				</tr>
+			</thead>
+		</tbody></table>
+<br>
+		<table id="pirepstn" class="page6tbl"><tbody>
+		<caption>PIREP</caption>
+			<thead>
+				<tr>
+					<th>Date</th>
+					<th>Type<br>Location</th>
+					<th>Fl Lev<br>AC</th>
+					<th>Turb<br>Ice</th>
+					<th>Cld<br>Temp</th>
+					<th>Wind<br>WX</th>										
+					<th>Rmks</th>					
+				</tr>
+			</thead>
+		</tbody></table>
+	</div>
+
+<div id="footer"></div>
+
+<script src="map978p6.js"></script>
+
+</body>
+</html>

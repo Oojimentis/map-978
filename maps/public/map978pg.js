@@ -1,3 +1,5 @@
+// ** Map978 Home Sceen.
+
 var server_port = document.getElementById('port').value;
 var host_url = "http://localhost:";
 var url = host_url.concat(server_port, "/sql?q=");
@@ -7,18 +9,18 @@ var turblegend;
 var icelegend;
 var cloudlegend;
 var nexlegend;
-var sua_object=[];
-var airmet_object=[];
-var sigmet_object=[];
-var popupOptions =
-	{
-		'className' : 'custompopup',
-		'closeButton' : false
-	}
+var sua_object = [];
+var airmet_object = [];
+var sigmet_object = [];
+
+var popupOptions = {
+	'className' : 'custompopup',
+	'closeButton' : false
+}
 	
 window.onload = onPageLoad();
 
-function onPageLoad(){
+function onPageLoad() {
 	document.getElementById("gmsliderRange").step = "1000";
 	document.getElementById("gmsliderRange").value = "-1000";
 	document.getElementById("altrad").disabled = true;
@@ -27,29 +29,46 @@ function onPageLoad(){
 var formValues = JSON.parse(localStorage.getItem('formValues')) || {};
 var $checkboxez = $("#ckboxes :checkbox");
 
-function sua_overlap(_sua_object, i){
+function separator(numb) {
+	var str = numb.toString().split(".");
+	str[0] = str[0].replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+
+	return str.join(".");
+}
+
+function popup(mylink, windowname) {
+	if (! window.focus)return true;
+		var href;
+	if (typeof(mylink) == 'string') href=mylink;
+		else href=mylink.href;
+		
+	window.open(href, windowname, 'width=750,height=400,scrollbars=yes');
+	return false;
+}
+
+function sua_overlap(_sua_object, i) {
 	$('#f1').html('SUA - ' + this.sua_object[i].airsp_name);
-			$('#f2').html(this.sua_object[i].sua_airsp_desc + ' <br>'
-				+ this.sua_object[i].sua_status_desc);
-			$('#f3').html(this.sua_object[i].start_time + ' <br>'
-				+ this.sua_object[i].end_time);
-			$('#f4').html(this.sua_object[i].low_alt + ' <br>'
-				+ this.sua_object[i].high_alt);
-			$('#f5').html(this.sua_object[i].sep_rule + '  '
-				+ this.sua_object[i].shape_ind);
-			$('#f6').html(this.sua_object[i].dafif_name);
+	$('#f2').html(this.sua_object[i].sua_airsp_desc + ' <br>'
+		+ this.sua_object[i].sched_status_desc);
+	$('#f3').html(this.sua_object[i].start_time + ' <br>'
+		+ this.sua_object[i].end_time);
+	$('#f4').html(this.sua_object[i].low_alt + ' <br>'
+		+ this.sua_object[i].high_alt);
+	$('#f5').html(this.sua_object[i].sep_rule + '  '
+		+ this.sua_object[i].shape_ind);
+	$('#f6').html(this.sua_object[i].dafif_name);
 };
 
-function airmet_overlap(_airmet_object, i){
+function airmet_overlap(_airmet_object, i) {
 	map.removeLayer(airmet);
 	map.addLayer(airmet);	
-	map.eachLayer(function (layer) {
+	map.eachLayer(function(layer) {
 		if (layer._leaflet_id == this.airmet_object[i]._leaflet_id) {
 
 			layer.setStyle({fillColor: 'yellow', fillOpacity: 0.5});
 
 			$('#f1').html('AIRMET');
-			$('#f2').html(this.airmet_object[i].feature.properties.alt);
+			$('#f2').html(separator(this.airmet_object[i].feature.properties.alt + 'ft'));
 			$('#f3').html(this.airmet_object[i].feature.properties.rep_num);
 			$('#f4').html(this.airmet_object[i].feature.properties.text_data);
 			$('#f5').html(this.airmet_object[i].feature.properties.start_date);
@@ -58,16 +77,16 @@ function airmet_overlap(_airmet_object, i){
 	});
 };
 
-function sigmet_overlap(_sigmet_object, i){
+function sigmet_overlap(_sigmet_object, i) {
 	map.removeLayer(sigmet);
 	map.addLayer(sigmet);	
-	map.eachLayer(function (layer) {
+	map.eachLayer(function(layer) {
 		if (layer._leaflet_id == this.sigmet_object[i]._leaflet_id) {
 
 			layer.setStyle({fillColor: 'yellow', fillOpacity: 0.5});
 
 			$('#f1').html('SIGMET');
-			$('#f2').html(this.sigmet_object[i].feature.properties.alt);
+			$('#f2').html(separator(this.sigmet_object[i].feature.properties.alt) + 'ft');
 			$('#f3').html(this.sigmet_object[i].feature.properties.rep_num);
 			$('#f4').html(this.sigmet_object[i].feature.properties.text_data);
 			$('#f5').html(this.sigmet_object[i].feature.properties.start_date);
@@ -76,24 +95,24 @@ function sigmet_overlap(_sigmet_object, i){
 	});
 };
 
-function updateStorage(){
-	$checkboxez.each(function(){
-	formValues[this.id] = this.checked;
+function updateStorage() {
+	$checkboxez.each(function() {
+		formValues[this.id] = this.checked;
 	});
 
 	localStorage.setItem("formValues", JSON.stringify(formValues));
 }
 
-$checkboxez.on("change", function(){
+$checkboxez.on("change", function() {
 	updateStorage();
 });
 
 // On page load
-$.each(formValues, function(key, value){
+$.each(formValues, function(key, value) {
 	$("#" + key).prop('checked', value);
 });
 
-function right(str, chr){
+function right(str, chr) {
 	return str.slice(str.length - chr, str.length);
 }
 
@@ -114,7 +133,7 @@ var OpenStreetMap_BlackAndWhite = L.tileLayer('http://{s}.tiles.wmflabs.org/bw-m
 });
 
 //** Altitude colours
-function getColor(alt_color){
+function getColor(alt_color) {
 	return 	alt_color >=	60000	? '#67BDE9':
 			alt_color >=	50000	? '#6EBAE0':
 			alt_color >=	43000	? '#75B7D6':
@@ -144,6 +163,19 @@ function getNexrad() {
 	var nexrad_prod = parseInt(nexrad_prod_str);
 	var nexrad_alt = parseInt(nexrad_alt_str);
 	var nexrad_prodid = 0
+
+	$("#m1").html("-");
+	$("#m2").html("-");					
+	$("#m3").html("-");
+	$("#m4").html("-");
+	$("#m5").html("-");
+	$("#m6").html("-");
+	$('#f1').html('-');
+	$('#f2').html('-');
+	$('#f3').html('-');
+	$('#f4').html('-');
+	$('#f5').html('-');
+	$('#f6').html('-');			
 
 	switch(nexrad_prod) {
 	case 0:
@@ -186,17 +218,19 @@ function getNexrad() {
 		break;
 	}
 
-	var nexrad_sql_holder = `SELECT coords AS GEOM, m.prod_id, m.intensity, m.maptime, m.block_num,seq \
-					FROM nexrad m INNER JOIN (SELECT MAX(maptime) AS mob FROM nexrad \
-					WHERE prod_id = ${nexrad_prodid}) g \
-					ON m.maptime = g.mob AND m.prod_id = ${nexrad_prodid} AND altitude = ${nexrad_alt} \
-                    &m=NEXRAD+${nexrad_prodid}+Alt:+${nexrad_alt}`;
+	var nexrad_sql_holder = `SELECT coords AS GEOM, m.prod_id, m.intensity,\
+						m.maptime, m.block_num,seq \
+						FROM nexrad m INNER JOIN (SELECT MAX(maptime) AS mob FROM nexrad \
+						WHERE prod_id = ${nexrad_prodid}) g \
+						ON m.maptime = g.mob AND m.prod_id = ${nexrad_prodid}\ 
+						AND altitude = ${nexrad_alt} \
+						&m=NEXRAD+${nexrad_prodid}+Alt:+${nexrad_alt}`;
 
 	return nexrad_sql_holder;
 }	
 
 // ** NEXRAD intensity colours.
-function getColorInt(alt_color){
+function getColorInt(alt_color) {
 	switch (alt_color) {
 	case 1:
 		nexrad_color = '#8C8C74';
@@ -248,8 +282,10 @@ return nexrad_color;
 }
 
 // ** G-AIRMET
-var url_gairmet = url.concat("SELECT coords AS GEOM, rep_num, alt, ob_ele, start_date, stop_date \
-					FROM graphics WHERE prod_id = 14 &m=G\-AIRMET");
+var url_gairmet = url.concat("SELECT coords AS GEOM, rep_num, alt,\
+				ob_ele, start_date, stop_date \
+				FROM graphics WHERE prod_id = 14\
+				&m=G\-AIRMET");
 
 var gairmet_ckbox = document.getElementById("gmet")
 var gairmet = L.realtime({
@@ -258,16 +294,18 @@ var gairmet = L.realtime({
 	}, {interval: 33000,
 	style: function(feature){
 		altitude_color = getColor(feature.properties.alt);
-		return {color: '#5D8C8C', weight: 2, fillColor: altitude_color, opacity: 1.0, fillOpacity: 0.2};
+		return {color: '#5D8C8C', weight: 2, fillColor: altitude_color,
+			opacity: 1.0, fillOpacity: 0.2};
 	},
-	getFeatureId: function(featureData){
+	getFeatureId: function(featureData) {
 		return featureData.properties.rep_num;
 	},
-	onEachFeature: function(feature, layer){
-		layer.bindTooltip('G-AIRMET: Alt ' + feature.properties.alt + '<br>'
+	onEachFeature: function(feature, layer) {
+		layer.bindTooltip('G-AIRMET: Alt ' + separator(feature.properties.alt) + '<br>'
 			+ feature.properties.ob_ele);
-		layer.on('click', function(e){
-			layer.setStyle({color: 'yellow', opacity: 0.8, fillColor: 'yellow', fillOpacity: 0.5});
+		layer.on('click', function(e) {
+			layer.setStyle({color: 'yellow', opacity: 0.8, fillColor: 'yellow',
+				fillOpacity: 0.5});
 			$("#m1").html("Report");
 			$("#m2").html("Altitude");					
 			$("#m3").html("Report Num");
@@ -275,7 +313,7 @@ var gairmet = L.realtime({
 			$("#m5").html("Start");
 			$("#m6").html("Stop");
 			$('#f1').html('G-AIRMET');
-			$('#f2').html(e.target.feature.properties.alt);
+			$('#f2').html(separator(e.target.feature.properties.alt) + 'ft');
 			$('#f3').html(e.target.feature.properties.rep_num);
 			$('#f4').html(e.target.feature.properties.ob_ele);
 			$('#f5').html(e.target.feature.properties.start_date);
@@ -283,17 +321,17 @@ var gairmet = L.realtime({
 
 			gairmet.stop();
 		});
-		layer.on('mouseout', function(e){
+		layer.on('mouseout', function(e) {
 			gairmet.start();
 		})		
 	},
-	filter: function(feature, layer){
+	filter: function(feature, layer) {
 		var rangeslider = document.getElementById("gmsliderRange");
 		var output = document.getElementById("slidealt");
 		if (rangeslider.value == -1000) 
 			output.innerHTML = "All"
 		else 
-			output.innerHTML = rangeslider.value;
+			output.innerHTML = separator(rangeslider.value);
 
 		var alt_level = parseInt(rangeslider.value, 10);
 		var e = document.getElementById("stim");
@@ -309,30 +347,33 @@ var gairmet = L.realtime({
 }).addTo(map);
 
 if (!gairmet_ckbox.checked) {
-	map.removeLayer(gairmet), 
+	map.removeLayer(gairmet),
 	gairmet.stop()
 }
 
 // ** AIRMET
-var url_airmet = url.concat("SELECT coords AS GEOM, g.rep_num, alt, ob_ele, text_data, start_date, stop_date \
-					FROM graphics g LEFT JOIN sigairmet s ON (g.prod_id = s.prod_id) \
-					AND (g.rep_num = s.rep_num) WHERE g.prod_id = 11 &m=AIRMET");
+var url_airmet = url.concat("SELECT coords AS GEOM, g.rep_num, alt, ob_ele,\
+			text_data, start_date, stop_date \
+			FROM graphics g LEFT JOIN sigairmet s ON (g.prod_id = s.prod_id) \
+			AND (g.rep_num = s.rep_num) WHERE g.prod_id = 11\
+			&m=AIRMET");
 					
 var airmet_ckbox = document.getElementById("amet")
 var	airmet = L.realtime({
 	url: url_airmet,
 	crossOrigin: true, type: 'json'
 	}, {interval: 35000,
-	style: function(feature){
+	style: function(feature) {
 		altitude_color = getColor(feature.properties.alt);
-		return {color: '#00cccc', weight: 2, fillColor: altitude_color, opacity: 1.0, fillOpacity: 0.2};
+		return {color: '#00cccc', weight: 2, fillColor: altitude_color,
+			opacity: 1.0, fillOpacity: 0.2};
 	},
-	getFeatureId: function(featureData){
+	getFeatureId: function(featureData) {
 		return featureData.properties.rep_num;
 	},
-	onEachFeature: function(feature, layer){
+	onEachFeature: function(feature, layer) {
 //		layer.bindTooltip('AIRMET: Alt ' + feature.properties.alt);
-		layer.on('mousedown', function(e){
+		layer.on('mousedown', function(e) {
 			layer.setStyle({fillColor: 'yellow', fillOpacity: 0.5});
 			$("#m1").html("Report");
 			$("#m2").html("Altitude");					
@@ -341,7 +382,7 @@ var	airmet = L.realtime({
 			$("#m5").html("Start");
 			$("#m6").html("Stop");
 			$('#f1').html('AIRMET');
-			$('#f2').html(e.target.feature.properties.alt);
+			$('#f2').html(separator(e.target.feature.properties.alt) + 'ft');
 			$('#f3').html(e.target.feature.properties.rep_num);
 			$('#f4').html(e.target.feature.properties.text_data);
 			$('#f5').html(e.target.feature.properties.start_date);
@@ -354,10 +395,11 @@ var	airmet = L.realtime({
 			if (pip_airmet.length) {
 				for (var i = 0; i < pip_airmet.length; i++) {
 					airmet_object[i] = pip_airmet[i];	//.feature.properties;
-					html_airmet += "<a onclick= 'airmet_overlap(\"" + airmet_object[i] + "\",\"" + i + "\");'>" + 
-					"AIRMET - Alt: " +
-					pip_airmet[i].feature.properties.alt + " : " + " Rep num: " +
-					pip_airmet[i].feature.properties.rep_num + "</a><br>" ;
+					html_airmet += "<a onclick= 'airmet_overlap(\"" 
+						+ airmet_object[i] + "\",\"" + i + "\");'>" + 
+						"AIRMET - Alt: " +
+						separator(pip_airmet[i].feature.properties.alt) + " : " + " Rep num: " +
+						pip_airmet[i].feature.properties.rep_num + "</a><br>" ;
 				}
 				if (html_airmet) {
 					layer.bindPopup(html_airmet, popupOptions);
@@ -365,17 +407,17 @@ var	airmet = L.realtime({
 			}
 			airmet.stop();
 		});
-		layer.on('mousedown', function(e){
+		layer.on('mousedown', function(e) {
 			airmet.start();
 		})		
 	},
-	filter: function(feature, layer){
+	filter: function(feature, layer) {
 		var rangeslider = document.getElementById("gmsliderRange");
 		var output = document.getElementById("slidealt");
 		if (rangeslider.value == -1000) 
 			output.innerHTML = "All"
 		else 
-			output.innerHTML = rangeslider.value;
+			output.innerHTML = separator(rangeslider.value);
 
 		var alt_level = parseInt(rangeslider.value, 10);
 		if (alt_level == -1000) 
@@ -392,9 +434,11 @@ if (!airmet_ckbox.checked) {
 }
 
 // ** SIGMET
-var url_sigmet = url.concat("SELECT coords AS GEOM, g.rep_num, alt, ob_ele, text_data, start_date, stop_date \
-					FROM graphics g LEFT JOIN sigairmet s ON (g.prod_id = s.prod_id) AND \
-					(g.rep_num = s.rep_num)	WHERE g.prod_id = 12 &m=SIGMET");
+var url_sigmet = url.concat("SELECT coords AS GEOM, g.rep_num, alt,\
+			ob_ele, text_data, start_date, stop_date \
+			FROM graphics g LEFT JOIN sigairmet s ON (g.prod_id = s.prod_id) AND \
+			(g.rep_num = s.rep_num)	WHERE g.prod_id = 12\
+			&m=SIGMET");
 
 var sigmet_ckbox = document.getElementById("smet")
 var	sigmet = L.realtime({
@@ -403,14 +447,15 @@ var	sigmet = L.realtime({
 	}, {interval: 60000,
 	style: function(feature) {
 		altitude_color = getColor(feature.properties.alt);
-		return {color: '#00cccc', weight: 2, fillColor: altitude_color, opacity: 1.0, fillOpacity: 0.2};
+		return {color: '#00cccc', weight: 2, fillColor: altitude_color,
+			opacity: 1.0, fillOpacity: 0.2};
 	},
-	getFeatureId: function(featureData){
+	getFeatureId: function(featureData) {
 		return featureData.properties.rep_num;
 	},
-	onEachFeature: function(feature, layer){
+	onEachFeature: function(feature, layer) {
 //		layer.bindTooltip('SIGMET: Alt ' + feature.properties.alt);
-		layer.on('mousedown', function(e){
+		layer.on('mousedown', function(e) {
 			layer.setStyle({fillColor: 'yellow', fillOpacity: 0.5});
 			$("#m1").html("Report");
 			$("#m2").html("Altitude");					
@@ -419,7 +464,7 @@ var	sigmet = L.realtime({
 			$("#m5").html("Start");
 			$("#m6").html("Stop");
 			$('#f1').html('SIGMET');
-			$('#f2').html(e.target.feature.properties.alt);
+			$('#f2').html(separator(e.target.feature.properties.alt) + 'ft');
 			$('#f3').html(e.target.feature.properties.rep_num);
 			$('#f4').html(e.target.feature.properties.text_data);
 			$('#f5').html(e.target.feature.properties.start_date);
@@ -432,10 +477,11 @@ var	sigmet = L.realtime({
 			if (pip_sigmet.length) {
 				for (var i = 0; i < pip_sigmet.length; i++) {
 					sigmet_object[i] = pip_sigmet[i];	//.feature.properties;
-					html_sigmet += "<a onclick= 'sigmet_overlap(\"" + sigmet_object[i] + "\",\"" + i + "\");'>" + 
-					"SIGMET - Alt: " +
-					pip_sigmet[i].feature.properties.alt + " : " + " Rep num: " +
-					pip_sigmet[i].feature.properties.rep_num + "</a><br>" ;
+					html_sigmet += "<a onclick= 'sigmet_overlap(\"" 
+						+ sigmet_object[i] + "\",\"" + i + "\");'>" + 
+						"SIGMET - Alt: " +
+						separator(pip_sigmet[i].feature.properties.alt) + " : " + " Rep num: " +
+						pip_sigmet[i].feature.properties.rep_num + "</a><br>" ;
 				}
 				if (html_sigmet) {
 					layer.bindPopup(html_sigmet, popupOptions);
@@ -443,17 +489,17 @@ var	sigmet = L.realtime({
 			}
 			sigmet.stop();
 		});
-		layer.on('mousedown', function(e){
+		layer.on('mousedown', function(e) {
 			sigmet.start();
 		})		
 	},
-	filter: function(feature, layer){
+	filter: function(feature, layer) {
 		var rangeslider = document.getElementById("gmsliderRange");
 		var output = document.getElementById("slidealt");
 		if (rangeslider.value == -1000)
 			output.innerHTML = "All"
 		else
-			output.innerHTML = rangeslider.value;
+			output.innerHTML = separator(rangeslider.value);
 
 		var alt_level = parseInt(rangeslider.value, 10);
 		if (alt_level == -1000) 
@@ -479,25 +525,32 @@ var	nexrad = L.realtime({
 	crossOrigin: true, type: 'json'
 	}, {interval: 55000,
 
-	getFeatureId: function(featureData){
+	getFeatureId: function(featureData) {
 		return featureData.properties.seq;
 	},
-	style: function(feature){
-		if (feature.properties.prod_id == 84 || feature.properties.prod_id == 90 
+	
+	style: function(feature) {
+		$("#m1").html("Latest");
+		$('#f1').html(feature.properties.maptime + 'z');
+
+		if (feature.properties.prod_id == 84 || feature.properties.prod_id == 90
 				|| feature.properties.prod_id == 91 ) {
 			nexrad_color = getColorInt(feature.properties.intensity);
-			return {color: nexrad_color, weight: 4, fillColor: nexrad_color, opacity: 0.5, fillOpacity: 0.5}
+			return {color: nexrad_color, weight: 4, fillColor: nexrad_color,
+				opacity: 0.5, fillOpacity: 0.5}
 		}
 	},
-	pointToLayer: function(feature, latlng){
+	pointToLayer: function(feature, latlng) {
 		if (feature.properties.prod_id != 84 ) {		
 			var currentPoint = map.latLngToContainerPoint(latlng);
 			var width = 5;		//5
 			var height = 5;		//5
 			var xDifference = width / 2;
 			var yDifference = height / 2;
-			var southWest = L.point((currentPoint.x - xDifference), (currentPoint.y - yDifference));
-			var northEast = L.point((currentPoint.x + xDifference), (currentPoint.y + yDifference));
+			var southWest = L.point((currentPoint.x - xDifference),
+				(currentPoint.y - yDifference));
+			var northEast = L.point((currentPoint.x + xDifference),
+				(currentPoint.y + yDifference));
 			var bounds = L.latLngBounds(map.containerPointToLatLng(southWest),
 				map.containerPointToLatLng(northEast));
 
@@ -509,29 +562,33 @@ var	nexrad = L.realtime({
 			map.addLayer(nexrad_layer_group);
 			nexrad.stop();
 		};
+
 	}
 }).addTo(map)
 
 // ** CWA
-var url_cwa = url.concat("SELECT coords AS GEOM, g.rep_num, alt, ob_ele, text_data, start_date, stop_date \
-					FROM graphics g LEFT JOIN sigairmet s ON (g.prod_id = s.prod_id) AND \
-					(g.rep_num = s.rep_num) WHERE g.prod_id = 15 &m=CWA");
+var url_cwa = url.concat("SELECT coords AS GEOM, g.rep_num, alt, ob_ele,\
+			text_data, start_date, stop_date \
+			FROM graphics g LEFT JOIN sigairmet s ON (g.prod_id = s.prod_id)\
+			AND (g.rep_num = s.rep_num) WHERE g.prod_id = 15\
+			&m=CWA");
 
 var cwa_ckbox = document.getElementById("cwa")
 var	cwa = L.realtime({
 	url: url_cwa,
 	crossOrigin: true, type: 'json'
 	}, {interval: 77000,
-	style: function(feature){
+	style: function(feature) {
 		altitude_color = getColor(feature.properties.alt);
-		return {color: '#00cccc', weight: 2, fillColor: altitude_color, opacity: 1.0, fillOpacity: 0.2};
+		return {color: '#00cccc', weight: 2, fillColor: altitude_color,
+			opacity: 1.0, fillOpacity: 0.2};
 	},
-	getFeatureId: function(featureData){
+	getFeatureId: function(featureData) {
 		return featureData.properties.rep_num;
 	},
-	onEachFeature: function(feature, layer){
-		layer.bindTooltip('CWA: Alt ' + feature.properties.alt);
-		layer.on('click', function(e){
+	onEachFeature: function(feature, layer) {
+		layer.bindTooltip('CWA: Alt ' + separator(feature.properties.alt));
+		layer.on('click', function(e) {
 			layer.setStyle({fillColor: 'yellow', fillOpacity: 0.5});
 			$("#m1").html("Report");
 			$("#m2").html("Altitude");					
@@ -540,7 +597,7 @@ var	cwa = L.realtime({
 			$("#m5").html("Start");
 			$("#m6").html("Stop");
 			$('#f1').html('CWA');
-			$('#f2').html(e.target.feature.properties.alt);
+			$('#f2').html(separator(e.target.feature.properties.alt) + 'ft');
 			$('#f3').html(e.target.feature.properties.rep_num);
 			$('#f4').html(e.target.feature.properties.text_data);
 			$('#f5').html(e.target.feature.properties.start_date);
@@ -548,17 +605,17 @@ var	cwa = L.realtime({
 
 			cwa.stop();
 		});
-		layer.on('mouseout', function(e){
+		layer.on('mouseout', function(e) {
 			cwa.start();
 		})		
 	},
-	filter: function(feature,layer){
+	filter: function(feature,layer) {
 		var rangeslider = document.getElementById("gmsliderRange");
 		var output = document.getElementById("slidealt");
 		if (rangeslider.value == -1000)
 			output.innerHTML = "All"
 		else 
-			output.innerHTML = rangeslider.value;
+			output.innerHTML = separator(rangeslider.value);
 
 		var alt_level = parseInt(rangeslider.value, 10);
 		if (alt_level == -1000) 
@@ -575,27 +632,29 @@ if (!cwa_ckbox.checked) {
 }
 
 // ** SUA 
-var url_sua = url.concat("SELECT s.airsp_id, rep_time, s.airsp_name, sua_airsp_desc, sua_status_desc, start_time, \
-					end_time, high_alt, low_alt, coords AS GEOM, dafif_name, sep_rule, shape_ind \
-					FROM sua s INNER JOIN sua_airspace a ON a.airsp_id = s.airsp_id \
-					INNER JOIN sua_airspace_type t ON t.sua_airsp_type = s.airsp_type \
-					INNER JOIN sua_sched_status c ON c.sua_status = s.sched_status \
-					ORDER BY s.airsp_name, rep_num &m=SUA");
+var url_sua = url.concat("SELECT s.airsp_id, rep_time, t.airsp_type_desc,\
+			s.airsp_name, sched_status_desc, start_date, stop_date,\
+			high_alt, low_alt, coords AS GEOM, dafif_name, sep_rule, shape_ind \
+			FROM sua s INNER JOIN sua_airspace a ON a.airsp_id = s.airsp_id \
+			INNER JOIN sua_airspace_type t ON t.airsp_type = s.airsp_type \
+			INNER JOIN sua_sched_status c ON c.sched_status = s.sched_status \
+			ORDER BY s.airsp_name, rep_num &m=SUA");
 
 var sua_ckbox = document.getElementById("sua")
 var	sua = L.realtime({
 	url: url_sua,
 	crossOrigin: true, type: 'json'
 	}, {interval: 50000,
-	style: function(feature){
-		return {color: '#2e052a', weight: 3, fillColor: '#2e052a', opacity: 0.5, fillOpacity: 0.5};
+	style: function(feature) {
+		return {color: '#2e052a', weight: 3, fillColor: '#2e052a',
+			opacity: 0.5, fillOpacity: 0.5};
 	},
-	getFeatureId: function(featureData){
+	getFeatureId: function(featureData) {
 		return featureData.properties.airsp_name;
 	},
-	onEachFeature: function(feature, layer){
+	onEachFeature: function(feature, layer) {
 //		layer.bindTooltip('SUA: ' + feature.properties.airsp_name);
-		layer.on('mousedown', function(e){
+		layer.on('mousedown', function(e) {
 //			map.closePopup();
 			layer.setStyle({color: 'yellow', fillColor: 'orange', fillOpacity: 0.5});
 			$("#m1").html("Report");
@@ -605,10 +664,10 @@ var	sua = L.realtime({
 			$("#m5").html("Sep/shape");
 			$("#m6").html("DAFIF");
 			$('#f1').html('SUA - ' + e.target.feature.properties.airsp_name);
-			$('#f2').html(e.target.feature.properties.sua_airsp_desc + ' <br>'
-				+ e.target.feature.properties.sua_status_desc);
-			$('#f3').html(e.target.feature.properties.start_time + ' <br>'
-				+ e.target.feature.properties.end_time);
+			$('#f2').html(e.target.feature.properties.airsp_type_desc + ' <br>'
+				+ e.target.feature.properties.sched_status_desc);
+			$('#f3').html(e.target.feature.properties.start_date + ' <br>'
+				+ e.target.feature.properties.stop_date);
 			$('#f4').html(e.target.feature.properties.low_alt + ' <br>'
 				+ e.target.feature.properties.high_alt);
 			$('#f5').html(e.target.feature.properties.sep_rule + '  '
@@ -624,8 +683,9 @@ var	sua = L.realtime({
 				for (var i = 0; i < match.length; i++) {
 					sua_object[i] = match[i].feature.properties;
 					if (match[i].feature.properties.airsp_name) {
-						html += "<a onclick= 'sua_overlap(\"" + sua_object[i] + "\",\"" + i +"\");'>" +
-						match[i].feature.properties.airsp_name	+ "	</a><br>" ;
+						html += "<a onclick= 'sua_overlap(\"" 
+							+ sua_object[i] + "\",\"" + i +"\");'>" 
+							+ match[i].feature.properties.airsp_name + "</a><br>" ;
 					}
 				}
 				if (html) {
@@ -636,7 +696,7 @@ var	sua = L.realtime({
 			sua.stop();
 		})
 		
-		layer.on('mouseout', function(e){
+		layer.on('mouseout', function(e) {
 			html='';
 			sua.start();
 		});
@@ -654,12 +714,13 @@ if (!sua_ckbox.checked) {
 }
 
 // ** NOTAM TFR - Circle
-var url_circle = url.concat("SELECT bot AS GEOM, c.start_date, c.stop_date, c.rep_num, c.r_lng, \
-					c.r_lat, c.alt_top, c.alt_bot, c.alpha, s.text_data FROM circles c \
-					LEFT JOIN sigairmet s ON s.rep_num = c.rep_num &m=NOTAM circle");
+var url_circle = url.concat("SELECT bot AS GEOM, c.start_date, c.stop_date,\
+			c.rep_num, c.r_lng, c.r_lat, c.alt_top, c.alt_bot, c.alpha, s.text_data \
+			FROM circles c \
+			LEFT JOIN sigairmet s ON s.rep_num = c.rep_num &m=NOTAM circle");
 
 var cmarkers = L.markerClusterGroup({
-	iconCreateFunction: function(cluster){
+	iconCreateFunction: function(cluster) {
 		var n = cluster.getChildCount();
 		return L.divIcon({ html: n, className: 'mycluster2', iconSize: L.point[1,1]});
 	},
@@ -674,13 +735,13 @@ var	cir = L.realtime({
 	url: url_circle,
 	crossOrigin: true, type: 'json'
 	}, {interval: 70000,
-	getFeatureId: function(featureData){
+	getFeatureId: function(featureData) {
 	return featureData.properties.rep_num;
 	},
-	pointToLayer: function(feature, latlng){
+	pointToLayer: function(feature, latlng) {
 		marker = L.circleMarker(latlng, {color: 'red', fillcolor: 'yellow'});
-		marker.bindTooltip('NOTAM-TFR<br>' + feature.properties.rep_num );
-		marker.on('click', function (e) {
+		marker.bindTooltip('NOTAM-TFR<br>' + feature.properties.rep_num);
+		marker.on('click', function(e) {
 			$("#m1").html("Altitude");
 			$("#m2").html("Radius");
 			$("#m3").html("Rep Number");
@@ -717,9 +778,10 @@ var	cir = L.realtime({
 }).addTo(map);
 
 // ** Segmented graphical NOTAMS
-var url_seg_notam = url.concat("SELECT coords AS GEOM, alt, g.rep_num, start_date, stop_date, text_data \
-					FROM graphics g LEFT JOIN sigairmet s ON s.rep_num = g.rep_num \
-					WHERE g.segmented = 1 AND g.prod_id = 8 &m=NOTAM segmented");
+var url_seg_notam = url.concat("SELECT coords AS GEOM, alt, g.rep_num,\
+			start_date, stop_date, text_data \
+			FROM graphics g LEFT JOIN sigairmet s ON s.rep_num = g.rep_num \
+			WHERE g.segmented = 1 AND g.prod_id = 8 &m=NOTAM segmented");
 
 var notam_ckbox = document.getElementById("notam")			
 
@@ -734,7 +796,7 @@ var	seg = L.realtime({
 	getFeatureId: function(featureData) {
 		return featureData.properties.rep_num;
 	},
-	onEachFeature: function(feature, layer){
+	onEachFeature: function(feature, layer) {
 		layer.bindTooltip('NOTAM-TFR<br>Alt ' + feature.properties.alt);
 		layer.on('click', function(e){
 			layer.setStyle({fillColor: 'yellow', fillOpacity: 0.5});
@@ -763,18 +825,20 @@ var	seg = L.realtime({
 			seg.start();
 		}
 		
-		layer.on('mouseout', function(e){
+		layer.on('mouseout', function(e) {
 			seg.start();
 		})		
 	},
 }).addTo(map);
 
 // ** METAR 
-var url_metar = url.concat("SELECT s.coords AS GEOM, m.stn_call, s.stn_loc, state, ob_date, temp, windsp, \
-					winddir, altimeter, visby, dewp, hrly_precip, slp, windvar, windgust \
-					FROM metar m INNER JOIN (SELECT stn_call, MAX(ob_date) AS mob FROM metar \
-					GROUP BY stn_call) g ON m.stn_call = g.stn_call AND m.ob_date = g.mob \
-					INNER JOIN stations s ON m.stn_call = s.stn_call &m=METAR");
+var url_metar = url.concat("SELECT s.coords AS GEOM, s.stn_call, s.stn_loc,\
+			state, ob_date, temperature, windsp, winddir, altimeter, visby, dewp,\
+			hrly_precip, slp, windvar, windgust \
+			FROM metar m INNER JOIN (SELECT stn_call, MAX(ob_date) AS mob FROM metar \
+			GROUP BY stn_call) g ON m.stn_call = g.stn_call AND m.ob_date = g.mob \
+			INNER JOIN stations s ON m.stn_call = s.stn_call\
+			&m=METAR");
 
 var wxIcon = L.icon({iconUrl: 'therm.ico', iconSize: [20,20]});
 var metar_ckbox = document.getElementById("meta")
@@ -783,34 +847,82 @@ metar = L.realtime({
 	url: url_metar,
 	crossOrigin: true, type: 'json'
 	}, {interval: 36000,
-	getFeatureId: function(featureData){
+	getFeatureId: function(featureData) {
 		return featureData.properties.stn_call;
 	},
-	pointToLayer: function(feature, latlng){
+	pointToLayer: function(feature, latlng) {
 		marker = L.marker(latlng, {icon: wxIcon});
 		marker.bindTooltip('METAR' + '<br>' + feature.properties.stn_call
-			+ '<br>' + feature.properties.temp + '&#x2109');
-		marker.on('click', function(e){
+			+ '<br>' + feature.properties.temperature + '&#x2109');
+		marker.on('click', function(e) {
+			var hold1;
+			var hold2;
+			var hold3;
+
 			$("#m1").html("Station" );
 			$("#m2").html("Location");
-			$("#m3").html("Temp");
+			$("#m3").html("Temp:<br>Precip:");
 			$("#m4").html("Winds");
 			$("#m5").html("Visibility");
-			$("#m6").html("Pressure");
-			$('#f1').html(e.target.feature.properties.stn_call + " - "
+			$("#m6").html("SLP<br>Altimeter");
+			$('#f1').html('<a href=page5?StnID="'+ e.target.feature.properties.stn_call
+				+ '" onClick="return popup(this,\'notes\')">'
+				+ e.target.feature.properties.stn_call  +' </a> - @'
 				+ e.target.feature.properties.ob_date + 'z');
 			$('#f2').html(e.target.feature.properties.stn_loc + ", "
 				+ e.target.feature.properties.state);
-			$('#f3').html(e.target.feature.properties.temp + "\xB0F" + "  dp:"
-				+ e.target.feature.properties.dewp + "\xB0F<br> Hrly Precip:"
-				+ e.target.feature.properties.hrly_precip);
-			$('#f4').html(e.target.feature.properties.windsp + "kts "
-				+ e.target.feature.properties.winddir + "° "
-				+ e.target.feature.properties.windvar + "  gusts:"
-				+ e.target.feature.properties.windgust + "kts");
-			$('#f5').html(e.target.feature.properties.visby);
-			$('#f6').html("SLP:" + e.target.feature.properties.slp + "<br>Altimeter:"
-				+ e.target.feature.properties.altimeter);
+
+			if (feature.properties.temperature == "- ")
+				hold1 = " n/a";
+			else
+				hold1 = feature.properties.temperature + "\xB0F  - dp:"  
+					+ e.target.feature.properties.dewp + "\xB0F"; 
+
+			if (feature.properties.hrly_precip == "- ")
+				hold2 = " -";
+			else	
+				hold2 = feature.properties.hrly_precip + " in/hour"
+
+			$('#f3').html(hold1 + "<br>" + hold2);
+
+			if (feature.properties.windvar == "Variable")
+				hold2 = feature.properties.windvar;
+			else
+				hold2 = feature.properties.winddir + "\xB0";
+
+			if (feature.properties.windgust == "-")
+				hold3 = " ";
+			else
+				hold3 = " Gusts: " + feature.properties.windgust + "kts";	
+
+			if (feature.properties.windsp == "-") {
+				hold1 = " n/a";
+				hold2 = " ";
+				hold3 = " ";
+				}
+			else	
+				hold1 = feature.properties.windsp + " kts ";			
+
+			$('#f4').html(hold1 + hold2 + hold3);
+
+			if (feature.properties.visby == "-")	
+				hold1 = "n/a";
+			else
+				hold1 = feature.properties.visby + " (sm)";
+
+			$('#f5').html(hold1);
+
+			if (feature.properties.altimeter == "-")	
+				hold1 = "n/a";
+			else
+				hold1 = feature.properties.altimeter + " (Ins)";
+
+			if (feature.properties.slp == "-")	
+				hold2 = "n/a";
+			else
+				hold2 = feature.properties.slp + " (hPa)";
+
+			$('#f6').html(hold1 + "<br>" + hold2);
 		});
 		marker.addTo(map);
 			
@@ -833,24 +945,27 @@ if (!metar_ckbox.checked) {
 var url_maxmin = url.concat("DROP TABLE IF EXISTS max_a; DROP TABLE IF EXISTS max_b;\
 		DROP TABLE IF EXISTS max_c; DROP TABLE IF EXISTS max_d; \
 		SELECT stn_call, MAX(ob_date) INTO temp max_a FROM metar GROUP BY stn_call; \
-		SELECT m.stn_call, ob_date, temp, windsp, winddir, altimeter, visby, dewp, hrly_precip, slp, windvar, windgust \
+		SELECT m.stn_call, ob_date, cast(temperature AS INTEGER), windsp, winddir, altimeter,\
+		visby, dewp, hrly_precip, slp, windvar, windgust \
 		INTO temp max_b FROM max_a t \
 		INNER JOIN metar m ON (t.stn_call = m.stn_call) AND (t.max = m.ob_date) \
-		WHERE (m.temp <> '- '); \
+		WHERE (m.temperature <> '- '); \
 		SELECT  b.* INTO max_c FROM max_b b \
-		INNER JOIN max_b c on c.temp = (SELECT MIN(temp) FROM max_b) AND c.ob_date = b.ob_date \
+		INNER JOIN max_b c on c.temperature = (SELECT MIN(temperature) FROM max_b) AND c.ob_date = b.ob_date \
 		AND b.stn_call = c.stn_call; \
 		SELECT b.* INTO max_d FROM max_b b \
-		INNER JOIN max_b e ON e.temp = (SELECT MAX(temp) FROM max_b) AND e.ob_date = b.ob_date \
+		INNER JOIN max_b e ON e.temperature = (SELECT MAX(temperature) FROM max_b) AND e.ob_date = b.ob_date \
 		AND b.stn_call = e.stn_call; \
-		SELECT coords AS GEOM, s.stn_call, s.stn_loc, s.state, c.ob_date, c.temp ,c.windsp, c.winddir, c.altimeter,\
-		c.visby, c.dewp, c.hrly_precip, c.slp, c.windvar, c.windgust, 'Min' AS maxmin FROM max_c c \
+		SELECT coords AS GEOM, s.stn_call, s.stn_loc, s.state, c.ob_date, c.temperature,\
+		c.windsp, c.winddir, c.altimeter, c.visby, c.dewp, c.hrly_precip, c.slp,\
+		c.windvar, c.windgust, 'Min' AS maxmin FROM max_c c \
 		INNER JOIN stations s ON s.stn_call = c.stn_call \
 		INNER JOIN max_c d ON d.ob_date = c.ob_date \
 		WHERE c.ob_date IN (SELECT MAX(ob_date) FROM max_c) \
 		UNION \
-		SELECT coords AS GEOM, s.stn_call, s.stn_loc, s.state, c.ob_date, c.temp ,c.windsp, c.winddir, c.altimeter,\
-		c.visby, c.dewp, c.hrly_precip, c.slp, c.windvar, c.windgust, 'Max' AS maxmin FROM max_d c \
+		SELECT coords AS GEOM, s.stn_call, s.stn_loc, s.state, c.ob_date, c.temperature,\
+		c.windsp, c.winddir, c.altimeter, c.visby, c.dewp, c.hrly_precip, c.slp,\
+		c.windvar, c.windgust, 'Max' AS maxmin FROM max_d c \
 		INNER JOIN stations s ON s.stn_call = c.stn_call \
 		INNER JOIN max_d d ON d.ob_date = c.ob_date \
 		WHERE c.ob_date IN (SELECT MAX(ob_date) FROM max_d) \
@@ -863,11 +978,10 @@ maxmin = L.realtime({
 	url: url_maxmin,
 	crossOrigin: true, type: 'json'
 	}, {interval: 20000,
-	getFeatureId: function(featureData){
-		return featureData.properties.stn_call + featureData.properties.temp;
-
+	getFeatureId: function(featureData) {
+		return featureData.properties.stn_call + featureData.properties.temperature;
 	},
-	pointToLayer: function(feature, latlng){
+	pointToLayer: function(feature, latlng) {
 		if (feature.properties.maxmin == "Max")
 			wxIcon6 = L.icon({iconUrl: 'red.ico', iconSize: [15,15]})
 		else
@@ -875,32 +989,77 @@ maxmin = L.realtime({
 		
 		mmarker = L.marker(latlng, {icon: wxIcon6});
 		mmarker.bindTooltip(feature.properties.maxmin + ': ' 
-			+ feature.properties.temp + '&#x2109' + '<br>' 
+			+ feature.properties.temperature + '&#x2109' + '<br>'
 			+ feature.properties.stn_call );
-		mmarker.on('click', function(e){
+		mmarker.on('click', function(e) {
+			var hold1;
+			var hold2;
+			var hold3;
+
 			$("#m1").html("Station" );
 			$("#m2").html("Location");
-			$("#m3").html("Temp");
+			$("#m3").html("Temp:<br>Precip:");
 			$("#m4").html("Winds");
 			$("#m5").html("Visibility");
-			$("#m6").html("Pressure");
-			$('#f1').html(e.target.feature.properties.maxmin + " - " 
-				+ e.target.feature.properties.stn_call + " - "
-				+ e.target.feature.properties.ob_date + 'z');
+			$("#m6").html("SLP<br>Altimeter");
+	$('#f1').html('<a href=page5?StnID="'+ e.target.feature.properties.stn_call
+		+ '" onClick="return popup(this,\'notes\')">'
+		+ e.target.feature.properties.stn_call  +' </a> - @'
+		+ e.target.feature.properties.ob_date + 'z');
 			$('#f2').html(e.target.feature.properties.stn_loc + ", "
 				+ e.target.feature.properties.state);
-			$('#f3').html(e.target.feature.properties.temp + "\xB0F" + "<b>");
-			$('#f4').html(" ");
-			$('#f5').html(" ");
-			$('#f6').html(" ");
-		
-			$('#f4').html(e.target.feature.properties.windsp + "kts " +
-					e.target.feature.properties.winddir + "° " +
-					e.target.feature.properties.windvar + "  gusts:" +
-					e.target.feature.properties.windgust + "kts");
-			$('#f5').html(e.target.feature.properties.visby);
-			$('#f6').html("SLP:" + e.target.feature.properties.slp +
-					"<br>Altimeter:" + e.target.feature.properties.altimeter );
+
+			if (feature.properties.temperature == "- ")
+				hold1 = " n/a";
+			else
+				hold1 = feature.properties.temperature + "\xB0F  - dp:"  
+					+ e.target.feature.properties.dewp + "\xB0F"; 
+
+			if (feature.properties.hrly_precip == "- ")
+				hold2 = " -";
+			else	
+				hold2 = feature.properties.hrly_precip + " in/hour"
+
+			$('#f3').html(hold1 + "<br>" + hold2);
+
+			if (feature.properties.windvar == "Variable")
+				hold2 = feature.properties.windvar;
+			else
+				hold2 = feature.properties.winddir + "\xB0";
+
+			if (feature.properties.windgust == "-")
+				hold3 = " ";
+			else
+				hold3 = " Gusts: " + feature.properties.windgust + "kts";	
+
+			if (feature.properties.windsp == "-") {
+				hold1 = " n/a";
+				hold2 = " ";
+				hold3 = " ";
+				}
+			else	
+				hold1 = feature.properties.windsp + " kts ";			
+
+			$('#f4').html(hold1 + hold2 + hold3);
+
+			if (feature.properties.visby == "-")	
+				hold1 = "n/a";
+			else
+				hold1 = feature.properties.visby + " (sm)";
+
+			$('#f5').html(hold1);
+
+			if (feature.properties.altimeter == "-")	
+				hold1 = "n/a";
+			else
+				hold1 = feature.properties.altimeter + " (Ins)";
+
+			if (feature.properties.slp == "-")	
+				hold2 = "n/a";
+			else
+				hold2 = feature.properties.slp + " (hPa)";
+
+			$('#f6').html(hold1 + "<br>" + hold2);
 		});
 		mmarker.addTo(map);
 
@@ -919,21 +1078,21 @@ if (!maxmin_ckbox.checked) {
 }
 
 // ** NOTAM
-var url_notam = url.concat("SELECT t.coords AS GEOM, s.stn_call, stn_loc, state, s.rep_num, text_data, \
-					start_date, stop_date, notam_name FROM sigairmet s \
-					LEFT JOIN graphics g ON (g.stn_call = s.stn_call) AND (g.rep_num = s.rep_num) \
-					JOIN stations t ON t.stn_call = s.stn_call \
-					WHERE s.stn_call != '   ' AND s.prod_id = 8 \
-					ORDER BY s.rep_num &m=NOTAM");
+var url_notam = url.concat("SELECT t.coords AS GEOM, s.stn_call, stn_loc,\
+			state, s.rep_num, text_data, start_date, stop_date, notam_name \
+			FROM sigairmet s LEFT JOIN graphics g ON (g.stn_call = s.stn_call) \
+			AND (g.rep_num = s.rep_num) JOIN stations t ON t.stn_call = s.stn_call \
+			WHERE s.stn_call != '   ' AND s.prod_id = 8 ORDER BY s.rep_num \
+			&m=NOTAM");
 
 var wxIcon2 = L.icon({iconUrl: 'wx2.ico', iconSize: [15,15]});
 var notam_ckbox = document.getElementById("notam")
 
 var narkers = L.markerClusterGroup({
 
-	iconCreateFunction: function(cluster){
+	iconCreateFunction: function(cluster) {
 		var n = cluster.getChildCount();
-		return L.divIcon({ html: n, className: 'mycluster' , iconSize: L.point[1,1]});
+		return L.divIcon({ html: n, className: 'mycluster', iconSize: L.point[1,1]});
 	},
 	spiderfyOnMaxZoom: true,
 	showCoverageOnHover: false,
@@ -945,14 +1104,14 @@ notam = L.realtime({
 	url: url_notam,
 	crossOrigin: true, type: 'json'
 	}, {interval: 38000,
-	getFeatureId: function(featureData){
-		return featureData.properties.stn_call+featureData.properties.rep_num;
+	getFeatureId: function(featureData) {
+		return featureData.properties.stn_call + featureData.properties.rep_num;
 	},
-	pointToLayer: function(feature, latlng){
+	pointToLayer: function(feature, latlng) {
 		marker = L.marker(latlng, {icon: wxIcon2});
 		marker.bindTooltip(feature.properties.notam_name
 			+ '<br>' + feature.properties.stn_call);
-		marker.on('click', function(e){
+		marker.on('click', function(e) {
 			$("#m1").html("Station");
 			$("#m2").html("Location");
 			$("#m3").html("Report Num");
@@ -986,11 +1145,12 @@ notam = L.realtime({
 }).addTo(map);
 
 // ** TAF
-var url_taf = url.concat("SELECT coords AS GEOM, t.stn_call, stn_loc, state, issued, current, \
-					wind, visby, condx, rep_time \
-					FROM taf t INNER JOIN (SELECT stn_call, MAX(issued) AS mob FROM taf \
-					GROUP BY stn_call) g ON t.stn_call = g.stn_call AND t.issued = g.mob \
-					INNER JOIN stations s ON t.stn_call = s.stn_call &m=TAF");
+var url_taf = url.concat("SELECT coords AS GEOM, t.stn_call, stn_loc, state,\
+			issued, current, wind, visby, condx, rep_time \
+			FROM taf t INNER JOIN (SELECT stn_call, MAX(issued) AS mob FROM taf \
+			GROUP BY stn_call) g ON t.stn_call = g.stn_call AND t.issued = g.mob \
+			INNER JOIN stations s ON t.stn_call = s.stn_call \
+			&m=TAF");
 					
 var wxIcon3 = L.icon({iconUrl: 'wx1.ico', iconSize: [15,15]});
 var taf_ckbox = document.getElementById("taf")
@@ -999,13 +1159,13 @@ taf = L.realtime({
 	url: url_taf,
 	crossOrigin: true, type: 'json'
 	}, {interval: 30000,
-	getFeatureId: function(featureData){
+	getFeatureId: function(featureData) {
 		return featureData.properties.stn_call;
 	},
-	pointToLayer: function(feature, latlng){
+	pointToLayer: function(feature, latlng) {
 		marker = L.marker(latlng, {icon: wxIcon3});
 		marker.bindTooltip('TAF' + '<br>' + feature.properties.stn_call);
-		marker.on('click', function(e){
+		marker.on('click', function(e) {
 			$("#m1").html("Station");
 			$("#m2").html("Location");
 			$("#m3").html("Issued");
@@ -1038,13 +1198,14 @@ if (!taf_ckbox.checked) {
 }
 
 // ** Winds Aloft
-var url_winds = url.concat("SELECT coords AS GEOM, w.stn_call, stn_loc, state, issue_date, alt1, \
-					dir1, spd1, temp1, alt2, dir2, spd2, temp2, alt3, dir3, spd3, temp3, alt4, \
-					dir4, spd4, temp4, alt5, dir5, spd5, temp5, alt6, dir6, spd6, temp6, alt7, \
-					dir7, spd7, temp7, alt8, dir8, spd8, temp8, alt9, dir9, spd9, temp9 \
-					FROM winds w INNER JOIN (SELECT stn_call, MAX(proc_time) AS mx FROM winds \
-					GROUP BY stn_call) g ON w.stn_call = g.stn_call AND w.proc_time = g.mx \
-					INNER JOIN stations s ON w.stn_call = s.stn_call &m=Winds");
+var url_winds = url.concat("SELECT coords AS GEOM, w.stn_call, stn_loc, state, issue_date,\
+			alt1, dir1, spd1, temp1, alt2, dir2, spd2, temp2, alt3, dir3, spd3, temp3,\
+			alt4, dir4, spd4, temp4, alt5, dir5, spd5, temp5, alt6, dir6, spd6, temp6,\
+			alt7, dir7, spd7, temp7, alt8, dir8, spd8, temp8, alt9, dir9, spd9, temp9 \
+			FROM winds w INNER JOIN (SELECT stn_call, MAX(proc_time) AS mx FROM winds \
+			GROUP BY stn_call) g ON w.stn_call = g.stn_call AND w.proc_time = g.mx \
+			INNER JOIN stations s ON w.stn_call = s.stn_call \
+			&m=Winds");
 
 var wxIcon5 = L.icon({iconUrl: 'wind.ico', iconSize: [15,15]});
 var winds_ckbox = document.getElementById("winds")
@@ -1053,23 +1214,23 @@ winds = L.realtime({
 	url: url_winds,
 	crossOrigin: true, type: 'json'
 	}, {interval: 67000,
-	getFeatureId: function(featureData){
+	getFeatureId: function(featureData) {
 		return featureData.properties.stn_call;
 	},
-	pointToLayer: function(feature, latlng){
+	pointToLayer: function(feature, latlng) {
 		marker = L.marker(latlng, {icon: wxIcon5});
 		marker.bindTooltip('Winds' + '<br>' + feature.properties.stn_call);
-		marker.on('click', function(e){
-			$("#m1").html("Station" + '<br>' + e.target.feature.properties.issue_date );
-			$("#m2").html(e.target.feature.properties.alt1 + "ft" + '<br>'
-				+ e.target.feature.properties.alt2 + "ft");
-			$("#m3").html(e.target.feature.properties.alt3 + "ft" + '<br>'
-				+ e.target.feature.properties.alt4 + "ft");
-			$("#m4").html(e.target.feature.properties.alt5 + "ft" + '<br>'
-				+ e.target.feature.properties.alt6 + "ft");
-			$("#m5").html(e.target.feature.properties.alt7 + "ft" + '<br>'
-				+ e.target.feature.properties.alt8 + "ft");
-			$("#m6").html(e.target.feature.properties.alt9 + "ft");
+		marker.on('click', function(e) {
+			$("#m1").html("Station" + '<br>' + e.target.feature.properties.issue_date);
+			$("#m2").html(separator(e.target.feature.properties.alt1) + "ft" + '<br>'
+				+ separator(e.target.feature.properties.alt2) + "ft");
+			$("#m3").html(separator(e.target.feature.properties.alt3) + "ft" + '<br>'
+				+ separator(e.target.feature.properties.alt4) + "ft");
+			$("#m4").html(separator(e.target.feature.properties.alt5) + "ft" + '<br>'
+				+ separator(e.target.feature.properties.alt6) + "ft");
+			$("#m5").html(separator(e.target.feature.properties.alt7) + "ft" + '<br>'
+				+ separator(e.target.feature.properties.alt8) + "ft");
+			$("#m6").html(separator(e.target.feature.properties.alt9) + "ft");
 			$('#f1').html(e.target.feature.properties.stn_call + " (Winds)" + '<br>'
 				+ e.target.feature.properties.stn_loc + ", "
 				+ e.target.feature.properties.state);
@@ -1118,12 +1279,13 @@ if (!winds_ckbox.checked) {
 }
 
 // ** PIREP
-var url_pirep = url.concat("SELECT coords AS GEOM, p.stn_call, stn_loc, state, rep_type, fl_lev, \
-					ac_type, turbulence, remarks, location, cloud, weather, temperature, \
-					wind_spd_dir, icing, rep_time \
-					FROM pirep p INNER JOIN (SELECT stn_call, MAX(rep_time) AS mx FROM pirep \
-					GROUP BY stn_call) g ON p.stn_call = g.stn_call AND p.rep_time = g.mx \
-					INNER JOIN stations s ON p.stn_call = s.stn_call &m=PIREP");
+var url_pirep = url.concat("SELECT coords AS GEOM, p.stn_call, stn_loc, state,\
+			rep_type, fl_lev, ac_type, turbulence, remarks, location, cloud, weather,\
+			temperature, windsp, icing, rep_time \
+			FROM pirep p INNER JOIN (SELECT stn_call, MAX(rep_time) AS mx FROM pirep \
+			GROUP BY stn_call) g ON p.stn_call = g.stn_call AND p.rep_time = g.mx \
+			INNER JOIN stations s ON p.stn_call = s.stn_call \
+			&m=PIREP");
 
 var wxIcon4
 var pirep_ckbox = document.getElementById("pirep")
@@ -1132,10 +1294,10 @@ pirep = L.realtime({
 	url: url_pirep,
 	crossOrigin: true, type: 'json'
 	}, {interval: 50000,
-	getFeatureId: function(featureData){
+	getFeatureId: function(featureData) {
 		return featureData.properties.stn_call;
 	},
-	pointToLayer: function(feature, latlng){
+	pointToLayer: function(feature, latlng) {
 		if (feature.properties.rep_type == "Urgent Report")
 			wxIcon4 = L.icon({iconUrl: 'pilot2.ico', iconSize: [17,17]})
 		else
@@ -1150,31 +1312,74 @@ pirep = L.realtime({
 			marker.bindTooltip('PIREP' + '<br>'
 				+ feature.properties.stn_call);
 
-		marker.on('click', function(e){
+		marker.on('click', function(e) {
+			var hold1;
+			var hold2;
+			var hold3;
+			var hold4;
+			
 			$("#m1").html("Station");
-			$("#m2").html("Location" + '<br>' + "Time: "
-				+ e.target.feature.properties.rep_time + "z");
-			$("#m3").html("Flt Lev:" + '<br>' + "AC Type:");
-			$("#m4").html("Turbulence:" + '<br>' + "Icing:");
-			$("#m5").html("WX");
+			$("#m2").html("Location");
+			$("#m3").html("Flt Lev" + '<br>' + "AC Type");
+			$("#m4").html("Turbulence" + '<br>' + "Icing");
+			$("#m5").html("Cloud<br>Temp<br>Wind<br>WX");
 			$("#m6").html("Remarks");
 			if (feature.properties.rep_type == "Urgent Report")
-				$('#f1').html(e.target.feature.properties.stn_call + " (*Urgent PIREP*)");
+				$('#f1').html(e.target.feature.properties.stn_call 
+					+ " (Urgent PIREP) @"
+					+ e.target.feature.properties.rep_time + "z");
 			else
-				$('#f1').html(e.target.feature.properties.stn_call + " (PIREP)");
-
+				$('#f1').html(e.target.feature.properties.stn_call
+					+ " (PIREP) @"
+					+ e.target.feature.properties.rep_time + "z");
+				
 			$('#f2').html(e.target.feature.properties.stn_loc + ", "
 				+ e.target.feature.properties.state + "<br><i>Loc: "
 				+ e.target.feature.properties.location);
-			$('#f3').html("<i>Flt lev: " + e.target.feature.properties.fl_lev + "<br><i>a/c: "
+				
+			$('#f3').html(e.target.feature.properties.fl_lev + "<br>"
 				+ e.target.feature.properties.ac_type);
-			$('#f4').html("<i>Turb: " + e.target.feature.properties.turbulence + "<br><i>Ice: "
-				+ e.target.feature.properties.icing);
-			$('#f5').html("<i>Cloud: " +e.target.feature.properties.cloud + "<br><i>Temp: "
-				+ e.target.feature.properties.temperature + "<br><i>Wind: "
-				+ e.target.feature.properties.wind_spd_dir + "<br><i>WX: "
-				+ e.target.feature.properties.weather);
-			$('#f6').html(e.target.feature.properties.remarks);
+				
+			if (feature.properties.turbulence == "")
+				hold1 = "- ";
+			else
+				hold1 = feature.properties.turbulence;
+
+			if (feature.properties.icing == "")
+				hold2 = "- ";
+			else
+				hold2 = feature.properties.icing;
+
+			$('#f4').html(hold1	+ "<br>" + hold2);
+
+			if (feature.properties.cloud == "")
+				hold1 = " - ";
+			else
+				hold1 = feature.properties.cloud;				
+
+			if (feature.properties.temperature == "")
+				hold2 = " - ";
+			else
+				hold2 = feature.properties.temperature;	
+
+			if (feature.properties.windsp == "")
+				hold3 = " - ";
+			else
+				hold3 = feature.properties.windsp;	
+
+			if (feature.properties.weather == "")
+				hold4 = " - ";
+			else
+				hold4 = feature.properties.weather;					
+				
+			$('#f5').html(hold1	+ "<br>" + hold2 + "<br>" + hold3 + "<br>" + hold4); 
+			
+			if (feature.properties.remarks == "")
+				hold1 = " - ";
+			else
+				hold1 = feature.properties.remarks;					
+				
+			$('#f6').html(hold1);
 		});
 		marker.addTo(map);
 			
@@ -1193,7 +1398,7 @@ if (!pirep_ckbox.checked) {
 }
 
 // ** Checkbox controls
-document.querySelector("input[name = gmet]").addEventListener('change', function(){
+document.querySelector("input[name = gmet]").addEventListener('change', function() {
 	if(this.checked) {
 		map.addLayer(gairmet),
 		gairmet.start()
@@ -1204,7 +1409,7 @@ document.querySelector("input[name = gmet]").addEventListener('change', function
 	}
 })
 
-document.querySelector("input[name = amet]").addEventListener('change', function(){
+document.querySelector("input[name = amet]").addEventListener('change', function() {
 	if(this.checked) {
 		map.addLayer(airmet),
 		airmet.start()
@@ -1216,7 +1421,7 @@ document.querySelector("input[name = amet]").addEventListener('change', function
 })
 
 // ** Toggle METAR and Max/Min
-document.querySelector("input[name = meta]").addEventListener('change', function(){
+document.querySelector("input[name = meta]").addEventListener('change', function() {
 	if(this.checked) {
 		map.addLayer(metar),
 		metar.start()		
@@ -1225,11 +1430,10 @@ document.querySelector("input[name = meta]").addEventListener('change', function
 		map.removeLayer(metar),
 		metar.stop()
 	}
-	
 })
 
 // Toggle Max/Min and METAR
-document.querySelector("input[name = mxmn]").addEventListener('change', function(){
+document.querySelector("input[name = mxmn]").addEventListener('change', function() {
 	if(this.checked) {
 		map.addLayer(maxmin),
 		maxmin.start()
@@ -1241,7 +1445,7 @@ document.querySelector("input[name = mxmn]").addEventListener('change', function
 })
 
 // ** Includes graphic NOTAMs
-document.querySelector("input[name = notam]").addEventListener('change', function(){
+document.querySelector("input[name = notam]").addEventListener('change', function() {
 	if(this.checked) {
 		map.addLayer(notam),
 		notam.start(),
@@ -1263,7 +1467,7 @@ document.querySelector("input[name = notam]").addEventListener('change', functio
 	}
 })
 
-document.querySelector("input[name = sua]").addEventListener('change', function(){
+document.querySelector("input[name = sua]").addEventListener('change', function() {
 	if(this.checked) {
 		map.addLayer(sua),
 		sua.start()
@@ -1274,7 +1478,7 @@ document.querySelector("input[name = sua]").addEventListener('change', function(
 	}
 })
 
-document.querySelector("input[name = taf]").addEventListener('change', function(){
+document.querySelector("input[name = taf]").addEventListener('change', function() {
 	if(this.checked) {
 		map.addLayer(taf),
 		taf.start()
@@ -1285,7 +1489,7 @@ document.querySelector("input[name = taf]").addEventListener('change', function(
 	}
 })
 
-document.querySelector("input[name = pirep]").addEventListener('change', function(){
+document.querySelector("input[name = pirep]").addEventListener('change', function() {
 	if(this.checked) {
 		map.addLayer(pirep),
 		pirep.start()
@@ -1296,7 +1500,7 @@ document.querySelector("input[name = pirep]").addEventListener('change', functio
 	}
 })
 
-document.querySelector("input[name = winds]").addEventListener('change', function(){
+document.querySelector("input[name = winds]").addEventListener('change', function() {
 	if(this.checked) {
 		map.addLayer(winds),
 		winds.start()
@@ -1307,7 +1511,7 @@ document.querySelector("input[name = winds]").addEventListener('change', functio
 	}
 })
 
-document.querySelector("input[name = smet]").addEventListener('change', function(){
+document.querySelector("input[name = smet]").addEventListener('change', function() {
 	if(this.checked) {
 		map.addLayer(sigmet),
 		sigmet.start()
@@ -1318,7 +1522,7 @@ document.querySelector("input[name = smet]").addEventListener('change', function
 	}
 })
 
-document.querySelector("input[name = cwa]").addEventListener('change', function(){
+document.querySelector("input[name = cwa]").addEventListener('change', function() {
 	if(this.checked) {
 		map.addLayer(cwa),
 		cwa.start()
@@ -1329,11 +1533,11 @@ document.querySelector("input[name = cwa]").addEventListener('change', function(
 	}
 })
 
-document.getElementById("stim").onchange = function(){
+document.getElementById("stim").onchange = function() {
 	gairmet.update()
 }		
 		
-document.getElementById("altrad").onchange = function(){
+document.getElementById("altrad").onchange = function() {
 	nexrad_layer_group.clearLayers();
 	nexrad_sql = getNexrad();
 	url_nexrad = url.concat(nexrad_sql);
@@ -1345,7 +1549,7 @@ document.getElementById("altrad").onchange = function(){
 document.getElementById("gmsliderRange").onchange = function()
 	{gairmet.update(), airmet.update(), sigmet.update(), cwa.update()}
 
-document.getElementById("prodid").onchange = function(){
+document.getElementById("prodid").onchange = function() {
 	var nexrad_select_str = document.getElementById('prodid').value;
 	nexrad_sel_prodid = parseInt(nexrad_select_str);
 	map.removeControl(nexlegend);
@@ -1387,7 +1591,7 @@ document.getElementById("prodid").onchange = function(){
 
 // Map legends
 turblegend = L.control({ position: "topright" });
-turblegend.onAdd = function(){
+turblegend.onAdd = function() {
 	var div = L.DomUtil.create("div", "legend");
 	div.innerHTML += "<h4>Turbulence</h4>";
 	div.innerHTML += '<i style="background: #8C8C74"></i><span>EDR  7-13</span><br>';
@@ -1409,7 +1613,7 @@ turblegend.onAdd = function(){
 };
 
 cloudlegend = L.control({ position: "topright" });
-cloudlegend.onAdd = function(){
+cloudlegend.onAdd = function() {
 	var div = L.DomUtil.create("div", "legend");
 	div.innerHTML += "<h4>Cloud Tops</h4>";
 	div.innerHTML += '<i style="background: #8C8C74"></i><span><= 1,500ft</span><br>';
@@ -1431,7 +1635,7 @@ cloudlegend.onAdd = function(){
 };
 
 icelegend = L.control({ position: "topright" });
-icelegend.onAdd = function(){
+icelegend.onAdd = function() {
 	var div = L.DomUtil.create("div", "legend");
 	div.innerHTML += "<h4>Icing</h4>";
 	div.innerHTML += '<i style="background: #8C8C74"></i><span>Trace</span><br>';
@@ -1445,7 +1649,7 @@ icelegend.onAdd = function(){
 };
 
 lightlegend = L.control({ position: "topright" });
-lightlegend.onAdd = function(){
+lightlegend.onAdd = function() {
 	var div = L.DomUtil.create("div", "legend");
 	div.innerHTML += "<h4>Lightning</h4>";
 	div.innerHTML += '<i style="background: #8C8C74"></i><span>1 Strike</span><br>';
@@ -1459,7 +1663,7 @@ lightlegend.onAdd = function(){
 };
 
 nexlegend = L.control({ position: "topright" });
-nexlegend.onAdd = function(){
+nexlegend.onAdd = function() {
 	var div = L.DomUtil.create("div", "legend");
 	div.innerHTML += "<h4>NEXRAD</h4>";
 	div.innerHTML += '<i style="background: #8C8C74"></i><span>None</span><br>';
