@@ -10,6 +10,7 @@ Uses Leaflet (© 2010–2019 Vladimir Agafonkin. https://leafletjs.com)
 and Leaflet Realtime (https://github.com/perliedman/leaflet-realtime)
 
 ## Recent Changes
+* 08/23/21 Station lookup and details screens added.
 * 07/23/21 METAR station temperature graph. (Click station in METAR details table)
 * 07/16/21 TAF Details screen added.
 * 07/03/21 Selection of overlapping AIRMET/SIGMET/SUA features added.
@@ -30,8 +31,14 @@ and Leaflet Realtime (https://github.com/perliedman/leaflet-realtime)
 
 ## Screenshots
 
+Station Lookup Screen:
+![station-lookup](https://user-images.githubusercontent.com/60933475/130510370-db816883-ac59-4c3f-b9cb-d2619bf6bc57.png)
+
+Station Details Screen:
+![station-details](https://user-images.githubusercontent.com/60933475/130510415-b08ae85f-5638-475e-b008-33c6b264e1ad.png)
+
 METAR Station Temperature Graph:
-![metar-graph](https://user-images.githubusercontent.com/60933475/126839667-15cc1513-7901-4645-8b23-b5d110a11aea.png)
+![graph](https://user-images.githubusercontent.com/60933475/130510306-8da009c8-ff9f-46bb-9b4e-9620f8502c4f.png)
 
 TAF Details (Uses DataTables plug-in):
 ![taf_details](https://user-images.githubusercontent.com/60933475/126046043-f5dc957b-f770-41b9-a04c-fe83183730f0.png)
