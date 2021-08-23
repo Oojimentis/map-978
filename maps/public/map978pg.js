@@ -29,6 +29,13 @@ function onPageLoad() {
 var formValues = JSON.parse(localStorage.getItem('formValues')) || {};
 var $checkboxez = $("#ckboxes :checkbox");
 
+function separator(numb) {
+	var str = numb.toString().split(".");
+	str[0] = str[0].replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+
+	return str.join(".");
+}
+
 function popup(mylink, windowname) {
 	if (! window.focus)return true;
 		var href;
@@ -61,7 +68,7 @@ function airmet_overlap(_airmet_object, i) {
 			layer.setStyle({fillColor: 'yellow', fillOpacity: 0.5});
 
 			$('#f1').html('AIRMET');
-			$('#f2').html(this.airmet_object[i].feature.properties.alt);
+			$('#f2').html(separator(this.airmet_object[i].feature.properties.alt + 'ft'));
 			$('#f3').html(this.airmet_object[i].feature.properties.rep_num);
 			$('#f4').html(this.airmet_object[i].feature.properties.text_data);
 			$('#f5').html(this.airmet_object[i].feature.properties.start_date);
@@ -79,7 +86,7 @@ function sigmet_overlap(_sigmet_object, i) {
 			layer.setStyle({fillColor: 'yellow', fillOpacity: 0.5});
 
 			$('#f1').html('SIGMET');
-			$('#f2').html(this.sigmet_object[i].feature.properties.alt);
+			$('#f2').html(separator(this.sigmet_object[i].feature.properties.alt) + 'ft');
 			$('#f3').html(this.sigmet_object[i].feature.properties.rep_num);
 			$('#f4').html(this.sigmet_object[i].feature.properties.text_data);
 			$('#f5').html(this.sigmet_object[i].feature.properties.start_date);
@@ -157,6 +164,19 @@ function getNexrad() {
 	var nexrad_alt = parseInt(nexrad_alt_str);
 	var nexrad_prodid = 0
 
+	$("#m1").html("-");
+	$("#m2").html("-");					
+	$("#m3").html("-");
+	$("#m4").html("-");
+	$("#m5").html("-");
+	$("#m6").html("-");
+	$('#f1').html('-');
+	$('#f2').html('-');
+	$('#f3').html('-');
+	$('#f4').html('-');
+	$('#f5').html('-');
+	$('#f6').html('-');			
+
 	switch(nexrad_prod) {
 	case 0:
 		nexrad_prodid = 0;
@@ -199,12 +219,12 @@ function getNexrad() {
 	}
 
 	var nexrad_sql_holder = `SELECT coords AS GEOM, m.prod_id, m.intensity,\
-			m.maptime, m.block_num,seq \
-			FROM nexrad m INNER JOIN (SELECT MAX(maptime) AS mob FROM nexrad \
-			WHERE prod_id = ${nexrad_prodid}) g \
-			ON m.maptime = g.mob AND m.prod_id = ${nexrad_prodid}\ 
-			AND altitude = ${nexrad_alt} \
-			&m=NEXRAD+${nexrad_prodid}+Alt:+${nexrad_alt}`;
+						m.maptime, m.block_num,seq \
+						FROM nexrad m INNER JOIN (SELECT MAX(maptime) AS mob FROM nexrad \
+						WHERE prod_id = ${nexrad_prodid}) g \
+						ON m.maptime = g.mob AND m.prod_id = ${nexrad_prodid}\ 
+						AND altitude = ${nexrad_alt} \
+						&m=NEXRAD+${nexrad_prodid}+Alt:+${nexrad_alt}`;
 
 	return nexrad_sql_holder;
 }	
@@ -263,9 +283,9 @@ return nexrad_color;
 
 // ** G-AIRMET
 var url_gairmet = url.concat("SELECT coords AS GEOM, rep_num, alt,\
-			ob_ele, start_date, stop_date \
-			FROM graphics WHERE prod_id = 14\
-			&m=G\-AIRMET");
+				ob_ele, start_date, stop_date \
+				FROM graphics WHERE prod_id = 14\
+				&m=G\-AIRMET");
 
 var gairmet_ckbox = document.getElementById("gmet")
 var gairmet = L.realtime({
@@ -281,7 +301,7 @@ var gairmet = L.realtime({
 		return featureData.properties.rep_num;
 	},
 	onEachFeature: function(feature, layer) {
-		layer.bindTooltip('G-AIRMET: Alt ' + feature.properties.alt + '<br>'
+		layer.bindTooltip('G-AIRMET: Alt ' + separator(feature.properties.alt) + '<br>'
 			+ feature.properties.ob_ele);
 		layer.on('click', function(e) {
 			layer.setStyle({color: 'yellow', opacity: 0.8, fillColor: 'yellow',
@@ -293,7 +313,7 @@ var gairmet = L.realtime({
 			$("#m5").html("Start");
 			$("#m6").html("Stop");
 			$('#f1').html('G-AIRMET');
-			$('#f2').html(e.target.feature.properties.alt);
+			$('#f2').html(separator(e.target.feature.properties.alt) + 'ft');
 			$('#f3').html(e.target.feature.properties.rep_num);
 			$('#f4').html(e.target.feature.properties.ob_ele);
 			$('#f5').html(e.target.feature.properties.start_date);
@@ -311,7 +331,7 @@ var gairmet = L.realtime({
 		if (rangeslider.value == -1000) 
 			output.innerHTML = "All"
 		else 
-			output.innerHTML = rangeslider.value;
+			output.innerHTML = separator(rangeslider.value);
 
 		var alt_level = parseInt(rangeslider.value, 10);
 		var e = document.getElementById("stim");
@@ -362,7 +382,7 @@ var	airmet = L.realtime({
 			$("#m5").html("Start");
 			$("#m6").html("Stop");
 			$('#f1').html('AIRMET');
-			$('#f2').html(e.target.feature.properties.alt);
+			$('#f2').html(separator(e.target.feature.properties.alt) + 'ft');
 			$('#f3').html(e.target.feature.properties.rep_num);
 			$('#f4').html(e.target.feature.properties.text_data);
 			$('#f5').html(e.target.feature.properties.start_date);
@@ -378,7 +398,7 @@ var	airmet = L.realtime({
 					html_airmet += "<a onclick= 'airmet_overlap(\"" 
 						+ airmet_object[i] + "\",\"" + i + "\");'>" + 
 						"AIRMET - Alt: " +
-						pip_airmet[i].feature.properties.alt + " : " + " Rep num: " +
+						separator(pip_airmet[i].feature.properties.alt) + " : " + " Rep num: " +
 						pip_airmet[i].feature.properties.rep_num + "</a><br>" ;
 				}
 				if (html_airmet) {
@@ -397,7 +417,7 @@ var	airmet = L.realtime({
 		if (rangeslider.value == -1000) 
 			output.innerHTML = "All"
 		else 
-			output.innerHTML = rangeslider.value;
+			output.innerHTML = separator(rangeslider.value);
 
 		var alt_level = parseInt(rangeslider.value, 10);
 		if (alt_level == -1000) 
@@ -444,7 +464,7 @@ var	sigmet = L.realtime({
 			$("#m5").html("Start");
 			$("#m6").html("Stop");
 			$('#f1').html('SIGMET');
-			$('#f2').html(e.target.feature.properties.alt);
+			$('#f2').html(separator(e.target.feature.properties.alt) + 'ft');
 			$('#f3').html(e.target.feature.properties.rep_num);
 			$('#f4').html(e.target.feature.properties.text_data);
 			$('#f5').html(e.target.feature.properties.start_date);
@@ -460,7 +480,7 @@ var	sigmet = L.realtime({
 					html_sigmet += "<a onclick= 'sigmet_overlap(\"" 
 						+ sigmet_object[i] + "\",\"" + i + "\");'>" + 
 						"SIGMET - Alt: " +
-						pip_sigmet[i].feature.properties.alt + " : " + " Rep num: " +
+						separator(pip_sigmet[i].feature.properties.alt) + " : " + " Rep num: " +
 						pip_sigmet[i].feature.properties.rep_num + "</a><br>" ;
 				}
 				if (html_sigmet) {
@@ -479,7 +499,7 @@ var	sigmet = L.realtime({
 		if (rangeslider.value == -1000)
 			output.innerHTML = "All"
 		else
-			output.innerHTML = rangeslider.value;
+			output.innerHTML = separator(rangeslider.value);
 
 		var alt_level = parseInt(rangeslider.value, 10);
 		if (alt_level == -1000) 
@@ -508,7 +528,11 @@ var	nexrad = L.realtime({
 	getFeatureId: function(featureData) {
 		return featureData.properties.seq;
 	},
+	
 	style: function(feature) {
+		$("#m1").html("Latest");
+		$('#f1').html(feature.properties.maptime + 'z');
+
 		if (feature.properties.prod_id == 84 || feature.properties.prod_id == 90
 				|| feature.properties.prod_id == 91 ) {
 			nexrad_color = getColorInt(feature.properties.intensity);
@@ -538,6 +562,7 @@ var	nexrad = L.realtime({
 			map.addLayer(nexrad_layer_group);
 			nexrad.stop();
 		};
+
 	}
 }).addTo(map)
 
@@ -562,7 +587,7 @@ var	cwa = L.realtime({
 		return featureData.properties.rep_num;
 	},
 	onEachFeature: function(feature, layer) {
-		layer.bindTooltip('CWA: Alt ' + feature.properties.alt);
+		layer.bindTooltip('CWA: Alt ' + separator(feature.properties.alt));
 		layer.on('click', function(e) {
 			layer.setStyle({fillColor: 'yellow', fillOpacity: 0.5});
 			$("#m1").html("Report");
@@ -572,7 +597,7 @@ var	cwa = L.realtime({
 			$("#m5").html("Start");
 			$("#m6").html("Stop");
 			$('#f1').html('CWA');
-			$('#f2').html(e.target.feature.properties.alt);
+			$('#f2').html(separator(e.target.feature.properties.alt) + 'ft');
 			$('#f3').html(e.target.feature.properties.rep_num);
 			$('#f4').html(e.target.feature.properties.text_data);
 			$('#f5').html(e.target.feature.properties.start_date);
@@ -590,7 +615,7 @@ var	cwa = L.realtime({
 		if (rangeslider.value == -1000)
 			output.innerHTML = "All"
 		else 
-			output.innerHTML = rangeslider.value;
+			output.innerHTML = separator(rangeslider.value);
 
 		var alt_level = parseInt(rangeslider.value, 10);
 		if (alt_level == -1000) 
@@ -1197,15 +1222,15 @@ winds = L.realtime({
 		marker.bindTooltip('Winds' + '<br>' + feature.properties.stn_call);
 		marker.on('click', function(e) {
 			$("#m1").html("Station" + '<br>' + e.target.feature.properties.issue_date);
-			$("#m2").html(e.target.feature.properties.alt1 + "ft" + '<br>'
-				+ e.target.feature.properties.alt2 + "ft");
-			$("#m3").html(e.target.feature.properties.alt3 + "ft" + '<br>'
-				+ e.target.feature.properties.alt4 + "ft");
-			$("#m4").html(e.target.feature.properties.alt5 + "ft" + '<br>'
-				+ e.target.feature.properties.alt6 + "ft");
-			$("#m5").html(e.target.feature.properties.alt7 + "ft" + '<br>'
-				+ e.target.feature.properties.alt8 + "ft");
-			$("#m6").html(e.target.feature.properties.alt9 + "ft");
+			$("#m2").html(separator(e.target.feature.properties.alt1) + "ft" + '<br>'
+				+ separator(e.target.feature.properties.alt2) + "ft");
+			$("#m3").html(separator(e.target.feature.properties.alt3) + "ft" + '<br>'
+				+ separator(e.target.feature.properties.alt4) + "ft");
+			$("#m4").html(separator(e.target.feature.properties.alt5) + "ft" + '<br>'
+				+ separator(e.target.feature.properties.alt6) + "ft");
+			$("#m5").html(separator(e.target.feature.properties.alt7) + "ft" + '<br>'
+				+ separator(e.target.feature.properties.alt8) + "ft");
+			$("#m6").html(separator(e.target.feature.properties.alt9) + "ft");
 			$('#f1').html(e.target.feature.properties.stn_call + " (Winds)" + '<br>'
 				+ e.target.feature.properties.stn_loc + ", "
 				+ e.target.feature.properties.state);

@@ -4,14 +4,21 @@ var server_port = document.getElementById('port').value;
 var host_url = "http://localhost:";
 var url = host_url.concat(server_port, "/sqlx?q=");
 
+function separator(numb) {
+	var str = numb.toString().split(".");
+	str[0] = str[0].replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+
+	return str.join(".");
+}
+
 // NEXRAD Count
 $(document).ready(function() {
 	setInterval(get_nexrad_count, 30000);
 
 var nexrad_count = url.concat("SELECT n.prod_id, f.prod_id_desc, altitude, COUNT(*) AS count \
-			FROM nexrad n, fisb_products f WHERE n.prod_id = f.prod_id \
-			GROUP BY n.prod_id, f.prod_id_desc, altitude ORDER BY n.prod_id, altitude \
-			&m=NEXRAD count");
+				FROM nexrad n, fisb_products f WHERE n.prod_id = f.prod_id \
+				GROUP BY n.prod_id, f.prod_id_desc, altitude ORDER BY n.prod_id, altitude \
+				&m=NEXRAD count");
 
 	function get_nexrad_count() {
 		var row = "";
@@ -22,7 +29,7 @@ var nexrad_count = url.concat("SELECT n.prod_id, f.prod_id_desc, altitude, COUNT
 				$('#nexrtbl tbody').empty();
 				$.each(data, function(index, features) {
 					row += "<tr><td>" + features.prod_id_desc + "</td><td>"
-						+ features.altitude + "</td><<td>"
+						+ separator(features.altitude) + "</td><<td>"
 						+ features.count + "</td></tr>";
 				});
 				$("#nexrtbl tbody").append(row);
