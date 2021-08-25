@@ -67,7 +67,7 @@ $(document).ready(function() {
 			success: function(data) {
 				$('#metarstn tbody').empty();
 				$.each(data, function(index, features) {
-					if (features.temp == "- ")
+					if (features.temperature == "- ")
 						hold1 = " n/a";
 					else
 						hold1 = features.temperature + "\xB0F<br>"  

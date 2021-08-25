@@ -748,9 +748,9 @@ var	cir = L.realtime({
 			$("#m4").html("Start");
 			$("#m5").html("Stop");
 			$("#m6").html("Text ");
-			$('#f1').html('Bottom ' + e.target.feature.properties.alt_bot + 'ft<br> Top '
-				+ e.target.feature.properties.alt_top + 'ft');
-			$('#f2').html('Lat: ' + e.target.feature.properties.r_lat + ' Lng: '
+			$('#f1').html('Bottom ' + separator(e.target.feature.properties.alt_bot) + 'ft<br> Top '
+				+ separator(e.target.feature.properties.alt_top) + 'ft');
+			$('#f2').html('Lat: ' + e.target.feature.properties.r_lat + ' Long: '
 				+ e.target.feature.properties.r_lat + ' Alpha: '
 				+ e.target.feature.properties.alpha);
 			$('#f3').html(e.target.feature.properties.rep_num);
@@ -807,7 +807,7 @@ var	seg = L.realtime({
 			$("#m5").html("Start");
 			$("#m6").html("Stop");
 			$('#f1').html('Graphical NOTAM');
-			$('#f2').html(e.target.feature.properties.alt);
+			$('#f2').html(separator(e.target.feature.properties.alt) + 'ft');
 			$('#f3').html(e.target.feature.properties.rep_num);
 			$('#f4').html(e.target.feature.properties.text_data);
 			$('#f5').html(e.target.feature.properties.start_date);

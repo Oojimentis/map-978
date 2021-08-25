@@ -11,7 +11,7 @@ var stnid = urlParams.get('StnID');
 stnid = stnid.replace(/"/g, "'");
 //stnid = stnid.concat("'");
 
-var stn_sql = url.concat(`SELECT stn_call, temperature, ob_date FROM metar \
+var stn_sql = url.concat(`SELECT stn_call, temperature, windsp, ob_date, altimeter FROM metar \
 			WHERE stn_call = ${stnid} ORDER BY ob_date \
 			&m=METAR METAR Graph`);
 
@@ -22,21 +22,46 @@ $(document).ready(function() {
 		success: function(data) {
 			var obs =[];
 			var tmp = [];
-		
+			var windsp = [];
+			var alt = [];
+					
 			for(var i in data) {
 				obs.push(data[i].ob_date);
 				tmp.push(data[i].temperature);
+				windsp.push(data[i].windsp);
+				alt.push(data[i].altimeter);
 			}
 			var chartdata = {
 				labels: obs,
-				datasets : [{
+				datasets : [
+				{
 					label: 'Temperature',
-					backgroundColor: 'yellow',
-					borderColor: 'yellow',
+					backgroundColor: 'blue',
+					borderColor: 'blue',
 					hoverBackgroundColor: 'green',
 					hoverBorderColor: 'rgba(200, 200, 200, 1)',
-					data: tmp
-				}]
+					data: tmp,
+					yAxisID: 'y',
+				},
+				{
+					label: 'Wind Speed',
+					backgroundColor: 'red',
+					borderColor: 'red',
+					hoverBackgroundColor: 'green',
+					hoverBorderColor: 'rgba(200, 200, 200, 1)',
+					data: windsp,
+					yAxisID: 'y1',
+				},
+				{
+					label: 'Altimeter',
+					backgroundColor: 'cyan',
+					borderColor: 'cyan',
+					hoverBackgroundColor: 'green',
+					hoverBorderColor: 'rgba(200, 200, 200, 1)',
+					data: alt,
+					yAxisID: 'y2',
+				}
+				]
 			};
 			var ctx = $("#mycanvas");
 
@@ -45,6 +70,10 @@ $(document).ready(function() {
 				data: chartdata,
 				options: {
 					responsive: true,
+					interaction: {
+						mode: 'index',
+						intersect: false,
+					},
 					plugins: {
 						legend: {
 							position: 'bottom',
@@ -56,8 +85,33 @@ $(document).ready(function() {
 							font: {
 								size: 18
 							},
-							text: 'Temperature at Station '+stnid
+							text: 'METAR Station ' + stnid
 						}
+					},
+					scales: {
+						y: {
+							type: 'linear',
+							display: true,
+							position: 'left',
+						},
+						y2: {
+							type: 'linear',
+							display: true,
+							position: 'right',
+							// grid line settings
+							grid: {
+								drawOnChartArea: false, // only want the grid lines for one axis to show up
+							},
+						},
+						y1: {
+							type: 'linear',
+							display: true,
+							position: 'right',
+							// grid line settings
+							grid: {
+								drawOnChartArea: false, // only want the grid lines for one axis to show up
+							},
+						},
 					}
 				},
 			});
