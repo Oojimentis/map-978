@@ -12,6 +12,7 @@ var nexlegend;
 var sua_object = [];
 var airmet_object = [];
 var sigmet_object = [];
+var myCustomColour
 
 var popupOptions = {
 	'className' : 'custompopup',
@@ -116,7 +117,7 @@ function right(str, chr) {
 	return str.slice(str.length - chr, str.length);
 }
 
-var map = L.map('map', {preferCanvas: true}).setView([36.0, -75.26], 5);
+var map = L.map('map', {preferCanvas: true}).setView([40.0, -75.26], 7);
 
 // ** Map Layers
 var osm=new L.tileLayer('http://{s}.tile.osm.org/{z}/{x}/{y}.png', { 
@@ -156,6 +157,30 @@ function getColor(alt_color) {
 			alt_color >=	0		? '#EC8235':
 					'blue';
 }	
+// METAR temperature colours
+function getTempColor(alt_color) {
+	return 	alt_color >=	100	?'#FF0EF0':
+			alt_color >=	95	?'#FF00E0':
+			alt_color >=	90	?'#FF00B0':
+			alt_color >=	85	?'#FF0050':
+			alt_color >=	80	?'#FF3c00':
+			alt_color >=	75	?'#FF6400':
+			alt_color >=	70	?'#FF8c00':
+			alt_color >=	65	?'#FFaa00':
+			alt_color >=	60	?'#FFbe00':
+			alt_color >=	55	?'#FFd200':
+			alt_color >=	50	?'#FFf000':
+			alt_color >=	45	?'#b0ff00':
+			alt_color >=	40	?'#3eff00':
+			alt_color >=	35	?'#00ff5c':
+			alt_color >=	30	?'#00ffd0':
+			alt_color >=	25	?'#00e4ff':
+			alt_color >=	20	?'#00b4ff':
+			alt_color >=	15	?'#0084ff':
+			alt_color >=	10	?'#0044ff':
+			alt_color >=	0	?'#0500ff':
+					'white';
+}
 
 function getNexrad() {
 	var nexrad_prod_str = document.getElementById('prodid').value;
@@ -851,7 +876,19 @@ metar = L.realtime({
 		return featureData.properties.stn_call;
 	},
 	pointToLayer: function(feature, latlng) {
-		marker = L.marker(latlng, {icon: wxIcon});
+		myCustomColour = getTempColor(feature.properties.temperature)
+
+		const markerHtmlStyles = `background-color: ${myCustomColour};
+			width:10;
+			height:28;
+			border-radius: 3rem 3rem 0;
+			padding: 0;
+			font-size: 10px;`
+
+		marker = L.marker(latlng, {icon: L.divIcon({
+			iconSize: "auto",
+			html: `<span style="${markerHtmlStyles}"/>`+ feature.properties.temperature })});
+		
 		marker.bindTooltip('METAR' + '<br>' + feature.properties.stn_call
 			+ '<br>' + feature.properties.temperature + '&#x2109');
 		marker.on('click', function(e) {
