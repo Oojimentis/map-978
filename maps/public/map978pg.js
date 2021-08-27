@@ -864,7 +864,6 @@ var url_metar = url.concat("SELECT s.coords AS GEOM, s.stn_call, s.stn_loc,\
 			INNER JOIN stations s ON m.stn_call = s.stn_call\
 			&m=METAR");
 
-//var wxIcon = L.icon({iconUrl: 'therm.ico', iconSize: [20,20]});
 var metar_ckbox = document.getElementById("meta")
 
 metar = L.realtime({
@@ -903,7 +902,7 @@ metar = L.realtime({
 			$("#m3").html("Temp:<br>Precip:");
 			$("#m4").html("Winds");
 			$("#m5").html("Visibility");
-			$("#m6").html("SLP<br>Altimeter");
+			$("#m6").html("Altimeter<br>SLP");
 			$('#f1').html('<a href=page5?StnID="'+ e.target.feature.properties.stn_call
 				+ '" onClick="return popup(this,\'notes\')">'
 				+ e.target.feature.properties.stn_call  +' </a> - @'
@@ -1040,7 +1039,7 @@ maxmin = L.realtime({
 			$("#m3").html("Temp:<br>Precip:");
 			$("#m4").html("Winds");
 			$("#m5").html("Visibility");
-			$("#m6").html("SLP<br>Altimeter");
+			$("#m6").html("Altimeter<br>SLP");
 	$('#f1').html('<a href=page5?StnID="'+ e.target.feature.properties.stn_call
 		+ '" onClick="return popup(this,\'notes\')">'
 		+ e.target.feature.properties.stn_call +' </a> - @'
