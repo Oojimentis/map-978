@@ -1317,14 +1317,38 @@ winds = L.realtime({
 				var temp3 = feature.properties.temp3.replace(/\b0+/g, '') + "\xB0C" + '<br>'
 			}
 
-			$('#f3').html(e.target.feature.properties.dir3 + "\xB0  "
-				+ e.target.feature.properties.spd3.replace(/\b0+/g, '') + "kt  "
-				+ temp3
-				+ e.target.feature.properties.dir4 + "\xB0  "
-				+ e.target.feature.properties.spd4.replace(/\b0+/g, '') + "kt  "
+			if (feature.properties.dir3 ==	"Light and variable") {
+				var dir3 = feature.properties.dir3;
+				var spd3 = "  ";
+			}
+			else {
+				var dir3 = feature.properties.dir3 + "\xB0  ";
+				var spd3 = feature.properties.spd3.replace(/\b0+/g, '') + "kt  ";
+			}
+
+			if (feature.properties.dir4 ==	"Light and variable") {
+				var dir4 = feature.properties.dir4;
+				var spd4 = "  ";
+			}
+			else {
+				var dir4 = feature.properties.dir4 + "\xB0  ";
+				var spd4 = feature.properties.spd4.replace(/\b0+/g, '') + "kt  ";
+			}
+
+			$('#f3').html(dir3 + spd3 + temp3
+				+ dir4 + spd4
 				+ e.target.feature.properties.temp4.replace(/\b0+/g, '') + "\xB0C" + '<br>');
-			$('#f4').html(e.target.feature.properties.dir5 + "\xB0  "
-				+ e.target.feature.properties.spd5.replace(/\b0+/g, '') + "kt  "
+
+			if (feature.properties.dir5 ==	"Light and variable") {
+				var dir5 = feature.properties.dir5;
+				var spd5 = "  ";
+			}
+			else {
+				var dir5 = feature.properties.dir5 + "\xB0  ";
+				var spd5 = feature.properties.spd5.replace(/\b0+/g, '') + "kt  ";
+			}
+
+			$('#f4').html(dir5 + spd5
 				+ e.target.feature.properties.temp5.replace(/\b0+/g, '') + "\xB0C" + '<br>'
 				+ e.target.feature.properties.dir6 + "\xB0  "
 				+ e.target.feature.properties.spd6.replace(/\b0+/g, '') + "kt  "
@@ -1352,8 +1376,9 @@ winds = L.realtime({
 				var temp9 = " - ";
 			}
 			else {
-				var temp9 = feature.properties.temp2.replace(/\b0+/g, '') + "\xB0C" + '<br>';
+				var temp9 = feature.properties.temp9.replace(/\b0+/g, '') + "\xB0C" + '<br>';
 			}
+			
 			$('#f6').html(dir9 + spd9 + temp9);
 		});
 		marker.addTo(map);
