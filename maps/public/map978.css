@@ -19,6 +19,19 @@ p {
 	width: 50%;
 	height:400px;
 }
+#map .leaflet-div-icon {
+	width:0;
+	height:0;
+	border: 0;
+	padding: 0;
+	font-size: 10px;
+}
+#map .leaflet-div-icon b {
+	display:inline-block;
+	padding: 0px;
+	border-radius: 99px;
+	transform:translate(-50%, -50%);
+}
 .page2 {
 	margin-top: 48px;
 	background-color: #81d3ab;

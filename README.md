@@ -10,6 +10,9 @@ Uses Leaflet (© 2010–2019 Vladimir Agafonkin. https://leafletjs.com)
 and Leaflet Realtime (https://github.com/perliedman/leaflet-realtime)
 
 ## Recent Changes
+
+* 08/23/21 Dynamic METAR icons based on temperature.
+* 08/27/21 Use 'clustering' for PIREP reports.
 * 08/23/21 Station lookup and details screens added.
 * 07/23/21 METAR station temperature graph. (Click station in METAR details table)
 * 07/16/21 TAF Details screen added.
@@ -30,6 +33,11 @@ and Leaflet Realtime (https://github.com/perliedman/leaflet-realtime)
 
 
 ## Screenshots
+
+METAR:
+
+![metar](https://user-images.githubusercontent.com/60933475/131131160-13d65fe4-1ba6-4dcb-a252-bb46aae5a67e.png)
+
 
 Station Lookup Screen:
 
@@ -76,10 +84,6 @@ Winds Aloft:
 CONUS:
 
 ![conus](https://user-images.githubusercontent.com/60933475/124371041-f0783600-dc4b-11eb-96f1-cf26149819e1.png)
-
-METAR:
-
-![metar](https://user-images.githubusercontent.com/60933475/124371053-0ede3180-dc4c-11eb-867a-1ea49794d096.png)
 
 Regional NEXRAD:
 
