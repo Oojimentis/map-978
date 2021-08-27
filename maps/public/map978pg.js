@@ -864,16 +864,16 @@ var url_metar = url.concat("SELECT s.coords AS GEOM, s.stn_call, s.stn_loc,\
 			INNER JOIN stations s ON m.stn_call = s.stn_call\
 			&m=METAR");
 
-var wxIcon = L.icon({iconUrl: 'therm.ico', iconSize: [20,20]});
+//var wxIcon = L.icon({iconUrl: 'therm.ico', iconSize: [20,20]});
 var metar_ckbox = document.getElementById("meta")
 
 metar = L.realtime({
 	url: url_metar,
 	removeMissing: true,
 	crossOrigin: true, type: 'json'
-	}, {interval: 6000,
+	}, {interval: 36000,
 	getFeatureId: function(featureData) {
-		return featureData.properties.metar_count + featureData.properties.stn_call
+		return  featureData.properties.stn_call
 			+ featureData.properties.temperature + featureData.properties.ob_date;
 	},
 	pointToLayer: function(feature, latlng) {
