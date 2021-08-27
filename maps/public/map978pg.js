@@ -1239,8 +1239,8 @@ var url_winds = url.concat("SELECT coords AS GEOM, w.stn_call, stn_loc, state, i
 			alt1, dir1, spd1, temp1, alt2, dir2, spd2, temp2, alt3, dir3, spd3, temp3,\
 			alt4, dir4, spd4, temp4, alt5, dir5, spd5, temp5, alt6, dir6, spd6, temp6,\
 			alt7, dir7, spd7, temp7, alt8, dir8, spd8, temp8, alt9, dir9, spd9, temp9 \
-			FROM winds w INNER JOIN (SELECT stn_call, MAX(proc_time) AS mx FROM winds \
-			GROUP BY stn_call) g ON w.stn_call = g.stn_call AND w.proc_time = g.mx \
+			FROM winds w INNER JOIN (SELECT stn_call, MAX(issue_date) AS mx FROM winds \
+			GROUP BY stn_call) g ON w.stn_call = g.stn_call AND w.issue_date = g.mx \
 			INNER JOIN stations s ON w.stn_call = s.stn_call \
 			&m=Winds");
 
@@ -1267,37 +1267,94 @@ winds = L.realtime({
 				+ separator(e.target.feature.properties.alt6) + "ft");
 			$("#m5").html(separator(e.target.feature.properties.alt7) + "ft" + '<br>'
 				+ separator(e.target.feature.properties.alt8) + "ft");
-			$("#m6").html(separator(e.target.feature.properties.alt9) + "ft");
+
+			if (feature.properties.alt9 == '(null)')
+				$("#m6").html(" - ");
+			else
+				$("#m6").html(separator(e.target.feature.properties.alt9) + "ft");
+			
 			$('#f1').html(e.target.feature.properties.stn_call + " (Winds)" + '<br>'
 				+ e.target.feature.properties.stn_loc + ", "
 				+ e.target.feature.properties.state);
-			$('#f2').html(e.target.feature.properties.dir1 + "\xB0 "
-				+ e.target.feature.properties.spd1 + "kt "
-				+ e.target.feature.properties.temp1 + "\xB0C" + '<br>'
-				+ e.target.feature.properties.dir2 + "\xB0 "
-				+ e.target.feature.properties.spd2 + "kt "
-				+ e.target.feature.properties.temp2 + "\xB0C");
-			$('#f3').html(e.target.feature.properties.dir3 + "\xB0 "
-				+ e.target.feature.properties.spd3 + "kt " 
-				+ e.target.feature.properties.temp3 + "\xB0C" + '<br>'
-				+ e.target.feature.properties.dir4 + "\xB0 "
-				+ e.target.feature.properties.spd4 + "kt "
-				+ e.target.feature.properties.temp4 + "\xB0C");
-			$('#f4').html(e.target.feature.properties.dir5 + "\xB0 "
-				+ e.target.feature.properties.spd5 + "kt "
-				+ e.target.feature.properties.temp5 + "\xB0C" + '<br>'
-				+ e.target.feature.properties.dir6 + "\xB0 "
-				+ e.target.feature.properties.spd6 + "kt "
-				+ e.target.feature.properties.temp6 + "\xB0C");
-			$('#f5').html(e.target.feature.properties.dir7 + "\xB0 "
-				+ e.target.feature.properties.spd7 + "kt "
-				+ e.target.feature.properties.temp7 + "\xB0C" + '<br>'
-				+ e.target.feature.properties.dir8 + "\xB0 "
-				+ e.target.feature.properties.spd8 + "kt "
-				+ e.target.feature.properties.temp8 + "\xB0C");
-			$('#f6').html(e.target.feature.properties.dir9 + "\xB0 "
-				+ e.target.feature.properties.spd9 + "kt "
-				+ e.target.feature.properties.temp9 + "\xB0C");
+
+			if (feature.properties.dir1 ==	"Light and variable") {
+				var dir1 = feature.properties.dir1;
+				var spd1 = "  ";
+			}
+			else {
+				var dir1 = feature.properties.dir1 + "\xB0  ";
+				var spd1 = feature.properties.spd1.replace(/\b0+/g, '') + "kt  ";
+			}
+
+			if (feature.properties.dir2 ==	"Light and variable") {
+				var dir2 = feature.properties.dir2;
+				var spd2 = "  ";
+			}
+			else {
+				var dir2 = feature.properties.dir2 + "\xB0  ";
+				var spd2 = feature.properties.spd2.replace(/\b0+/g, '') + "kt  ";
+			}
+
+			if (feature.properties.temp1 ==	"+00") {
+				var temp1 = "0\xB0C <br>";
+			}
+			else {
+				var temp1 = feature.properties.temp1.replace(/\b0+/g, '') + "\xB0C" + '<br>'
+			}
+			if (feature.properties.temp2 ==	"+00") {
+				var temp2 = "0\xB0C <br>";
+			}
+			else {
+				var temp2 = feature.properties.temp2.replace(/\b0+/g, '') + "\xB0C" + '<br>'
+			}
+
+			$('#f2').html(dir1 + spd1 + temp1 + dir2 + spd2 + temp2);
+
+			if (feature.properties.temp3 ==	"+00") {
+				var temp3 = "0\xB0C <br>";
+			}
+			else {
+				var temp3 = feature.properties.temp3.replace(/\b0+/g, '') + "\xB0C" + '<br>'
+			}
+
+			$('#f3').html(e.target.feature.properties.dir3 + "\xB0  "
+				+ e.target.feature.properties.spd3.replace(/\b0+/g, '') + "kt  "
+				+ temp3
+				+ e.target.feature.properties.dir4 + "\xB0  "
+				+ e.target.feature.properties.spd4.replace(/\b0+/g, '') + "kt  "
+				+ e.target.feature.properties.temp4.replace(/\b0+/g, '') + "\xB0C" + '<br>');
+			$('#f4').html(e.target.feature.properties.dir5 + "\xB0  "
+				+ e.target.feature.properties.spd5.replace(/\b0+/g, '') + "kt  "
+				+ e.target.feature.properties.temp5.replace(/\b0+/g, '') + "\xB0C" + '<br>'
+				+ e.target.feature.properties.dir6 + "\xB0  "
+				+ e.target.feature.properties.spd6.replace(/\b0+/g, '') + "kt  "
+				+ e.target.feature.properties.temp6.replace(/\b0+/g, '') + "\xB0C" + '<br>');
+			$('#f5').html(e.target.feature.properties.dir7 + "\xB0  "
+				+ e.target.feature.properties.spd7.replace(/\b0+/g, '') + "kt  "
+				+ e.target.feature.properties.temp7.replace(/\b0+/g, '') + "\xB0C" + '<br>'
+				+ e.target.feature.properties.dir8 + "\xB0  "
+				+ e.target.feature.properties.spd8.replace(/\b0+/g, '') + "kt  "
+				+ e.target.feature.properties.temp8.replace(/\b0+/g, '') + "\xB0C" + '<br>');
+
+			if (feature.properties.dir9 == "-") {
+				var dir9 = " - ";
+			}
+			else {
+				var dir9 = 	feature.properties.dir9 + "\xB0  ";
+			}
+			if (feature.properties.spd9 == "-") {
+				var spd9 = " - ";
+			}
+			else {
+				var spd9 = 	feature.properties.spd9.replace(/\b0+/g, '') + "kt  ";
+			}
+			if (feature.properties.temp9 == "-") {
+				var temp9 = " - ";
+			}
+			else {
+				var temp9 = feature.properties.temp2.replace(/\b0+/g, '') + "\xB0C" + '<br>';
+			}
+			$('#f6').html(dir9 + spd9 + temp9);
 		});
 		marker.addTo(map);
 
@@ -1363,7 +1420,8 @@ pirep = L.realtime({
 
 		if (feature.properties.rep_type == "Urgent Report")
 			marker.bindTooltip('Urgent PIREP' + '<br>'
-				+ feature.properties.stn_call);
+				+ feature.properties.stn_call + '<br>'
+				+ feature.properties.rep_time);
 		else
 			marker.bindTooltip('PIREP' + '<br>'
 				+ feature.properties.stn_call + '<br>'
