@@ -741,7 +741,8 @@ if (!sua_ckbox.checked) {
 var url_circle = url.concat("SELECT bot AS GEOM, c.start_date, c.stop_date,\
 			c.rep_num, c.r_lng, c.r_lat, c.alt_top, c.alt_bot, c.alpha, s.text_data \
 			FROM circles c \
-			LEFT JOIN sigairmet s ON s.rep_num = c.rep_num &m=NOTAM circle");
+			LEFT JOIN sigairmet s ON s.rep_num = c.rep_num AND c.prod_id = s.prod_id \
+			&m=NOTAM circle");
 
 var cmarkers = L.markerClusterGroup({
 	iconCreateFunction: function(cluster) {
@@ -1347,11 +1348,19 @@ winds = L.realtime({
 				var dir5 = feature.properties.dir5 + "\xB0  ";
 				var spd5 = feature.properties.spd5.replace(/\b0+/g, '') + "kt  ";
 			}
+			
+						if (feature.properties.dir6 ==	"Light and variable") {
+				var dir6 = feature.properties.dir6;
+				var spd6 = "  ";
+			}
+			else {
+				var dir6 = feature.properties.dir6 + "\xB0  ";
+				var spd6 = feature.properties.spd6.replace(/\b0+/g, '') + "kt  ";
+			}
 
 			$('#f4').html(dir5 + spd5
 				+ e.target.feature.properties.temp5.replace(/\b0+/g, '') + "\xB0C" + '<br>'
-				+ e.target.feature.properties.dir6 + "\xB0  "
-				+ e.target.feature.properties.spd6.replace(/\b0+/g, '') + "kt  "
+				+ dir6 + spd6
 				+ e.target.feature.properties.temp6.replace(/\b0+/g, '') + "\xB0C" + '<br>');
 			$('#f5').html(e.target.feature.properties.dir7 + "\xB0  "
 				+ e.target.feature.properties.spd7.replace(/\b0+/g, '') + "kt  "
