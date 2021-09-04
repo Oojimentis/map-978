@@ -859,7 +859,7 @@ var seg = L.realtime({
 // ** METAR 
 var url_metar = url.concat("SELECT s.coords AS GEOM, s.stn_call, s.stn_loc,\
 			state, ob_date, temperature, windsp, winddir, altimeter, visby, dewp,\
-			hrly_precip, slp, windvar, windgust \
+			hrly_precip, slp, windvar, windgust, mtype \
 			FROM metar m INNER JOIN (SELECT stn_call, MAX(ob_date) AS mob FROM metar \
 			GROUP BY stn_call) g ON m.stn_call = g.stn_call AND m.ob_date = g.mob \
 			INNER JOIN stations s ON m.stn_call = s.stn_call\
@@ -878,27 +878,37 @@ metar = L.realtime({
 	},
 	pointToLayer: function(feature, latlng) {
 		myCustomColour = getTempColor(feature.properties.temperature)
+		var markerHtmlStyles;
 
-		const markerHtmlStyles = `background-color: ${myCustomColour};
+		if (feature.properties.mtype == "SPECI") {
+			markerHtmlStyles = `background-color: ${myCustomColour};
+			color: #ffffff;
+			width:10;
+			height:28;
+			border-radius: 3rem 3rem 0;
+			padding: 0;
+			font-size: 12px;`
+		}
+		else {
+			markerHtmlStyles = `background-color: ${myCustomColour};
 			width:10;
 			height:28;
 			border-radius: 3rem 3rem 0;
 			padding: 0;
 			font-size: 10px;`
-
+		}
 		marker = L.marker(latlng, {icon: L.divIcon({
 			iconSize: "auto",
 			html: `<span style="${markerHtmlStyles}"/>`+ feature.properties.temperature })});
 		
-
-		marker.bindTooltip('METAR' + '<br>' + feature.properties.stn_call
+		marker.bindTooltip(feature.properties.mtype + '<br>' + feature.properties.stn_call
 			+ '<br>' + feature.properties.temperature + '&#x2109');
 		marker.on('click', function(e) {
 			var hold1;
 			var hold2;
 			var hold3;
 
-			$("#m1").html("Station" );
+			$('#m1').html(e.target.feature.properties.mtype);
 			$("#m2").html("Location");
 			$("#m3").html("Temp:<br>Precip:");
 			$("#m4").html("Winds");
