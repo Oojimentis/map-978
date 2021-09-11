@@ -738,7 +738,7 @@ if (!sua_ckbox.checked) {
 }
 
 // ** NOTAM TFR - Circle
-var url_circle = url.concat("SELECT bot AS GEOM, c.start_date, c.stop_date,\
+var url_circle = url.concat("SELECT bot AS GEOM, c.start_date, c.stop_date, c.rec_count, \
 			c.rep_num, c.r_lng, c.r_lat, c.alt_top, c.alt_bot, c.alpha, s.text_data \
 			FROM circles c \
 			LEFT JOIN sigairmet s ON s.rep_num = c.rep_num AND c.prod_id = s.prod_id \
@@ -761,11 +761,11 @@ var cir = L.realtime({
 	crossOrigin: true, type: 'json'
 	}, {interval: 70000,
 	getFeatureId: function(featureData) {
-	return featureData.properties.rep_num;
+	return featureData.properties.rep_num + featureData.properties.rec_count + featureData.properties.start_date;
 	},
 	pointToLayer: function(feature, latlng) {
 		marker = L.circleMarker(latlng, {color: 'red', fillcolor: 'yellow'});
-		marker.bindTooltip('NOTAM-TFR<br>' + feature.properties.rep_num);
+		marker.bindTooltip('NOTAM-TFR<br>' + feature.properties.rep_num + '  '+ feature.properties.rec_count);
 		marker.on('click', function(e) {
 			$("#m1").html("Altitude");
 			$("#m2").html("Radius");
@@ -778,7 +778,8 @@ var cir = L.realtime({
 			$('#f2').html('Lat: ' + e.target.feature.properties.r_lat + ' Long: '
 				+ e.target.feature.properties.r_lat + ' Alpha: '
 				+ e.target.feature.properties.alpha);
-			$('#f3').html(e.target.feature.properties.rep_num);
+			$('#f3').html(e.target.feature.properties.rep_num
+				+ '<br>' + e.target.feature.properties.rec_count);
 			$('#f4').html(e.target.feature.properties.start_date);
 			$('#f5').html(e.target.feature.properties.stop_date);
 			$('#f6').html(e.target.feature.properties.text_data);
