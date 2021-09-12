@@ -427,7 +427,7 @@ var	airmet = L.realtime({
 			$("#m4").html("Condition");
 			$("#m5").html("Start");
 			$("#m6").html("Stop");
-			$('#f1').html('AIRMET');
+			$('#f1').html('AIRMET test');
 			$('#f2').html(separator(e.target.feature.properties.alt) + 'ft');
 			$('#f3').html(e.target.feature.properties.rep_num);
 			$('#f4').html(e.target.feature.properties.text_data);
