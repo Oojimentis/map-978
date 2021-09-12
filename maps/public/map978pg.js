@@ -12,6 +12,7 @@ var nexlegend;
 var sua_object = [];
 var airmet_object = [];
 var sigmet_object = [];
+var tfr_object = [];
 var myCustomColour
 
 var popupOptions = {
@@ -95,6 +96,26 @@ function sigmet_overlap(_sigmet_object, i) {
 		}
 	});
 };
+
+function tfr_overlap(_tfr_object, i) {
+	map.removeLayer(seg);
+	map.addLayer(seg);
+	map.eachLayer(function(layer) {
+		if (layer._leaflet_id == this.tfr_object[i]._leaflet_id) {
+
+			layer.setStyle({fillColor: 'yellow', fillOpacity: 0.5});
+			$('#f1').html('Graphical NOTAM');
+			$('#f2').html(separator(this.tfr_object[i].feature.properties.alt) + 'ft');
+			$('#f3').html(this.tfr_object[i].feature.properties.rep_num);
+			$('#f4').html(this.tfr_object[i].feature.properties.text_data);
+			$('#f5').html(this.tfr_object[i].feature.properties.start_date);
+			$('#f6').html(this.tfr_object[i].feature.properties.stop_date);
+		}
+	});
+};
+
+
+
 
 function updateStorage() {
 	$checkboxez.each(function() {
@@ -804,11 +825,18 @@ var cir = L.realtime({
 }).addTo(map);
 
 // ** Segmented graphical NOTAMS
-var url_seg_notam = url.concat("SELECT coords AS GEOM, alt, g.rep_num,\
-			start_date, stop_date, text_data \
-			FROM graphics g LEFT JOIN sigairmet s ON s.rep_num = g.rep_num \
-			WHERE g.segmented = 1 AND g.prod_id = 8 &m=NOTAM segmented");
+//var url_seg_notam = url.concat("SELECT coords AS GEOM, alt, g.rep_num,\
+//			start_date, stop_date, text_data, overlay_rec_id \
+//			FROM graphics g LEFT JOIN sigairmet s ON s.rep_num = g.rep_num \
+//			WHERE g.segmented = 1 AND g.prod_id = 8 &m=NOTAM segmented");
 
+var url_seg_notam = url.concat("SELECT coords AS GEOM, alt, g.rep_num,\
+			start_date, stop_date, text_data, overlay_rec_id \
+			FROM graphics g LEFT JOIN sigairmet s ON s.rep_num = g.rep_num \
+			WHERE g.overlay_rec_id = (select max(overlay_rec_id) from graphics h \
+				where h.rep_num = g.rep_num) and \
+						g.segmented = 1 AND g.prod_id = 8 &m=NOTAM segmented");
+  
 var notam_ckbox = document.getElementById("notam")
 
 var seg = L.realtime({
@@ -823,8 +851,9 @@ var seg = L.realtime({
 		return featureData.properties.rep_num;
 	},
 	onEachFeature: function(feature, layer) {
-		layer.bindTooltip('NOTAM-TFR<br>Alt ' + feature.properties.alt);
-		layer.on('click', function(e){
+//		layer.bindTooltip('NOTAM-TFR<br>Alt ' + feature.properties.alt);
+//		layer.on('click', function(e){
+		layer.on('mousedown', function(e) {
 			layer.setStyle({fillColor: 'yellow', fillOpacity: 0.5});
 			$("#m1").html("Report");
 			$("#m2").html("Altitude");
@@ -839,23 +868,35 @@ var seg = L.realtime({
 			$('#f5').html(e.target.feature.properties.start_date);
 			$('#f6').html(e.target.feature.properties.stop_date);
 
+			var html_tfr = '';
+			var pixelPosition = e.layerPoint;
+			var latLng = map.layerPointToLatLng(pixelPosition);
+			var pip_tfr = leafletPip.pointInLayer(latLng, map, false);
+			if (pip_tfr.length) {
+				for (var i = 0; i < pip_tfr.length; i++) {
+					tfr_object[i] = pip_tfr[i];	//.feature.properties;
+					html_tfr += "<a onclick= 'tfr_overlap(\"" 
+						+ tfr_object[i] + "\",\"" + i + "\");'>" + 
+						"TFR - Alt: " +
+						separator(pip_tfr[i].feature.properties.alt) + " : " + " Rep num: " +
+						pip_tfr[i].feature.properties.rep_num + "</a><br>" ;
+				}
+				if (html_tfr) {
+					layer.bindPopup(html_tfr, popupOptions);
+				}
+			}
 			seg.stop();
 		});
-		
-		if (!notam_ckbox.checked) {
-			map.removeLayer(seg),
-			seg.stop()
-		}
-		else {
-			map.addLayer(seg);
-			seg.start();
-		}
-		
-		layer.on('mouseout', function(e) {
+		layer.on('mousedown', function(e) {
 			seg.start();
 		})
-	},
+	}
 }).addTo(map);
+
+if (!notam_ckbox.checked) {
+	map.removeLayer(seg),
+	seg.stop()
+}
 
 // ** METAR 
 var url_metar = url.concat("SELECT s.coords AS GEOM, s.stn_call, s.stn_loc,\
@@ -1611,7 +1652,7 @@ document.querySelector("input[name = notam]").addEventListener('change', functio
 		notam.start(),
 		cmarkers.addLayer(cmarkers),
 		map.addLayer(cir);
-		cir.start();
+		cir.start(),
 		map.addLayer(seg),
 		seg.start()
 	}
@@ -1620,7 +1661,7 @@ document.querySelector("input[name = notam]").addEventListener('change', functio
 		map.removeLayer(notam),
 		notam.stop(),
 		cmarkers.removeLayer(cmarkers),
-		map.removeLayer(cir);
+		map.removeLayer(cir),
 		cir.stop(),
 		map.removeLayer(seg),
 		seg.stop()
