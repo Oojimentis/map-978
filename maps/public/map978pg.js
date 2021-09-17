@@ -277,6 +277,9 @@ function getColorInt(alt_color,prod_id) {
 	switch (prod_id) {
 	case 63: case 64:
 		switch (alt_color) {
+		case 0:
+			nexrad_color = '#00ff35';
+			break;	
 		case 1:
 			nexrad_color = '#00ff35';
 			break;
