@@ -114,9 +114,6 @@ function tfr_overlap(_tfr_object, i) {
 	});
 };
 
-
-
-
 function updateStorage() {
 	$checkboxez.each(function() {
 		formValues[this.id] = this.checked;
@@ -275,55 +272,183 @@ function getNexrad() {
 	return nexrad_sql_holder;
 }
 
-// ** NEXRAD intensity colours.
-function getColorInt(alt_color) {
-	switch (alt_color) {
-	case 1:
-		nexrad_color = '#8C8C74';
-		break;
-	case 2:
-		nexrad_color = '#B4C8FF';
-		break;
-	case 3:
-		nexrad_color = '#5F87FF';
-		break;
-	case 4:
-		nexrad_color = '#1446E6';
-		break;
-	case 5:
-		nexrad_color = '#6EF54B';
-		break;
-	case 6:
-		nexrad_color = '#00C300';
-		break;
-	case 7:
-		nexrad_color = '#007300';
-		break;
-	case 8:
-		nexrad_color = '#FFFF00';
-		break;	
-	case 9:
-		nexrad_color = '#FFB430';
-		break;
-	case 10:
-		nexrad_color = '#FA7D00';
-		break;	
-	case 11:
-		nexrad_color = '#E62D00';
-		break;
-	case 12:
-		nexrad_color = '#AF0000';
-		break;	
-	case 13:
-		nexrad_color = '#690000';
-		break;
-	case 14:
-		nexrad_color = '#FA00C8';	
-		break;
-	case 15:
-		nexrad_color = '#9B00FA';	
-		break;
+function getColorInt(alt_color,prod_id) {
+
+	switch (prod_id) {
+	case 63: case 64:
+		switch (alt_color) {
+		case 1:
+			nexrad_color = '#00ff35';
+			break;
+		case 2:
+			nexrad_color = '#0ba31e';
+			break;
+		case 3:
+			nexrad_color = '#fffe3a';
+			break;
+		case 4:
+			nexrad_color = '#ff0011';
+			break;
+		case 5:
+			nexrad_color = '#990017';
+			break;
+		case 6:
+			nexrad_color = '#ff00fb';
+			break;
+		case 7:
+			nexrad_color = '#9a0096';
+			break;
 		}
+		break;
+	case 70: case 71:
+		switch (alt_color) {
+		case 1:
+			nexrad_color = '#76d3ff';
+			break;
+		case 2:
+			nexrad_color = '#00ff00';
+			break;
+		case 3:
+			nexrad_color = '#ffff00';
+			break;
+		case 4:
+			nexrad_color = '#ff00ff';
+			break;
+		case 5:
+			nexrad_color = '#ff0000';
+			break;
+		case 6:
+			nexrad_color = '#000000';
+			break;
+		case 7:
+			nexrad_color = '#b6b6b6';
+			break;
+		}
+		break;
+	case 103:
+		switch (alt_color) {
+		case 1:
+			nexrad_color = '#00b4f1';
+			break;
+		case 2:
+			nexrad_color = '#c1d9ef';
+			break;
+		case 3:
+			nexrad_color = '#5a883b';
+			break;
+		case 4:
+			nexrad_color = '#c9e2b8';
+			break;
+		case 5:
+			nexrad_color = '#ffff00';
+			break;
+		case 6:
+			nexrad_color = '#c95f14';
+			break;
+		case 7:
+			nexrad_color = '#b6b6b6';
+			break;
+		}
+		break;
+	case 84:
+		switch (alt_color) {
+		case 1:
+			nexrad_color = '#0000ff';
+			break;
+		case 2:
+			nexrad_color = '#8686ff';
+			break;
+		case 3:
+			nexrad_color = '#76d3ff';
+			break;
+		case 4:
+			nexrad_color = '#008600';
+			break;
+		case 5:
+			nexrad_color = '#00ff00';
+			break;
+		case 6:
+			nexrad_color = '#c4ffc4';
+			break;
+		case 7:
+			nexrad_color = '#ffff00';
+			break;
+		case 8:
+			nexrad_color = '#f18635';
+			break;
+		case 9:
+			nexrad_color = '#864613';
+			break;
+		case 10:
+			nexrad_color = '#ff0000';
+			break;
+		case 11:
+			nexrad_color = '#ffcdcd';
+			break;
+		case 12:
+			nexrad_color = '#ff00ff';
+			break;
+		case 13:
+			nexrad_color = '#a500a5';
+			break;
+		case 14:
+			nexrad_color = '#ff0000';
+			break;
+		case 15:
+			nexrad_color = '#b6b6b6';
+			break;
+		}
+		break;
+	case 90: case 91:
+		switch (alt_color) {
+		case 1:
+			nexrad_color = '#0000ff';
+			break;
+		case 2:
+			nexrad_color = '#8686ff';
+			break;
+		case 3:
+			nexrad_color = '#76d3ff';
+			break;
+		case 4:
+			nexrad_color = '#008600';
+			break;
+		case 5:
+			nexrad_color = '#00ff00';
+			break;
+		case 6:
+			nexrad_color = '#c4ffc4';
+			break;
+		case 7:
+			nexrad_color = '#ffff00';
+			break;
+		case 8:
+			nexrad_color = '#f18635';
+			break;
+		case 9:
+			nexrad_color = '#864613';
+			break;
+		case 10:
+			nexrad_color = '#ff0000';
+			break;
+		case 11:
+			nexrad_color = '#ffcdcd';
+			break;
+		case 12:
+			nexrad_color = '#ff00ff';
+			break;
+		case 13:
+			nexrad_color = '#a500a5';
+			break;
+		case 14:
+			nexrad_color = '#000000';
+			break;
+		case 15:
+			nexrad_color = '#b6b6b6';
+			break;
+		}
+		break;
+	}
 return nexrad_color;
 }
 
@@ -581,7 +706,7 @@ var nexrad = L.realtime({
 
 		if (feature.properties.prod_id == 84 || feature.properties.prod_id == 90
 				|| feature.properties.prod_id == 91 ) {
-			nexrad_color = getColorInt(feature.properties.intensity);
+			nexrad_color = getColorInt(feature.properties.intensity, feature.properties.prod_id);
 			return {color: nexrad_color, weight: 4, fillColor: nexrad_color,
 				opacity: 0.5, fillOpacity: 0.5}
 		}
@@ -600,7 +725,7 @@ var nexrad = L.realtime({
 			var bounds = L.latLngBounds(map.containerPointToLatLng(southWest),
 				map.containerPointToLatLng(northEast));
 
-			nexrad_color = getColorInt(feature.properties.intensity);
+			nexrad_color = getColorInt(feature.properties.intensity, feature.properties.prod_id);
 			var rectOptions = {fillColor: nexrad_color, fillOpacity: 0.2, weight: 0}
 			radar_point = L.rectangle(bounds, rectOptions); 
 
@@ -1330,7 +1455,7 @@ winds = L.realtime({
 				+ e.target.feature.properties.stn_loc + ", "
 				+ e.target.feature.properties.state);
 
-			if (feature.properties.dir1 ==	"Light and variable") {
+			if (feature.properties.dir1 == "Light and variable") {
 				var dir1 = feature.properties.dir1;
 				var spd1 = "  ";
 			}
@@ -1339,7 +1464,7 @@ winds = L.realtime({
 				var spd1 = feature.properties.spd1.replace(/\b0+/g, '') + "kt  ";
 			}
 
-			if (feature.properties.dir2 ==	"Light and variable") {
+			if (feature.properties.dir2 == "Light and variable") {
 				var dir2 = feature.properties.dir2;
 				var spd2 = "  ";
 			}
@@ -1348,13 +1473,13 @@ winds = L.realtime({
 				var spd2 = feature.properties.spd2.replace(/\b0+/g, '') + "kt  ";
 			}
 
-			if (feature.properties.temp1 ==	"+00") {
+			if (feature.properties.temp1 == "+00") {
 				var temp1 = "0\xB0C <br>";
 			}
 			else {
 				var temp1 = feature.properties.temp1.replace(/\b0+/g, '') + "\xB0C" + '<br>'
 			}
-			if (feature.properties.temp2 ==	"+00") {
+			if (feature.properties.temp2 == "+00") {
 				var temp2 = "0\xB0C <br>";
 			}
 			else {
@@ -1363,14 +1488,14 @@ winds = L.realtime({
 
 			$('#f2').html(dir1 + spd1 + temp1 + dir2 + spd2 + temp2);
 
-			if (feature.properties.temp3 ==	"+00") {
+			if (feature.properties.temp3 == "+00") {
 				var temp3 = "0\xB0C <br>";
 			}
 			else {
 				var temp3 = feature.properties.temp3.replace(/\b0+/g, '') + "\xB0C" + '<br>'
 			}
 
-			if (feature.properties.dir3 ==	"Light and variable") {
+			if (feature.properties.dir3 == "Light and variable") {
 				var dir3 = feature.properties.dir3;
 				var spd3 = "  ";
 			}
@@ -1379,7 +1504,7 @@ winds = L.realtime({
 				var spd3 = feature.properties.spd3.replace(/\b0+/g, '') + "kt  ";
 			}
 
-			if (feature.properties.dir4 ==	"Light and variable") {
+			if (feature.properties.dir4 == "Light and variable") {
 				var dir4 = feature.properties.dir4;
 				var spd4 = "  ";
 			}
@@ -1392,7 +1517,7 @@ winds = L.realtime({
 				+ dir4 + spd4
 				+ e.target.feature.properties.temp4.replace(/\b0+/g, '') + "\xB0C" + '<br>');
 
-			if (feature.properties.dir5 ==	"Light and variable") {
+			if (feature.properties.dir5 == "Light and variable") {
 				var dir5 = feature.properties.dir5;
 				var spd5 = "  ";
 			}
@@ -1401,7 +1526,7 @@ winds = L.realtime({
 				var spd5 = feature.properties.spd5.replace(/\b0+/g, '') + "kt  ";
 			}
 			
-						if (feature.properties.dir6 ==	"Light and variable") {
+						if (feature.properties.dir6 == "Light and variable") {
 				var dir6 = feature.properties.dir6;
 				var spd6 = "  ";
 			}
@@ -1425,7 +1550,7 @@ winds = L.realtime({
 				var dir9 = " - ";
 			}
 			else {
-				var dir9 = 	feature.properties.dir9 + "\xB0  ";
+				var dir9 = feature.properties.dir9 + "\xB0  ";
 			}
 			if (feature.properties.spd9 == "-") {
 				var spd9 = " - ";
@@ -1796,21 +1921,21 @@ turblegend = L.control({ position: "topright" });
 turblegend.onAdd = function() {
 	var div = L.DomUtil.create("div", "legend");
 	div.innerHTML += "<h4>Turbulence</h4>";
-	div.innerHTML += '<i style="background: #8C8C74"></i><span>EDR  7-13</span><br>';
-	div.innerHTML += '<i style="background: #B4C8FF"></i><span>EDR 14-20</span><br>';
-	div.innerHTML += '<i style="background: #5F87FF"></i><span>EDR 21-27</span><br>';
-	div.innerHTML += '<i style="background: #1446E6"></i><span>EDR 28-34</span><br>';
-	div.innerHTML += '<i style="background: #6EF54B"></i><span>EDR 35-41</span><br>';
-	div.innerHTML += '<i style="background: #00C300"></i><span>EDR 42-48</span><br>';
-	div.innerHTML += '<i style="background: #007300"></i><span>EDR 49-55</span><br>';
-	div.innerHTML += '<i style="background: #FFFF00"></i><span>EDR 56-62</span><br>';
-	div.innerHTML += '<i style="background: #FFB430"></i><span>EDR 63-69</span><br>';
-	div.innerHTML += '<i style="background: #FA7D00"></i><span>EDR 70-76</span><br>';
-	div.innerHTML += '<i style="background: #E62D00"></i><span>EDR 77-83</span><br>';
-	div.innerHTML += '<i style="background: #AF0000"></i><span>EDR 84-90</span><br>';
-	div.innerHTML += '<i style="background: #690000"></i><span>EDR 91-97</span><br>';
-	div.innerHTML += '<i style="background: #FA00C8"></i><span>EDR >=98</span><br>';
-	div.innerHTML += '<i style="background: #9B00FA"></i><span>EDR No Data</span><br>';
+	div.innerHTML += '<i style="background: #0000ff"></i><span>EDR  7-13</span><br>';
+	div.innerHTML += '<i style="background: #8686ff"></i><span>EDR 14-20</span><br>';
+	div.innerHTML += '<i style="background: #76d3ff"></i><span>EDR 21-27</span><br>';
+	div.innerHTML += '<i style="background: #008600"></i><span>EDR 28-34</span><br>';
+	div.innerHTML += '<i style="background: #00ff00"></i><span>EDR 35-41</span><br>';
+	div.innerHTML += '<i style="background: #c4ffc4"></i><span>EDR 42-48</span><br>';
+	div.innerHTML += '<i style="background: #ffff00"></i><span>EDR 49-55</span><br>';
+	div.innerHTML += '<i style="background: #f18635"></i><span>EDR 56-62</span><br>';
+	div.innerHTML += '<i style="background: #864613"></i><span>EDR 63-69</span><br>';
+	div.innerHTML += '<i style="background: #ff0000"></i><span>EDR 70-76</span><br>';
+	div.innerHTML += '<i style="background: #ffcdcd"></i><span>EDR 77-83</span><br>';
+	div.innerHTML += '<i style="background: #ff00ff"></i><span>EDR 84-90</span><br>';
+	div.innerHTML += '<i style="background: #a500a5"></i><span>EDR 91-97</span><br>';
+	div.innerHTML += '<i style="background: #000000"></i><span>EDR >=98</span><br>';
+	div.innerHTML += '<i style="background: #b6b6b6"></i><span>EDR No Data</span><br>';
 	return div;
 };
 
@@ -1818,21 +1943,21 @@ cloudlegend = L.control({ position: "topright" });
 cloudlegend.onAdd = function() {
 	var div = L.DomUtil.create("div", "legend");
 	div.innerHTML += "<h4>Cloud Tops</h4>";
-	div.innerHTML += '<i style="background: #8C8C74"></i><span><= 1,500ft</span><br>';
-	div.innerHTML += '<i style="background: #B4C8FF"></i><span>1,501ft-3,000ft</span><br>';
-	div.innerHTML += '<i style="background: #5F87FF"></i><span>3,001ft-4,500ft</span><br>';
-	div.innerHTML += '<i style="background: #1446E6"></i><span>4,501ft-6,00ft</span><br>';
-	div.innerHTML += '<i style="background: #6EF54B"></i><span>6,001ft-7,500ft</span><br>';
-	div.innerHTML += '<i style="background: #00C300"></i><span>7,501ft-9,000ft</span><br>';
-	div.innerHTML += '<i style="background: #007300"></i><span>9,001ft-10,500ft</span><br>';
-	div.innerHTML += '<i style="background: #FFFF00"></i><span>10,501ft-12,000ft</span><br>';
-	div.innerHTML += '<i style="background: #FFB430"></i><span>12,001ft-13,500ft</span><br>';
-	div.innerHTML += '<i style="background: #FA7D00"></i><span>13,501ft-15,000ft</span><br>';
-	div.innerHTML += '<i style="background: #E62D00"></i><span>15,001ft-18,000ft</span><br>';
-	div.innerHTML += '<i style="background: #AF0000"></i><span>18,001ft-21,000ft</span><br>';
-	div.innerHTML += '<i style="background: #690000"></i><span>21,001ft-24,000ft</span><br>';
-	div.innerHTML += '<i style="background: #FA00C8"></i><span>>24,000ft</span><br>';
-	div.innerHTML += '<i style="background: #9B00FA"></i><span>No Data</span><br>';
+	div.innerHTML += '<i style="background: #0000ff"></i><span><= 1,500ft</span><br>';
+	div.innerHTML += '<i style="background: #8686ff"></i><span>1,501ft-3,000ft</span><br>';
+	div.innerHTML += '<i style="background: #76d3ff"></i><span>3,001ft-4,500ft</span><br>';
+	div.innerHTML += '<i style="background: #008600"></i><span>4,501ft-6,00ft</span><br>';
+	div.innerHTML += '<i style="background: #00ff00"></i><span>6,001ft-7,500ft</span><br>';
+	div.innerHTML += '<i style="background: #c4ffc4"></i><span>7,501ft-9,000ft</span><br>';
+	div.innerHTML += '<i style="background: #ffff00"></i><span>9,001ft-10,500ft</span><br>';
+	div.innerHTML += '<i style="background: #f18635"></i><span>10,501ft-12,000ft</span><br>';
+	div.innerHTML += '<i style="background: #864613"></i><span>12,001ft-13,500ft</span><br>';
+	div.innerHTML += '<i style="background: #ff0000"></i><span>13,501ft-15,000ft</span><br>';
+	div.innerHTML += '<i style="background: #ffcdcd"></i><span>15,001ft-18,000ft</span><br>';
+	div.innerHTML += '<i style="background: #ff00ff"></i><span>18,001ft-21,000ft</span><br>';
+	div.innerHTML += '<i style="background: #a500a5"></i><span>21,001ft-24,000ft</span><br>';
+	div.innerHTML += '<i style="background: #ff0000"></i><span>>24,000ft</span><br>';
+	div.innerHTML += '<i style="background: #b6b6b6"></i><span>No Data</span><br>';
 	return div;
 };
 
@@ -1840,13 +1965,13 @@ icelegend = L.control({ position: "topright" });
 icelegend.onAdd = function() {
 	var div = L.DomUtil.create("div", "legend");
 	div.innerHTML += "<h4>Icing</h4>";
-	div.innerHTML += '<i style="background: #8C8C74"></i><span>Trace</span><br>';
-	div.innerHTML += '<i style="background: #B4C8FF"></i><span>Light</span><br>';
-	div.innerHTML += '<i style="background: #5F87FF"></i><span>Moderate</span><br>';
-	div.innerHTML += '<i style="background: #1446E6"></i><span>Severe</span><br>';
-	div.innerHTML += '<i style="background: #6EF54B"></i><span>Heavy</span><br>';
-	div.innerHTML += '<i style="background: #00C300"></i><span>Reserved</span><br>';
-	div.innerHTML += '<i style="background: #007300"></i><span>No Data</span><br>';
+	div.innerHTML += '<i style="background: #76d3ff"></i><span>Trace</span><br>';
+	div.innerHTML += '<i style="background: #00ff00"></i><span>Light</span><br>';
+	div.innerHTML += '<i style="background: #ffff00"></i><span>Moderate</span><br>';
+	div.innerHTML += '<i style="background: #ff00ff"></i><span>Severe</span><br>';
+	div.innerHTML += '<i style="background: #ff00ff"></i><span>Heavy</span><br>';
+	div.innerHTML += '<i style="background: #000000"></i><span>Reserved</span><br>';
+	div.innerHTML += '<i style="background: #b6b6b6"></i><span>No Data</span><br>';
 	return div;
 };
 
@@ -1854,27 +1979,26 @@ lightlegend = L.control({ position: "topright" });
 lightlegend.onAdd = function() {
 	var div = L.DomUtil.create("div", "legend");
 	div.innerHTML += "<h4>Lightning</h4>";
-	div.innerHTML += '<i style="background: #8C8C74"></i><span>1 Strike</span><br>';
-	div.innerHTML += '<i style="background: #B4C8FF"></i><span>2 Strikes</span><br>';
-	div.innerHTML += '<i style="background: #5F87FF"></i><span>3-5 Strikes</span><br>';
-	div.innerHTML += '<i style="background: #1446E6"></i><span>6-10 Strikes</span><br>';
-	div.innerHTML += '<i style="background: #6EF54B"></i><span>11-15 Strikes</span><br>';
-	div.innerHTML += '<i style="background: #00C300"></i><span>>15 Strikes</span><br>';
-	div.innerHTML += '<i style="background: #007300"></i><span>No Data</span><br>';
+	div.innerHTML += '<i style="background: #00b4f1"></i><span>1 Strike</span><br>';
+	div.innerHTML += '<i style="background: #c1d9ef"></i><span>2 Strikes</span><br>';
+	div.innerHTML += '<i style="background: #5a883b"></i><span>3-5 Strikes</span><br>';
+	div.innerHTML += '<i style="background: #c9e2b8"></i><span>6-10 Strikes</span><br>';
+	div.innerHTML += '<i style="background: #ffff00"></i><span>11-15 Strikes</span><br>';
+	div.innerHTML += '<i style="background: #c95f14"></i><span>>15 Strikes</span><br>';
+	div.innerHTML += '<i style="background: #b6b6b6"></i><span>No Data</span><br>';
 	return div;
 };
 
 nexlegend = L.control({ position: "topright" });
 nexlegend.onAdd = function() {
 	var div = L.DomUtil.create("div", "legend");
-	div.innerHTML += "<h4>NEXRAD</h4>";
-	div.innerHTML += '<i style="background: #8C8C74"></i><span>None</span><br>';
-	div.innerHTML += '<i style="background: #B4C8FF"></i><span>Light</span><br>';
-	div.innerHTML += '<i style="background: #5F87FF"></i><span>Light to Moderate</span><br>';
-	div.innerHTML += '<i style="background: #1446E6"></i><span>Moderate to Heavy</span><br>';
-	div.innerHTML += '<i style="background: #6EF54B"></i><span>Heavy</span><br>';
-	div.innerHTML += '<i style="background: #00C300"></i><span>Very Heavy</span><br>';
-	div.innerHTML += '<i style="background: #007300"></i><span>Very Heavy+Hail</span><br>';
+	div.innerHTML += '<i style="background: #00ff35"></i><span>None</span><br>';
+	div.innerHTML += '<i style="background: #0ba31e"></i><span>Light</span><br>';
+	div.innerHTML += '<i style="background: #fffe3a"></i><span>Light to Moderate</span><br>';
+	div.innerHTML += '<i style="background: #ff0011"></i><span>Moderate to Heavy</span><br>';
+	div.innerHTML += '<i style="background: #990017"></i><span>Heavy</span><br>';
+	div.innerHTML += '<i style="background: #ff00fb"></i><span>Very Heavy</span><br>';
+	div.innerHTML += '<i style="background: #9a0096"></i><span>Very Heavy+Hail</span><br>';
 	return div;
 };
 
