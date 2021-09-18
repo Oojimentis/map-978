@@ -472,7 +472,7 @@ var gairmet = L.realtime({
 			opacity: 1.0, fillOpacity: 0.2};
 	},
 	getFeatureId: function(featureData) {
-		return featureData.properties.rep_num;
+		return featureData.properties.rep_num + featureData.properties.alt;
 	},
 	onEachFeature: function(feature, layer) {
 		layer.bindTooltip('G-AIRMET: Alt ' + separator(feature.properties.alt) + '<br>'
@@ -963,7 +963,7 @@ var url_seg_notam = url.concat("SELECT coords AS GEOM, alt, g.rep_num,\
 			FROM graphics g LEFT JOIN sigairmet s ON s.rep_num = g.rep_num \
 			WHERE g.overlay_rec_id = (select max(overlay_rec_id) from graphics h \
 				where h.rep_num = g.rep_num) and \
-						g.segmented = 1 AND g.prod_id = 8 &m=NOTAM segmented");
+						(g.segmented = 1 AND g.prod_id = 8 ) or (g.prod_id = 8 and g.overlay_vert_cnt > 1) &m=NOTAM segmented");
   
 var notam_ckbox = document.getElementById("notam")
 
