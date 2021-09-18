@@ -757,7 +757,7 @@ var cwa = L.realtime({
 			opacity: 1.0, fillOpacity: 0.2};
 	},
 	getFeatureId: function(featureData) {
-		return featureData.properties.rep_num;
+		return featureData.properties.rep_num + featureData.properties.alt;
 	},
 	onEachFeature: function(feature, layer) {
 		layer.bindTooltip('CWA: Alt ' + separator(feature.properties.alt));
