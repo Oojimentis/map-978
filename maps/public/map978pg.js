@@ -543,7 +543,7 @@ var	airmet = L.realtime({
 			opacity: 1.0, fillOpacity: 0.2};
 	},
 	getFeatureId: function(featureData) {
-		return featureData.properties.rep_num;
+		return featureData.properties.rep_num + featureData.properties.alt;
 	},
 	onEachFeature: function(feature, layer) {
 //		layer.bindTooltip('AIRMET: Alt ' + feature.properties.alt);
@@ -555,7 +555,7 @@ var	airmet = L.realtime({
 			$("#m4").html("Condition");
 			$("#m5").html("Start");
 			$("#m6").html("Stop");
-			$('#f1').html('AIRMET test');
+			$('#f1').html('AIRMET');
 			$('#f2').html(separator(e.target.feature.properties.alt) + 'ft');
 			$('#f3').html(e.target.feature.properties.rep_num);
 			$('#f4').html(e.target.feature.properties.text_data);
