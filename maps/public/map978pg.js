@@ -14,6 +14,8 @@ var airmet_object = [];
 var sigmet_object = [];
 var tfr_object = [];
 var myCustomColour
+var radar_point;
+var nexrad_color;
 
 var popupOptions = {
 	'className' : 'custompopup',
