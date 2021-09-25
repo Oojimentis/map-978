@@ -21,6 +21,7 @@ var nexrad_count = url.concat("SELECT n.prod_id, f.prod_id_desc, altitude, n.map
 				GROUP BY prod_id) g ON g.prod_id = n.prod_id AND n.maptime = g.mob \
 				inner join fisb_products f on f.prod_id =n.prod_id \
 				group by n.prod_id,prod_id_desc,altitude,n.maptime \
+				order by n.prod_id \
 				&m=NEXRAD count");
 
 //var nexrad_count = url.concat("SELECT n.prod_id, f.prod_id_desc, altitude, COUNT(*) AS count \

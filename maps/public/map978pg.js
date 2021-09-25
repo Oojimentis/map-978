@@ -264,7 +264,7 @@ function getNexrad() {
 	}
 
 	var nexrad_sql_holder = `SELECT coords AS GEOM, m.prod_id, m.intensity,\
-						m.maptime, m.block_num,seq \
+						m.maptime, m.block_num \
 						FROM nexrad m INNER JOIN (SELECT MAX(maptime) AS mob FROM nexrad \
 						WHERE prod_id = ${nexrad_prodid}) g \
 						ON m.maptime = g.mob AND m.prod_id = ${nexrad_prodid}\ 
@@ -702,7 +702,7 @@ var nexrad = L.realtime({
 	}, {interval: 55000,
 
 	getFeatureId: function(featureData) {
-		return featureData.properties.seq;
+		return featureData.properties.block_num + featureData.properties.geom;
 	},
 
 	style: function(feature) {
@@ -759,7 +759,7 @@ var cwa = L.realtime({
 			opacity: 1.0, fillOpacity: 0.2};
 	},
 	getFeatureId: function(featureData) {
-		return featureData.properties.rep_num + featureData.properties.alt;
+		return featureData.properties.seq + featureData.properties.alt;
 	},
 	onEachFeature: function(feature, layer) {
 		layer.bindTooltip('CWA: Alt ' + separator(feature.properties.alt));
