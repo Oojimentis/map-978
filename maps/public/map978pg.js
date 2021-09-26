@@ -915,7 +915,14 @@ var cir = L.realtime({
 	return featureData.properties.rep_num + featureData.properties.rec_count + featureData.properties.start_date;
 	},
 	pointToLayer: function(feature, latlng) {
-		marker = L.circleMarker(latlng, {color: 'red', fillcolor: 'yellow'});
+//		marker = L.circleMarker(latlng, {color: 'red', fillcolor: 'yellow'});
+var circleOptions = {
+   color: 'red',
+   fillColor: 'yellow',
+   fillOpacity: 0.2
+}
+var radius = feature.properties.r_lat * 1852;
+		marker = L.circle(latlng, radius,circleOptions);
 		marker.bindTooltip('NOTAM-TFR<br>' + feature.properties.rep_num + '  '+ feature.properties.rec_count);
 		marker.on('click', function(e) {
 			$("#m1").html("Altitude");
