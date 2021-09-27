@@ -264,7 +264,7 @@ function getNexrad() {
 	}
 
 	var nexrad_sql_holder = `SELECT coords AS GEOM, m.prod_id, m.intensity,\
-						m.maptime, m.block_num \
+						m.maptime, m.block_num, seq \
 						FROM nexrad m INNER JOIN (SELECT MAX(maptime) AS mob FROM nexrad \
 						WHERE prod_id = ${nexrad_prodid}) g \
 						ON m.maptime = g.mob AND m.prod_id = ${nexrad_prodid}\ 
@@ -702,7 +702,7 @@ var nexrad = L.realtime({
 	}, {interval: 55000,
 
 	getFeatureId: function(featureData) {
-		return featureData.properties.block_num + featureData.properties.geom;
+		return featureData.properties.seq;
 	},
 
 	style: function(feature) {
@@ -712,12 +712,12 @@ var nexrad = L.realtime({
 		if (feature.properties.prod_id == 84 || feature.properties.prod_id == 90
 				|| feature.properties.prod_id == 91 ) {
 			nexrad_color = getColorInt(feature.properties.intensity, feature.properties.prod_id);
-			return {color: nexrad_color, weight: 4, fillColor: nexrad_color,
-				opacity: 0.5, fillOpacity: 0.5}
+
+			return {color: nexrad_color, weight: 4, fillColor: nexrad_color, opacity: 0.5, fillOpacity: 0.5}			
 		}
 	},
 	pointToLayer: function(feature, latlng) {
-		if (feature.properties.prod_id != 84 ) {
+//		if (feature.properties.prod_id != 84 ) {
 			var currentPoint = map.latLngToContainerPoint(latlng);
 			var width = 5;		//5
 			var height = 5;		//5
@@ -737,7 +737,7 @@ var nexrad = L.realtime({
 			nexrad_layer_group.addLayer(radar_point);
 			map.addLayer(nexrad_layer_group);
 			nexrad.stop();
-		};
+//		};
 	}
 }).addTo(map)
 
