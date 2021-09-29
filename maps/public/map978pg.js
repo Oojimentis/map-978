@@ -1896,7 +1896,7 @@ document.getElementById("prodid").onchange = function() {
 	map.removeControl(icelegend);
 	map.removeControl(lightlegend);
 	map.removeControl(cloudlegend);
-
+	nexrad_layer_group.clearLayers();
 	switch(nexrad_sel_prodid) {
 	case 0:
 		document.getElementById("altrad").disabled = true;
