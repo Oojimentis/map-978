@@ -52,10 +52,10 @@ function popup(mylink, windowname) {
 
 function sua_overlap(_sua_object, i) {
 	$('#f1').html('SUA - ' + this.sua_object[i].airsp_name);
-	$('#f2').html(this.sua_object[i].sua_airsp_desc + ' <br>'
+	$('#f2').html(this.sua_object[i].airsp_type_desc + ' <br>'
 		+ this.sua_object[i].sched_status_desc);
-	$('#f3').html(this.sua_object[i].start_time + ' <br>'
-		+ this.sua_object[i].end_time);
+	$('#f3').html(this.sua_object[i].start_date + ' <br>'
+		+ this.sua_object[i].stop_date);
 	$('#f4').html(this.sua_object[i].low_alt + ' <br>'
 		+ this.sua_object[i].high_alt);
 	$('#f5').html(this.sua_object[i].sep_rule + '  '
