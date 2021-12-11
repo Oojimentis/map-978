@@ -11,6 +11,7 @@ var cloudlegend;
 var nexlegend;
 var sua_object = [];
 var airmet_object = [];
+var cwa_object = [];
 var sigmet_object = [];
 var tfr_object = [];
 var myCustomColour
@@ -77,6 +78,24 @@ function airmet_overlap(_airmet_object, i) {
 			$('#f4').html(this.airmet_object[i].feature.properties.text_data);
 			$('#f5').html(this.airmet_object[i].feature.properties.start_date);
 			$('#f6').html(this.airmet_object[i].feature.properties.stop_date);
+		}
+	});
+};
+
+function cwa_overlap(_cwa_object, i) {
+	map.removeLayer(cwa);
+	map.addLayer(cwa);
+	map.eachLayer(function(layer) {
+		if (layer._leaflet_id == this.cwa_object[i]._leaflet_id) {
+
+			layer.setStyle({fillColor: 'yellow', fillOpacity: 0.5});
+
+			$('#f1').html('CWA');
+			$('#f2').html(separator(this.cwa_object[i].feature.properties.alt + 'ft'));
+			$('#f3').html(this.cwa_object[i].feature.properties.rep_num);
+			$('#f4').html(this.cwa_object[i].feature.properties.text_data);
+			$('#f5').html(this.cwa_object[i].feature.properties.start_date);
+			$('#f6').html(this.cwa_object[i].feature.properties.stop_date);
 		}
 	});
 };
@@ -548,7 +567,6 @@ var	airmet = L.realtime({
 		return featureData.properties.rep_num + featureData.properties.alt;
 	},
 	onEachFeature: function(feature, layer) {
-//		layer.bindTooltip('AIRMET: Alt ' + feature.properties.alt);
 		layer.on('mousedown', function(e) {
 			layer.setStyle({fillColor: 'yellow', fillOpacity: 0.5});
 			$("#m1").html("Report");
@@ -630,7 +648,6 @@ var sigmet = L.realtime({
 		return featureData.properties.rep_num;
 	},
 	onEachFeature: function(feature, layer) {
-//		layer.bindTooltip('SIGMET: Alt ' + feature.properties.alt);
 		layer.on('mousedown', function(e) {
 			layer.setStyle({fillColor: 'yellow', fillOpacity: 0.5});
 			$("#m1").html("Report");
@@ -759,12 +776,10 @@ var cwa = L.realtime({
 			opacity: 1.0, fillOpacity: 0.2};
 	},
 	getFeatureId: function(featureData) {
-//		return featureData.properties.seq + featureData.properties.alt;
-		return featureData.properties.rep_num;
+		return featureData.properties.rep_num + featureData.properties.alt;
 	},
 	onEachFeature: function(feature, layer) {
-		layer.bindTooltip('CWA: Alt ' + separator(feature.properties.alt));
-		layer.on('click', function(e) {
+		layer.on('mousedown', function(e) {
 			layer.setStyle({fillColor: 'yellow', fillOpacity: 0.5});
 			$("#m1").html("Report");
 			$("#m2").html("Altitude");
@@ -779,9 +794,27 @@ var cwa = L.realtime({
 			$('#f5').html(e.target.feature.properties.start_date);
 			$('#f6').html(e.target.feature.properties.stop_date);
 
+			var html_cwa = '';
+			var pixelPosition = e.layerPoint;
+			var latLng = map.layerPointToLatLng(pixelPosition);
+			var pip_cwa = leafletPip.pointInLayer(latLng, map, false);
+			if (pip_cwa.length) {
+				for (var i = 0; i < pip_cwa.length; i++) {
+					cwa_object[i] = pip_cwa[i];	//.feature.properties;
+					html_cwa += "<a onclick= 'cwa_overlap(\"" 
+						+ cwa_object[i] + "\",\"" + i + "\");'>" + 
+						"CWA - Alt: " +
+						separator(pip_cwa[i].feature.properties.alt) + " : " + " Rep num: " +
+						pip_cwa[i].feature.properties.rep_num + "</a><br>" ;
+				}
+				if (html_cwa) {
+					layer.bindPopup(html_cwa, popupOptions);
+				}
+			}
 			cwa.stop();
 		});
-		layer.on('mouseout', function(e) {
+//		layer.on('mouseout', function(e) {
+		layer.on('mousedown', function(e) {			
 			cwa.start();
 		})
 	},
@@ -829,7 +862,6 @@ var sua = L.realtime({
 		return featureData.properties.airsp_name;
 	},
 	onEachFeature: function(feature, layer) {
-//		layer.bindTooltip('SUA: ' + feature.properties.airsp_name);
 		layer.on('mousedown', function(e) {
 //			map.closePopup();
 			layer.setStyle({color: 'yellow', fillColor: 'orange', fillOpacity: 0.5});
@@ -963,10 +995,6 @@ var radius = feature.properties.r_lat * 1852;
 }).addTo(map);
 
 // ** Segmented graphical NOTAMS
-//var url_seg_notam = url.concat("SELECT coords AS GEOM, alt, g.rep_num,\
-//			start_date, stop_date, text_data, overlay_rec_id \
-//			FROM graphics g LEFT JOIN sigairmet s ON s.rep_num = g.rep_num \
-//			WHERE g.segmented = 1 AND g.prod_id = 8 &m=NOTAM segmented");
 
 var url_seg_notam = url.concat("SELECT coords AS GEOM, alt, g.rep_num,\
 			start_date, stop_date, text_data, overlay_rec_id \
@@ -989,8 +1017,6 @@ var seg = L.realtime({
 		return featureData.properties.rep_num;
 	},
 	onEachFeature: function(feature, layer) {
-//		layer.bindTooltip('NOTAM-TFR<br>Alt ' + feature.properties.alt);
-//		layer.on('click', function(e){
 		layer.on('mousedown', function(e) {
 			layer.setStyle({fillColor: 'yellow', fillOpacity: 0.5});
 			$("#m1").html("Report");
@@ -1597,13 +1623,6 @@ if (!winds_ckbox.checked) {
 }
 
 // ** PIREP
-//var url_pirep = url.concat("SELECT coords AS GEOM, p.stn_call, stn_loc, state,\
-//			rep_type, fl_lev, ac_type, turbulence, remarks, location, cloud, weather,\
-//			temperature, windsp, icing, rep_time \
-//			FROM pirep p INNER JOIN (SELECT stn_call, MAX(rep_time) AS mx FROM pirep \
-//			GROUP BY stn_call) g ON p.stn_call = g.stn_call AND p.rep_time = g.mx \
-//			INNER JOIN stations s ON p.stn_call = s.stn_call \
-//			&m=PIREP");
 
 var url_pirep = url.concat("SELECT coords AS GEOM, p.stn_call, stn_loc, state,\
 			rep_type, fl_lev, ac_type, turbulence, remarks, location, cloud, weather,\
