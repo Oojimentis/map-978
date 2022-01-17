@@ -172,7 +172,7 @@ $(document).ready(function() {
 				$.each(data, function(index, features) {
 					row += "<tr><td>" 
 						+ features.rep_time + "</td><td>"
-						+ features.rep_type + "<br>" + features.location+ "</td><<td>"
+						+ features.rep_type + "<br>" + features.location+ "</td><td>"
 						+ features.fl_lev + "<br>" + features.ac_type + "</td><td>"
 						+ features.turbulence + "<br>" + features.icing + "</td><td>"
 						+ features.cloud + "<br>" + features.temperature + "</td><td>"

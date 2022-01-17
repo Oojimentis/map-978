@@ -11,8 +11,12 @@ var cloudlegend;
 var nexlegend;
 var sua_object = [];
 var airmet_object = [];
+var cwa_object = [];
 var sigmet_object = [];
+var tfr_object = [];
 var myCustomColour
+var radar_point;
+var nexrad_color;
 
 var popupOptions = {
 	'className' : 'custompopup',
@@ -49,10 +53,10 @@ function popup(mylink, windowname) {
 
 function sua_overlap(_sua_object, i) {
 	$('#f1').html('SUA - ' + this.sua_object[i].airsp_name);
-	$('#f2').html(this.sua_object[i].sua_airsp_desc + ' <br>'
+	$('#f2').html(this.sua_object[i].airsp_type_desc + ' <br>'
 		+ this.sua_object[i].sched_status_desc);
-	$('#f3').html(this.sua_object[i].start_time + ' <br>'
-		+ this.sua_object[i].end_time);
+	$('#f3').html(this.sua_object[i].start_date + ' <br>'
+		+ this.sua_object[i].stop_date);
 	$('#f4').html(this.sua_object[i].low_alt + ' <br>'
 		+ this.sua_object[i].high_alt);
 	$('#f5').html(this.sua_object[i].sep_rule + '  '
@@ -78,6 +82,24 @@ function airmet_overlap(_airmet_object, i) {
 	});
 };
 
+function cwa_overlap(_cwa_object, i) {
+	map.removeLayer(cwa);
+	map.addLayer(cwa);
+	map.eachLayer(function(layer) {
+		if (layer._leaflet_id == this.cwa_object[i]._leaflet_id) {
+
+			layer.setStyle({fillColor: 'yellow', fillOpacity: 0.5});
+
+			$('#f1').html('CWA');
+			$('#f2').html(separator(this.cwa_object[i].feature.properties.alt + 'ft'));
+			$('#f3').html(this.cwa_object[i].feature.properties.rep_num);
+			$('#f4').html(this.cwa_object[i].feature.properties.text_data);
+			$('#f5').html(this.cwa_object[i].feature.properties.start_date);
+			$('#f6').html(this.cwa_object[i].feature.properties.stop_date);
+		}
+	});
+};
+
 function sigmet_overlap(_sigmet_object, i) {
 	map.removeLayer(sigmet);
 	map.addLayer(sigmet);
@@ -92,6 +114,23 @@ function sigmet_overlap(_sigmet_object, i) {
 			$('#f4').html(this.sigmet_object[i].feature.properties.text_data);
 			$('#f5').html(this.sigmet_object[i].feature.properties.start_date);
 			$('#f6').html(this.sigmet_object[i].feature.properties.stop_date);
+		}
+	});
+};
+
+function tfr_overlap(_tfr_object, i) {
+	map.removeLayer(seg);
+	map.addLayer(seg);
+	map.eachLayer(function(layer) {
+		if (layer._leaflet_id == this.tfr_object[i]._leaflet_id) {
+
+			layer.setStyle({fillColor: 'yellow', fillOpacity: 0.5});
+			$('#f1').html('Graphical NOTAM');
+			$('#f2').html(separator(this.tfr_object[i].feature.properties.alt) + 'ft');
+			$('#f3').html(this.tfr_object[i].feature.properties.rep_num);
+			$('#f4').html(this.tfr_object[i].feature.properties.text_data);
+			$('#f5').html(this.tfr_object[i].feature.properties.start_date);
+			$('#f6').html(this.tfr_object[i].feature.properties.stop_date);
 		}
 	});
 };
@@ -244,7 +283,7 @@ function getNexrad() {
 	}
 
 	var nexrad_sql_holder = `SELECT coords AS GEOM, m.prod_id, m.intensity,\
-						m.maptime, m.block_num,seq \
+						m.maptime, m.block_num, seq \
 						FROM nexrad m INNER JOIN (SELECT MAX(maptime) AS mob FROM nexrad \
 						WHERE prod_id = ${nexrad_prodid}) g \
 						ON m.maptime = g.mob AND m.prod_id = ${nexrad_prodid}\ 
@@ -254,55 +293,186 @@ function getNexrad() {
 	return nexrad_sql_holder;
 }
 
-// ** NEXRAD intensity colours.
-function getColorInt(alt_color) {
-	switch (alt_color) {
-	case 1:
-		nexrad_color = '#8C8C74';
-		break;
-	case 2:
-		nexrad_color = '#B4C8FF';
-		break;
-	case 3:
-		nexrad_color = '#5F87FF';
-		break;
-	case 4:
-		nexrad_color = '#1446E6';
-		break;
-	case 5:
-		nexrad_color = '#6EF54B';
-		break;
-	case 6:
-		nexrad_color = '#00C300';
-		break;
-	case 7:
-		nexrad_color = '#007300';
-		break;
-	case 8:
-		nexrad_color = '#FFFF00';
-		break;	
-	case 9:
-		nexrad_color = '#FFB430';
-		break;
-	case 10:
-		nexrad_color = '#FA7D00';
-		break;	
-	case 11:
-		nexrad_color = '#E62D00';
-		break;
-	case 12:
-		nexrad_color = '#AF0000';
-		break;	
-	case 13:
-		nexrad_color = '#690000';
-		break;
-	case 14:
-		nexrad_color = '#FA00C8';	
-		break;
-	case 15:
-		nexrad_color = '#9B00FA';	
-		break;
+function getColorInt(alt_color,prod_id) {
+
+	switch (prod_id) {
+	case 63: case 64:
+		switch (alt_color) {
+		case 0:
+			nexrad_color = '#00ff35';
+			break;	
+		case 1:
+			nexrad_color = '#00ff35';
+			break;
+		case 2:
+			nexrad_color = '#0ba31e';
+			break;
+		case 3:
+			nexrad_color = '#fffe3a';
+			break;
+		case 4:
+			nexrad_color = '#ff0011';
+			break;
+		case 5:
+			nexrad_color = '#990017';
+			break;
+		case 6:
+			nexrad_color = '#ff00fb';
+			break;
+		case 7:
+			nexrad_color = '#9a0096';
+			break;
 		}
+		break;
+	case 70: case 71:
+		switch (alt_color) {
+		case 1:
+			nexrad_color = '#76d3ff';
+			break;
+		case 2:
+			nexrad_color = '#00ff00';
+			break;
+		case 3:
+			nexrad_color = '#ffff00';
+			break;
+		case 4:
+			nexrad_color = '#ff00ff';
+			break;
+		case 5:
+			nexrad_color = '#ff0000';
+			break;
+		case 6:
+			nexrad_color = '#000000';
+			break;
+		case 7:
+			nexrad_color = '#b6b6b6';
+			break;
+		}
+		break;
+	case 103:
+		switch (alt_color) {
+		case 1:
+			nexrad_color = '#00b4f1';
+			break;
+		case 2:
+			nexrad_color = '#c1d9ef';
+			break;
+		case 3:
+			nexrad_color = '#5a883b';
+			break;
+		case 4:
+			nexrad_color = '#c9e2b8';
+			break;
+		case 5:
+			nexrad_color = '#ffff00';
+			break;
+		case 6:
+			nexrad_color = '#c95f14';
+			break;
+		case 7:
+			nexrad_color = '#b6b6b6';
+			break;
+		}
+		break;
+	case 84:
+		switch (alt_color) {
+		case 1:
+			nexrad_color = '#0000ff';
+			break;
+		case 2:
+			nexrad_color = '#8686ff';
+			break;
+		case 3:
+			nexrad_color = '#76d3ff';
+			break;
+		case 4:
+			nexrad_color = '#008600';
+			break;
+		case 5:
+			nexrad_color = '#00ff00';
+			break;
+		case 6:
+			nexrad_color = '#c4ffc4';
+			break;
+		case 7:
+			nexrad_color = '#ffff00';
+			break;
+		case 8:
+			nexrad_color = '#f18635';
+			break;
+		case 9:
+			nexrad_color = '#864613';
+			break;
+		case 10:
+			nexrad_color = '#ff0000';
+			break;
+		case 11:
+			nexrad_color = '#ffcdcd';
+			break;
+		case 12:
+			nexrad_color = '#ff00ff';
+			break;
+		case 13:
+			nexrad_color = '#a500a5';
+			break;
+		case 14:
+			nexrad_color = '#ff0000';
+			break;
+		case 15:
+			nexrad_color = '#b6b6b6';
+			break;
+		}
+		break;
+	case 90: case 91:
+		switch (alt_color) {
+		case 1:
+			nexrad_color = '#0000ff';
+			break;
+		case 2:
+			nexrad_color = '#8686ff';
+			break;
+		case 3:
+			nexrad_color = '#76d3ff';
+			break;
+		case 4:
+			nexrad_color = '#008600';
+			break;
+		case 5:
+			nexrad_color = '#00ff00';
+			break;
+		case 6:
+			nexrad_color = '#c4ffc4';
+			break;
+		case 7:
+			nexrad_color = '#ffff00';
+			break;
+		case 8:
+			nexrad_color = '#f18635';
+			break;
+		case 9:
+			nexrad_color = '#864613';
+			break;
+		case 10:
+			nexrad_color = '#ff0000';
+			break;
+		case 11:
+			nexrad_color = '#ffcdcd';
+			break;
+		case 12:
+			nexrad_color = '#ff00ff';
+			break;
+		case 13:
+			nexrad_color = '#a500a5';
+			break;
+		case 14:
+			nexrad_color = '#000000';
+			break;
+		case 15:
+			nexrad_color = '#b6b6b6';
+			break;
+		}
+		break;
+	}
 return nexrad_color;
 }
 
@@ -323,7 +493,7 @@ var gairmet = L.realtime({
 			opacity: 1.0, fillOpacity: 0.2};
 	},
 	getFeatureId: function(featureData) {
-		return featureData.properties.rep_num;
+		return featureData.properties.rep_num + featureData.properties.alt;
 	},
 	onEachFeature: function(feature, layer) {
 		layer.bindTooltip('G-AIRMET: Alt ' + separator(feature.properties.alt) + '<br>'
@@ -394,10 +564,9 @@ var	airmet = L.realtime({
 			opacity: 1.0, fillOpacity: 0.2};
 	},
 	getFeatureId: function(featureData) {
-		return featureData.properties.rep_num;
+		return featureData.properties.rep_num + featureData.properties.alt;
 	},
 	onEachFeature: function(feature, layer) {
-//		layer.bindTooltip('AIRMET: Alt ' + feature.properties.alt);
 		layer.on('mousedown', function(e) {
 			layer.setStyle({fillColor: 'yellow', fillOpacity: 0.5});
 			$("#m1").html("Report");
@@ -479,7 +648,6 @@ var sigmet = L.realtime({
 		return featureData.properties.rep_num;
 	},
 	onEachFeature: function(feature, layer) {
-//		layer.bindTooltip('SIGMET: Alt ' + feature.properties.alt);
 		layer.on('mousedown', function(e) {
 			layer.setStyle({fillColor: 'yellow', fillOpacity: 0.5});
 			$("#m1").html("Report");
@@ -560,13 +728,13 @@ var nexrad = L.realtime({
 
 		if (feature.properties.prod_id == 84 || feature.properties.prod_id == 90
 				|| feature.properties.prod_id == 91 ) {
-			nexrad_color = getColorInt(feature.properties.intensity);
-			return {color: nexrad_color, weight: 4, fillColor: nexrad_color,
-				opacity: 0.5, fillOpacity: 0.5}
+			nexrad_color = getColorInt(feature.properties.intensity, feature.properties.prod_id);
+
+			return {color: nexrad_color, weight: 4, fillColor: nexrad_color, opacity: 0.5, fillOpacity: 0.5}			
 		}
 	},
 	pointToLayer: function(feature, latlng) {
-		if (feature.properties.prod_id != 84 ) {
+//		if (feature.properties.prod_id != 84 ) {
 			var currentPoint = map.latLngToContainerPoint(latlng);
 			var width = 5;		//5
 			var height = 5;		//5
@@ -579,14 +747,14 @@ var nexrad = L.realtime({
 			var bounds = L.latLngBounds(map.containerPointToLatLng(southWest),
 				map.containerPointToLatLng(northEast));
 
-			nexrad_color = getColorInt(feature.properties.intensity);
+			nexrad_color = getColorInt(feature.properties.intensity, feature.properties.prod_id);
 			var rectOptions = {fillColor: nexrad_color, fillOpacity: 0.2, weight: 0}
 			radar_point = L.rectangle(bounds, rectOptions); 
 
 			nexrad_layer_group.addLayer(radar_point);
 			map.addLayer(nexrad_layer_group);
 			nexrad.stop();
-		};
+//		};
 	}
 }).addTo(map)
 
@@ -608,11 +776,10 @@ var cwa = L.realtime({
 			opacity: 1.0, fillOpacity: 0.2};
 	},
 	getFeatureId: function(featureData) {
-		return featureData.properties.rep_num;
+		return featureData.properties.rep_num + featureData.properties.alt;
 	},
 	onEachFeature: function(feature, layer) {
-		layer.bindTooltip('CWA: Alt ' + separator(feature.properties.alt));
-		layer.on('click', function(e) {
+		layer.on('mousedown', function(e) {
 			layer.setStyle({fillColor: 'yellow', fillOpacity: 0.5});
 			$("#m1").html("Report");
 			$("#m2").html("Altitude");
@@ -627,9 +794,27 @@ var cwa = L.realtime({
 			$('#f5').html(e.target.feature.properties.start_date);
 			$('#f6').html(e.target.feature.properties.stop_date);
 
+			var html_cwa = '';
+			var pixelPosition = e.layerPoint;
+			var latLng = map.layerPointToLatLng(pixelPosition);
+			var pip_cwa = leafletPip.pointInLayer(latLng, map, false);
+			if (pip_cwa.length) {
+				for (var i = 0; i < pip_cwa.length; i++) {
+					cwa_object[i] = pip_cwa[i];	//.feature.properties;
+					html_cwa += "<a onclick= 'cwa_overlap(\"" 
+						+ cwa_object[i] + "\",\"" + i + "\");'>" + 
+						"CWA - Alt: " +
+						separator(pip_cwa[i].feature.properties.alt) + " : " + " Rep num: " +
+						pip_cwa[i].feature.properties.rep_num + "</a><br>" ;
+				}
+				if (html_cwa) {
+					layer.bindPopup(html_cwa, popupOptions);
+				}
+			}
 			cwa.stop();
 		});
-		layer.on('mouseout', function(e) {
+//		layer.on('mouseout', function(e) {
+		layer.on('mousedown', function(e) {			
 			cwa.start();
 		})
 	},
@@ -677,7 +862,6 @@ var sua = L.realtime({
 		return featureData.properties.airsp_name;
 	},
 	onEachFeature: function(feature, layer) {
-//		layer.bindTooltip('SUA: ' + feature.properties.airsp_name);
 		layer.on('mousedown', function(e) {
 //			map.closePopup();
 			layer.setStyle({color: 'yellow', fillColor: 'orange', fillOpacity: 0.5});
@@ -738,10 +922,11 @@ if (!sua_ckbox.checked) {
 }
 
 // ** NOTAM TFR - Circle
-var url_circle = url.concat("SELECT bot AS GEOM, c.start_date, c.stop_date,\
+var url_circle = url.concat("SELECT bot AS GEOM, c.start_date, c.stop_date, c.rec_count, \
 			c.rep_num, c.r_lng, c.r_lat, c.alt_top, c.alt_bot, c.alpha, s.text_data \
 			FROM circles c \
-			LEFT JOIN sigairmet s ON s.rep_num = c.rep_num &m=NOTAM circle");
+			LEFT JOIN sigairmet s ON s.rep_num = c.rep_num AND c.prod_id = s.prod_id \
+			&m=NOTAM circle");
 
 var cmarkers = L.markerClusterGroup({
 	iconCreateFunction: function(cluster) {
@@ -760,11 +945,18 @@ var cir = L.realtime({
 	crossOrigin: true, type: 'json'
 	}, {interval: 70000,
 	getFeatureId: function(featureData) {
-	return featureData.properties.rep_num;
+	return featureData.properties.rep_num + featureData.properties.rec_count + featureData.properties.start_date;
 	},
 	pointToLayer: function(feature, latlng) {
-		marker = L.circleMarker(latlng, {color: 'red', fillcolor: 'yellow'});
-		marker.bindTooltip('NOTAM-TFR<br>' + feature.properties.rep_num);
+//		marker = L.circleMarker(latlng, {color: 'red', fillcolor: 'yellow'});
+var circleOptions = {
+   color: 'red',
+   fillColor: 'yellow',
+   fillOpacity: 0.2
+}
+var radius = feature.properties.r_lat * 1852;
+		marker = L.circle(latlng, radius,circleOptions);
+		marker.bindTooltip('NOTAM-TFR<br>' + feature.properties.rep_num + '  '+ feature.properties.rec_count);
 		marker.on('click', function(e) {
 			$("#m1").html("Altitude");
 			$("#m2").html("Radius");
@@ -777,7 +969,8 @@ var cir = L.realtime({
 			$('#f2').html('Lat: ' + e.target.feature.properties.r_lat + ' Long: '
 				+ e.target.feature.properties.r_lat + ' Alpha: '
 				+ e.target.feature.properties.alpha);
-			$('#f3').html(e.target.feature.properties.rep_num);
+			$('#f3').html(e.target.feature.properties.rep_num
+				+ '<br>' + e.target.feature.properties.rec_count);
 			$('#f4').html(e.target.feature.properties.start_date);
 			$('#f5').html(e.target.feature.properties.stop_date);
 			$('#f6').html(e.target.feature.properties.text_data);
@@ -802,11 +995,14 @@ var cir = L.realtime({
 }).addTo(map);
 
 // ** Segmented graphical NOTAMS
-var url_seg_notam = url.concat("SELECT coords AS GEOM, alt, g.rep_num,\
-			start_date, stop_date, text_data \
-			FROM graphics g LEFT JOIN sigairmet s ON s.rep_num = g.rep_num \
-			WHERE g.segmented = 1 AND g.prod_id = 8 &m=NOTAM segmented");
 
+var url_seg_notam = url.concat("SELECT coords AS GEOM, alt, g.rep_num,\
+			start_date, stop_date, text_data, overlay_rec_id \
+			FROM graphics g LEFT JOIN sigairmet s ON s.rep_num = g.rep_num \
+			WHERE g.overlay_rec_id = (select max(overlay_rec_id) from graphics h \
+				where h.rep_num = g.rep_num) and \
+						(g.segmented = 1 AND g.prod_id = 8 ) or (g.prod_id = 8 and g.overlay_vert_cnt > 1) &m=NOTAM segmented");
+  
 var notam_ckbox = document.getElementById("notam")
 
 var seg = L.realtime({
@@ -821,8 +1017,7 @@ var seg = L.realtime({
 		return featureData.properties.rep_num;
 	},
 	onEachFeature: function(feature, layer) {
-		layer.bindTooltip('NOTAM-TFR<br>Alt ' + feature.properties.alt);
-		layer.on('click', function(e){
+		layer.on('mousedown', function(e) {
 			layer.setStyle({fillColor: 'yellow', fillOpacity: 0.5});
 			$("#m1").html("Report");
 			$("#m2").html("Altitude");
@@ -837,28 +1032,40 @@ var seg = L.realtime({
 			$('#f5').html(e.target.feature.properties.start_date);
 			$('#f6').html(e.target.feature.properties.stop_date);
 
+			var html_tfr = '';
+			var pixelPosition = e.layerPoint;
+			var latLng = map.layerPointToLatLng(pixelPosition);
+			var pip_tfr = leafletPip.pointInLayer(latLng, map, false);
+			if (pip_tfr.length) {
+				for (var i = 0; i < pip_tfr.length; i++) {
+					tfr_object[i] = pip_tfr[i];	//.feature.properties;
+					html_tfr += "<a onclick= 'tfr_overlap(\"" 
+						+ tfr_object[i] + "\",\"" + i + "\");'>" + 
+						"TFR - Alt: " +
+						separator(pip_tfr[i].feature.properties.alt) + " : " + " Rep num: " +
+						pip_tfr[i].feature.properties.rep_num + "</a><br>" ;
+				}
+				if (html_tfr) {
+					layer.bindPopup(html_tfr, popupOptions);
+				}
+			}
 			seg.stop();
 		});
-		
-		if (!notam_ckbox.checked) {
-			map.removeLayer(seg),
-			seg.stop()
-		}
-		else {
-			map.addLayer(seg);
-			seg.start();
-		}
-		
-		layer.on('mouseout', function(e) {
+		layer.on('mousedown', function(e) {
 			seg.start();
 		})
-	},
+	}
 }).addTo(map);
+
+if (!notam_ckbox.checked) {
+	map.removeLayer(seg),
+	seg.stop()
+}
 
 // ** METAR 
 var url_metar = url.concat("SELECT s.coords AS GEOM, s.stn_call, s.stn_loc,\
 			state, ob_date, temperature, windsp, winddir, altimeter, visby, dewp,\
-			hrly_precip, slp, windvar, windgust \
+			hrly_precip, slp, windvar, windgust, mtype \
 			FROM metar m INNER JOIN (SELECT stn_call, MAX(ob_date) AS mob FROM metar \
 			GROUP BY stn_call) g ON m.stn_call = g.stn_call AND m.ob_date = g.mob \
 			INNER JOIN stations s ON m.stn_call = s.stn_call\
@@ -877,27 +1084,37 @@ metar = L.realtime({
 	},
 	pointToLayer: function(feature, latlng) {
 		myCustomColour = getTempColor(feature.properties.temperature)
+		var markerHtmlStyles;
 
-		const markerHtmlStyles = `background-color: ${myCustomColour};
+		if (feature.properties.mtype == "SPECI") {
+			markerHtmlStyles = `background-color: ${myCustomColour};
+			color: #ffffff;
+			width:10;
+			height:28;
+			border-radius: 3rem 3rem 0;
+			padding: 0;
+			font-size: 12px;`
+		}
+		else {
+			markerHtmlStyles = `background-color: ${myCustomColour};
 			width:10;
 			height:28;
 			border-radius: 3rem 3rem 0;
 			padding: 0;
 			font-size: 10px;`
-
+		}
 		marker = L.marker(latlng, {icon: L.divIcon({
 			iconSize: "auto",
 			html: `<span style="${markerHtmlStyles}"/>`+ feature.properties.temperature })});
 		
-
-		marker.bindTooltip('METAR' + '<br>' + feature.properties.stn_call
+		marker.bindTooltip(feature.properties.mtype + '<br>' + feature.properties.stn_call
 			+ '<br>' + feature.properties.temperature + '&#x2109');
 		marker.on('click', function(e) {
 			var hold1;
 			var hold2;
 			var hold3;
 
-			$("#m1").html("Station" );
+			$('#m1').html(e.target.feature.properties.mtype);
 			$("#m2").html("Location");
 			$("#m3").html("Temp:<br>Precip:");
 			$("#m4").html("Winds");
@@ -1239,8 +1456,8 @@ var url_winds = url.concat("SELECT coords AS GEOM, w.stn_call, stn_loc, state, i
 			alt1, dir1, spd1, temp1, alt2, dir2, spd2, temp2, alt3, dir3, spd3, temp3,\
 			alt4, dir4, spd4, temp4, alt5, dir5, spd5, temp5, alt6, dir6, spd6, temp6,\
 			alt7, dir7, spd7, temp7, alt8, dir8, spd8, temp8, alt9, dir9, spd9, temp9 \
-			FROM winds w INNER JOIN (SELECT stn_call, MAX(proc_time) AS mx FROM winds \
-			GROUP BY stn_call) g ON w.stn_call = g.stn_call AND w.proc_time = g.mx \
+			FROM winds w INNER JOIN (SELECT stn_call, MAX(issue_date) AS mx FROM winds \
+			GROUP BY stn_call) g ON w.stn_call = g.stn_call AND w.issue_date = g.mx \
 			INNER JOIN stations s ON w.stn_call = s.stn_call \
 			&m=Winds");
 
@@ -1267,37 +1484,127 @@ winds = L.realtime({
 				+ separator(e.target.feature.properties.alt6) + "ft");
 			$("#m5").html(separator(e.target.feature.properties.alt7) + "ft" + '<br>'
 				+ separator(e.target.feature.properties.alt8) + "ft");
-			$("#m6").html(separator(e.target.feature.properties.alt9) + "ft");
+
+			if (feature.properties.alt9 == '(null)')
+				$("#m6").html(" - ");
+			else
+				$("#m6").html(separator(e.target.feature.properties.alt9) + "ft");
+			
 			$('#f1').html(e.target.feature.properties.stn_call + " (Winds)" + '<br>'
 				+ e.target.feature.properties.stn_loc + ", "
 				+ e.target.feature.properties.state);
-			$('#f2').html(e.target.feature.properties.dir1 + "\xB0 "
-				+ e.target.feature.properties.spd1 + "kt "
-				+ e.target.feature.properties.temp1 + "\xB0C" + '<br>'
-				+ e.target.feature.properties.dir2 + "\xB0 "
-				+ e.target.feature.properties.spd2 + "kt "
-				+ e.target.feature.properties.temp2 + "\xB0C");
-			$('#f3').html(e.target.feature.properties.dir3 + "\xB0 "
-				+ e.target.feature.properties.spd3 + "kt " 
-				+ e.target.feature.properties.temp3 + "\xB0C" + '<br>'
-				+ e.target.feature.properties.dir4 + "\xB0 "
-				+ e.target.feature.properties.spd4 + "kt "
-				+ e.target.feature.properties.temp4 + "\xB0C");
-			$('#f4').html(e.target.feature.properties.dir5 + "\xB0 "
-				+ e.target.feature.properties.spd5 + "kt "
-				+ e.target.feature.properties.temp5 + "\xB0C" + '<br>'
-				+ e.target.feature.properties.dir6 + "\xB0 "
-				+ e.target.feature.properties.spd6 + "kt "
-				+ e.target.feature.properties.temp6 + "\xB0C");
-			$('#f5').html(e.target.feature.properties.dir7 + "\xB0 "
-				+ e.target.feature.properties.spd7 + "kt "
-				+ e.target.feature.properties.temp7 + "\xB0C" + '<br>'
-				+ e.target.feature.properties.dir8 + "\xB0 "
-				+ e.target.feature.properties.spd8 + "kt "
-				+ e.target.feature.properties.temp8 + "\xB0C");
-			$('#f6').html(e.target.feature.properties.dir9 + "\xB0 "
-				+ e.target.feature.properties.spd9 + "kt "
-				+ e.target.feature.properties.temp9 + "\xB0C");
+
+			if (feature.properties.dir1 == "Light and variable") {
+				var dir1 = feature.properties.dir1;
+				var spd1 = "  ";
+			}
+			else {
+				var dir1 = feature.properties.dir1 + "\xB0  ";
+				var spd1 = feature.properties.spd1.replace(/\b0+/g, '') + "kt  ";
+			}
+
+			if (feature.properties.dir2 == "Light and variable") {
+				var dir2 = feature.properties.dir2;
+				var spd2 = "  ";
+			}
+			else {
+				var dir2 = feature.properties.dir2 + "\xB0  ";
+				var spd2 = feature.properties.spd2.replace(/\b0+/g, '') + "kt  ";
+			}
+
+			if (feature.properties.temp1 == "+00") {
+				var temp1 = "0\xB0C <br>";
+			}
+			else {
+				var temp1 = feature.properties.temp1.replace(/\b0+/g, '') + "\xB0C" + '<br>'
+			}
+			if (feature.properties.temp2 == "+00") {
+				var temp2 = "0\xB0C <br>";
+			}
+			else {
+				var temp2 = feature.properties.temp2.replace(/\b0+/g, '') + "\xB0C" + '<br>'
+			}
+
+			$('#f2').html(dir1 + spd1 + temp1 + dir2 + spd2 + temp2);
+
+			if (feature.properties.temp3 == "+00") {
+				var temp3 = "0\xB0C <br>";
+			}
+			else {
+				var temp3 = feature.properties.temp3.replace(/\b0+/g, '') + "\xB0C" + '<br>'
+			}
+
+			if (feature.properties.dir3 == "Light and variable") {
+				var dir3 = feature.properties.dir3;
+				var spd3 = "  ";
+			}
+			else {
+				var dir3 = feature.properties.dir3 + "\xB0  ";
+				var spd3 = feature.properties.spd3.replace(/\b0+/g, '') + "kt  ";
+			}
+
+			if (feature.properties.dir4 == "Light and variable") {
+				var dir4 = feature.properties.dir4;
+				var spd4 = "  ";
+			}
+			else {
+				var dir4 = feature.properties.dir4 + "\xB0  ";
+				var spd4 = feature.properties.spd4.replace(/\b0+/g, '') + "kt  ";
+			}
+
+			$('#f3').html(dir3 + spd3 + temp3
+				+ dir4 + spd4
+				+ e.target.feature.properties.temp4.replace(/\b0+/g, '') + "\xB0C" + '<br>');
+
+			if (feature.properties.dir5 == "Light and variable") {
+				var dir5 = feature.properties.dir5;
+				var spd5 = "  ";
+			}
+			else {
+				var dir5 = feature.properties.dir5 + "\xB0  ";
+				var spd5 = feature.properties.spd5.replace(/\b0+/g, '') + "kt  ";
+			}
+			
+						if (feature.properties.dir6 == "Light and variable") {
+				var dir6 = feature.properties.dir6;
+				var spd6 = "  ";
+			}
+			else {
+				var dir6 = feature.properties.dir6 + "\xB0  ";
+				var spd6 = feature.properties.spd6.replace(/\b0+/g, '') + "kt  ";
+			}
+
+			$('#f4').html(dir5 + spd5
+				+ e.target.feature.properties.temp5.replace(/\b0+/g, '') + "\xB0C" + '<br>'
+				+ dir6 + spd6
+				+ e.target.feature.properties.temp6.replace(/\b0+/g, '') + "\xB0C" + '<br>');
+			$('#f5').html(e.target.feature.properties.dir7 + "\xB0  "
+				+ e.target.feature.properties.spd7.replace(/\b0+/g, '') + "kt  "
+				+ e.target.feature.properties.temp7.replace(/\b0+/g, '') + "\xB0C" + '<br>'
+				+ e.target.feature.properties.dir8 + "\xB0  "
+				+ e.target.feature.properties.spd8.replace(/\b0+/g, '') + "kt  "
+				+ e.target.feature.properties.temp8.replace(/\b0+/g, '') + "\xB0C" + '<br>');
+
+			if (feature.properties.dir9 == "-") {
+				var dir9 = " - ";
+			}
+			else {
+				var dir9 = feature.properties.dir9 + "\xB0  ";
+			}
+			if (feature.properties.spd9 == "-") {
+				var spd9 = " - ";
+			}
+			else {
+				var spd9 = 	feature.properties.spd9.replace(/\b0+/g, '') + "kt  ";
+			}
+			if (feature.properties.temp9 == "-") {
+				var temp9 = " - ";
+			}
+			else {
+				var temp9 = feature.properties.temp9.replace(/\b0+/g, '') + "\xB0C" + '<br>';
+			}
+			
+			$('#f6').html(dir9 + spd9 + temp9);
 		});
 		marker.addTo(map);
 
@@ -1316,13 +1623,6 @@ if (!winds_ckbox.checked) {
 }
 
 // ** PIREP
-//var url_pirep = url.concat("SELECT coords AS GEOM, p.stn_call, stn_loc, state,\
-//			rep_type, fl_lev, ac_type, turbulence, remarks, location, cloud, weather,\
-//			temperature, windsp, icing, rep_time \
-//			FROM pirep p INNER JOIN (SELECT stn_call, MAX(rep_time) AS mx FROM pirep \
-//			GROUP BY stn_call) g ON p.stn_call = g.stn_call AND p.rep_time = g.mx \
-//			INNER JOIN stations s ON p.stn_call = s.stn_call \
-//			&m=PIREP");
 
 var url_pirep = url.concat("SELECT coords AS GEOM, p.stn_call, stn_loc, state,\
 			rep_type, fl_lev, ac_type, turbulence, remarks, location, cloud, weather,\
@@ -1363,7 +1663,8 @@ pirep = L.realtime({
 
 		if (feature.properties.rep_type == "Urgent Report")
 			marker.bindTooltip('Urgent PIREP' + '<br>'
-				+ feature.properties.stn_call);
+				+ feature.properties.stn_call + '<br>'
+				+ feature.properties.rep_time);
 		else
 			marker.bindTooltip('PIREP' + '<br>'
 				+ feature.properties.stn_call + '<br>'
@@ -1508,7 +1809,7 @@ document.querySelector("input[name = notam]").addEventListener('change', functio
 		notam.start(),
 		cmarkers.addLayer(cmarkers),
 		map.addLayer(cir);
-		cir.start();
+		cir.start(),
 		map.addLayer(seg),
 		seg.start()
 	}
@@ -1517,7 +1818,7 @@ document.querySelector("input[name = notam]").addEventListener('change', functio
 		map.removeLayer(notam),
 		notam.stop(),
 		cmarkers.removeLayer(cmarkers),
-		map.removeLayer(cir);
+		map.removeLayer(cir),
 		cir.stop(),
 		map.removeLayer(seg),
 		seg.stop()
@@ -1615,7 +1916,7 @@ document.getElementById("prodid").onchange = function() {
 	map.removeControl(icelegend);
 	map.removeControl(lightlegend);
 	map.removeControl(cloudlegend);
-
+	nexrad_layer_group.clearLayers();
 	switch(nexrad_sel_prodid) {
 	case 0:
 		document.getElementById("altrad").disabled = true;
@@ -1652,21 +1953,21 @@ turblegend = L.control({ position: "topright" });
 turblegend.onAdd = function() {
 	var div = L.DomUtil.create("div", "legend");
 	div.innerHTML += "<h4>Turbulence</h4>";
-	div.innerHTML += '<i style="background: #8C8C74"></i><span>EDR  7-13</span><br>';
-	div.innerHTML += '<i style="background: #B4C8FF"></i><span>EDR 14-20</span><br>';
-	div.innerHTML += '<i style="background: #5F87FF"></i><span>EDR 21-27</span><br>';
-	div.innerHTML += '<i style="background: #1446E6"></i><span>EDR 28-34</span><br>';
-	div.innerHTML += '<i style="background: #6EF54B"></i><span>EDR 35-41</span><br>';
-	div.innerHTML += '<i style="background: #00C300"></i><span>EDR 42-48</span><br>';
-	div.innerHTML += '<i style="background: #007300"></i><span>EDR 49-55</span><br>';
-	div.innerHTML += '<i style="background: #FFFF00"></i><span>EDR 56-62</span><br>';
-	div.innerHTML += '<i style="background: #FFB430"></i><span>EDR 63-69</span><br>';
-	div.innerHTML += '<i style="background: #FA7D00"></i><span>EDR 70-76</span><br>';
-	div.innerHTML += '<i style="background: #E62D00"></i><span>EDR 77-83</span><br>';
-	div.innerHTML += '<i style="background: #AF0000"></i><span>EDR 84-90</span><br>';
-	div.innerHTML += '<i style="background: #690000"></i><span>EDR 91-97</span><br>';
-	div.innerHTML += '<i style="background: #FA00C8"></i><span>EDR >=98</span><br>';
-	div.innerHTML += '<i style="background: #9B00FA"></i><span>EDR No Data</span><br>';
+	div.innerHTML += '<i style="background: #0000ff"></i><span>EDR  7-13</span><br>';
+	div.innerHTML += '<i style="background: #8686ff"></i><span>EDR 14-20</span><br>';
+	div.innerHTML += '<i style="background: #76d3ff"></i><span>EDR 21-27</span><br>';
+	div.innerHTML += '<i style="background: #008600"></i><span>EDR 28-34</span><br>';
+	div.innerHTML += '<i style="background: #00ff00"></i><span>EDR 35-41</span><br>';
+	div.innerHTML += '<i style="background: #c4ffc4"></i><span>EDR 42-48</span><br>';
+	div.innerHTML += '<i style="background: #ffff00"></i><span>EDR 49-55</span><br>';
+	div.innerHTML += '<i style="background: #f18635"></i><span>EDR 56-62</span><br>';
+	div.innerHTML += '<i style="background: #864613"></i><span>EDR 63-69</span><br>';
+	div.innerHTML += '<i style="background: #ff0000"></i><span>EDR 70-76</span><br>';
+	div.innerHTML += '<i style="background: #ffcdcd"></i><span>EDR 77-83</span><br>';
+	div.innerHTML += '<i style="background: #ff00ff"></i><span>EDR 84-90</span><br>';
+	div.innerHTML += '<i style="background: #a500a5"></i><span>EDR 91-97</span><br>';
+	div.innerHTML += '<i style="background: #000000"></i><span>EDR >=98</span><br>';
+	div.innerHTML += '<i style="background: #b6b6b6"></i><span>EDR No Data</span><br>';
 	return div;
 };
 
@@ -1674,21 +1975,21 @@ cloudlegend = L.control({ position: "topright" });
 cloudlegend.onAdd = function() {
 	var div = L.DomUtil.create("div", "legend");
 	div.innerHTML += "<h4>Cloud Tops</h4>";
-	div.innerHTML += '<i style="background: #8C8C74"></i><span><= 1,500ft</span><br>';
-	div.innerHTML += '<i style="background: #B4C8FF"></i><span>1,501ft-3,000ft</span><br>';
-	div.innerHTML += '<i style="background: #5F87FF"></i><span>3,001ft-4,500ft</span><br>';
-	div.innerHTML += '<i style="background: #1446E6"></i><span>4,501ft-6,00ft</span><br>';
-	div.innerHTML += '<i style="background: #6EF54B"></i><span>6,001ft-7,500ft</span><br>';
-	div.innerHTML += '<i style="background: #00C300"></i><span>7,501ft-9,000ft</span><br>';
-	div.innerHTML += '<i style="background: #007300"></i><span>9,001ft-10,500ft</span><br>';
-	div.innerHTML += '<i style="background: #FFFF00"></i><span>10,501ft-12,000ft</span><br>';
-	div.innerHTML += '<i style="background: #FFB430"></i><span>12,001ft-13,500ft</span><br>';
-	div.innerHTML += '<i style="background: #FA7D00"></i><span>13,501ft-15,000ft</span><br>';
-	div.innerHTML += '<i style="background: #E62D00"></i><span>15,001ft-18,000ft</span><br>';
-	div.innerHTML += '<i style="background: #AF0000"></i><span>18,001ft-21,000ft</span><br>';
-	div.innerHTML += '<i style="background: #690000"></i><span>21,001ft-24,000ft</span><br>';
-	div.innerHTML += '<i style="background: #FA00C8"></i><span>>24,000ft</span><br>';
-	div.innerHTML += '<i style="background: #9B00FA"></i><span>No Data</span><br>';
+	div.innerHTML += '<i style="background: #0000ff"></i><span><= 1,500ft</span><br>';
+	div.innerHTML += '<i style="background: #8686ff"></i><span>1,501ft-3,000ft</span><br>';
+	div.innerHTML += '<i style="background: #76d3ff"></i><span>3,001ft-4,500ft</span><br>';
+	div.innerHTML += '<i style="background: #008600"></i><span>4,501ft-6,00ft</span><br>';
+	div.innerHTML += '<i style="background: #00ff00"></i><span>6,001ft-7,500ft</span><br>';
+	div.innerHTML += '<i style="background: #c4ffc4"></i><span>7,501ft-9,000ft</span><br>';
+	div.innerHTML += '<i style="background: #ffff00"></i><span>9,001ft-10,500ft</span><br>';
+	div.innerHTML += '<i style="background: #f18635"></i><span>10,501ft-12,000ft</span><br>';
+	div.innerHTML += '<i style="background: #864613"></i><span>12,001ft-13,500ft</span><br>';
+	div.innerHTML += '<i style="background: #ff0000"></i><span>13,501ft-15,000ft</span><br>';
+	div.innerHTML += '<i style="background: #ffcdcd"></i><span>15,001ft-18,000ft</span><br>';
+	div.innerHTML += '<i style="background: #ff00ff"></i><span>18,001ft-21,000ft</span><br>';
+	div.innerHTML += '<i style="background: #a500a5"></i><span>21,001ft-24,000ft</span><br>';
+	div.innerHTML += '<i style="background: #ff0000"></i><span>>24,000ft</span><br>';
+	div.innerHTML += '<i style="background: #b6b6b6"></i><span>No Data</span><br>';
 	return div;
 };
 
@@ -1696,13 +1997,13 @@ icelegend = L.control({ position: "topright" });
 icelegend.onAdd = function() {
 	var div = L.DomUtil.create("div", "legend");
 	div.innerHTML += "<h4>Icing</h4>";
-	div.innerHTML += '<i style="background: #8C8C74"></i><span>Trace</span><br>';
-	div.innerHTML += '<i style="background: #B4C8FF"></i><span>Light</span><br>';
-	div.innerHTML += '<i style="background: #5F87FF"></i><span>Moderate</span><br>';
-	div.innerHTML += '<i style="background: #1446E6"></i><span>Severe</span><br>';
-	div.innerHTML += '<i style="background: #6EF54B"></i><span>Heavy</span><br>';
-	div.innerHTML += '<i style="background: #00C300"></i><span>Reserved</span><br>';
-	div.innerHTML += '<i style="background: #007300"></i><span>No Data</span><br>';
+	div.innerHTML += '<i style="background: #76d3ff"></i><span>Trace</span><br>';
+	div.innerHTML += '<i style="background: #00ff00"></i><span>Light</span><br>';
+	div.innerHTML += '<i style="background: #ffff00"></i><span>Moderate</span><br>';
+	div.innerHTML += '<i style="background: #ff00ff"></i><span>Severe</span><br>';
+	div.innerHTML += '<i style="background: #ff00ff"></i><span>Heavy</span><br>';
+	div.innerHTML += '<i style="background: #000000"></i><span>Reserved</span><br>';
+	div.innerHTML += '<i style="background: #b6b6b6"></i><span>No Data</span><br>';
 	return div;
 };
 
@@ -1710,27 +2011,26 @@ lightlegend = L.control({ position: "topright" });
 lightlegend.onAdd = function() {
 	var div = L.DomUtil.create("div", "legend");
 	div.innerHTML += "<h4>Lightning</h4>";
-	div.innerHTML += '<i style="background: #8C8C74"></i><span>1 Strike</span><br>';
-	div.innerHTML += '<i style="background: #B4C8FF"></i><span>2 Strikes</span><br>';
-	div.innerHTML += '<i style="background: #5F87FF"></i><span>3-5 Strikes</span><br>';
-	div.innerHTML += '<i style="background: #1446E6"></i><span>6-10 Strikes</span><br>';
-	div.innerHTML += '<i style="background: #6EF54B"></i><span>11-15 Strikes</span><br>';
-	div.innerHTML += '<i style="background: #00C300"></i><span>>15 Strikes</span><br>';
-	div.innerHTML += '<i style="background: #007300"></i><span>No Data</span><br>';
+	div.innerHTML += '<i style="background: #00b4f1"></i><span>1 Strike</span><br>';
+	div.innerHTML += '<i style="background: #c1d9ef"></i><span>2 Strikes</span><br>';
+	div.innerHTML += '<i style="background: #5a883b"></i><span>3-5 Strikes</span><br>';
+	div.innerHTML += '<i style="background: #c9e2b8"></i><span>6-10 Strikes</span><br>';
+	div.innerHTML += '<i style="background: #ffff00"></i><span>11-15 Strikes</span><br>';
+	div.innerHTML += '<i style="background: #c95f14"></i><span>>15 Strikes</span><br>';
+	div.innerHTML += '<i style="background: #b6b6b6"></i><span>No Data</span><br>';
 	return div;
 };
 
 nexlegend = L.control({ position: "topright" });
 nexlegend.onAdd = function() {
 	var div = L.DomUtil.create("div", "legend");
-	div.innerHTML += "<h4>NEXRAD</h4>";
-	div.innerHTML += '<i style="background: #8C8C74"></i><span>None</span><br>';
-	div.innerHTML += '<i style="background: #B4C8FF"></i><span>Light</span><br>';
-	div.innerHTML += '<i style="background: #5F87FF"></i><span>Light to Moderate</span><br>';
-	div.innerHTML += '<i style="background: #1446E6"></i><span>Moderate to Heavy</span><br>';
-	div.innerHTML += '<i style="background: #6EF54B"></i><span>Heavy</span><br>';
-	div.innerHTML += '<i style="background: #00C300"></i><span>Very Heavy</span><br>';
-	div.innerHTML += '<i style="background: #007300"></i><span>Very Heavy+Hail</span><br>';
+	div.innerHTML += '<i style="background: #00ff35"></i><span>None</span><br>';
+	div.innerHTML += '<i style="background: #0ba31e"></i><span>Light</span><br>';
+	div.innerHTML += '<i style="background: #fffe3a"></i><span>Light to Moderate</span><br>';
+	div.innerHTML += '<i style="background: #ff0011"></i><span>Moderate to Heavy</span><br>';
+	div.innerHTML += '<i style="background: #990017"></i><span>Heavy</span><br>';
+	div.innerHTML += '<i style="background: #ff00fb"></i><span>Very Heavy</span><br>';
+	div.innerHTML += '<i style="background: #9a0096"></i><span>Very Heavy+Hail</span><br>';
 	return div;
 };
 

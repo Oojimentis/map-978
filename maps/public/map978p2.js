@@ -14,11 +14,20 @@ function separator(numb) {
 // NEXRAD Count
 $(document).ready(function() {
 	setInterval(get_nexrad_count, 30000);
-
-var nexrad_count = url.concat("SELECT n.prod_id, f.prod_id_desc, altitude, COUNT(*) AS count \
-				FROM nexrad n, fisb_products f WHERE n.prod_id = f.prod_id \
-				GROUP BY n.prod_id, f.prod_id_desc, altitude ORDER BY n.prod_id, altitude \
+	
+var nexrad_count = url.concat("SELECT n.prod_id, f.prod_id_desc, altitude, n.maptime, COUNT(*) AS count \
+				FROM nexrad n \
+				INNER JOIN (SELECT prod_id, MAX(maptime) AS mob FROM nexrad \
+				GROUP BY prod_id) g ON g.prod_id = n.prod_id AND n.maptime = g.mob \
+				inner join fisb_products f on f.prod_id =n.prod_id \
+				group by n.prod_id,prod_id_desc,altitude,n.maptime \
+				order by n.prod_id \
 				&m=NEXRAD count");
+
+//var nexrad_count = url.concat("SELECT n.prod_id, f.prod_id_desc, altitude, COUNT(*) AS count \
+//				FROM nexrad n, fisb_products f WHERE n.prod_id = f.prod_id \
+//				GROUP BY n.prod_id, f.prod_id_desc, altitude ORDER BY n.prod_id, altitude \
+//				&m=NEXRAD count");
 
 	function get_nexrad_count() {
 		var row = "";
@@ -28,9 +37,10 @@ var nexrad_count = url.concat("SELECT n.prod_id, f.prod_id_desc, altitude, COUNT
 			success: function(data) {
 				$('#nexrtbl tbody').empty();
 				$.each(data, function(index, features) {
-					row += "<tr><td>" + features.prod_id_desc + "</td><td>"
-						+ separator(features.altitude) + "</td><<td>"
-						+ features.count + "</td></tr>";
+					row += "<tr><td>" + features.prod_id_desc + " (" + features.prod_id + ")</td><td>"
+						+ separator(features.altitude) + "</td><td>"
+						+ separator(features.count) + "</td><td>"
+						+ features.maptime + "</td></tr>";
 				});
 				$("#nexrtbl tbody").append(row);
 			},
@@ -57,7 +67,7 @@ $(document).ready(function() {
 				$('#suatbl tbody').empty();
 				$.each(data, function(index, features) {
 					row += "<tr><td>" + features.airsp_id + "</td><td>"
-						+ features.airsp_name + "</td><<td>" 
+						+ features.airsp_name + "</td><td>" 
 						+ features.airsp_type + "</td></tr>";
 				});
 				$("#suatbl tbody").append(row);
@@ -88,7 +98,7 @@ $(document).ready(function() {
 				$('#tfrtbl tbody').empty();
 				$.each(data, function(index, features) {
 					row += "<tr><td>" + features.rep_num + "</td><td>"
-						+ features.notam_name + "</td><<td>"
+						+ features.notam_name + "</td><td>"
 						+ features.text_data + "</td></tr>";
 				});
 				$("#tfrtbl tbody").append(row);
