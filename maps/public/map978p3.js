@@ -51,8 +51,8 @@ $(document).ready(function() {
 			var table=	$('#tableID').DataTable({
 				destroy: true,
 				data: result,
-				pageLength: 10,
-				lengthMenu: [5, 10, 25, 100, 500],
+				pageLength: 25,
+				lengthMenu: [10, 25, 50, 100, 250, 500],
 				columns: [{
 					"className": 'details-control',
 					"orderable": true,
