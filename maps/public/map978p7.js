@@ -7,8 +7,9 @@ var thead = '';
 var tbody = '';
 
 var stn_sql = url.concat("SELECT t.stn_call, CONCAT(s.stn_loc,', ', s.state) AS stn_loc,\
-			ob_date, temperature, windsp, winddir, altimeter, visby, dewp, hrly_precip, slp,\
-			windvar, windgust, mtype, cld_type1, cld_type2, cld_type3, cld_type4, cld_type5,\
+			ob_date, CONCAT(temperature,'/',dewp) as temperature, concat(windsp,'kts <br>',winddir,'deg') as windsp, \
+			concat(altimeter,'<br>',slp) as slp, visby, dewp, hrly_precip,\
+			windvar, windgust, mtype, concat(cld_type1,'<br>', cld_type2,'<br>', cld_type3,'<br>', cld_type4, '<br>',cld_type5) as cld_type1,\
 			wx_obstruct FROM postgis.metar t \
 			INNER JOIN (select stn_call, MAX(ob_date) AS mob FROM metar GROUP BY stn_call) \
 			g ON t.stn_call = g.stn_call AND t.ob_date = g.mob \
@@ -27,26 +28,21 @@ $(document).ready(function() {
 				pageLength: 25,
 				lengthMenu: [10, 25, 50, 100, 250, 500],
 				columns: [ 
-					{ data: 'stn_call'},
-					{ data: 'stn_loc' },
-					{ data: 'ob_date' },									
-					{ data: 'mtype' },
-					{ data: 'temperature' },
-					{ data: 'dewp' },
+					{ "width": "1px",
+						data: 'stn_call'},
+					{ "width": "5px",data: 'stn_loc' },
+					{"width": "42px", data: 'ob_date' },									
+					{ "width": "5px",data: 'mtype' },
+					{ "width": "1px",data: 'temperature' },
 					{ data: 'windsp' },
-					{ data: 'winddir' },
 					{ data: 'windvar' },
-					{ data: 'windgust' },					
-					{ data: 'altimeter' },
+					{ "width": "5px",data: 'windgust' },					
 					{ data: 'slp' },					
 					{ data: 'visby'},
-					{ data: 'hrly_precip' },									
+					{ "width": "5px",data: 'hrly_precip' },									
 					{ data: 'wx_obstruct' },
-					{ data: 'cld_type1'},
-					{ data: 'cld_type2'},
-					{ data: 'cld_type3'},
-					{ data: 'cld_type4'},
-					{ data: 'cld_type5'}				
+					{ data: 'cld_type1'}
+				
 				]
 			});
 		}
