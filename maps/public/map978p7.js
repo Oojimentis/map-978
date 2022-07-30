@@ -19,8 +19,8 @@ var stn_sql = url.concat("SELECT t.stn_call, CONCAT(s.stn_loc,', ', s.state) AS 
 		CASE WHEN visby <> '-' THEN concat(visby,' sm') \
 		ELSE visby END AS visby, \
 	hrly_precip, mtype, \
-	CONCAT(cld_type1, '<BRr>', cld_type2,'<BR>' , cld_type3,'<BRr>', \
-		   cld_type4, '<BRr>', cld_type5) AS cld_type1, \
+	CONCAT(cld_type1, '<BR>', cld_type2,'<BR>' , cld_type3,'<BR>', \
+		   cld_type4, '<BR>', cld_type5) AS cld_type1, \
 	wx_obstruct FROM postgis.metar t \
 	INNER JOIN stations s ON s.stn_call = t.stn_call \
 	ORDER BY t.stn_call \
