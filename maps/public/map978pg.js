@@ -1143,7 +1143,7 @@ metar = L.realtime({
 			if (feature.properties.windvar == "Variable")
 				hold2 = feature.properties.windvar;
 			else
-				hold2 = feature.properties.winddir + "\xB0";
+				hold2 = feature.properties.winddir;
 
 			if (feature.properties.windgust == "-")
 				hold3 = " ";
