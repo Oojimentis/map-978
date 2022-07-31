@@ -11,6 +11,7 @@ and Leaflet Realtime (https://github.com/perliedman/leaflet-realtime)
 
 ## Recent Changes
 
+* 07/30/22 Add METAR details page.
 * 08/23/21 Dynamic METAR icons based on temperature.
 * 08/27/21 Use 'clustering' for PIREP reports.
 * 08/23/21 Station lookup and details screens added.
@@ -33,6 +34,10 @@ and Leaflet Realtime (https://github.com/perliedman/leaflet-realtime)
 
 
 ## Screenshots
+
+METAR Details:
+
+![metar-details](https://user-images.githubusercontent.com/60933475/182007687-417989f6-dda9-4886-a504-abb70125d3e8.png)
 
 METAR:
 
