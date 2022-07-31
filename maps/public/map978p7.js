@@ -15,7 +15,7 @@ CONCAT( \
 	(CASE WHEN windgust <> '-' THEN CONCAT('Gust: ', windgust, ' kts') ELSE windgust END)) AS windsp, \
 CONCAT( \
 	CASE WHEN altimeter <> '-' THEN CONCAT('Alt: ',altimeter, ' Ins<BR>') ELSE altimeter END, \
-	CASE WHEN slp <> '-' THEN CONCAT('SLP: ',slp,' hPa') ELSE slp END) AS slp, \
+	CASE WHEN slp <> '-' THEN CONCAT('SLP: ',slp,' hPa') ELSE slp END) AS slp,  \
 CONCAT( \
 	CASE WHEN visby <> '-' THEN CONCAT('Vis: ',visby,' sm<BR>') ELSE CONCAT(visby,'<BR>') END ,\
    (CASE WHEN hrly_precip <> '- ' THEN CONCAT('Precip: ',hrly_precip,'in/hr<BR>') \
