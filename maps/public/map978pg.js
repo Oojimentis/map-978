@@ -1143,7 +1143,7 @@ metar = L.realtime({
 			if (feature.properties.windvar == "Variable")
 				hold2 = feature.properties.windvar;
 			else
-				hold2 = feature.properties.winddir + "\xB0";
+				hold2 = feature.properties.winddir;
 
 			if (feature.properties.windgust == "-")
 				hold3 = " ";
@@ -1250,8 +1250,11 @@ maxmin = L.realtime({
 			var hold1;
 			var hold2;
 			var hold3;
+		if (feature.properties.maxmin == "Max")
+			$("#m1").html("Max" );
+		else
+			$("#m1").html("Min" );
 
-			$("#m1").html("Station" );
 			$("#m2").html("Location");
 			$("#m3").html("Temp:<br>Precip:");
 			$("#m4").html("Winds");

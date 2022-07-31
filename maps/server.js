@@ -44,6 +44,11 @@ app.get('/page6', function(req, res) {
    res.render('page6',{ ptnum: port});
 });
 
+// METAR Details
+app.get('/page7', function(req, res) {
+   res.render('page7',{ ptnum: port});
+});
+
 // Expose sqlx endpoint for jsquery GET
 app.get( "/sqlx", function(req, res) {
 	var sqlx = req.query.q;

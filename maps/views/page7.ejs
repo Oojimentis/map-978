@@ -20,10 +20,10 @@
 <nav class="topnav">
 	<a href="/">Home</a>	
 	<a href="page2">Reports</a>
-	<a class="active" href="page3">TAF Details</a>
-	<a href="page7">METAR Details</a>	
+	<a href="page3">TAF Details</a>	
+	<a class="active" href="page7">METAR Details</a>
 	<a href="page4">Station Lookup</a>	
-	<a class="disabled">DUMP978 - TAF Details</a>
+	<a class="disabled">DUMP978 - METAR Details</a>
 	<a class="disabled">
 		<span id="UTC_za00"></span>z
 		<script src="//widget.time.is/t.js"></script>
@@ -36,14 +36,15 @@
 	<table id="tableID" class="display" style="width:100%">
 		<thead>
 			<tr>
-				<th></th>
 				<th>Station</th>
 				<th>Location</th>
-				<th>Issued At</th>	
-				<th>Period</th>
+				<th>Date</th>	
+				<th>Type</th>
+				<th>Temp<br>Dewp</th>
 				<th>Winds</th>
-				<th>Visibility</th>
-				<th>Conditions</th>
+				<th>Alt/SLP</th>
+				<th>WX</th>
+				<th>Cloud Cover</th>
 			</tr>
 		</thead>
 	</table>
@@ -51,7 +52,7 @@
 </div>
 
 <div id="footer"></div>
-<script src="map978p3.js"></script>
+<script src="map978p7.js"></script>
 
 </body>
 </html>
