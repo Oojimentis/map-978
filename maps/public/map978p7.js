@@ -17,7 +17,7 @@ CONCAT( \
 	CASE WHEN altimeter <> '-' THEN CONCAT('Alt: ',altimeter, ' Ins<BR>') ELSE altimeter END, \
 	CASE WHEN slp <> '-' THEN CONCAT('SLP: ',slp,' hPa') ELSE slp END) AS slp, \
 CONCAT( \
-	CASE WHEN visby <> '-' THEN CONCAT('Vis: ',visby,' sm<BR>') ELSE visby END ,\
+	CASE WHEN visby <> '-' THEN CONCAT('Vis: ',visby,' sm<BR>') ELSE CONCAT(visby,'<BR>') END ,\
    (CASE WHEN hrly_precip <> '- ' THEN CONCAT('Precip: ',hrly_precip,'in/hr<BR>') \
 	ELSE CONCAT(hrly_precip,'<BR>') END), wx_obstruct) AS wx_obstruct, \
 	mtype, \

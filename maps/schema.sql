@@ -2,10 +2,10 @@
 -- PostgreSQL database dump
 --
 
--- Dumped from database version 13.7 (Ubuntu 13.7-1.pgdg18.04+1)
--- Dumped by pg_dump version 14.3 (Ubuntu 14.3-1.pgdg18.04+1)
+-- Dumped from database version 14.4 (Ubuntu 14.4-1.pgdg18.04+1)
+-- Dumped by pg_dump version 14.4 (Ubuntu 14.4-1.pgdg18.04+1)
 
--- Started on 2022-05-19 19:25:05 EDT
+-- Started on 2022-07-30 22:24:04 EDT
 
 SET statement_timeout = 0;
 SET lock_timeout = 0;
@@ -17,10 +17,12 @@ SET check_function_bodies = false;
 SET xmloption = content;
 SET client_min_messages = warning;
 SET row_security = off;
+
 
 
 CREATE DATABASE uat978 WITH TEMPLATE = template0 ENCODING = 'UTF8' LOCALE = 'en_US.UTF-8';
 
+
 \connect uat978
 
 SET statement_timeout = 0;
@@ -33,9 +35,12 @@ SET check_function_bodies = false;
 SET xmloption = content;
 SET client_min_messages = warning;
 SET row_security = off;
+
+
 
 ALTER DATABASE uat978 SET search_path TO 'public', 'postgis', 'contrib';
 
+
 \connect uat978
 
 SET statement_timeout = 0;
@@ -49,17 +54,349 @@ SET xmloption = content;
 SET client_min_messages = warning;
 SET row_security = off;
 
+
+
 CREATE SCHEMA postgis;
+
+
+
 
 CREATE EXTENSION IF NOT EXISTS postgis WITH SCHEMA postgis;
 
+
+
+
+COMMENT ON EXTENSION postgis IS 'PostGIS geometry and geography spatial types and functions';
+
+
+SET default_tablespace = '';
+
 SET default_table_access_method = heap;
 
--- ****************************************************************************
+
+
 CREATE TABLE postgis.airspace_ob_ele (
     airspace_ob_ele_id integer NOT NULL,
     airspace_ob_ele_desc character varying NOT NULL
 );
+
+
+
+
+CREATE TABLE postgis.circles (
+    bot postgis.geometry NOT NULL,
+    top postgis.geometry NOT NULL,
+    alt_top integer,
+    alt_bot integer,
+    alpha integer,
+    prod_id integer NOT NULL,
+    rec_count integer NOT NULL,
+    rep_num integer NOT NULL,
+    rep_year integer,
+    start_date character varying NOT NULL,
+    stop_date character varying,
+    geo_opt integer NOT NULL,
+    r_lng integer,
+    r_lat integer,
+    overlay_rec_id integer NOT NULL
+);
+
+
+
+
+CREATE TABLE postgis.current (
+    prod_id integer NOT NULL,
+    rep_time character varying NOT NULL,
+    rep_year integer,
+    text integer,
+    graphic integer,
+    rep_num integer NOT NULL
+);
+
+
+
+
+CREATE TABLE postgis.fisb_products (
+    prod_id integer NOT NULL,
+    prod_id_desc character varying NOT NULL
+);
+
+
+
+
+CREATE TABLE postgis.graphics (
+    coords postgis.geometry,
+    ob_ele character varying,
+    rep_num integer NOT NULL,
+    prod_id integer NOT NULL,
+    start_date character varying,
+    stop_date character varying,
+    geo_overlay_opt integer NOT NULL,
+    alt integer NOT NULL,
+    stn_call character varying,
+    obj_par_val integer,
+    obj_param_type integer,
+    object_qualifier integer,
+    obj_labelt character varying,
+    obj_label integer,
+    overlay_rec_id integer NOT NULL,
+    rec_len integer,
+    obj_status integer,
+    param_flag integer,
+    element_flag integer,
+    overlay_op integer,
+    overlay_vert_cnt integer,
+    segmented integer
+);
+
+
+
+CREATE TABLE postgis.metar (
+    stn_call character varying NOT NULL,
+    ob_date character varying NOT NULL,
+    temperature character varying,
+    windsp character varying,
+    winddir character varying,
+    altimeter character varying,
+    visby character varying,
+    dewp character varying,
+    hrly_precip character varying,
+    slp character varying,
+    windvar character varying,
+    windgust character varying,
+    mtype character varying,
+    cld_type1 character varying,
+    cld_type2 character varying,
+    cld_type3 character varying,
+    cld_type4 character varying,
+    cld_type5 character varying,
+    wx_obstruct character varying
+);
+
+
+
+
+CREATE TABLE postgis.nexrad (
+    intensity integer NOT NULL,
+    coords postgis.geometry NOT NULL,
+    altitude integer NOT NULL,
+    prod_id integer NOT NULL,
+    block_num integer NOT NULL,
+    maptime character varying NOT NULL,
+    ice_sld integer,
+    ice_prob integer,
+    seq integer
+);
+
+
+
+
+CREATE TABLE postgis.overlay_geo_opt (
+    geo_overlay_opt_id integer NOT NULL,
+    geo_overlay_opt_desc character varying NOT NULL
+);
+
+
+
+
+CREATE TABLE postgis.pirep (
+    rep_type character varying NOT NULL,
+    fl_lev character varying,
+    ac_type character varying,
+    cloud character varying,
+    weather character varying,
+    temperature character varying,
+    windsp character varying,
+    turbulence character varying,
+    icing character varying,
+    remarks character varying,
+    location character varying,
+    rep_time character varying NOT NULL,
+    stn_call character varying NOT NULL
+);
+
+
+
+
+CREATE TABLE postgis.sigairmet (
+    prod_id integer NOT NULL,
+    rep_num integer NOT NULL,
+    text_data character varying,
+    stn_call character varying NOT NULL,
+    rep_time character varying,
+    segmented integer,
+    notam_name character varying
+);
+
+
+
+
+CREATE TABLE postgis.stations (
+    coords postgis.geometry NOT NULL,
+    stn_call character varying NOT NULL,
+    stn_loc character varying NOT NULL,
+    state character varying NOT NULL
+);
+
+
+
+
+CREATE TABLE postgis.sua (
+    rep_time character varying NOT NULL,
+    rep_year integer NOT NULL,
+    rep_num integer NOT NULL,
+    sched_id integer,
+    airsp_id integer,
+    sched_status character varying NOT NULL,
+    airsp_name character varying,
+    start_date character varying NOT NULL,
+    stop_date character varying NOT NULL,
+    high_alt integer,
+    sep_rule character varying,
+    shape_ind character varying,
+    nfdc_id character varying,
+    nfdc_name character varying,
+    dafif_id character varying,
+    dafif_name character varying,
+    airsp_type character varying,
+    low_alt integer
+);
+
+
+
+
+CREATE TABLE postgis.sua_airspace (
+    coords postgis.geometry NOT NULL,
+    airsp_id integer NOT NULL,
+    airsp_name character varying NOT NULL
+);
+
+
+
+
+CREATE TABLE postgis.sua_airspace_type (
+    airsp_type "char" NOT NULL,
+    airsp_type_desc character varying NOT NULL
+);
+
+
+
+
+CREATE TABLE postgis.sua_sched_status (
+    sched_status "char" NOT NULL,
+    sched_status_desc character varying NOT NULL
+);
+
+
+
+
+CREATE TABLE postgis.taf (
+    issued character varying NOT NULL,
+    current character varying,
+    wind character varying,
+    visby character varying,
+    condx character varying,
+    rep_time character varying NOT NULL,
+    stn_call character varying NOT NULL,
+    taf_unknown_fl integer,
+    taf_raw character varying
+);
+
+
+
+
+CREATE TABLE postgis.taf_forecast (
+    stn_call character varying NOT NULL,
+    rep_time character varying NOT NULL,
+    forecast character varying,
+    taf_unknown_fl integer NOT NULL,
+    taf_line_number integer NOT NULL,
+    taf_raw character varying
+);
+
+
+
+
+CREATE TABLE postgis.winds (
+    issue_date character varying NOT NULL,
+    proc_time character varying NOT NULL,
+    alt1 character varying,
+    alt2 character varying,
+    alt3 character varying,
+    alt4 character varying,
+    alt5 character varying,
+    alt6 character varying,
+    alt7 character varying,
+    alt8 character varying,
+    alt9 character varying,
+    dir1 character varying,
+    dir2 character varying,
+    dir3 character varying,
+    dir4 character varying,
+    dir5 character varying,
+    dir6 character varying,
+    dir7 character varying,
+    dir8 character varying,
+    dir9 character varying,
+    spd1 character varying,
+    spd2 character varying,
+    spd3 character varying,
+    spd4 character varying,
+    spd5 character varying,
+    spd6 character varying,
+    spd7 character varying,
+    spd8 character varying,
+    spd9 character varying,
+    temp1 character varying,
+    temp2 character varying,
+    temp3 character varying,
+    temp4 character varying,
+    temp5 character varying,
+    temp6 character varying,
+    temp7 character varying,
+    temp8 character varying,
+    temp9 character varying,
+    stn_call character varying NOT NULL
+);
+
+
+
+
+CREATE TABLE public.max_c (
+    stn_call character varying,
+    ob_date character varying,
+    temperature integer,
+    windsp character varying,
+    winddir character varying,
+    altimeter character varying,
+    visby character varying,
+    dewp character varying,
+    hrly_precip character varying,
+    slp character varying,
+    windvar character varying,
+    windgust character varying
+);
+
+
+
+
+CREATE TABLE public.max_d (
+    stn_call character varying,
+    ob_date character varying,
+    temperature integer,
+    windsp character varying,
+    winddir character varying,
+    altimeter character varying,
+    visby character varying,
+    dewp character varying,
+    hrly_precip character varying,
+    slp character varying,
+    windvar character varying,
+    windgust character varying
+);
+
+
+
 
 INSERT INTO postgis.airspace_ob_ele VALUES (0, 'Temporary Flight Restriction');
 INSERT INTO postgis.airspace_ob_ele VALUES (1, 'Turbulence');
@@ -94,49 +431,10 @@ INSERT INTO postgis.airspace_ob_ele VALUES (29, 'Future Use(29)');
 INSERT INTO postgis.airspace_ob_ele VALUES (30, 'Future Use(30)');
 INSERT INTO postgis.airspace_ob_ele VALUES (31, 'Future Use(31)');
 
-ALTER TABLE ONLY postgis.airspace_ob_ele
-    ADD CONSTRAINT airspace_ob_ele_pkey PRIMARY KEY (airspace_ob_ele_id);
 
--- ****************************************************************************
-CREATE TABLE postgis.circles (
-    bot postgis.geometry NOT NULL,
-    top postgis.geometry NOT NULL,
-    alt_top integer,
-    alt_bot integer,
-    alpha integer,
-    prod_id integer NOT NULL,
-    rec_count integer NOT NULL,
-    rep_num integer NOT NULL,
-    rep_year integer,
-    start_date character varying NOT NULL,
-    stop_date character varying,
-    geo_opt integer NOT NULL,
-    r_lng integer,
-    r_lat integer,
-    overlay_rec_id integer NOT NULL
-);
 
-ALTER TABLE ONLY postgis.circles
-    ADD CONSTRAINT circles_pkey PRIMARY KEY (prod_id, rep_num, start_date, overlay_rec_id);
 
--- ****************************************************************************
-CREATE TABLE postgis.current (
-    prod_id integer NOT NULL,
-    rep_time character varying NOT NULL,
-    rep_year integer,
-    text integer,
-    graphic integer,
-    rep_num integer NOT NULL
-);
 
-ALTER TABLE ONLY postgis.current
-    ADD CONSTRAINT current_pkey PRIMARY KEY (prod_id, rep_time, rep_num);
-
--- ****************************************************************************
-CREATE TABLE postgis.fisb_products (
-    prod_id integer NOT NULL,
-    prod_id_desc character varying NOT NULL
-);
 
 INSERT INTO postgis.fisb_products VALUES (8, 'NOTAM');
 INSERT INTO postgis.fisb_products VALUES (11, 'AIRMET');
@@ -156,79 +454,11 @@ INSERT INTO postgis.fisb_products VALUES (413, 'Generic Textual Data Product');
 INSERT INTO postgis.fisb_products VALUES (16, 'Temporary Restricted Area (TRA)');
 INSERT INTO postgis.fisb_products VALUES (17, 'Temporary Military Operating Area (TMOA)');
 
-ALTER TABLE ONLY postgis.fisb_products
-    ADD CONSTRAINT fisb_products_pkey PRIMARY KEY (prod_id);
 
--- ****************************************************************************
-CREATE TABLE postgis.graphics (
-    coords postgis.geometry,
-    ob_ele character varying,
-    rep_num integer NOT NULL,
-    prod_id integer NOT NULL,
-    start_date character varying,
-    stop_date character varying,
-    geo_overlay_opt integer NOT NULL,
-    alt integer NOT NULL,
-    stn_call character varying,
-    obj_par_val integer,
-    obj_param_type integer,
-    object_qualifier integer,
-    obj_labelt character varying,
-    obj_label integer,
-    overlay_rec_id integer NOT NULL,
-    rec_len integer,
-    obj_status integer,
-    param_flag integer,
-    element_flag integer,
-    overlay_op integer,
-    overlay_vert_cnt integer,
-    segmented integer
-);
 
-ALTER TABLE ONLY postgis.graphics
-    ADD CONSTRAINT graphics_pkey PRIMARY KEY (rep_num, prod_id, alt, geo_overlay_opt, overlay_rec_id);
 
--- ****************************************************************************
-CREATE TABLE postgis.metar (
-    stn_call character varying NOT NULL,
-    ob_date character varying NOT NULL,
-    temperature character varying,
-    windsp character varying,
-    winddir character varying,
-    altimeter character varying,
-    visby character varying,
-    dewp character varying,
-    hrly_precip character varying,
-    slp character varying,
-    windvar character varying,
-    windgust character varying,
-    mtype character varying
-);
 
-ALTER TABLE ONLY postgis.metar
-    ADD CONSTRAINT metar_new_pkey PRIMARY KEY (ob_date, stn_call);
 
--- ****************************************************************************
-CREATE TABLE postgis.nexrad (
-    intensity integer NOT NULL,
-    coords postgis.geometry NOT NULL,
-    altitude integer NOT NULL,
-    prod_id integer NOT NULL,
-    block_num integer NOT NULL,
-    maptime character varying NOT NULL,
-    ice_sld integer,
-    ice_prob integer,
-    seq integer
-);
-
-ALTER TABLE ONLY postgis.nexrad
-    ADD CONSTRAINT nexrad_pkey PRIMARY KEY (coords, prod_id, block_num, maptime);
-
--- ****************************************************************************
-CREATE TABLE postgis.overlay_geo_opt (
-    geo_overlay_opt_id integer NOT NULL,
-    geo_overlay_opt_desc character varying NOT NULL
-);
 
 INSERT INTO postgis.overlay_geo_opt VALUES (0, 'No Geometry');
 INSERT INTO postgis.overlay_geo_opt VALUES (1, 'High Resolution 3D Polygon');
@@ -246,50 +476,11 @@ INSERT INTO postgis.overlay_geo_opt VALUES (12, 'Future Use');
 INSERT INTO postgis.overlay_geo_opt VALUES (13, 'Future Use');
 INSERT INTO postgis.overlay_geo_opt VALUES (14, 'Future Use');
 
-ALTER TABLE ONLY postgis.overlay_geo_opt
-    ADD CONSTRAINT overlay_geo_opt_pkey PRIMARY KEY (geo_overlay_opt_id);
 
--- ****************************************************************************
-CREATE TABLE postgis.pirep (
-    rep_type character varying NOT NULL,
-    fl_lev character varying,
-    ac_type character varying,
-    cloud character varying,
-    weather character varying,
-    temperature character varying,
-    windsp character varying,
-    turbulence character varying,
-    icing character varying,
-    remarks character varying,
-    location character varying,
-    rep_time character varying NOT NULL,
-    stn_call character varying NOT NULL
-);
 
-ALTER TABLE ONLY postgis.pirep
-    ADD CONSTRAINT pirep_pkey PRIMARY KEY (stn_call, rep_time);
 
--- ****************************************************************************
-CREATE TABLE postgis.sigairmet (
-    prod_id integer NOT NULL,
-    rep_num integer NOT NULL,
-    text_data character varying,
-    stn_call character varying NOT NULL,
-    rep_time character varying,
-    segmented integer,
-    notam_name character varying
-);
 
-ALTER TABLE ONLY postgis.sigairmet
-    ADD CONSTRAINT sigairmet_pkey PRIMARY KEY (prod_id, rep_num, stn_call);
 
--- ****************************************************************************
-CREATE TABLE postgis.stations (
-    coords postgis.geometry NOT NULL,
-    stn_call character varying NOT NULL,
-    stn_loc character varying NOT NULL,
-    state character varying NOT NULL
-);
 
 INSERT INTO postgis.stations VALUES ('0101000020E61000005704FF5BC96163C06284F068E3B83340', 'PHTO', 'Hilo, Hilo International Airport', 'HI');
 INSERT INTO postgis.stations VALUES ('0101000020E61000008B4F01309E8163C04BE5ED08A7BD3340', 'PHKO', 'Kailua / Kona, Keahole Airport', 'HI');
@@ -2961,40 +3152,8 @@ INSERT INTO postgis.stations VALUES ('0101000020E61000001A2EA665E16C56C0F91B78AB
 INSERT INTO postgis.stations VALUES ('0101000020E6100000274AE7687A5453C007EA944737744540', 'KIUA', 'Canandaigua Airport, Canandaigua', 'NY');
 INSERT INTO postgis.stations VALUES ('0101000020E61000006B9A779CA26B55C0D09B8A54183B4040', 'K06A', 'Moton Field Municipal Airport-Tuskegee ', 'AL');
 
-ALTER TABLE ONLY postgis.stations
-    ADD CONSTRAINT stations_pkey PRIMARY KEY (stn_call);
 
--- ****************************************************************************
-CREATE TABLE postgis.sua (
-    rep_time character varying NOT NULL,
-    rep_year integer NOT NULL,
-    rep_num integer NOT NULL,
-    sched_id integer,
-    airsp_id integer,
-    sched_status character varying NOT NULL,
-    airsp_name character varying,
-    start_date character varying NOT NULL,
-    stop_date character varying NOT NULL,
-    high_alt integer,
-    sep_rule character varying,
-    shape_ind character varying,
-    nfdc_id character varying,
-    nfdc_name character varying,
-    dafif_id character varying,
-    dafif_name character varying,
-    airsp_type character varying,
-    low_alt integer
-);
 
-ALTER TABLE ONLY postgis.sua
-    ADD CONSTRAINT sua_pkey PRIMARY KEY (rep_num, sched_status);
-
--- ****************************************************************************
-CREATE TABLE postgis.sua_airspace (
-    coords postgis.geometry NOT NULL,
-    airsp_id integer NOT NULL,
-    airsp_name character varying NOT NULL
-);
 
 INSERT INTO postgis.sua_airspace VALUES ('0103000020E61000000100000007000000BD8BF7E3F65F51C087A3AB7477D7454036E84B6F7F3851C0BBD6DEA7AAEA4540BD8BF7E3F6BF50C0CDCCCCCCCC2C4640BD8BF7E3F6BF50C06666666666E645409C4EB2D5E52E51C0213D450E11B14540BD8BF7E3F65F51C0BBD6DEA7AA8A4540BD8BF7E3F65F51C087A3AB7477D74540', 7635, '102-LOW');
 INSERT INTO postgis.sua_airspace VALUES ('0103000020E61000000100000007000000BD8BF7E3F65F51C087A3AB7477D7454036E84B6F7F3851C0BBD6DEA7AAEA4540BD8BF7E3F6BF50C0CDCCCCCCCC2C4640BD8BF7E3F6BF50C06666666666E645409C4EB2D5E52E51C0213D450E11B14540BD8BF7E3F65F51C0BBD6DEA7AA8A4540BD8BF7E3F65F51C087A3AB7477D74540', 7650, '102-HIGH');
@@ -3263,14 +3422,7 @@ INSERT INTO postgis.sua_airspace VALUES ('0103000020E610000001000000090000000395
 INSERT INTO postgis.sua_airspace VALUES ('0103000020E61000000100000005000000C4CE143AAF655CC08B71FE2614C2414029ED0DBE30535CC00B0C59DDEA954140DFE00B93A97C5CC0E59B6D6E4C6B4140EB39E97DE38D5CC0DE9387855A974140C4CE143AAF655CC08B71FE2614C24140', 25467, 'ZLA-3');
 INSERT INTO postgis.sua_airspace VALUES ('0103000020E61000000100000005000000EE77280AF43F57C0E9F17B9BFE544240D26F5F07CE2957C02D431CEBE22A42407FA4880CAB6A57C09357E71890D541402B6A300DC37F57C080608E1EBFFF4140EE77280AF43F57C0E9F17B9BFE544240', 25472, 'ZME-1');
 
-ALTER TABLE ONLY postgis.sua_airspace
-    ADD CONSTRAINT sua_airspace_pkey PRIMARY KEY (airsp_id);
 
--- ****************************************************************************
-CREATE TABLE postgis.sua_airspace_type (
-    airsp_type "char" NOT NULL,
-    airsp_type_desc character varying NOT NULL
-);
 
 INSERT INTO postgis.sua_airspace_type VALUES ('W', 'Warning Area');
 INSERT INTO postgis.sua_airspace_type VALUES ('R', 'Restricted Area');
@@ -3285,100 +3437,106 @@ INSERT INTO postgis.sua_airspace_type VALUES ('B', 'Military Route (Refueling)')
 INSERT INTO postgis.sua_airspace_type VALUES ('O', 'Other');
 INSERT INTO postgis.sua_airspace_type VALUES ('T', 'Refueling Track');
 
-ALTER TABLE ONLY postgis.sua_airspace_type
-    ADD CONSTRAINT sua_airspace_type_pkey PRIMARY KEY (airsp_type);
 
--- ****************************************************************************
-CREATE TABLE postgis.sua_sched_status (
-    sched_status "char" NOT NULL,
-    sched_status_desc character varying NOT NULL
-);
 
 INSERT INTO postgis.sua_sched_status VALUES ('W', 'Waiting to Start');
 INSERT INTO postgis.sua_sched_status VALUES ('P', 'Pending Approval');
 INSERT INTO postgis.sua_sched_status VALUES ('H', 'Activated for Use');
 
+
+
+
+ALTER TABLE ONLY postgis.airspace_ob_ele
+    ADD CONSTRAINT airspace_ob_ele_pkey PRIMARY KEY (airspace_ob_ele_id);
+
+
+
+ALTER TABLE ONLY postgis.circles
+    ADD CONSTRAINT circles_pkey PRIMARY KEY (prod_id, rep_num, start_date, overlay_rec_id);
+
+
+
+ALTER TABLE ONLY postgis.current
+    ADD CONSTRAINT current_pkey PRIMARY KEY (prod_id, rep_time, rep_num);
+
+
+
+ALTER TABLE ONLY postgis.fisb_products
+    ADD CONSTRAINT fisb_products_pkey PRIMARY KEY (prod_id);
+
+
+
+ALTER TABLE ONLY postgis.graphics
+    ADD CONSTRAINT graphics_pkey PRIMARY KEY (rep_num, prod_id, alt, geo_overlay_opt, overlay_rec_id);
+
+
+
+ALTER TABLE ONLY postgis.metar
+    ADD CONSTRAINT metar_new_pkey PRIMARY KEY (ob_date, stn_call);
+
+
+
+ALTER TABLE ONLY postgis.nexrad
+    ADD CONSTRAINT nexrad_pkey PRIMARY KEY (coords, prod_id, block_num, maptime);
+
+
+ALTER TABLE ONLY postgis.overlay_geo_opt
+    ADD CONSTRAINT overlay_geo_opt_pkey PRIMARY KEY (geo_overlay_opt_id);
+
+
+
+ALTER TABLE ONLY postgis.pirep
+    ADD CONSTRAINT pirep_pkey PRIMARY KEY (stn_call, rep_time);
+
+
+
+ALTER TABLE ONLY postgis.sigairmet
+    ADD CONSTRAINT sigairmet_pkey PRIMARY KEY (prod_id, rep_num, stn_call);
+
+
+
+ALTER TABLE ONLY postgis.stations
+    ADD CONSTRAINT stations_pkey PRIMARY KEY (stn_call);
+
+
+
+ALTER TABLE ONLY postgis.sua_airspace
+    ADD CONSTRAINT sua_airspace_pkey PRIMARY KEY (airsp_id);
+
+
+
+ALTER TABLE ONLY postgis.sua_airspace_type
+    ADD CONSTRAINT sua_airspace_type_pkey PRIMARY KEY (airsp_type);
+
+
+
+ALTER TABLE ONLY postgis.sua
+    ADD CONSTRAINT sua_pkey PRIMARY KEY (rep_num, sched_status);
+
+
+
 ALTER TABLE ONLY postgis.sua_sched_status
     ADD CONSTRAINT sua_sched_status_pkey PRIMARY KEY (sched_status);
 
--- ****************************************************************************
-CREATE TABLE postgis.taf (
-    issued character varying NOT NULL,
-    current character varying,
-    wind character varying,
-    visby character varying,
-    condx character varying,
-    rep_time character varying NOT NULL,
-    stn_call character varying NOT NULL,
-    taf_unknown_fl integer,
-    taf_raw character varying
-);
 
-ALTER TABLE ONLY postgis.taf
-    ADD CONSTRAINT taf_pkey PRIMARY KEY (stn_call, rep_time);
-
--- ****************************************************************************
-CREATE TABLE postgis.taf_forecast (
-    stn_call character varying NOT NULL,
-    rep_time character varying NOT NULL,
-    forecast character varying,
-    taf_unknown_fl integer NOT NULL,
-    taf_line_number integer NOT NULL,
-    taf_raw character varying
-);
 
 ALTER TABLE ONLY postgis.taf_forecast
     ADD CONSTRAINT taf_forecast_pkey PRIMARY KEY (stn_call, rep_time, taf_line_number);
 
--- ****************************************************************************
-CREATE TABLE postgis.winds (
-    issue_date character varying NOT NULL,
-    proc_time character varying NOT NULL,
-    alt1 character varying,
-    alt2 character varying,
-    alt3 character varying,
-    alt4 character varying,
-    alt5 character varying,
-    alt6 character varying,
-    alt7 character varying,
-    alt8 character varying,
-    alt9 character varying,
-    dir1 character varying,
-    dir2 character varying,
-    dir3 character varying,
-    dir4 character varying,
-    dir5 character varying,
-    dir6 character varying,
-    dir7 character varying,
-    dir8 character varying,
-    dir9 character varying,
-    spd1 character varying,
-    spd2 character varying,
-    spd3 character varying,
-    spd4 character varying,
-    spd5 character varying,
-    spd6 character varying,
-    spd7 character varying,
-    spd8 character varying,
-    spd9 character varying,
-    temp1 character varying,
-    temp2 character varying,
-    temp3 character varying,
-    temp4 character varying,
-    temp5 character varying,
-    temp6 character varying,
-    temp7 character varying,
-    temp8 character varying,
-    temp9 character varying,
-    stn_call character varying NOT NULL
-);
+
+
+ALTER TABLE ONLY postgis.taf
+    ADD CONSTRAINT taf_pkey PRIMARY KEY (stn_call, rep_time);
+
+
 
 ALTER TABLE ONLY postgis.winds
     ADD CONSTRAINT winds_pkey PRIMARY KEY (stn_call, issue_date);
 
 
--- Completed on 2022-05-19 19:25:06 EDT
+-- Completed on 2022-07-30 22:24:05 EDT
 
 --
 -- PostgreSQL database dump complete
 --
+
