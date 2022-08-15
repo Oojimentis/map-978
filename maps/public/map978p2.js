@@ -53,8 +53,9 @@ var nexrad_count = url.concat("SELECT n.prod_id, f.prod_id_desc, altitude, n.map
 $(document).ready(function() {
 	setInterval(get_sua_nofeat, 60000);
 
-	var sua_nofeat = url.concat("SELECT DISTINCT s.airsp_id, s.airsp_name, s.airsp_type \
+	var sua_nofeat = url.concat("SELECT DISTINCT s.airsp_id, s.airsp_name, t.airsp_type_desc \
 					FROM sua s LEFT JOIN sua_airspace a ON a.airsp_id = s.airsp_id \
+					JOIN sua_airspace_type t ON t.airsp_type = s.airsp_type \
 					WHERE a.airsp_name IS NULL ORDER BY s.airsp_name \
 					&m=SUA no coords");
 
@@ -68,7 +69,7 @@ $(document).ready(function() {
 				$.each(data, function(index, features) {
 					row += "<tr><td>" + features.airsp_id + "</td><td>"
 						+ features.airsp_name + "</td><td>" 
-						+ features.airsp_type + "</td></tr>";
+						+ features.airsp_type_desc + "</td></tr>";
 				});
 				$("#suatbl tbody").append(row);
 			},

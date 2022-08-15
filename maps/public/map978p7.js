@@ -39,13 +39,13 @@ $(document).ready(function() {
 				lengthMenu: [10, 25, 50, 100, 250, 500],
 				columns: [ 
 					{ "width": "1px", data: 'stn_call'},
-					{ "width": "95px", data: 'stn_loc' },
+					{ data: 'stn_loc' },
 					{ "width": "42px",data: 'ob_date' },									
 					{ "width": "5px", data: 'mtype' },
 					{ "width": "1px", data: 'temperature' },
 					{ "width": "70px",data: 'windsp' },
 					{ "width": "90px",data: 'slp' },					
-					{ "width" : "80px",data: 'wx_obstruct' },
+					{ data: 'wx_obstruct' },
 					{ data: 'cld_type1'}
 				]
 			});
