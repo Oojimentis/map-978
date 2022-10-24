@@ -14,11 +14,11 @@ CONCAT( \
 		  WHEN winddir <> '-' THEN CONCAT('Dir: ', winddir, 'deg<BR>') ELSE winddir END), \
 	(CASE WHEN windgust <> '-' THEN CONCAT('Gust: ', windgust, ' kts') ELSE windgust END)) AS windsp, \
 CONCAT( \
-	CASE WHEN altimeter <> '-' THEN CONCAT('Alt: ',altimeter, ' Ins<BR>') ELSE altimeter END, \
-	CASE WHEN slp <> '-' THEN CONCAT('SLP: ',slp,' hPa') ELSE slp END) AS slp, \
+	CASE WHEN altimeter <> '-' THEN CONCAT('Alt: ',altimeter, ' Ins<BR>') ELSE CONCAT(altimeter,'<BR>') END, \
+	CASE WHEN slp <> '-' THEN CONCAT('SLP: ',slp,' hPa') ELSE slp END) AS slp,  \
 CONCAT( \
 	CASE WHEN visby <> '-' THEN CONCAT('Vis: ',visby,' sm<BR>') ELSE CONCAT(visby,'<BR>') END ,\
-   (CASE WHEN hrly_precip <> '- ' THEN CONCAT('Precip: ',hrly_precip,'in/hr<BR>') \
+   (CASE WHEN hrly_precip <> '- ' THEN CONCAT('Precip: ',hrly_precip,' in/hr<BR>') \
 	ELSE CONCAT(hrly_precip,'<BR>') END), wx_obstruct) AS wx_obstruct, \
 	mtype, \
 CONCAT(cld_type1, '<BR>', cld_type2,'<BR>', cld_type3, '<BR>', cld_type4, '<BR>', cld_type5) AS cld_type1 \
@@ -39,13 +39,13 @@ $(document).ready(function() {
 				lengthMenu: [10, 25, 50, 100, 250, 500],
 				columns: [ 
 					{ "width": "1px", data: 'stn_call'},
-					{ "width": "95px", data: 'stn_loc' },
+					{ data: 'stn_loc' },
 					{ "width": "42px",data: 'ob_date' },									
 					{ "width": "5px", data: 'mtype' },
 					{ "width": "1px", data: 'temperature' },
 					{ "width": "70px",data: 'windsp' },
 					{ "width": "90px",data: 'slp' },					
-					{ "width" : "80px",data: 'wx_obstruct' },
+					{ data: 'wx_obstruct' },
 					{ data: 'cld_type1'}
 				]
 			});
